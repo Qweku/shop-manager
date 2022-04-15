@@ -14,7 +14,7 @@ class GeneralProvider extends ChangeNotifier {
   List<Product> _categoryinventory = [];
   List<Product> _modelInventory = [];
   List<ProductCategory>? _categories = [
-    ProductCategory(categoryName: "Milo", products: [])
+    ProductCategory(categoryName: "Provisions", products: [])
   ];
   bool _categorised = false;
 

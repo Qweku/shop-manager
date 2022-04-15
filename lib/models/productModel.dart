@@ -2,6 +2,8 @@
 //
 //     final productModel = productModelFromMap(jsonString);
 
+// ignore_for_file: prefer_null_aware_operators
+
 import 'dart:convert';
 
 class ProductModel {
@@ -51,11 +53,9 @@ class ProductCategory {
 
   factory ProductCategory.fromMap(Map<String, dynamic> json) => ProductCategory(
         categoryName:
-            json["categoryName"] == null ? null : json["categoryName"],
-        categorydescription: json["categorydescription"] == null
-            ? null
-            : json["categorydescription"],
-        categoryId: json["categoryID"] == null ? null : json["categoryID"],
+            json["categoryName"],
+        categorydescription: json["categorydescription"],
+        categoryId: json["categoryID"],
         products: json["Products"] == null
             ? null
             : List<Product>.from(
@@ -63,10 +63,10 @@ class ProductCategory {
       );
 
   Map<String, dynamic> toMap() => {
-        "categoryName": categoryName == null ? null : categoryName,
+        "categoryName": categoryName,
         "categorydescription":
-            categorydescription == null ? null : categorydescription,
-        "categoryID": categoryId == null ? null : categoryId,
+            categorydescription,
+        "categoryID": categoryId,
         "Products": products == null
             ? null
             : List<dynamic>.from(products!.map((x) => x.toMap())),
@@ -95,23 +95,23 @@ class Product {
   String toJson() => json.encode(toMap());
 
   factory Product.fromMap(Map<String, dynamic> json) => Product(
-        productName: json["productName"] == null ? null : json["productName"],
+        productName: json["productName"],
         sellingPrice: json["sellingPrice"] == null
             ? null
             : json["sellingPrice"].toDouble(),
         costPrice:
             json["costPrice"] == null ? null : json["costPrice"].toDouble(),
-        imageb64: json["imageb64"] == null ? null : json["imageb64"],
-        quantity: json["quantity"] == null ? null : json["quantity"],
-        productId: json["productID"] == null ? null : json["productID"],
+        imageb64: json["imageb64"],
+        quantity: json["quantity"],
+        productId: json["productID"],
       );
 
   Map<String, dynamic> toMap() => {
-        "productName": productName == null ? null : productName,
-        "sellingPrice": sellingPrice == null ? null : sellingPrice,
-        "costPrice": costPrice == null ? null : costPrice,
-        "imageb64": imageb64 == null ? null : imageb64,
-        "quantity": quantity == null ? null : quantity,
-        "productID": productId == null ? null : productId,
+        "productName": productName,
+        "sellingPrice": sellingPrice,
+        "costPrice": costPrice,
+        "imageb64": imageb64,
+        "quantity": quantity,
+        "productID": productId,
       };
 }

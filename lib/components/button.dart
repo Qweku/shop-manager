@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Button extends StatelessWidget {
   final Function()? onTap;
   final String? buttonText;
-  final Color color;
+  final Color color, textColor;
   final double? width;
   final Color borderColor;
   final Color shadowColor;
@@ -16,7 +16,7 @@ class Button extends StatelessWidget {
     this.color = Colors.transparent,
     this.width,
     this.borderColor = Colors.transparent,
-    this.shadowColor = Colors.black45,
+    this.shadowColor = Colors.black45, this.textColor = Colors.white,
   }) : super(key: key);
 
   @override
@@ -41,7 +41,7 @@ class Button extends StatelessWidget {
         ),
         child: Text(
           buttonText!,textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 15, color: Colors.white),
+          style: TextStyle(fontSize: 15, color: textColor),
         ),
       ),
     );

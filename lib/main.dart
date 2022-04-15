@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_manager/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_manager/pages/login.dart';
+import 'package:shop_manager/pages/login/login.dart';
 
 import 'models/GeneralProvider.dart';
 
