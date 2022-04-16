@@ -147,7 +147,7 @@ class CustomTextField extends StatelessWidget {
   final String? hintText;
   final TextEditingController? controller;
   final TextInputType? keyboard;
-  final int? maxLines;
+  final int maxLines;
   final Color borderColor;
   final Color color;
   final TextStyle? style;
@@ -164,7 +164,7 @@ class CustomTextField extends StatelessWidget {
       this.hintText,
       this.controller,
       this.keyboard,
-      this.maxLines,
+      this.maxLines=1,
       this.borderColor = Colors.transparent,
       this.color = Colors.transparent,
       this.style,

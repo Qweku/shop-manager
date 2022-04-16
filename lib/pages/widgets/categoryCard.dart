@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String? categoryName;
+  final String? categoryName, categoryInitial;
   final int? index;
+  final double? smallFont, largeFont;
   final Function()? onTap;
-  const CategoryCard({Key? key, this.categoryName, this.onTap, this.index})
+  const CategoryCard({Key? key, this.categoryName, this.onTap, this.index, this.categoryInitial, this.smallFont, this.largeFont})
       : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class CategoryCard extends StatelessWidget {
               color: index!.isEven ? theme.primaryColor : Colors.white,
               // ignore: prefer_const_literals_to_create_immutables
               boxShadow: [
-                BoxShadow(
+                const BoxShadow(
                     offset: Offset(2, 2),
                     color: Color.fromARGB(31, 0, 0, 0),
                     blurRadius: 2,
@@ -33,17 +34,23 @@ class CategoryCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.category_outlined,
-                color: index!.isEven ? Colors.white : theme.primaryColor,
-                size: 50,
+              Text(
+                categoryInitial!,
+                style: index!.isEven
+                    ? theme.textTheme.headline2!.copyWith(fontSize:largeFont!)
+                    : theme.textTheme.headline1!.copyWith(fontSize:largeFont!,color: theme.primaryColor),
               ),
+              // Icon(
+              //   Icons.category_outlined,
+              //   color: index!.isEven ? Colors.white : theme.primaryColor,
+              //   size: 50,
+              // ),
               SizedBox(height:height*0.01),
               Text(
                 categoryName!,
                 style: index!.isEven
-                    ? theme.textTheme.headline2
-                    : theme.textTheme.headline1!.copyWith(color: theme.primaryColor),
+                    ? theme.textTheme.headline2!.copyWith(fontSize:smallFont!)
+                    : theme.textTheme.headline1!.copyWith(fontSize:smallFont!,color: theme.primaryColor),
               ),
             ],
           ),

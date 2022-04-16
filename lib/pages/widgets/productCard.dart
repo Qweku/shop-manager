@@ -49,7 +49,7 @@ class ProductCard extends StatelessWidget {
                       style: theme.textTheme.bodyText1,
                     ),
                     Text(
-                      "Quantity: $quantity!",
+                      "Quantity: $quantity",
                       style: theme.textTheme.bodyText1!.copyWith(fontSize:12),
                     ),
                   ],

@@ -94,7 +94,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                               categoryIndex: index,
                                             )));
                               },
+                              smallFont: 20.0,
+                              largeFont: 50.0,
                               categoryName: "${categories[index].categoryName}",
+                              categoryInitial: categories[index].categoryName!.substring(0,2),
                             );
                            }),
                     ),
