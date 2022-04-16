@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/pages/login/login.dart';
 
 import 'models/GeneralProvider.dart';
 
-void main() {
+main() async {
+  await Hive.initFlutter();
+
   runApp(ChangeNotifierProvider<GeneralProvider>(
       create: (context) => GeneralProvider(), child: const MyApp()));
 }
@@ -13,7 +16,6 @@ void main() {
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -26,6 +28,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {});
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,15 +36,17 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xFF0D47A1),
-       primaryColorLight: Colors.white,
-       primaryColorDark: const Color.fromARGB(255, 7, 7, 7),
-       fontFamily: "Montserrat",
-       textTheme: const TextTheme(
-         headline1:  TextStyle(fontSize:20,color: Color.fromARGB(255, 0, 0, 0)),
-         headline2: TextStyle(fontSize:20,color: Colors.white),
-         bodyText1: TextStyle(fontSize: 14,color:Color.fromARGB(255, 0, 0, 0)),
-         bodyText2: TextStyle(fontSize: 14,color:Color.fromARGB(255, 255, 255, 255))
-       ),
+        primaryColorLight: Colors.white,
+        primaryColorDark: const Color.fromARGB(255, 7, 7, 7),
+        fontFamily: "Montserrat",
+        textTheme: const TextTheme(
+            headline1:
+                TextStyle(fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
+            headline2: TextStyle(fontSize: 20, color: Colors.white),
+            bodyText1:
+                TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 0, 0)),
+            bodyText2: TextStyle(
+                fontSize: 14, color: Color.fromARGB(255, 255, 255, 255))),
         primarySwatch: Colors.green,
       ),
       home: const LoginScreen(),

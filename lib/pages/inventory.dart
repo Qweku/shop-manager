@@ -29,137 +29,117 @@ class _InventoryScreenState extends State<InventoryScreen> {
   // String base64Image = base64Encode(toBytes);
   Product? product;
   String? imagePath;
-  List<ProductCategory> category = [ProductCategory(categoryName: "Milo")];
-  @override
+   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     //var categories = context.watch<GeneralProvider>();
-    var categories = context.watch<GeneralProvider>().categories!;
-final theme = Theme.of(context);
+    var categories = context.watch<GeneralProvider>();
+    final theme = Theme.of(context);
     return Scaffold(
-        
-       
         body: SafeArea(
-         top:false,
-          child: Column(
-              // height: height * 0.8,
-              children: [
-                 ClipPath
-                  (
-                    clipper: BottomClipper(),
-                    child: Container(
-                      width: width,
-                      padding: EdgeInsets.only(
-                        right: height * 0.02,
-                        left: height * 0.02,
-                        top: height * 0.1,
-                        bottom: height*0.07),
-                                  color: theme.primaryColor,
-                      child: HeaderSection(
-                        height: height,
-                        
-                        theme: theme,
-                        width: width,
-                       
+      top: false,
+      child: Column(
+          // height: height * 0.8,
+          children: [
+            ClipPath(
+              clipper: BottomClipper(),
+              child: Container(
+                width: width,
+                padding: EdgeInsets.only(
+                    right: height * 0.02,
+                    left: height * 0.02,
+                    top: height * 0.1,
+                    bottom: height * 0.07),
+                color: theme.primaryColor,
+                child: HeaderSection(
+                  height: height,
+                  theme: theme,
+                  width: width,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: height * 0.01),
+              height: height * 0.15,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.categories!.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: width * 0.3,
+                      child: CategoryCard(
+                        index: index,
+                        onTap: () {
+                          // categories =
+                          //     categories.categories[index];
+                          // categories.categorised = true;
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => ProductListScreen(
+                          //               categoryIndex: index,
+                          //             )));
+                        },
+                        smallFont: 12.0,
+                        largeFont: 25.0,
+                        categoryName: "${categories.categories![index].categoryName}",
+                        categoryInitial:
+                            categories.categories![index].categoryName!.substring(0, 2),
                       ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: height*0.01),
-                    height:height*0.15,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (context,index){
-                      return SizedBox(
-                        width: width*0.3,
-                        child: CategoryCard(
-                          index: index,
-                                onTap: () {
-                                  // categories =
-                                  //     categories.categories[index];
-                                  // categories.categorised = true;
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => ProductListScreen(
-                                  //               categoryIndex: index,
-                                  //             )));
-                                },
-                                smallFont: 12.0,
-                                largeFont: 25.0,
-                                categoryName: "${categories[index].categoryName}",
-                                categoryInitial: categories[index].categoryName!.substring(0,2),
+                    );
+                  }),
+            ),
 
-                        ),
-                      );
-                    }),
-                  ),
+            Expanded(
+                child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: height * 0.01),
+              child: GridView.builder(
+                  padding: EdgeInsets.only(top: height * 0.02),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, childAspectRatio: 2 / 2.9),
+                  itemCount: categories.inventory.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          top: index.isEven ? height * 0.02 : 0,
+                          bottom: index.isOdd ? height * 0.02 : 0),
+                      child: ProductCard(
+                        index: index,
+                        productName: categories.inventory[index].productName,
+                        quantity: categories.inventory[index].quantity.toString(),
+                        price: categories.inventory[index].sellingPrice.toString(),
+                      ),
+                    );
+                  }),
+            ))
 
-                   
-                
-                Expanded(
-                  child: 
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: height * 0.01),
-                      child: GridView.builder(
-                        padding: EdgeInsets.only(
-                 
-                  top: height * 0.02),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  
-                                  childAspectRatio: 2 / 2.9),
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top: index.isEven ? height * 0.02 : 0,
-                                  bottom: index.isOdd ? height * 0.02 : 0),
-                              child: ProductCard(
-                                index: index,
-                                productName:
-                                    "Milk",
-                                quantity:
-                                    "20",
-                                price:
-                                    "GHS 5.00",
-                              ),
-                            );
-                          }),
-                    ))
-                 
-                  
-                  // ListView.builder(
-                  //     itemCount: categories.length,
-                  //     itemBuilder: (context, index) {
-                  //       return ListTile(
-                  //           onTap: () {
-                  //             // categories.category =
-                  //             //     categories.categories[index];
-                  //             // categories.categorised = true;
-                  //             // Navigator.push(
-                  //             //     context,
-                  //             //     MaterialPageRoute(
-                  //             //         builder: (context) =>
-                  //             //             ProductListScreen()));
-                  //           },
-                  //           leading: Icon(Icons.category,
-                  //               color: ShopColors.secondaryColor),
-                  //           // title: Text(
-                  //           //     "${categories[index].productName}",
-                  //           //     style: TextStyle(fontSize: 17)),
-                  //           trailing: Icon(Icons.circle,
-                  //               color: ShopColors.secondaryColor));
-                  //     }),
-                
-                //),
-              
-              ]
-               ),
-        ));
+            // ListView.builder(
+            //     itemCount: categories.length,
+            //     itemBuilder: (context, index) {
+            //       return ListTile(
+            //           onTap: () {
+            //             // categories.category =
+            //             //     categories.categories[index];
+            //             // categories.categorised = true;
+            //             // Navigator.push(
+            //             //     context,
+            //             //     MaterialPageRoute(
+            //             //         builder: (context) =>
+            //             //             ProductListScreen()));
+            //           },
+            //           leading: Icon(Icons.category,
+            //               color: ShopColors.secondaryColor),
+            //           // title: Text(
+            //           //     "${categories[index].productName}",
+            //           //     style: TextStyle(fontSize: 17)),
+            //           trailing: Icon(Icons.circle,
+            //               color: ShopColors.secondaryColor));
+            //     }),
+
+            //),
+          ]),
+    ));
   }
 }
 
@@ -206,9 +186,7 @@ class ProductList extends StatelessWidget {
                       style: TextStyle(fontSize: 17)),
                   trailing:
                       Icon(Icons.circle, color: ShopColors.secondaryColor));
-            })
-
-        );
+            }));
   }
 }
 
@@ -216,14 +194,13 @@ class HeaderSection extends StatelessWidget {
   const HeaderSection({
     Key? key,
     required this.height,
-   
     required this.theme,
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
-  
+
   final ThemeData theme;
   final double width;
   final Function()? onPressed;
@@ -233,7 +210,6 @@ class HeaderSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-       
         Text(
           "Inventory",
           textAlign: TextAlign.left,

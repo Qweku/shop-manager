@@ -20,7 +20,6 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  List<ProductCategory> category = [ProductCategory(categoryName: "Milo")];
 
   final categoryName = TextEditingController();
 
@@ -84,9 +83,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             return CategoryCard(
                               index: index,
                               onTap: () {
-                                // categories =
-                                //     categories.categories[index];
-                                // categories.categorised = true;
+                            
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
  import 'package:shop_manager/pages/dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,7 +22,17 @@ class _LoginScreenState extends State<LoginScreen> {
   double num = 0.4;
   //double maxH = MediaQuery.of(context).size.height;
   IconData visibility = Icons.visibility_off;
- 
+   late Box shopBox;
+
+  void launchHive() async {
+    shopBox = await Hive.openBox<String>("shop");
+  }
+
+  @override
+  void initState() {
+    launchHive();
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -132,23 +146,22 @@ class _LoginScreenState extends State<LoginScreen> {
                               color:theme.primaryColorLight,
                               textColor: theme.primaryColor,
                               buttonText: 'Login',
-                               onTap: () {
+                              onTap: () async {
+                                  String shopJson = shopBox.get("shopDetail",
+                                      defaultValue: "{}");
 
-                                  if (isShown == false) {
-                                    // isShown = true;
-                                    // num = 0.35;
-                                    // isNot = false;
-                                    // return null;
-                                    setState(() {
-                                      isShown = true;
-                                      num = 0.4;
-                                      isNot = false;
-                                    });
-                                  } else {
-                                    
-                                    Navigator.push(
-                                        context, MaterialPageRoute(builder: (context) => Dashboard()));
-                                  }
+                                  Provider.of<GeneralProvider>(context,
+                                          listen: false)
+                                      .shop = Shop.fromJson(shopJson);
+
+                                  Provider.of<GeneralProvider>(context,
+                                              listen: false)
+                                          .categories = Shop.fromJson(shopJson).productCategory ?? [];
+
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Dashboard()));
                                 },
                             )
                             
