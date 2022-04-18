@@ -1,7 +1,4 @@
-// ignore_for_file: file_names
-
-import 'package:flutter/foundation.dart';
-import 'package:shop_manager/models/LocalStorageAccess.dart';
+import 'package:flutter/material.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 
 class GeneralProvider extends ChangeNotifier {
@@ -9,22 +6,28 @@ class GeneralProvider extends ChangeNotifier {
   ProductCategory _modelCategory = ProductCategory();
   Product _product = Product();
   Product _modelProduct = Product();
+  Shop _shop = Shop();
 
-  final List<Product> _inventory = [];
+  List<Product> _inventory = [];
   List<Product> _categoryinventory = [];
   List<Product> _modelInventory = [];
-  List<ProductCategory>? _categories = [
-    ProductCategory(categoryName: "Provisions", products: [])
-  ];
+  List<ProductCategory>? _categories = [];
   bool _categorised = false;
+
+  Shop get shop {
+    // debugPrint(categories!.first.categoryName);
+    _shop.productCategory = categories;
+
+    return _shop;
+  }
 
   Product get product => _product;
   ProductCategory get category => _category;
   List<Product> get inventory {
     _inventory.clear();
-    categories!.forEach((element) {
+    for (var element in categories!) {
       _inventory.addAll(element.products!);
-    });
+    }
     return _inventory;
   }
 
@@ -41,6 +44,11 @@ class GeneralProvider extends ChangeNotifier {
 
   set categorised(bool isCated) {
     _categorised = isCated;
+    notifyListeners();
+  }
+
+  set shop(Shop currentShop) {
+    _shop = currentShop;
     notifyListeners();
   }
 
@@ -113,7 +121,6 @@ class GeneralProvider extends ChangeNotifier {
     // different from the previous one. For example, availability of an item
     // might have changed.
     notifyListeners();
-    Stores().updateModel();
   }
 
   void loadCategory() {}

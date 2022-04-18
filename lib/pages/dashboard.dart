@@ -3,6 +3,7 @@ import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/pages/inventory.dart';
 
+
 import 'addproduct.dart';
 import 'category.dart';
 

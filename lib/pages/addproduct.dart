@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'dart:io';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final productQuantity = TextEditingController();
   File? _image;
 
+  late Box shopBox;
   String? _selectedCategory;
   List<String?> cat = [];
   //String imagePath;
@@ -65,7 +67,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   Widget _submitButton() {
     return InkWell(
-        onTap: () {
+        onTap: () async {
           Product product = Product(
             productName: productName.text,
             sellingPrice:
@@ -73,22 +75,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
             quantity: int.tryParse(productQuantity.text),
             costPrice: double.tryParse(productPrice.text),
           );
+          // product.ca = context
+          //     .read<GeneralProvider>()
+          //     .categories![categoryIndex]
+          //     .categoryName;
 
           Provider.of<GeneralProvider>(context, listen: false)
               .categories![categoryIndex]
               .products!
               .add(product);
 
-          // Provider.of<GeneralProvider>(context, listen: false)
-          //     .inventory
-          //     .add(product);
+          String shopJson = Provider.of<GeneralProvider>(context, listen: false)
+              .shop
+              .toJson();
+          await shopBox.put("shopDetail", shopJson);
 
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => ProductListScreen(
-          //               categoryIndex: categoryIndex,
-          //             )));
+          // print(Provider.of<GeneralProvider>(context, listen: false)
+          //     .categories![categoryIndex]
+          //     .products!
+          //     [1]
+          //     .categoryName);
           Navigator.pop(context);
         },
         child: Container(
@@ -169,8 +175,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
         in Provider.of<GeneralProvider>(context, listen: false).categories!) {
       cat.add(item.categoryName);
     }
-
+    Hive.close().then((value) {
+      Hive.openBox('shop').then((value) {
+        shopBox = value;
+      });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    shopBox.close();
+    super.dispose();
   }
 
   @override
@@ -273,13 +289,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           Border.all(color: ShopColors.primaryColor, width: 2),
                       borderRadius: BorderRadius.circular(20)),
                   child: DropdownButtonFormField(
+                    style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
-                        hintStyle: TextStyle(color: Colors.black87),
+                        hintStyle: TextStyle(color: Colors.white),
                         border: InputBorder.none,
                         enabled: false,
                         fillColor: Colors.transparent,
                         filled: true),
-                    hint: Text('Select Category'),
+                    hint: Text(
+                      'Select Category',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     value: _selectedCategory,
                     onChanged: (dynamic newValue) {
                       setState(() {
@@ -288,51 +308,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     },
                     items: cat.map((location) {
                       return DropdownMenuItem(
-                        child: new Text(location!),
+                        child: Text(location!/* ,style: TextStyle(color: Colors.white), */),
                         value: location,
                       );
                     }).toList(),
                   ),
                 ),
               ),
-
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 10),
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     height: 50,
-              //     decoration: BoxDecoration(
-              //         border:
-              //             Border.all(color: ShopColors.primaryColor, width: 2),
-              //         borderRadius: BorderRadius.circular(20)),
-              //     child: TextFormField(
-              //       controller: productCategory,
-              //       textAlign: TextAlign.justify,
-              //       style: TextStyle(
-              //         color: ShopColors.primaryColor,
-              //         fontSize: 17,
-              //       ),
-              //       decoration: InputDecoration(
-              //         prefixIcon: Icon(Icons.category,
-              //             color: ShopColors.primaryColor, size: 20),
-              //         hintText: "Category",
-              //         hintStyle: TextStyle(color: ShopColors.primaryColor),
-              //         border: InputBorder.none,
-              //         focusedBorder: InputBorder.none,
-              //         enabledBorder: InputBorder.none,
-              //         errorStyle: TextStyle(fontSize: 15),
-              //         disabledBorder: InputBorder.none,
-              //         isDense: true,
-              //         contentPadding:
-              //             EdgeInsets.symmetric(horizontal: 15, vertical: 15.0),
-              //       ),
-              //       // validator: MultiValidator([
-              //       //   RequiredValidator(
-              //       //       errorText: "*field cannot be empty"),
-              //       // ]),
-              //     ),
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Container(
