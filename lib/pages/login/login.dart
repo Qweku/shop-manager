@@ -162,144 +162,29 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Provider.of<GeneralProvider>(context,
                                                 listen: false)
                                             .categories = Shop.fromJson(shopJson).productCategory ?? [];
-    
+                                        if (isShown == false) {
+                                          // isShown = true;
+                                          // num = 0.35;
+                                          // isNot = false;
+                                          // return null;
+                                          setState(() {
+                                            isShown = true;
+                                            num = 0.4;
+                                            isNot = false;
+                                          });
+                                        } else {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Dashboard()));
-                                  },
+                                            builder: (context) => const Dashboard()));
+                                }},
                               )
                               
                         )    ]),
                   ),
                 ),
               ),
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 800),
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: AnimatedContainer(
-                   duration: const Duration(milliseconds: 800),
-                    height: height * num,
-                    decoration: BoxDecoration(
-                        color: ShopColors.secondaryColor,
-                        borderRadius: BorderRadius.only(
-                            // bottomLeft: Radius.circular(width),
-                            bottomRight: Radius.circular(width * 0.5))),
-                    child: Padding(
-                      padding:  EdgeInsets.only(top: height*0.1, right: height*0.03, left: height*0.03),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Visibility(
-                              visible: isNot,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  "Existing user?",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                      color: ShopColors.primaryColor),
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: isShown,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 30),
-                                child: Text(
-                                  "WELCOME",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25,
-                                      color: ShopColors.primaryColor),
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: isShown,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: height*0.02),
-                                child: CustomTextField(
-                                  borderColor: theme.primaryColorLight,
-                                  hintText: "Username or email",
-                                  hintColor: theme.primaryColorLight,
-                                  style:theme.textTheme.bodyText2,
-                                  prefixIcon: Icon(Icons.person,color:theme.primaryColorLight),
-                                ),
-                              )
-                              
-                            )
-                            ,
-                            Visibility(
-                              visible: isShown,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: height*0.02),
-                                child: CustomTextField(
-                                  maxLines: 1,
-                                  obscure: true,
-                                  borderColor: theme.primaryColorLight,
-                                  style:theme.textTheme.bodyText2,
-                                   prefixIcon: Icon(Icons.lock,
-                                            color: theme.primaryColorLight),
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              obsure = !obsure;
-                                              if (!obsure) {
-                                                visibility = Icons.visibility;
-                                              } else {
-                                                visibility = Icons.visibility_off;
-                                              }
-                                            });
-                                          },
-                                          child: Container(
-                                            // alignment: Alignment(1.0,50.0),
-                                            padding: const EdgeInsets.only(right: 10),
-                                            child: Icon(visibility,
-                                                size: 25,
-                                                color: ShopColors.primaryColor),
-                                          ),
-                                        ),
-                                        hintText: "Password",
-                                        hintColor: theme.primaryColorLight,
-                                ),
-                              )
-                             
-                            ),
-                            Padding(
-                                padding: EdgeInsets.symmetric(vertical: height*0.04),
-                                child: Button(
-                                  width: width,
-                                  color:theme.primaryColorLight,
-                                  textColor: theme.primaryColor,
-                                  buttonText: 'Login',
-                                   onTap: () {
-      
-                                      if (isShown == false) {
-                                        // isShown = true;
-                                        // num = 0.35;
-                                        // isNot = false;
-                                        // return null;
-                                        setState(() {
-                                          isShown = true;
-                                          num = 0.4;
-                                          isNot = false;
-                                        });
-                                      } else {
-                                        
-                                        Navigator.push(
-                                            context, MaterialPageRoute(builder: (context) => const Dashboard()));
-                                      }
-                                    },
-                                )
-                                
-                          )    ]),
-                    ),
-                  ),
-                ),
+               
                 AnimatedPositioned(
                   duration: const Duration(milliseconds: 800),
                   bottom: 0,

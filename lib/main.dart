@@ -3,7 +3,7 @@ import 'package:shop_manager/pages/login/onboarding.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_manager/pages/login/login.dart';
+
 
 import 'models/GeneralProvider.dart';
 
