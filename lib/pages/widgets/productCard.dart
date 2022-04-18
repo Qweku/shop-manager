@@ -41,7 +41,7 @@ class ProductCard extends StatelessWidget {
                       blurRadius: 2,
                       spreadRadius: 1)
                 ]),
-                child: Image.file(img,fit: BoxFit.cover,)
+                child: !img.isAbsolute ? Container():Image.file(img,fit: BoxFit.cover,)
             
               ),
             ),
