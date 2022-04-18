@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 
