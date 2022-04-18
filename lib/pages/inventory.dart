@@ -218,20 +218,27 @@ class HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "Inventory",
-          textAlign: TextAlign.left,
-          style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Inventory",
+              textAlign: TextAlign.left,
+              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+            ),
+            SizedBox(
+                width: width * 0.1,
+                child: Divider(
+                  color: theme.primaryColorLight,
+                  thickness: 5,
+                )),
+          ],
         ),
-        SizedBox(
-            width: width * 0.1,
-            child: Divider(
-              color: theme.primaryColorLight,
-              thickness: 5,
-            )),
+        IconButton(icon:Icon(Icons.search,color:theme.primaryColorLight,size:30),
+        onPressed :(){},)
       ],
     );
   }
