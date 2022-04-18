@@ -8,6 +8,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/productModel.dart';
 import 'package:shop_manager/pages/addproduct.dart';
 import 'package:shop_manager/pages/dashboard.dart';
+import 'package:shop_manager/pages/productView.dart';
 import 'package:shop_manager/pages/widgets/categoryCard.dart';
 
 import 'widgets/clipPath.dart';
@@ -95,6 +96,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 child: Padding(
               padding: EdgeInsets.symmetric(horizontal: height * 0.01),
               child: GridView.builder(
+                 physics: BouncingScrollPhysics(),
                   padding: EdgeInsets.only(top: height * 0.02),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, childAspectRatio: 2 / 2.9),
@@ -105,11 +107,19 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           top: index.isEven ? height * 0.02 : 0,
                           bottom: index.isOdd ? height * 0.02 : 0),
                       child: ProductCard(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProductView(
+                                        
+                                      )));
+                        },
                         index: index,
                         image64:  categories.inventory[index].imageb64.toString(),
                         productName: categories.inventory[index].productName,
                         quantity: categories.inventory[index].quantity.toString(),
-                        price: categories.inventory[index].sellingPrice.toString(),
+                        price: "GHS ${categories.inventory[index].sellingPrice.toString()}",
                       ),
                     );
                   }),
@@ -227,72 +237,4 @@ class HeaderSection extends StatelessWidget {
   }
 }
 
-   // imagePath != null
-              //     ? GridView.builder(
-              //         gridDelegate:
-              //             const SliverGridDelegateWithFixedCrossAxisCount(
-              //                 crossAxisCount: 2,
-              //                 mainAxisSpacing: 10,
-              //                 crossAxisSpacing: 10,
-              //                 childAspectRatio: 0.5),
-              //         itemCount: imagePath != null && imagePath.isNotEmpty
-              //             ? imagePath.length
-              //             : 1,
-              //         padding: EdgeInsets.zero,
-              //         itemBuilder: (BuildContext context, int index) {
-              //           //List<String> imagePaths;
-              //           return Container(
-              //             height: height * 0.25,
-              //             child: Column(
-              //               crossAxisAlignment: CrossAxisAlignment.start,
-              //               children: [
-              //                 Container(
-              //                   width: width,
-              //                   height: height * 0.25,
-              //                   decoration: BoxDecoration(
-              //                       borderRadius: BorderRadius.circular(20),
-              //                       color: ShopColors.secondaryColor),
-              //                   child:  imagePath != null
-              //                       ? ClipRRect(
-              //                           borderRadius: BorderRadius.circular(20),
-              //                           child: Image.file(
-              //                             Io.File( imagePath),
-              //                             width: width,
-              //                             height: height * 0.25,
-              //                             fit: BoxFit.cover,
-              //                           ),
-              //                         )
-              //                       : Container(
-              //                           decoration: BoxDecoration(
-              //                             //color: Colors.grey[200],
-              //                             borderRadius:
-              //                                 BorderRadius.circular(20),
-              //                           ),
-              //                           width: width,
-              //                           height: height * 0.25,
-              //                           child: Icon(
-              //                             Icons.camera_alt,
-              //                             color: ShopColors.primaryColor,
-              //                             size: 30,
-              //                           ),
-              //                         ),
-              //                 ),
-              //                 Padding(
-              //                   padding:
-              //                       const EdgeInsets.symmetric(vertical: 8),
-              //                   child: Text(
-              //                       "${ product.productName}" +
-              //                           " (${ product.costPrice})",
-              //                       style: TextStyle(
-              //                           fontSize: 17,
-              //                           fontWeight: FontWeight.bold)),
-              //                 ),
-              //                 Text("${ product.sellingPrice}",
-              //                     style: TextStyle(fontSize: 17)),
-              //               ],
-              //             ),
-              //           );
-              //         },
-              //       )
-              //     : Container(),
-          
+  

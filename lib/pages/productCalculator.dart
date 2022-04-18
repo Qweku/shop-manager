@@ -78,6 +78,8 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                   theme: theme, itemPrice: itemPrice),
                             ),
                             ItemCounter(
+                              iconColor:theme.primaryColor,
+                              boxColor: theme.primaryColorLight,
                                 height: height, theme: theme, width: width),
                           ],
                         ),

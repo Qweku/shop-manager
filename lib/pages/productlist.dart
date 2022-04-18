@@ -77,6 +77,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: height * 0.01),
                       child: GridView.builder(
+                         physics: BouncingScrollPhysics(),
                         padding: EdgeInsets.only(
                  
                   top: height * 0.02),
@@ -93,6 +94,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   top: index.isEven ? height * 0.02 : 0,
                                   bottom: index.isOdd ? height * 0.02 : 0),
                               child: ProductCard(
+                                onTap: (){
+                                  _bottomDrawSheet(context);
+                                },
                                 index: index,
                                 image64:"${state.categories![widget.categoryIndex].products![index].imageb64}",
                                 productName:
@@ -112,6 +116,67 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ),
     );
   }
+  void _bottomDrawSheet(context) {
+    final theme = Theme.of(context);
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    showModalBottomSheet(
+        backgroundColor: theme.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(20.0),
+              topRight: const Radius.circular(20.0)),
+        ),
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            padding: EdgeInsets.all(height * 0.02),
+            child: Wrap(
+              spacing: 20,
+              children: <Widget>[
+                SizedBox(height: height * 0.02),
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: (){},
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: height*0.04,
+                            backgroundColor: theme.primaryColorLight,
+                            child: Icon(Icons.edit,color:theme.primaryColor),
+                          ),
+                          SizedBox(height:height*0.01),
+                          Text('Edit',style:theme.textTheme.bodyText2)
+                        ],
+                      ),
+                    ),
+                     GestureDetector(
+                    onTap: (){},
+                       child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: height*0.04,
+                            backgroundColor: theme.primaryColorLight,
+                            child: Icon(Icons.delete,color:theme.primaryColor),
+                          ),
+                          SizedBox(height:height*0.01),
+                          Text('Delete',style:theme.textTheme.bodyText2)
+                        ],
+                                           ),
+                     ),
+                  ],
+                ),
+                SizedBox(height: height * 0.04),
+               
+              ],
+            ),
+          );
+        });
+  }
+
 }
 
 class HeaderSection extends StatelessWidget {

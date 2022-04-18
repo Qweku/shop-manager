@@ -69,6 +69,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: height * 0.02),
                       child: GridView.builder(
+                        physics: BouncingScrollPhysics(),
                         padding: EdgeInsets.only(
                  
                   top: height * 0.04),
