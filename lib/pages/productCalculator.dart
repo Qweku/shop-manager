@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
 import 'widgets/productCalculatorWidget.dart';
@@ -27,6 +29,18 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   void dispose() {
     quantityItem.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    Provider.of<GeneralProvider>(context, listen: false)
+        .cart
+        .forEach((element) {
+      setState(() {
+        totalCost += element.sellingPrice!;
+      });
+    });
+    super.initState();
   }
 
   // calculateTotal() {
@@ -66,24 +80,31 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   ),
                   SizedBox(
                     //height: height * 0.6,
-                    child: ListView(
+                    child: ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: height * 0.15),
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: width * 0.65,
-                              child: ItemDetail(
-                                  theme: theme, itemPrice: itemPrice),
-                            ),
-                            ItemCounter(
-                              iconColor:theme.primaryColor,
+                      itemCount:
+                          Provider.of<GeneralProvider>(context, listen: false)
+                              .cart
+                              .length,
+                      itemBuilder: (context, index) => Row(
+                        children: [
+                          SizedBox(
+                            width: width * 0.65,
+                            child: ItemDetail(
+                                theme: theme,
+                                item: Provider.of<GeneralProvider>(context,
+                                        listen: false)
+                                    .cart[index]),
+                          ),
+                          ItemCounter(
+                              iconColor: theme.primaryColor,
                               boxColor: theme.primaryColorLight,
-                                height: height, theme: theme, width: width),
-                          ],
-                        ),
-                      ],
+                              height: height,
+                              theme: theme,
+                              width: width),
+                        ],
+                      ),
                     ),
                   ),
                 ],

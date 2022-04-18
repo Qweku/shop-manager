@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,6 +30,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   late Box shopBox;
   String? _selectedCategory;
+  String imageString = '';
   List<String?> cat = [];
   //String imagePath;
   final picker = ImagePicker();
@@ -36,11 +38,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
   int categoryIndex = 0;
 
   Future _imgFromCamera() async {
-    final image =
-        await picker.getImage(source: ImageSource.camera, imageQuality: 50);
     try {
+      final image =
+          await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+      // final toBytes = await
       setState(() {
         _image = File(image!.path);
+
+        imageString = base64Encode(File(image.path).readAsBytesSync());
       });
     } catch (e) {
       print(e);
@@ -48,34 +53,34 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   _imgFromGallery() async {
-    final image =
-        await picker.getImage(source: ImageSource.gallery, imageQuality: 80);
     try {
+      final image =
+          await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
       setState(() {
         _image = File(image!.path);
+        imageString = base64Encode(File(image.path).readAsBytesSync());
       });
     } catch (e) {
       print(e);
     }
   }
 
-  _removeimage() {
-    setState(() {
-      _image = null;
-    });
-  }
+  // _removeimage() {
+  //   setState(() {
+  //     _image = null;
+  //   });
+  // }
 
   Widget _submitButton() {
     return InkWell(
         onTap: () async {
           Product product = Product(
-            productName: productName.text,
-            sellingPrice:
-                double.tryParse(productPrice.text.replaceRange(0, 3, "")),
-            quantity: int.tryParse(productQuantity.text),
-            costPrice: double.tryParse(productPrice.text),
-            imageb64: _image!.path
-          );
+              productName: productName.text,
+              sellingPrice:
+                  double.tryParse(productPrice.text.replaceRange(0, 3, "")),
+              quantity: int.tryParse(productQuantity.text),
+              costPrice: double.tryParse(productPrice.text),
+              imageb64: imageString);
           // product.ca = context
           //     .read<GeneralProvider>()
           //     .categories![categoryIndex]
@@ -97,7 +102,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
           //     [1]
           //     .categoryName);
           Navigator.pop(context);
-          print(_image!.path);
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -195,7 +199,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-final theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: ShopColors.secondaryColor,
       body: SafeArea(
@@ -311,8 +315,11 @@ final theme = Theme.of(context);
                     },
                     items: cat.map((location) {
                       return DropdownMenuItem(
-                        child: Text(location!,style: theme.textTheme.bodyText2,
-                        /* ,style: TextStyle(color: Colors.white), */),
+                        child: Text(
+                          location!,
+                          style: theme.textTheme
+                              .bodyText2, /* ,style: TextStyle(color: Colors.white), */
+                        ),
                         value: location,
                       );
                     }).toList(),

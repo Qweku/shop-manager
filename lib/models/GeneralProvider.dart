@@ -9,7 +9,7 @@ class GeneralProvider extends ChangeNotifier {
   Shop _shop = Shop();
 
   List<Product> _inventory = [];
-  List<Product> _categoryinventory = [];
+  List<Product> _cart = [];
   List<Product> _modelInventory = [];
   List<ProductCategory>? _categories = [];
   bool _categorised = false;
@@ -38,7 +38,7 @@ class GeneralProvider extends ChangeNotifier {
   }
 
   List<Product> get modelInventory => _modelInventory;
-  List<Product> get categoryInventory => _categoryinventory;
+  List<Product> get cart => _cart;
   List<ProductCategory>? get categories => _categories;
   bool get categorised => _categorised;
 
@@ -84,8 +84,8 @@ class GeneralProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  set categoryInventory(List<Product> categoryInventory) {
-    _categoryinventory = categoryInventory;
+  set cart(List<Product> cart) {
+    _cart = cart;
     // Notify listeners, in case the new catalog provides information
     // different from the previous one. For example, availability of an item
     // might have changed.
@@ -116,10 +116,8 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addCategory(String categoryname) {
-    // Notify listeners, in case the new catalog provides information
-    // different from the previous one. For example, availability of an item
-    // might have changed.
+  void addtoCart(Product product) {
+    cart.add(product);
     notifyListeners();
   }
 

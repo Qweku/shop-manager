@@ -111,12 +111,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProductView(
+                                  builder: (context) => ProductView(product: categories.inventory[index],
                                         
                                       )));
                         },
                         index: index,
-                        image64:  categories.inventory[index].imageb64.toString(),
+                        image64:  categories.inventory[index].imageb64 ?? "",
                         productName: categories.inventory[index].productName,
                         quantity: categories.inventory[index].quantity.toString(),
                         price: "GHS ${categories.inventory[index].sellingPrice.toString()}",

@@ -98,7 +98,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   _bottomDrawSheet(context);
                                 },
                                 index: index,
-                                image64:"${state.categories![widget.categoryIndex].products![index].imageb64}",
+                                image64:state.categories![widget.categoryIndex].products![index].imageb64 ?? '',
                                 productName:
                                     "${state.categories![widget.categoryIndex].products![index].productName}",
                                 quantity:
