@@ -1,12 +1,15 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
   final String? productName, quantity,price;
+  final String image64;
   final int? index;
   final Function()? onTap;
-  const ProductCard({Key? key, this.productName, this.onTap, this.index, this.quantity, this.price})
+  const ProductCard({Key? key, this.productName, this.onTap, this.index, this.quantity, this.price, required this.image64})
       : super(key: key);
 
   @override
@@ -14,7 +17,7 @@ class ProductCard extends StatelessWidget {
     final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
+      File img = File(image64);
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -22,20 +25,25 @@ class ProductCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              height:height*0.23,
-               decoration: BoxDecoration(
+            ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
-              color: index!.isEven ? theme.primaryColor : Colors.white,
-             
-              boxShadow: [
-                const BoxShadow(
-                    offset: Offset(2, 2),
-                    color: Color.fromARGB(31, 0, 0, 0),
-                    blurRadius: 2,
-                    spreadRadius: 1)
-              ]),
-
+              child: Container(
+                height:height*0.23,
+                width: width*0.4,
+                 decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: index!.isEven ? theme.primaryColor : Colors.white,
+               
+                boxShadow: [
+                  const BoxShadow(
+                      offset: Offset(2, 2),
+                      color: Color.fromARGB(31, 0, 0, 0),
+                      blurRadius: 2,
+                      spreadRadius: 1)
+                ]),
+                child: Image.file(img,fit: BoxFit.cover,)
+            
+              ),
             ),
             SizedBox(height:height*0.01),
             Row(

@@ -106,6 +106,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           bottom: index.isOdd ? height * 0.02 : 0),
                       child: ProductCard(
                         index: index,
+                        image64:  categories.inventory[index].imageb64.toString(),
                         productName: categories.inventory[index].productName,
                         quantity: categories.inventory[index].quantity.toString(),
                         price: categories.inventory[index].sellingPrice.toString(),

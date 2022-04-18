@@ -74,6 +74,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 double.tryParse(productPrice.text.replaceRange(0, 3, "")),
             quantity: int.tryParse(productQuantity.text),
             costPrice: double.tryParse(productPrice.text),
+            imageb64: _image!.path
           );
           // product.ca = context
           //     .read<GeneralProvider>()
@@ -96,6 +97,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           //     [1]
           //     .categoryName);
           Navigator.pop(context);
+          print(_image!.path);
         },
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -193,7 +195,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
+final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: ShopColors.secondaryColor,
       body: SafeArea(
@@ -289,6 +291,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           Border.all(color: ShopColors.primaryColor, width: 2),
                       borderRadius: BorderRadius.circular(20)),
                   child: DropdownButtonFormField(
+                    dropdownColor: Colors.black,
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                         hintStyle: TextStyle(color: Colors.white),
@@ -298,7 +301,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         filled: true),
                     hint: Text(
                       'Select Category',
-                      style: TextStyle(color: Colors.white),
+                      style: theme.textTheme.bodyText2,
                     ),
                     value: _selectedCategory,
                     onChanged: (dynamic newValue) {
@@ -308,7 +311,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     },
                     items: cat.map((location) {
                       return DropdownMenuItem(
-                        child: Text(location!/* ,style: TextStyle(color: Colors.white), */),
+                        child: Text(location!,style: theme.textTheme.bodyText2,
+                        /* ,style: TextStyle(color: Colors.white), */),
                         value: location,
                       );
                     }).toList(),

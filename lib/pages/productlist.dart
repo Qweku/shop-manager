@@ -94,6 +94,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   bottom: index.isOdd ? height * 0.02 : 0),
                               child: ProductCard(
                                 index: index,
+                                image64:"${state.categories![widget.categoryIndex].products![index].imageb64}",
                                 productName:
                                     "${state.categories![widget.categoryIndex].products![index].productName}",
                                 quantity:
