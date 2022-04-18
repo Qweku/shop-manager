@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
- import 'package:shop_manager/components/bottomnav.dart';
+import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/config/colors.dart';
- import 'package:shop_manager/pages/inventory.dart';
+import 'package:shop_manager/pages/inventory.dart';
 
 import 'addproduct.dart';
 import 'category.dart';
@@ -18,7 +18,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
+    final theme = Theme.of(context);
     return Scaffold(
         bottomNavigationBar: BottomNav(),
         backgroundColor: ShopColors.primaryColor,
@@ -63,7 +63,7 @@ class _DashboardState extends State<Dashboard> {
                             ),
                           ],
                         )),
-                    Container(
+                    SizedBox(
                         height: height * 0.53,
                         child: GridView.count(
                           padding: EdgeInsets.zero,
@@ -71,7 +71,7 @@ class _DashboardState extends State<Dashboard> {
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 20,
                           children: [
-                            GestureDetector(
+                            GridMenuItem(
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -79,96 +79,32 @@ class _DashboardState extends State<Dashboard> {
                                         builder: (context) =>
                                             CategoryScreen()));
                               },
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: ShopColors.primaryColor,
-                                      border: Border.all(
-                                          color: ShopColors.secondaryColor!,
-                                          width: 2)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.category,
-                                          size: 40,
-                                          color: ShopColors.secondaryColor),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Text("Categories",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color:
-                                                    ShopColors.secondaryColor)),
-                                      ),
-                                    ],
-                                  )),
+                              label: "Categories",
+                              icon: Icons.category,
+                              menuColor: theme.primaryColorLight,
+                              iconColor: theme.primaryColor,
                             ),
-                            GestureDetector(
+                            GridMenuItem(
                               onTap: () {
-                                
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             AddProductScreen()));
                               },
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: ShopColors.primaryColor,
-                                      border: Border.all(
-                                          color: ShopColors.secondaryColor!,
-                                          width: 2)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.shopping_bag,
-                                          size: 40,
-                                          color: ShopColors.secondaryColor),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Text("Add product",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color:
-                                                    ShopColors.secondaryColor)),
-                                      ),
-                                    ],
-                                  )),
+                              label: "Add Product",
+                              icon: Icons.shopping_bag,
+                              menuColor: theme.primaryColorLight,
+                              iconColor: theme.primaryColor,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             CategoryScreen()));
-                              },
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: ShopColors.secondaryColor,
-                                      border: Border.all(
-                                          color: ShopColors.secondaryColor!,
-                                          width: 2)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.list_alt,
-                                          size: 40,
-                                          color: ShopColors.primaryColor),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Text("Accounts",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color:
-                                                    ShopColors.primaryColor)),
-                                      ),
-                                    ],
-                                  )),
+                            GridMenuItem(
+                              onTap: () {},
+                              label: "Accounts",
+                              icon: Icons.receipt_long,
+                              menuColor: theme.primaryColor,
+                              iconColor: theme.primaryColorLight,
                             ),
-                            GestureDetector(
+                            GridMenuItem(
                               onTap: () {
                                 Navigator.push(
                                     context,
@@ -176,29 +112,10 @@ class _DashboardState extends State<Dashboard> {
                                         builder: (context) =>
                                             InventoryScreen()));
                               },
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: ShopColors.secondaryColor,
-                                      border: Border.all(
-                                          color: ShopColors.primaryColor,
-                                          width: 2)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.inventory,
-                                          size: 40,
-                                          color: ShopColors.primaryColor),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Text("Inventory",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color:
-                                                    ShopColors.primaryColor)),
-                                      ),
-                                    ],
-                                  )),
+                              label: "Inventory",
+                              icon: Icons.inventory,
+                              menuColor: theme.primaryColor,
+                              iconColor: theme.primaryColorLight,
                             ),
                           ],
                         )),
@@ -208,5 +125,43 @@ class _DashboardState extends State<Dashboard> {
             ),
           ],
         ));
+  }
+}
+
+class GridMenuItem extends StatelessWidget {
+  final Function()? onTap;
+  final Color menuColor, iconColor;
+  final String label;
+  final IconData icon;
+  const GridMenuItem({
+    Key? key,
+    this.onTap,
+    required this.menuColor,
+    required this.iconColor,
+    required this.label,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: menuColor,
+              border: Border.all(color: iconColor, width: 2)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 40, color: iconColor),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(label,
+                    style: TextStyle(fontSize: 20, color: iconColor)),
+              ),
+            ],
+          )),
+    );
   }
 }

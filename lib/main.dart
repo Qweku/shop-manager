@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_manager/pages/login/onboarding.dart';
 import 'package:shop_manager/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/pages/login/login.dart';
@@ -42,9 +43,10 @@ class _MyAppState extends State<MyApp> {
          bodyText1: TextStyle(fontSize: 14,color:Color.fromARGB(255, 0, 0, 0)),
          bodyText2: TextStyle(fontSize: 14,color:Color.fromARGB(255, 255, 255, 255))
        ),
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      home: const OnboardingScreen()
+      //LoginScreen(),
     );
   }
 }

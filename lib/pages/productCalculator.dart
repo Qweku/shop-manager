@@ -1,5 +1,10 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
+import 'package:shop_manager/pages/widgets/clipPath.dart';
+
+import 'widgets/productCalculatorWidget.dart';
 
 class ProductCalculator extends StatefulWidget {
   const ProductCalculator({Key? key}) : super(key: key);
@@ -11,8 +16,10 @@ class ProductCalculator extends StatefulWidget {
 class _ProductCalculatorState extends State<ProductCalculator> {
   final totalPrice = TextEditingController();
   final quantityItem = TextEditingController();
+  final amountReceived = TextEditingController();
   bool items = false;
   double totalCost = 0.00;
+  double balance = 0.00;
   double itemPrice = 13.00;
   int quantity = 1;
 
@@ -31,198 +38,194 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: ShopColors.secondaryColor,
       body: SafeArea(
-        child: Container(
+        top: false,
+        child: SizedBox(
           height: height,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: height * 0.3,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 70),
-                    child: Center(
-                      child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(),
-                          child: Text(
-                            "GHS " + "$totalCost",
-                            style: TextStyle(
-                                color: ShopColors.textColor, fontSize: 40),
-                          )
-                          //  TextField(
-                          //   controller: totalPrice,
-                          //   textAlign: TextAlign.center,
-                          //   readOnly: true,
-                          //   keyboardType: TextInputType.number,
-                          //   style: TextStyle(
-                          //       color: ShopColors.textColor, fontSize: 15),
-                          //   decoration: InputDecoration(
-                          //       hintText: "GHS 15.00",
-                          //       border: InputBorder.none,
-                          //       hintStyle: TextStyle(
-                          //           color: ShopColors.textColor, fontSize: 40)),
-                          //   inputFormatters: [
-                          //     CurrencyTextInputFormatter(
-                          //         decimalDigits: 2,
-                          //         // locale: 'usa',
-                          //         symbol: 'GHS '),
-                          //   ],
-                          // ),
-
-                          ),
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipPath(
+                    clipper: BottomClipper(),
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          right: height * 0.02,
+                          left: height * 0.02,
+                          top: height * 0.1,
+                          bottom: height * 0.07),
+                      color: theme.primaryColorLight,
+                      width: width,
+                    ),
+                  ),
+                  SizedBox(
+                    //height: height * 0.6,
+                    child: ListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(top: height * 0.15),
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: width * 0.65,
+                              child: ItemDetail(
+                                  theme: theme, itemPrice: itemPrice),
+                            ),
+                            ItemCounter(
+                                height: height, theme: theme, width: width),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: height * 0.05,
+                child: Padding(
+                  padding: EdgeInsets.all(height * 0.03),
+                  child: Container(
+                    height: height * 0.2,
+                    decoration: BoxDecoration(
+                        color: theme.primaryColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                              offset: Offset(2, 2),
+                              color: Colors.black,
+                              blurRadius: 3,
+                              spreadRadius: 1)
+                        ]),
+                    child: Row(
+                      children: [
+                        Center(
+                          child: Container(
+                              height: 50,
+                              width: width * 0.43,
+                              decoration: const BoxDecoration(),
+                              child: Column(
+                                children: [
+                                  Text('Total Amount',
+                                      style: theme.textTheme.bodyText2),
+                                  SizedBox(height: height * 0.01),
+                                  Text(
+                                    "GHS $totalCost",
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.headline2,
+                                  ),
+                                ],
+                              )),
+                        ),
+                        Container(
+                            height: height * 0.1,
+                            width: 1,
+                            color: theme.primaryColorLight),
+                        Center(
+                          child: Container(
+                              height: 50,
+                              width: width * 0.43,
+                              decoration: const BoxDecoration(),
+                              child: Column(
+                                children: [
+                                  Text('Balance',
+                                      style: theme.textTheme.bodyText2),
+                                  SizedBox(height: height * 0.01),
+                                  Text(
+                                    "GHS $balance",
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.headline2,
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Container(
-                  
-                    child: !items
-                        ? GestureDetector(
-                            onTap: () {
-                              showDialog<bool>(
-                                  context: context,
-                                  builder: (c) => SimpleDialog(
-                                        title: Text(
-                                          "Product List",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        children: [
-                                          ListTile(
-                                            onTap: () {
-                                              setState(() {
-                                                items = true;
-                                                // quantity = int.parse(
-                                                //     quantityItem.text);
-                                                // // quantity = 1;
-                                                // totalCost =
-                                                //     itemPrice * quantity;
-                                                //     totalCost.toStringAsFixed(2);
-
-                                                Navigator.pop(context);
-                                              });
-                                            },
-                                            leading: CircleAvatar(
-                                              radius: 30,
-                                              backgroundColor:
-                                                  ShopColors.secondaryColor,
-                                            ),
-                                            title: Text("Product name",
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            subtitle: Text("Quantity " + "30",
-                                                style: TextStyle(fontSize: 17)),
-                                            trailing:
-                                                Text("GHS " + "$itemPrice",
-                                                    style: TextStyle(
-                                                      fontSize: 17,
-                                                    )),
-                                          )
-                                        ],
-                                      ));
-                            },
-                            child: ListTile(
-                              
-                              tileColor: ShopColors.primaryColor.withOpacity(0.6),
-                              title:Center(child: Icon(Icons.add,size:30,color:ShopColors.textColor))
-                            ))
-                        : Container(
-                            height: height * 0.6,
-                          child: ListView(
-                              padding: EdgeInsets.zero,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ListTile(
-                                      leading: CircleAvatar(
-                                        radius: 30,
-                                        backgroundColor: ShopColors.primaryColor,
-                                      ),
-                                      title: Text("Product name",
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              color: ShopColors.textColor,
-                                              fontWeight: FontWeight.w600)),
-                                      trailing: Text("GHS " + "$itemPrice",
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            color: ShopColors.textColor,
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 20),
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width *
-                                            0.6,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: ShopColors.primaryColor,
-                                                width: 2),
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: TextField(
-                                           onChanged:(text){
-                                             setState(() {
-                                                     quantity = int.parse(
-                                                      quantityItem.text.trim());
-                                                  
-                                                  totalCost =
-                                                      itemPrice * quantity;
-                                                      totalCost.toStringAsFixed(2);                                     
-                                                                                        });
-                                           },
-                                          keyboardType: TextInputType.number,
-                                          controller: quantityItem,
-                                          textAlign: TextAlign.justify,
-                                          style: TextStyle(
-                                            color: ShopColors.primaryColor,
-                                            fontSize: 17,
-                                          ),
-                                          
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(Icons.add_box,
-                                                color: ShopColors.primaryColor,
-                                                size: 20),
-                                            hintText: "Enter quantity",
-                                            hintStyle: TextStyle(
-                                                color: ShopColors.primaryColor),
-                                            border: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            enabledBorder: InputBorder.none,
-                                            errorStyle: TextStyle(fontSize: 15),
-                                            disabledBorder: InputBorder.none,
-                                            isDense: true,
-                                           
-                                            contentPadding: EdgeInsets.symmetric(
-                                                horizontal: 15, vertical: 15.0),
-                                          ),
-                                          // validator: MultiValidator([
-                                          //   RequiredValidator(
-                                          //       errorText: "*field cannot be empty"),
-                                          // ]),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                        )),
-              ],
-            ),
+              ),
+              Positioned(
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  child: Container(
+                    color: theme.primaryColor,
+                    padding: EdgeInsets.all(height * 0.03),
+                    child: Button(
+                      onTap: () {
+                        _bottomDrawSheet(context);
+                      },
+                      buttonText: 'Proceed',
+                      color: theme.primaryColorLight,
+                      textColor: theme.primaryColor,
+                      width: width,
+                    ),
+                  ))
+            ],
           ),
         ),
       ),
     );
+  }
+
+  void _bottomDrawSheet(context) {
+    final theme = Theme.of(context);
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    showModalBottomSheet(
+        backgroundColor: theme.primaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+        ),
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            padding: EdgeInsets.all(height * 0.02),
+            child: Wrap(
+              spacing: 20,
+              children: <Widget>[
+                SizedBox(height: height * 0.02),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: height * 0.02, top: height * 0.04),
+                  child: Text("Enter Amount Received",
+                      style: theme.textTheme.headline2),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: height * 0.04,
+                  ),
+                  child: CustomTextField(
+                      //controller: categoryName,
+                      hintText: 'Amount',
+                      hintColor: Colors.white,
+                      borderColor: Colors.white,
+                      prefixIcon: const Icon(Icons.add_box,
+                          color: Colors.white, size: 20),
+                      style: theme.textTheme.bodyText2),
+                ),
+                SizedBox(height: height * 0.04),
+                Button(
+                  color: theme.primaryColorLight,
+                  textColor: theme.primaryColor,
+                  width: width,
+                  buttonText: "Done",
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(height: height * 0.4),
+              ],
+            ),
+          );
+        });
   }
 }

@@ -150,7 +150,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
                 SizedBox(height: height * 0.04),
                 Button(
-                  color: theme.primaryColor,
+                  color: theme.primaryColorLight,
+                    textColor: theme.primaryColor,
                   width: width,
                   buttonText: "Done",
                   onTap: () {
