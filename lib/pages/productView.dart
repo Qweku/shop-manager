@@ -47,12 +47,17 @@ class ProductView extends StatelessWidget {
                   left: width * 0.17,
                   //right: 0,
                   //bottom: 0,
-                  child: Container(
-                    width: width * 0.45,
-                    height: height * 0.25,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.amber),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(height*0.1),
+                    child: Container(
+                      width: width * 0.45,
+                      height: height * 0.25,
+                     
+                      decoration: const BoxDecoration(
+                         
+                          color: Colors.amber),
+                          //child: Image.file(img,fit:BoxFit.cover),
+                    ),
                   ),
                 ),
                 Positioned(
