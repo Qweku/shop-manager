@@ -6,7 +6,7 @@ import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/productCalculator.dart';
-import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
+
 
 class ProductView extends StatelessWidget {
   final Product product;

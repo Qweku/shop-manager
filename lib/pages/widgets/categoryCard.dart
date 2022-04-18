@@ -11,7 +11,6 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     return GestureDetector(
