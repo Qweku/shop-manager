@@ -218,10 +218,10 @@ class HeaderSection extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: theme.primaryColorLight)),
+             color: theme.primaryColorLight),
           child: IconButton(
               onPressed: onPressed,
-              icon: Icon(Icons.add, color: theme.primaryColorLight)),
+              icon: Icon(Icons.add, color: theme.primaryColor)),
         )
       ],
     );
