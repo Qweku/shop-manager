@@ -21,7 +21,7 @@ class _DashboardState extends State<Dashboard> {
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return Scaffold(
-        bottomNavigationBar: BottomNav(),
+        bottomNavigationBar: const BottomNav(),
         backgroundColor: ShopColors.primaryColor,
         body: Stack(
           children: [
@@ -48,7 +48,7 @@ class _DashboardState extends State<Dashboard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                         height: height * 0.14,
                         child: Column(
                           children: [
@@ -78,7 +78,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            CategoryScreen()));
+                                            const CategoryScreen()));
                               },
                               label: "Categories",
                               icon: Icons.category,
@@ -91,7 +91,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            AddProductScreen()));
+                                            const AddProductScreen()));
                               },
                               label: "Add Product",
                               icon: Icons.shopping_bag,
@@ -111,7 +111,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            InventoryScreen()));
+                                            const InventoryScreen()));
                               },
                               label: "Inventory",
                               icon: Icons.inventory,

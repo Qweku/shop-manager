@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/productModel.dart';
-import 'package:shop_manager/pages/addproduct.dart';
-import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/productView.dart';
 import 'package:shop_manager/pages/widgets/categoryCard.dart';
 

@@ -27,9 +27,9 @@ class CustomTheme with ChangeNotifier {
 
   static ThemeData get lightTheme {
     return ThemeData(
-        primaryColor: Color(0xFF0D47A1),
+        primaryColor: const Color(0xFF0D47A1),
         primaryColorLight: Colors.white,
-        textTheme: TextTheme(          
+        textTheme: const TextTheme(          
           headline1: TextStyle(color: Colors.black, fontSize: 42,fontFamily: "Louis_George_Cafe",),
           headline2: TextStyle(color: Colors.white, fontSize: 42,fontFamily: "Louis_George_Cafe",),
           headline3: TextStyle(color: Colors.black, fontSize: 20,fontFamily: "Louis_George_Cafe",),
@@ -38,7 +38,7 @@ class CustomTheme with ChangeNotifier {
           bodyText2: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Louis_George_Cafe",),
           button: TextStyle(color:Colors.white,fontSize:15)
         ),
-        iconTheme: IconThemeData(color: Color(0xFF0D47A1)));
+        iconTheme: const IconThemeData(color: Color(0xFF0D47A1)));
   }
 
   static ThemeData get darkTheme {

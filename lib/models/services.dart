@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:shop_manager/models/LocalStorageAccess.dart';
+
 import 'package:shop_manager/models/SharedPreferences.dart';
 
-Storage storage = new Storage();
+Storage storage =  Storage();
 enum Status { noAccount, invalid, valid, exists, empty, done }
 
 class Auth {
@@ -26,10 +26,12 @@ class Auth {
     if (await storage.isStored(username!)) {
       if (await storage.retrieveString(username!) == password) {
         return Status.valid;
-      } else
+      } else {
         return Status.invalid;
-    } else
+      }
+    } else {
       return Status.noAccount;
+    }
   }
 
   signup() async {
@@ -41,9 +43,9 @@ class Auth {
 
     List<String?> shopList = await (storage.retrieveStringList("Shops") as FutureOr<List<String?>>);
 
-    if (shopList.contains(username))
+    if (shopList.contains(username)) {
       return Status.exists;
-    else {
+    } else {
       shopList.add(username);
       await storage.storeStringList("Shops", shopList);
       await storage.storeString(username!, "");

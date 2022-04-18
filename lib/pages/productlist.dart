@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_manager/models/ShopModel.dart';
 
 import 'addproduct.dart';
 import 'widgets/clipPath.dart';
@@ -119,7 +117,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   void _bottomDrawSheet(context) {
     final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
         backgroundColor: theme.primaryColor,
         shape: RoundedRectangleBorder(

@@ -6,7 +6,7 @@ import 'package:shop_manager/models/SharedPreferences.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/services.dart';
 
-Storage storage = new Storage();
+Storage storage =  Storage();
 
 class Fetches {
   fetchLists() async {
