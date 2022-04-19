@@ -35,16 +35,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
             Column(
                 // height: height,
                 children: [
-                  ClipPath
-                  (
+                  ClipPath(
                     clipper: BottomClipper(),
                     child: Container(
                       padding: EdgeInsets.only(
-                        right: height * 0.02,
-                        left: height * 0.02,
-                        top: height * 0.1,
-                        bottom: height*0.07),
-                                  color: theme.primaryColor,
+                          right: height * 0.02,
+                          left: height * 0.02,
+                          top: height * 0.1,
+                          bottom: height * 0.07),
+                      color: theme.primaryColor,
                       child: HeaderSection(
                         height: height,
                         widget: widget,
@@ -64,51 +63,66 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                   Consumer<GeneralProvider>(builder: (builder, state, child) {
                     return Expanded(
-                        child: state.categories![widget.categoryIndex]
-                              .products!.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No Products',
-                        
-                        style:
-                            theme.textTheme.headline1!.copyWith(fontSize: 25),
-                      ),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: height * 0.01),
-                      child: GridView.builder(
-                         physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.only(
-                 
-                  top: height * 0.02),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  
-                                  childAspectRatio: 2 / 2.9),
-                          itemCount: state.categories![widget.categoryIndex]
-                              .products!.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top: index.isEven ? height * 0.02 : 0,
-                                  bottom: index.isOdd ? height * 0.02 : 0),
-                              child: ProductCard(
-                                onTap: (){
-                                  _bottomDrawSheet(context);
-                                },
-                                index: index,
-                                image64:state.categories![widget.categoryIndex].products![index].imageb64 ?? '',
-                                productName:
-                                    "${state.categories![widget.categoryIndex].products![index].productName}",
-                                quantity:
-                                    "${state.categories![widget.categoryIndex].products![index].quantity}",
-                                price:
-                                    "GHS ${state.categories![widget.categoryIndex].products![index].sellingPrice}",
-                              ),
-                            );
-                          }),
-                    ));
+                        child: state.categories![widget.categoryIndex].products!
+                                .isEmpty
+                            ? Center(
+                                child: Text(
+                                  'No Products',
+                                  style: theme.textTheme.headline1!
+                                      .copyWith(fontSize: 25),
+                                ),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: height * 0.01),
+                                child: GridView.builder(
+                                    physics: BouncingScrollPhysics(),
+                                    padding:
+                                        EdgeInsets.only(top: height * 0.02),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            childAspectRatio: 2 / 2.9),
+                                    itemCount: context
+                                        .watch<GeneralProvider>()
+                                        .categories![widget.categoryIndex]
+                                        .products!
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                            top: index.isEven
+                                                ? height * 0.02
+                                                : 0,
+                                            bottom: index.isOdd
+                                                ? height * 0.02
+                                                : 0),
+                                        child: ProductCard(
+                                          onTap: () {
+                                            _bottomDrawSheet(
+                                                context,
+                                                state
+                                                    .categories![
+                                                        widget.categoryIndex]
+                                                    .products![index]);
+                                          },
+                                          index: index,
+                                          image64: state
+                                                  .categories![
+                                                      widget.categoryIndex]
+                                                  .products![index]
+                                                  .imageb64 ??
+                                              '',
+                                          productName:
+                                              "${state.categories![widget.categoryIndex].products![index].productName}",
+                                          quantity:
+                                              "${state.categories![widget.categoryIndex].products![index].quantity}",
+                                          price:
+                                              "GHS ${state.categories![widget.categoryIndex].products![index].sellingPrice}",
+                                        ),
+                                      );
+                                    }),
+                              ));
                   })
                 ]),
           ],
@@ -116,7 +130,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ),
     );
   }
-  void _bottomDrawSheet(context) {
+
+  void _bottomDrawSheet(context, Product product) {
     final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
@@ -135,48 +150,58 @@ class _ProductListScreenState extends State<ProductListScreen> {
               spacing: 20,
               children: <Widget>[
                 SizedBox(height: height * 0.02),
-                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: (){},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (builder) => AddProductScreen(
+                                      toEdit: true,
+                                      product: product,
+                                    )));
+                      },
                       child: Column(
                         children: [
                           CircleAvatar(
-                            radius: height*0.04,
+                            radius: height * 0.04,
                             backgroundColor: theme.primaryColorLight,
-                            child: Icon(Icons.edit,color:theme.primaryColor),
+                            child: Icon(Icons.edit, color: theme.primaryColor),
                           ),
-                          SizedBox(height:height*0.01),
-                          Text('Edit',style:theme.textTheme.bodyText2)
+                          SizedBox(height: height * 0.01),
+                          Text('Edit', style: theme.textTheme.bodyText2)
                         ],
                       ),
                     ),
-                     GestureDetector(
-                    onTap: (){},
-                       child: Column(
+                    GestureDetector(
+                      onTap: () {
+                        Provider.of<GeneralProvider>(context, listen: false)
+                            .removeProductFromCategories(
+                                widget.categoryIndex, product);
+                      },
+                      child: Column(
                         children: [
                           CircleAvatar(
-                            radius: height*0.04,
+                            radius: height * 0.04,
                             backgroundColor: theme.primaryColorLight,
-                            child: Icon(Icons.delete,color:theme.primaryColor),
+                            child:
+                                Icon(Icons.delete, color: theme.primaryColor),
                           ),
-                          SizedBox(height:height*0.01),
-                          Text('Delete',style:theme.textTheme.bodyText2)
+                          SizedBox(height: height * 0.01),
+                          Text('Delete', style: theme.textTheme.bodyText2)
                         ],
-                                           ),
-                     ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: height * 0.04),
-               
               ],
             ),
           );
         });
   }
-
 }
 
 class HeaderSection extends StatelessWidget {
@@ -204,7 +229,9 @@ class HeaderSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                "${context.read<GeneralProvider>().categories![widget.categoryIndex].categoryName}",
+                Provider.of<GeneralProvider>(context, listen: false)
+                    .categories![widget.categoryIndex]
+                    .categoryName!,
                 textAlign: TextAlign.left,
                 style: theme.textTheme.headline2),
             Text(

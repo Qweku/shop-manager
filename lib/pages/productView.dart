@@ -201,7 +201,7 @@ class ProductView extends StatelessWidget {
                 if (!(Provider.of<GeneralProvider>(context,listen: false)
                     .cart
                     .contains(product))) {
-                  Provider.of<GeneralProvider>(context,listen: false).addtoCart(product);
+                  Provider.of<GeneralProvider>(context,listen: false).addToCart(product);
                 }
               }),
               child: Container(

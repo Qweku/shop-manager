@@ -14,8 +14,10 @@ import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/productlist.dart';
 
 class AddProductScreen extends StatefulWidget {
-  // final Product product;
-  const AddProductScreen({Key? key}) : super(key: key);
+  final bool? toEdit;
+  final Product? product;
+  const AddProductScreen({Key? key, this.toEdit = false, this.product})
+      : super(key: key);
 
   @override
   _AddProductScreenState createState() => _AddProductScreenState();
@@ -86,10 +88,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
           //     .categories![categoryIndex]
           //     .categoryName;
 
-          Provider.of<GeneralProvider>(context, listen: false)
-              .categories![categoryIndex]
-              .products!
-              .add(product);
+          // Provider.of<GeneralProvider>(context, listen: false)
+          //     .categories![categoryIndex]
+          //     .products!
+          //     .add(product);
+
+          if (widget.toEdit!) {
+            Provider.of<GeneralProvider>(context, listen: false)
+                .categories![categoryIndex]
+                .products!
+                .removeWhere((element) => element == widget.product);
+            Provider.of<GeneralProvider>(context, listen: false)
+                .categories![categoryIndex]
+                .products!
+                .add(product);
+          } else {
+            Provider.of<GeneralProvider>(context, listen: false)
+                .categories![categoryIndex]
+                .products!
+                .add(product);
+          }
 
           String shopJson = Provider.of<GeneralProvider>(context, listen: false)
               .shop
@@ -181,6 +199,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
         in Provider.of<GeneralProvider>(context, listen: false).categories!) {
       cat.add(item.categoryName);
     }
+
+    if (widget.toEdit!) {
+      productName.text = widget.product!.productName! ?? "";
+      productPrice.text = widget.product!.sellingPrice!.toString() ?? "";
+      productQuantity.text = widget.product!.quantity!.toString() ?? "";
+      imageString = (widget.product!.imageb64 ?? "").isEmpty
+          ? ""
+          : widget.product!.imageb64!;
+      _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
+          .categories!
+          .firstWhere((element) => element.products!.contains(widget.product))
+          .categoryName;
+    }
     Hive.close().then((value) {
       Hive.openBox('shop').then((value) {
         shopBox = value;
@@ -211,7 +242,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 50, bottom: 20),
-                child: Text("Let's add the products in your shop",
+                child: Text(
+                    (widget.toEdit!)
+                        ? "Edit Product Detail"
+                        : "Let's add the products in your shop",
                     style:
                         TextStyle(color: ShopColors.textColor, fontSize: 25)),
               ),
@@ -393,20 +427,57 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 fit: BoxFit.cover,
                               ),
                             )
-                          : Container(
-                              decoration: BoxDecoration(
-                                //color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              width: width * 0.45,
-                              height: height * 0.25,
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: ShopColors.secondaryColor,
-                                size: 30,
-                              ),
-                            ),
-                    ),
+                          : (widget.toEdit!)
+                              ? (widget.product!.imageb64 ?? "").isEmpty
+                                  ? Container(
+                                      height: height * 0.23,
+                                      width: width * 0.4,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            const BoxShadow(
+                                                offset: Offset(2, 2),
+                                                color:
+                                                    Color.fromARGB(31, 0, 0, 0),
+                                                blurRadius: 2,
+                                                spreadRadius: 1)
+                                          ]),
+                                      child: Center(
+                                        child: Text(
+                                          widget.product!.productName!
+                                              .substring(0, 2)
+                                              .toUpperCase(),
+                                          style: theme.textTheme.headline1!
+                                              .copyWith(
+                                                  fontSize: 70,
+                                                  color: theme.primaryColor),
+                                        ),
+                                      ))
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.memory(
+                                        base64Decode(widget.product!.imageb64!),
+                                        width: width * 0.45,
+                                        height: height * 0.25,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    //color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  width: width * 0.45,
+                                  height: height * 0.25,
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    color: ShopColors.secondaryColor,
+                                    size: 30,
+                                  ),
+                                ),
+                    )
                   ],
                 ),
               ),

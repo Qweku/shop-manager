@@ -116,8 +116,18 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addtoCart(Product product) {
+  void removeProductFromCategories(int cartegoryIndex,Product product) {
+    categories![cartegoryIndex].products!.remove(product);
+    notifyListeners();
+  }
+  
+  void addToCart(Product product) {
     cart.add(product);
+    notifyListeners();
+  }
+
+  void removeFromCart(Product product) {
+    cart.remove(product);
     notifyListeners();
   }
 
