@@ -99,3 +99,49 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
+class ProductListTile extends StatelessWidget {
+  final String? productName, quantity, price;
+  final String image64;
+  final int? index;
+  final Function()? onTap;
+  const ProductListTile(
+      {Key? key,
+      this.productName,
+      this.quantity,
+      this.price,
+      required this.image64,
+      this.index,
+      this.onTap})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    
+        return ListTile(
+          leading:  CircleAvatar(
+          radius: height * 0.03,
+          backgroundColor: theme.primaryColor,
+          
+        ),
+          title: Text(productName!, style: theme.textTheme.headline1),
+      subtitle: Text("Quantity $quantity",
+          style: theme.textTheme.bodyText1),
+          trailing: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                    padding: EdgeInsets.all(height * 0.01),
+                    decoration: BoxDecoration(color: theme.primaryColor),
+                    child: Text(
+                      price!,
+                      style:
+                          theme.textTheme.bodyText2!.copyWith(fontSize: 12),
+                    )),
+              ),
+        );
+     
+  }
+}

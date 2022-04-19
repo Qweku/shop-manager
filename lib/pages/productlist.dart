@@ -19,6 +19,7 @@ class ProductListScreen extends StatefulWidget {
 
 class _ProductListScreenState extends State<ProductListScreen> {
   final categoryName = TextEditingController();
+  bool isList = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: theme.primaryColor,
+        onPressed: (){setState(() {
+        isList = !isList;
+      });
+      
+      },
+      child: isList ? Icon(Icons.dashboard_customize,color:theme.primaryColorLight):
+       Icon(Icons.list,color:theme.primaryColorLight),
+      
+      ),
       body: SafeArea(
         top: false,
         child: Stack(
@@ -74,53 +86,90 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             : Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: height * 0.01),
-                                child: GridView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    padding:
-                                        EdgeInsets.only(top: height * 0.02),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            childAspectRatio: 2 / 2.9),
-                                    itemCount: context
-                                        .watch<GeneralProvider>()
-                                        .categories![widget.categoryIndex]
-                                        .products!
-                                        .length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            top: index.isEven
-                                                ? height * 0.02
-                                                : 0,
-                                            bottom: index.isOdd
-                                                ? height * 0.02
-                                                : 0),
-                                        child: ProductCard(
-                                          onTap: () {
-                                            _bottomDrawSheet(
-                                                context,
-                                                state
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 800),
+                                  child: !isList ? GridView.builder(
+                                      physics: BouncingScrollPhysics(),
+                                      padding:
+                                          EdgeInsets.only(top: height * 0.02),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 2 / 2.9),
+                                      itemCount: context
+                                          .watch<GeneralProvider>()
+                                          .categories![widget.categoryIndex]
+                                          .products!
+                                          .length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              top: index.isEven
+                                                  ? height * 0.02
+                                                  : 0,
+                                              bottom: index.isOdd
+                                                  ? height * 0.02
+                                                  : 0),
+                                          child: ProductCard(
+                                            onTap: () {
+                                              _bottomDrawSheet(
+                                                  context,
+                                                  state
+                                                      .categories![
+                                                          widget.categoryIndex]
+                                                      .products![index]);
+                                            },
+                                            index: index,
+                                            image64: state
                                                     .categories![
                                                         widget.categoryIndex]
-                                                    .products![index]);
-                                          },
-                                          index: index,
-                                          image64: state
-                                                  .categories![
-                                                      widget.categoryIndex]
-                                                  .products![index]
-                                                  .imageb64 ??
-                                              '',
-                                          productName:
-                                              "${state.categories![widget.categoryIndex].products![index].productName}",
-                                          quantity:
-                                              "${state.categories![widget.categoryIndex].products![index].quantity}",
-                                          price:
-                                              "GHS ${state.categories![widget.categoryIndex].products![index].sellingPrice}",
-                                        ),
-                                      );
-                                    }),
+                                                    .products![index]
+                                                    .imageb64 ??
+                                                '',
+                                            productName:
+                                                "${state.categories![widget.categoryIndex].products![index].productName}",
+                                            quantity:
+                                                "${state.categories![widget.categoryIndex].products![index].quantity}",
+                                            price:
+                                                "GHS ${state.categories![widget.categoryIndex].products![index].sellingPrice}",
+                                          ),
+                                        );
+                                      }): ListView.builder(
+                                         physics: BouncingScrollPhysics(),
+                                        padding: EdgeInsets.zero,
+                                        itemCount: context
+                                          .watch<GeneralProvider>()
+                                          .categories![widget.categoryIndex]
+                                          .products!
+                                          .length,
+                                        itemBuilder: (context,index) {
+                                          return ProductListTile(
+
+                                            onTap: () {
+                                                  _bottomDrawSheet(
+                                                      context,
+                                                      state
+                                                          .categories![
+                                                              widget.categoryIndex]
+                                                          .products![index]);
+                                                },
+                                                index: index,
+                                                image64: state
+                                                        .categories![
+                                                            widget.categoryIndex]
+                                                        .products![index]
+                                                        .imageb64 ??
+                                                    '',
+                                                productName:
+                                                    "${state.categories![widget.categoryIndex].products![index].productName}",
+                                                quantity:
+                                                    "${state.categories![widget.categoryIndex].products![index].quantity}",
+                                                price:
+                                                    "GHS ${state.categories![widget.categoryIndex].products![index].sellingPrice}",
+                                          );
+                                        }
+                                      )
+                                ),
                               ));
                   })
                 ]),
@@ -178,6 +227,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         Provider.of<GeneralProvider>(context, listen: false)
                             .removeProductFromCategories(
                                 widget.categoryIndex, product);
+                      Navigator.pop(context);
                       },
                       child: Column(
                         children: [

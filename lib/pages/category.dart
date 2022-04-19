@@ -20,7 +20,6 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-
   final categoryName = TextEditingController();
 
   bool isV = false;
@@ -46,22 +45,27 @@ class _CategoryScreenState extends State<CategoryScreen> {
               clipper: BottomClipper(),
               child: Container(
                 padding: EdgeInsets.only(
-                      right: height * 0.02,
-                      left: height * 0.02,
-                      top: height * 0.1,
-                      bottom: height*0.07),
+                    right: height * 0.02,
+                    left: height * 0.02,
+                    top: height * 0.1,
+                    bottom: height * 0.07),
                 color: theme.primaryColor,
-                child: HeaderSection(height: height,width: width,theme: theme,onPressed: (){ _bottomDrawSheet(context);},),
+                child: HeaderSection(
+                  height: height,
+                  width: width,
+                  theme: theme,
+                  onPressed: () {
+                    _bottomDrawSheet(context);
+                  },
+                ),
               ),
             ),
-            
             Expanded(
               //height: height*0.5,
               child: categories.isEmpty
                   ? Center(
                       child: Text(
                         'No Categories',
-                        
                         style:
                             theme.textTheme.headline1!.copyWith(fontSize: 25),
                       ),
@@ -69,10 +73,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   : Padding(
                       padding: EdgeInsets.symmetric(horizontal: height * 0.02),
                       child: GridView.builder(
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.only(
-                 
-                  top: height * 0.04),
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.only(top: height * 0.04),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
@@ -84,7 +86,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             return CategoryCard(
                               index: index,
                               onTap: () {
-                            
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -95,16 +96,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               smallFont: 20.0,
                               largeFont: 50.0,
                               categoryName: "${categories[index].categoryName}",
-                              categoryInitial: categories[index].categoryName!.substring(0,2),
+                              categoryInitial: categories[index]
+                                  .categoryName!
+                                  .substring(0, 2),
                             );
-                           }),
+                          }),
                     ),
             ),
-            
           ],
         ),
       ),
-      
     );
   }
 
@@ -149,7 +150,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 SizedBox(height: height * 0.04),
                 Button(
                   color: theme.primaryColorLight,
-                    textColor: theme.primaryColor,
+                  textColor: theme.primaryColor,
                   width: width,
                   buttonText: "Done",
                   onTap: () {
@@ -201,7 +202,6 @@ class HeaderSection extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Text(
               "Categories",
               textAlign: TextAlign.left,
@@ -218,7 +218,7 @@ class HeaderSection extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-             color: theme.primaryColorLight),
+              color: theme.primaryColorLight),
           child: IconButton(
               onPressed: onPressed,
               icon: Icon(Icons.add, color: theme.primaryColor)),
@@ -227,4 +227,3 @@ class HeaderSection extends StatelessWidget {
     );
   }
 }
-

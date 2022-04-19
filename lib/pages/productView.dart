@@ -68,7 +68,7 @@ class _ProductViewState extends State<ProductView> {
                     height: height * 0.2,
                   ),
                 ),
-                SizedBox(height: height * 0.15),
+                SizedBox(height: height * 0.12),
                 Text(
                   widget.product.productName!,
                   style: theme.textTheme.headline1!
@@ -93,6 +93,28 @@ class _ProductViewState extends State<ProductView> {
                   ),
                 ),
                 SizedBox(
+                  height: height * 0.01,
+                ),
+                ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                    padding: EdgeInsets.all(height * 0.02),
+                    decoration: BoxDecoration(color: theme.primaryColor),
+                    child: Column(
+                      children: [
+                        Text('Total',style:theme.textTheme.bodyText2),
+                        SizedBox(
+                  height: height * 0.01,
+                ),
+                        Text(
+                          "GHS ${widget.product.sellingPrice! * counter}",
+                          style:
+                              theme.textTheme.headline2,
+                        ),
+                      ],
+                    )),
+              ),
+              SizedBox(
                   height: height * 0.02,
                 ),
                 SizedBox(

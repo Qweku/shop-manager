@@ -20,6 +20,7 @@ class ItemDetail extends StatelessWidget {
         leading: CircleAvatar(
           radius: height * 0.03,
           backgroundColor: theme.primaryColorLight,
+          
         ),
         title: Text(item.productName!, style: theme.textTheme.bodyText2),
         subtitle: Text("GHS ${item.sellingPrice}",
