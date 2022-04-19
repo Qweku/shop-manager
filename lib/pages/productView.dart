@@ -9,9 +9,23 @@ import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/productCalculator.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
-class ProductView extends StatelessWidget {
+class ProductView extends StatefulWidget {
   final Product product;
   const ProductView({Key? key, required this.product}) : super(key: key);
+
+  @override
+  State<ProductView> createState() => _ProductViewState();
+}
+
+class _ProductViewState extends State<ProductView> {
+  TextEditingController _counterController = TextEditingController();
+  int counter = 1;
+
+  @override
+  void initState() {
+    _counterController.text = "1";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +70,12 @@ class ProductView extends StatelessWidget {
                 ),
                 SizedBox(height: height * 0.15),
                 Text(
-                  product.productName!,
+                  widget.product.productName!,
                   style: theme.textTheme.headline1!
                       .copyWith(fontSize: 30, color: theme.primaryColor),
                 ),
                 SizedBox(height: height * 0.02),
-                Text('GHS ${product.sellingPrice}',
+                Text('GHS ${widget.product.sellingPrice}',
                     style: theme.textTheme.headline1),
                 Padding(
                   padding: EdgeInsets.all(height * 0.02),
@@ -72,7 +86,7 @@ class ProductView extends StatelessWidget {
                           style: theme.textTheme.bodyText1!
                               .copyWith(fontSize: 12)),
                       SizedBox(height: height * 0.01),
-                      Text("${product.quantity!}",
+                      Text("${widget.product.quantity!}",
                           style: theme.textTheme.headline1!
                               .copyWith(color: theme.primaryColor)),
                     ],
@@ -82,11 +96,67 @@ class ProductView extends StatelessWidget {
                   height: height * 0.02,
                 ),
                 SizedBox(
-                  width: width * 0.7,
-                  height: height * 0.1,
-                  child: ProductCounter(
-                      height: height, theme: theme, width: width),
-                ),
+                    width: width * 0.7,
+                    height: height * 0.1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(height * 0.01),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: theme.primaryColor),
+                          child: GestureDetector(
+                              onTap: () {
+                                counter = int.parse(_counterController.text);
+                                if (counter > 1) {
+                                  setState(() {
+                                    counter--;
+                                  });
+                                }
+                                _counterController.text = counter.toString();
+                              },
+                              child: Icon(Icons.remove,
+                                  size: 20, color: theme.primaryColorLight)),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: SizedBox(
+                            width: width,
+                            child: CustomTextField(
+                              textAlign: TextAlign.center,
+                              keyboard: TextInputType.number,
+                              controller: _counterController,
+                              hintColor: theme.primaryColor,
+                              style: theme.textTheme.headline2!
+                                  .copyWith(color: theme.primaryColor),
+                              onChanged: (text) {
+                                counter = int.parse(_counterController.text);
+                              },
+                              //hintText: '1',
+                              //borderColor: theme.primaryColorLight
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(height * 0.01),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: theme.primaryColor),
+                          child: GestureDetector(
+                              onTap: () {
+                                counter = int.parse(_counterController.text);
+                                setState(() {
+                                  counter++;
+                                });
+                                _counterController.text = counter.toString();
+                              },
+                              child: Icon(Icons.add,
+                                  size: 20, color: theme.primaryColorLight)),
+                        ),
+                      ],
+                    )
+                    ),
                 SizedBox(
                   height: height * 0.05,
                 ),
@@ -94,16 +164,18 @@ class ProductView extends StatelessWidget {
                   onTap: (() {
                     if (!(Provider.of<GeneralProvider>(context, listen: false)
                         .cart
-                        .contains(product))) {
+                        .contains(widget.product))) {
                       Provider.of<GeneralProvider>(context, listen: false)
-                          .addtoCart(product);
+                          .addtoCart(widget.product);
                     }
                   }),
                   buttonText: 'Add to Cart',
-                  color:
-                      (context.watch<GeneralProvider>().cart.contains(product))
-                          ? Colors.blueGrey
-                          : theme.primaryColor,
+                  color: (context
+                          .watch<GeneralProvider>()
+                          .cart
+                          .contains(widget.product))
+                      ? Colors.blueGrey
+                      : theme.primaryColor,
                   width: width * 0.7,
                 )
               ],
@@ -114,12 +186,21 @@ class ProductView extends StatelessWidget {
               //right: 0,
               //bottom: 0,
               child: ProductAvatar(
-                  width: width, height: height, product: product, theme: theme),
+                  width: width,
+                  height: height,
+                  product: widget.product,
+                  theme: theme),
             ),
           ],
         ),
       )),
     );
+  }
+
+  @override
+  void dispose() {
+    _counterController.dispose();
+    super.dispose();
   }
 }
 
@@ -165,62 +246,5 @@ class ProductAvatar extends StatelessWidget {
                         image: MemoryImage(base64Decode(product.imageb64!)),
                         fit: BoxFit.cover)),
               ));
-  }
-}
-
-class ProductCounter extends StatelessWidget {
-  const ProductCounter({
-    Key? key,
-    required this.height,
-    required this.theme,
-    required this.width,
-  }) : super(key: key);
-
-  final double height;
-  final ThemeData theme;
-  final double width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          padding: EdgeInsets.all(height * 0.01),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: theme.primaryColor),
-          child: GestureDetector(
-              onTap: () {},
-              child:
-                  Icon(Icons.remove, size: 20, color: theme.primaryColorLight)),
-        ),
-        Expanded(
-          flex: 3,
-          child: SizedBox(
-            width: width,
-            child: CustomTextField(
-              textAlign: TextAlign.center,
-              keyboard: TextInputType.number,
-
-              hintColor: theme.primaryColor,
-              style: theme.textTheme.headline2!
-                  .copyWith(color: theme.primaryColor),
-              hintText: '1',
-              //borderColor: theme.primaryColorLight
-            ),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(height * 0.01),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: theme.primaryColor),
-          child: GestureDetector(
-              onTap: () {},
-              child: Icon(Icons.add, size: 20, color: theme.primaryColorLight)),
-        ),
-      ],
-    );
   }
 }

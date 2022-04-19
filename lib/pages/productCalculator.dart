@@ -24,10 +24,15 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   double balance = 0.00;
   double itemPrice = 13.00;
   int quantity = 1;
+   final TextEditingController _counterController = TextEditingController();
+  int counter = 1;
+
+  
 
   @override
   void dispose() {
     quantityItem.dispose();
+    _counterController.dispose();
     super.dispose();
   }
 
@@ -40,6 +45,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
         totalCost += element.sellingPrice!;
       });
     });
+    _counterController.text = "1";
     super.initState();
   }
 
@@ -97,12 +103,60 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                         listen: false)
                                     .cart[index]),
                           ),
-                          ItemCounter(
-                              iconColor: theme.primaryColor,
-                              boxColor: theme.primaryColorLight,
-                              height: height,
-                              theme: theme,
-                              width: width),
+                          Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(height * 0.01),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: theme.primaryColorLight),
+                          child: GestureDetector(
+                              onTap: () {
+                                counter = int.parse(_counterController.text);
+                                if (counter > 1) {
+                                  setState(() {
+                                    counter--;
+                                  });
+                                }
+                                _counterController.text = counter.toString();
+                              },
+                              child: Icon(Icons.remove,
+                                  size: 15, color: theme.primaryColor)),
+                        ),
+                        SizedBox(
+                          width: width*0.13,
+                          child: CustomTextField(
+                            textAlign: TextAlign.center,
+                            keyboard: TextInputType.number,
+                            controller: _counterController,
+                            hintColor: theme.primaryColor,
+                            style: theme.textTheme.bodyText2,
+                            onChanged: (text) {
+                              counter = int.parse(_counterController.text);
+                            },
+                            //hintText: '1',
+                            //borderColor: theme.primaryColorLight
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(height * 0.01),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: theme.primaryColorLight),
+                          child: GestureDetector(
+                              onTap: () {
+                                counter = int.parse(_counterController.text);
+                                setState(() {
+                                  counter++;
+                                });
+                                _counterController.text = counter.toString();
+                              },
+                              child: Icon(Icons.add,
+                                  size: 15, color: theme.primaryColor)),
+                        ),
+                      ],
+                    )
                         ],
                       ),
                     ),
