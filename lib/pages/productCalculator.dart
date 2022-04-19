@@ -24,8 +24,10 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   double balance = 0.00;
   double itemPrice = 13.00;
   int quantity = 1;
+  static int indx = 0;
    final TextEditingController _counterController = TextEditingController();
   int counter = 1;
+  
 
   
 
@@ -46,6 +48,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
       });
     });
     _counterController.text = "1";
+    
     super.initState();
   }
 
@@ -116,9 +119,12 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                 counter = int.parse(_counterController.text);
                                 if (counter > 1) {
                                   setState(() {
-                                    counter--;
+                                    counter --;
+                                    
                                   });
+                                  
                                 }
+                                
                                 _counterController.text = counter.toString();
                               },
                               child: Icon(Icons.remove,
@@ -146,10 +152,11 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                               color: theme.primaryColorLight),
                           child: GestureDetector(
                               onTap: () {
-                                counter = int.parse(_counterController.text);
+                                counter  = int.parse(_counterController.text);
                                 setState(() {
                                   counter++;
                                 });
+                                
                                 _counterController.text = counter.toString();
                               },
                               child: Icon(Icons.add,
@@ -192,7 +199,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                       style: theme.textTheme.bodyText2),
                                   SizedBox(height: height * 0.01),
                                   Text(
-                                    "GHS $totalCost",
+                                    "GHS ${totalCost * counter}",
                                     textAlign: TextAlign.center,
                                     style: theme.textTheme.headline2,
                                   ),
@@ -279,7 +286,15 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                     bottom: height * 0.04,
                   ),
                   child: CustomTextField(
-                      //controller: categoryName,
+                      controller: amountReceived,
+                      onChanged: (text){
+                        setState(() {
+                          double amt = double.parse(amountReceived.text);
+                        balance = amt - totalCost;
+                        
+                        });
+                        
+                      },
                       hintText: 'Amount',
                       hintColor: Colors.white,
                       borderColor: Colors.white,
@@ -295,7 +310,9 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   buttonText: "Done",
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
-
+                    
+                       
+                       
                     Navigator.pop(context);
                   },
                 ),
