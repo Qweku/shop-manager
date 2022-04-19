@@ -11,7 +11,6 @@ import 'package:shop_manager/config/colors.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
-import 'package:shop_manager/pages/productlist.dart';
 
 class AddProductScreen extends StatefulWidget {
   final bool? toEdit;
