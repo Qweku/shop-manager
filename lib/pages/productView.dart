@@ -84,55 +84,8 @@ class ProductView extends StatelessWidget {
                 SizedBox(
                   width: width * 0.7,
                   height: height * 0.1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(height * 0.01),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: theme.primaryColor),
-                        child: GestureDetector(
-                            onTap: () {},
-                            child: Icon(Icons.remove,
-                                size: 20, color: theme.primaryColorLight)),
-                      ),
-                      // SizedBox(
-                      //   width: width * 0.01,
-                      // ),
-                      Expanded(
-                        flex: 3,
-                        child: SizedBox(
-                          width: width,
-                          // height: height * 0.1,
-                          child: CustomTextField(
-                            //borderColor: theme.primaryColorLight,
-                            textAlign: TextAlign.center,
-                            keyboard: TextInputType.number,
-
-                            hintColor: theme.primaryColor,
-                            style: theme.textTheme.headline2!
-                                .copyWith(color: theme.primaryColor),
-                            hintText: '1',
-                            //borderColor: theme.primaryColorLight
-                          ),
-                        ),
-                      ),
-                      // SizedBox(
-                      //   width: width * 0.01,
-                      // ),
-                      Container(
-                        padding: EdgeInsets.all(height * 0.01),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: theme.primaryColor),
-                        child: GestureDetector(
-                            onTap: () {},
-                            child: Icon(Icons.add,
-                                size: 20, color: theme.primaryColorLight)),
-                      ),
-                    ],
-                  ),
+                  child: ProductCounter(
+                      height: height, theme: theme, width: width),
                 ),
                 SizedBox(
                   height: height * 0.05,
@@ -160,38 +113,114 @@ class ProductView extends StatelessWidget {
               left: width * 0.27,
               //right: 0,
               //bottom: 0,
-              child: Container(
-                  width: width * 0.45,
-                  height: height * 0.25,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(height * 0.1),
-                      color: (product.imageb64 ?? "").isEmpty
-                          ? theme.primaryColor
-                          : theme.primaryColorLight,
-                      border:
-                          Border.all(color: theme.primaryColorLight, width: 3)),
-                  child: (product.imageb64 ?? "").isEmpty
-                      ? Center(
-                          child: Text(
-                            product.productName!.substring(0, 2).toUpperCase(),
-                            style: theme.textTheme.headline1!
-                                .copyWith(fontSize: 70, color: Colors.white),
-                          ),
-                        )
-                      : Container(
-                          width: width * 0.45,
-                          height: height * 0.25,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(height * 0.1),
-                              image: DecorationImage(
-                                  image: MemoryImage(
-                                      base64Decode(product.imageb64!)),
-                                  fit: BoxFit.cover)),
-                        )),
+              child: ProductAvatar(
+                  width: width, height: height, product: product, theme: theme),
             ),
           ],
         ),
       )),
+    );
+  }
+}
+
+class ProductAvatar extends StatelessWidget {
+  const ProductAvatar({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.product,
+    required this.theme,
+  }) : super(key: key);
+
+  final double width;
+  final double height;
+  final Product product;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: width * 0.45,
+        height: height * 0.25,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(height * 0.1),
+            color: (product.imageb64 ?? "").isEmpty
+                ? theme.primaryColor
+                : theme.primaryColorLight,
+            border: Border.all(color: theme.primaryColorLight, width: 3)),
+        child: (product.imageb64 ?? "").isEmpty
+            ? Center(
+                child: Text(
+                  product.productName!.substring(0, 2).toUpperCase(),
+                  style: theme.textTheme.headline1!
+                      .copyWith(fontSize: 70, color: Colors.white),
+                ),
+              )
+            : Container(
+                width: width * 0.45,
+                height: height * 0.25,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(height * 0.1),
+                    image: DecorationImage(
+                        image: MemoryImage(base64Decode(product.imageb64!)),
+                        fit: BoxFit.cover)),
+              ));
+  }
+}
+
+class ProductCounter extends StatelessWidget {
+  const ProductCounter({
+    Key? key,
+    required this.height,
+    required this.theme,
+    required this.width,
+  }) : super(key: key);
+
+  final double height;
+  final ThemeData theme;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          padding: EdgeInsets.all(height * 0.01),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: theme.primaryColor),
+          child: GestureDetector(
+              onTap: () {},
+              child:
+                  Icon(Icons.remove, size: 20, color: theme.primaryColorLight)),
+        ),
+        Expanded(
+          flex: 3,
+          child: SizedBox(
+            width: width,
+            child: CustomTextField(
+              textAlign: TextAlign.center,
+              keyboard: TextInputType.number,
+
+              hintColor: theme.primaryColor,
+              style: theme.textTheme.headline2!
+                  .copyWith(color: theme.primaryColor),
+              hintText: '1',
+              //borderColor: theme.primaryColorLight
+            ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(height * 0.01),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: theme.primaryColor),
+          child: GestureDetector(
+              onTap: () {},
+              child: Icon(Icons.add, size: 20, color: theme.primaryColorLight)),
+        ),
+      ],
     );
   }
 }
