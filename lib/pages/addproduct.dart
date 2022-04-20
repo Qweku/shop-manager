@@ -102,10 +102,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 .products!
                 .add(product);
           } else {
-            Provider.of<GeneralProvider>(context, listen: false)
+            if (!(Provider.of<GeneralProvider>(context, listen: false)
                 .categories![categoryIndex]
                 .products!
-                .add(product);
+                .any(
+                    (element) => element.productName == product.productName))) {
+              Provider.of<GeneralProvider>(context, listen: false)
+                  .categories![categoryIndex]
+                  .products!
+                  .add(product);
+            } else {
+              debugPrint(" ERROR PRODUCT ALREADY EXIST ");
+            }
           }
 
           String shopJson = Provider.of<GeneralProvider>(context, listen: false)

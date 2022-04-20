@@ -104,6 +104,7 @@ class Product {
     this.costPrice,
     this.imageb64,
     this.quantity,
+    this.cartQuantity  = 1,
     this.productId,
   });
 
@@ -113,6 +114,7 @@ class Product {
   double? costPrice;
   String? imageb64;
   int? quantity;
+  int? cartQuantity;
   int? productId;
 
   factory Product.fromJson(String str) => Product.fromMap(json.decode(str));
@@ -128,6 +130,7 @@ class Product {
             json["costPrice"] == null ? null : json["costPrice"].toDouble(),
         imageb64: json["imageb64"] ?? null,
         quantity: json["quantity"] ?? null,
+        cartQuantity: json["cartQuantity"] ?? null,
         productId: json["productID"] ?? null,
       );
 
@@ -136,6 +139,7 @@ class Product {
         "sellingPrice": sellingPrice ?? null,
         "costPrice": costPrice ?? null,
         "imageb64": imageb64 ?? null,
+        "cartQuantity": cartQuantity ?? null,
         "quantity": quantity ?? null,
         "productID": productId ?? null,
       };

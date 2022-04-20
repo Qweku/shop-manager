@@ -10,8 +10,8 @@ import 'package:shop_manager/pages/productCalculator.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
 class ProductView extends StatefulWidget {
-  final Product product;
-  const ProductView({Key? key, required this.product}) : super(key: key);
+  Product product;
+  ProductView({Key? key, required this.product}) : super(key: key);
 
   @override
   State<ProductView> createState() => _ProductViewState();
@@ -24,6 +24,7 @@ class _ProductViewState extends State<ProductView> {
   @override
   void initState() {
     _counterController.text = "1";
+    counter = widget.product.cartQuantity ?? 1;
     super.initState();
   }
 
@@ -105,13 +106,17 @@ class _ProductViewState extends State<ProductView> {
                           padding: EdgeInsets.all(height * 0.01),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: theme.primaryColor),
+                              color: (counter > 1)
+                                  ? theme.primaryColor
+                                  : Colors.blueGrey),
                           child: GestureDetector(
                               onTap: () {
-                                counter = int.parse(_counterController.text);
+                                counter =
+                                    int.tryParse(_counterController.text)!;
                                 if (counter > 1) {
                                   setState(() {
                                     counter--;
+                                    widget.product.cartQuantity = counter;
                                   });
                                 }
                                 _counterController.text = counter.toString();
@@ -131,7 +136,15 @@ class _ProductViewState extends State<ProductView> {
                               style: theme.textTheme.headline2!
                                   .copyWith(color: theme.primaryColor),
                               onChanged: (text) {
-                                counter = int.parse(_counterController.text);
+                                counter =
+                                    int.tryParse(_counterController.text)!;
+                                if (counter < 0 ||
+                                    counter > widget.product.cartQuantity!) {
+                                  setState(() {
+                                    counter = widget.product.cartQuantity!;
+                                    widget.product.cartQuantity = counter;
+                                  });
+                                }
                               },
                               //hintText: '1',
                               //borderColor: theme.primaryColorLight
@@ -142,21 +155,26 @@ class _ProductViewState extends State<ProductView> {
                           padding: EdgeInsets.all(height * 0.01),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: theme.primaryColor),
+                              color: (counter < widget.product.quantity!)
+                                  ? theme.primaryColor
+                                  : Colors.blueGrey),
                           child: GestureDetector(
                               onTap: () {
-                                counter = int.parse(_counterController.text);
-                                setState(() {
-                                  counter++;
-                                });
+                                counter =
+                                    int.tryParse(_counterController.text)!;
+                                if (counter < widget.product.quantity!) {
+                                  setState(() {
+                                    counter++;
+                                    widget.product.cartQuantity = counter;
+                                  });
+                                }
                                 _counterController.text = counter.toString();
                               },
                               child: Icon(Icons.add,
                                   size: 20, color: theme.primaryColorLight)),
                         ),
                       ],
-                    )
-                    ),
+                    )),
                 SizedBox(
                   height: height * 0.05,
                 ),

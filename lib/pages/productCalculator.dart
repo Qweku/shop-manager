@@ -4,6 +4,7 @@ import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/pages/productView.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
 import 'widgets/productCalculatorWidget.dart';
@@ -25,11 +26,8 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   double itemPrice = 13.00;
   int quantity = 1;
   static int indx = 0;
-   final TextEditingController _counterController = TextEditingController();
+  final TextEditingController _counterController = TextEditingController();
   int counter = 1;
-  
-
-  
 
   @override
   void dispose() {
@@ -44,11 +42,11 @@ class _ProductCalculatorState extends State<ProductCalculator> {
         .cart
         .forEach((element) {
       setState(() {
-        totalCost += element.sellingPrice!;
+        totalCost += element.sellingPrice! * element.cartQuantity!;
       });
     });
     _counterController.text = "1";
-    
+
     super.initState();
   }
 
@@ -100,70 +98,85 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                         children: [
                           SizedBox(
                             width: width * 0.65,
-                            child: ItemDetail(
-                                theme: theme,
-                                item: Provider.of<GeneralProvider>(context,
-                                        listen: false)
-                                    .cart[index]),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) => ProductView(
+                                            product:
+                                                Provider.of<GeneralProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .cart[index]))).then(
+                                    (value) => setState(() {}));
+                              },
+                              child: ItemDetail(
+                                  theme: theme,
+                                  item: Provider.of<GeneralProvider>(context,
+                                          listen: false)
+                                      .cart[index]),
+                            ),
                           ),
                           Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(height * 0.01),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: theme.primaryColorLight),
-                          child: GestureDetector(
-                              onTap: () {
-                                counter = int.parse(_counterController.text);
-                                if (counter > 1) {
-                                  setState(() {
-                                    counter --;
-                                    
-                                  });
-                                  
-                                }
-                                
-                                _counterController.text = counter.toString();
-                              },
-                              child: Icon(Icons.remove,
-                                  size: 15, color: theme.primaryColor)),
-                        ),
-                        SizedBox(
-                          width: width*0.13,
-                          child: CustomTextField(
-                            textAlign: TextAlign.center,
-                            keyboard: TextInputType.number,
-                            controller: _counterController,
-                            hintColor: theme.primaryColor,
-                            style: theme.textTheme.bodyText2,
-                            onChanged: (text) {
-                              counter = int.parse(_counterController.text);
-                            },
-                            //hintText: '1',
-                            //borderColor: theme.primaryColorLight
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(height * 0.01),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: theme.primaryColorLight),
-                          child: GestureDetector(
-                              onTap: () {
-                                counter  = int.parse(_counterController.text);
-                                setState(() {
-                                  counter++;
-                                });
-                                
-                                _counterController.text = counter.toString();
-                              },
-                              child: Icon(Icons.add,
-                                  size: 15, color: theme.primaryColor)),
-                        ),
-                      ],
-                    )
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(height * 0.01),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: theme.primaryColorLight),
+                                child: GestureDetector(
+                                    onTap: () {
+                                      counter =
+                                          int.parse(_counterController.text);
+                                      if (counter > 1) {
+                                        setState(() {
+                                          counter--;
+                                        });
+                                      }
+                                      _counterController.text =
+                                          counter.toString();
+                                    },
+                                    child: Icon(Icons.remove,
+                                        size: 15, color: theme.primaryColor)),
+                              ),
+                              SizedBox(
+                                width: width * 0.13,
+                                child: CustomTextField(
+                                  textAlign: TextAlign.center,
+                                  keyboard: TextInputType.number,
+                                  controller: _counterController,
+                                  hintColor: theme.primaryColor,
+                                  style: theme.textTheme.bodyText2,
+                                  onChanged: (text) {
+                                    counter =
+                                        int.parse(_counterController.text);
+                                  },
+                                  //hintText: '1',
+                                  //borderColor: theme.primaryColorLight
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(height * 0.01),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: theme.primaryColorLight),
+                                child: GestureDetector(
+                                    onTap: () {
+                                      counter =
+                                          int.parse(_counterController.text);
+                                      setState(() {
+                                        counter++;
+                                      });
+
+                                      _counterController.text =
+                                          counter.toString();
+                                    },
+                                    child: Icon(Icons.add,
+                                        size: 15, color: theme.primaryColor)),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -287,13 +300,11 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   ),
                   child: CustomTextField(
                       controller: amountReceived,
-                      onChanged: (text){
+                      onChanged: (text) {
                         setState(() {
                           double amt = double.parse(amountReceived.text);
-                        balance = amt - totalCost;
-                        
+                          balance = amt - totalCost;
                         });
-                        
                       },
                       hintText: 'Amount',
                       hintColor: Colors.white,
@@ -310,9 +321,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   buttonText: "Done",
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    
-                       
-                       
+
                     Navigator.pop(context);
                   },
                 ),
