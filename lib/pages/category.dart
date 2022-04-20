@@ -47,7 +47,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 padding: EdgeInsets.only(
                     right: height * 0.02,
                     left: height * 0.02,
-                    top: height * 0.1,
+                    top: height * 0.13,
                     bottom: height * 0.07),
                 color: theme.primaryColor,
                 child: HeaderSection(

@@ -79,7 +79,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                       padding: EdgeInsets.only(
                           right: height * 0.02,
                           left: height * 0.02,
-                          top: height * 0.1,
+                          top: height * 0.13,
                           bottom: height * 0.07),
                       color: theme.primaryColorLight,
                       width: width,
@@ -184,7 +184,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                 ],
               ),
               Positioned(
-                top: height * 0.05,
+                top: height * 0.08,
                 child: Padding(
                   padding: EdgeInsets.all(height * 0.03),
                   child: Container(

@@ -3,6 +3,7 @@
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/productModel.dart';
@@ -52,137 +53,150 @@ class _InventoryScreenState extends State<InventoryScreen> {
         ),
         body: SafeArea(
           top: false,
-          child: Column(
-              // height: height * 0.8,
-              children: [
-                ClipPath(
-                  clipper: BottomClipper(),
-                  child: Container(
-                    width: width,
-                    padding: EdgeInsets.only(
-                        right: height * 0.02,
-                        left: height * 0.02,
-                        top: height * 0.1,
-                        bottom: height * 0.07),
-                    color: theme.primaryColor,
-                    child: HeaderSection(
-                      height: height,
-                      theme: theme,
-                      width: width,
-                      onPressed: (){
-                          showSearch(
-                            //useRootNavigator: true,
-                            context: context, delegate: Search());
-                            print('SEARCH');
-                            },
+          child: Stack(
+            children: [
+              Column(
+                  // height: height * 0.8,
+                  children: [
+                    ClipPath(
+                      clipper: BottomClipper(),
+                      child: Container(
+                        width: width,
+                        padding: EdgeInsets.only(
+                            right: height * 0.02,
+                            left: height * 0.02,
+                            top: height * 0.13,
+                            bottom: height * 0.07),
+                        color: theme.primaryColor,
+                        child: HeaderSection(
+                          height: height,
+                          theme: theme,
+                          width: width,
+                          
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: height * 0.01),
-                  height: height * 0.15,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.categories!.length,
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          width: width * 0.3,
-                          child: CategoryCard(
-                            index: index,
-                            onTap: () {
-                              // categories =
-                              //     categories.categories[index];
-                              // categories.categorised = true;
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => ProductListScreen(
-                              //               categoryIndex: index,
-                              //             )));
-                            },
-                            smallFont: 12.0,
-                            largeFont: 25.0,
-                            categoryName:
-                                "${categories.categories![index].categoryName}",
-                            categoryInitial: categories
-                                .categories![index].categoryName!
-                                .substring(0, 2),
-                          ),
-                        );
-                      }),
-                ),
-                Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: height * 0.01),
-                  child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 800),
-                      child: !isList
-                          ? GridView.builder(
-                              physics: BouncingScrollPhysics(),
-                              padding: EdgeInsets.only(top: height * 0.02),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 2 / 2.9),
-                              itemCount: categories.inventory.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: index.isEven ? height * 0.02 : 0,
-                                      bottom: index.isOdd ? height * 0.02 : 0),
-                                  child: ProductCard(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ProductView(
-                                                    product: categories
-                                                        .inventory[index],
-                                                  )));
-                                    },
-                                    index: index,
-                                    image64:
-                                        categories.inventory[index].imageb64 ??
-                                            "",
-                                    productName:
-                                        categories.inventory[index].productName,
-                                    quantity: categories
-                                        .inventory[index].quantity
-                                        .toString(),
-                                    price:
-                                        "GHS ${categories.inventory[index].sellingPrice.toString()}",
-                                  ),
-                                );
-                              })
-                          : ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              itemCount: categories.inventory.length,
-                              itemBuilder: (context, index) {
-                                return ProductListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ProductView(
-                                                  product: categories
-                                                      .inventory[index],
-                                                )));
-                                  },
-                                  index: index,
-                                  image64:
-                                      categories.inventory[index].imageb64 ??
-                                          "",
-                                  productName:
-                                      categories.inventory[index].productName,
-                                  quantity: categories.inventory[index].quantity
-                                      .toString(),
-                                  price:
-                                      "GHS ${categories.inventory[index].sellingPrice.toString()}",
-                                );
-                              })),
-                ))
-              ]),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: height * 0.01),
+                      height: height * 0.15,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.categories!.length,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              width: width * 0.3,
+                              child: CategoryCard(
+                                index: index,
+                                onTap: () {
+                                  // categories =
+                                  //     categories.categories[index];
+                                  // categories.categorised = true;
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => ProductListScreen(
+                                  //               categoryIndex: index,
+                                  //             )));
+                                },
+                                smallFont: 12.0,
+                                largeFont: 25.0,
+                                categoryName:
+                                    "${categories.categories![index].categoryName}",
+                                categoryInitial: categories
+                                    .categories![index].categoryName!
+                                    .substring(0, 2),
+                              ),
+                            );
+                          }),
+                    ),
+                    Expanded(
+                        child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: height * 0.01),
+                      child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 800),
+                          child: !isList
+                              ? GridView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  padding: EdgeInsets.only(top: height * 0.02),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 2 / 2.9),
+                                  itemCount: categories.inventory.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                          top: index.isEven ? height * 0.02 : 0,
+                                          bottom: index.isOdd ? height * 0.02 : 0),
+                                      child: ProductCard(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => ProductView(
+                                                        product: categories
+                                                            .inventory[index],
+                                                      )));
+                                        },
+                                        index: index,
+                                        image64:
+                                            categories.inventory[index].imageb64 ??
+                                                "",
+                                        productName:
+                                            categories.inventory[index].productName,
+                                        quantity: categories
+                                            .inventory[index].quantity
+                                            .toString(),
+                                        price:
+                                            "GHS ${categories.inventory[index].sellingPrice.toString()}",
+                                      ),
+                                    );
+                                  })
+                              : ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  padding: EdgeInsets.zero,
+                                  itemCount: categories.inventory.length,
+                                  itemBuilder: (context, index) {
+                                    return ProductListTile(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ProductView(
+                                                      product: categories
+                                                          .inventory[index],
+                                                    )));
+                                      },
+                                      index: index,
+                                      image64:
+                                          categories.inventory[index].imageb64 ??
+                                              "",
+                                      productName:
+                                          categories.inventory[index].productName,
+                                      quantity: categories.inventory[index].quantity
+                                          .toString(),
+                                      price:
+                                          "GHS ${categories.inventory[index].sellingPrice.toString()}",
+                                    );
+                                  })),
+                    ))
+                  ]),
+
+                  Positioned(
+                    top:height*0.2,
+                    right: width*0.1,
+                    //left: 0,
+                    child: SizedBox(
+                      width: width*0.8,
+                      child: CustomTextField(
+                        color: theme.primaryColorLight,
+                        hintText: 'Search',
+                        style: theme.textTheme.bodyText1,
+                        suffixIcon: Icon(Icons.search,color:theme.primaryColor),
+                      ),
+                    ))
+            ],
+          ),
         ));
   }
 }
@@ -223,15 +237,15 @@ class HeaderSection extends StatelessWidget {
                 )),
           ],
         ),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: theme.primaryColor),
-          child: IconButton(
-            icon: Icon(Icons.search, color: theme.primaryColorLight, size: 30),
-            onPressed: onPressed,
-          ),
-        )
+        // Container(
+        //   decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(10),
+        //       color: theme.primaryColor),
+        //   child: IconButton(
+        //     icon: Icon(Icons.search, color: theme.primaryColorLight, size: 30),
+        //     onPressed: onPressed,
+        //   ),
+        // )
       ],
     );
   }
