@@ -75,7 +75,7 @@ class _ProductViewState extends State<ProductView> {
                   style: theme.textTheme.headline1!
                       .copyWith(fontSize: 30, color: theme.primaryColor),
                 ),
-                SizedBox(height: height * 0.02),
+                SizedBox(height: height * 0.01),
                 Text('GHS ${widget.product.sellingPrice}',
                     style: theme.textTheme.headline1),
                 Padding(
@@ -93,9 +93,7 @@ class _ProductViewState extends State<ProductView> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
+                
                 ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
@@ -198,7 +196,7 @@ class _ProductViewState extends State<ProductView> {
                       ],
                     )),
                 SizedBox(
-                  height: height * 0.05,
+                  height: height * 0.03,
                 ),
                 Button(
                   onTap: (() {
