@@ -208,9 +208,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
 
     if (widget.toEdit!) {
-      productName.text = widget.product!.productName! ?? "";
-      productPrice.text = widget.product!.sellingPrice!.toString() ?? "";
-      productQuantity.text = widget.product!.quantity!.toString() ?? "";
+      productName.text = widget.product!.productName!;
+      productPrice.text = widget.product!.sellingPrice!.toString();
+      productQuantity.text = widget.product!.quantity!.toString();
       imageString = (widget.product!.imageb64 ?? "").isEmpty
           ? ""
           : widget.product!.imageb64!;
