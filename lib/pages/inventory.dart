@@ -184,11 +184,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                                       )));
                                         },
                                         index: index,
-                                        image64: categories
-                                                .inventory[index].imageb64 ??
-                                            "",
-                                        productName: categories
-                                            .inventory[index].productName,
+                                        image64:
+                                            categories.inventory[index].imageb64 ??
+                                                "",
+                                        productName:
+                                            categories.inventory[index].productName,
                                         quantity: categories
                                             .inventory[index].quantity
                                             .toString(),
@@ -237,15 +237,15 @@ class HeaderSection extends StatelessWidget {
                 )),
           ],
         ),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: theme.primaryColor),
-          child: IconButton(
-            icon: Icon(Icons.search, color: theme.primaryColorLight, size: 30),
-            onPressed: onPressed,
-          ),
-        )
+        // Container(
+        //   decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(10),
+        //       color: theme.primaryColor),
+        //   child: IconButton(
+        //     icon: Icon(Icons.search, color: theme.primaryColorLight, size: 30),
+        //     onPressed: onPressed,
+        //   ),
+        // )
       ],
     );
   }
