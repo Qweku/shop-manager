@@ -80,7 +80,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 child: Text(
                                   'No Products',
                                   style: theme.textTheme.headline1!
-                                      .copyWith(fontSize: 25),
+                                      .copyWith(fontSize: 25,color: Colors.blueGrey),
                                 ),
                               )
                             : Padding(

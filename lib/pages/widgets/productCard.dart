@@ -120,12 +120,27 @@ class ProductListTile extends StatelessWidget {
     final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    
         return ListTile(
           leading:  CircleAvatar(
           radius: height * 0.03,
           backgroundColor: theme.primaryColor,
-          
+          child: ( image64 ?? "").isEmpty
+              ? Center(
+                  child: Text(
+                    productName!.substring(0, 2).toUpperCase(),
+                    style: theme.textTheme.headline1!
+                        .copyWith(fontSize: 20, color: theme.primaryColorLight),
+                  ),
+                )
+              : Container(
+                  // width: width * 0.45,
+                  // height: height * 0.25,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(height * 0.1),
+                      image: DecorationImage(
+                          image: MemoryImage(base64Decode(image64)),
+                          fit: BoxFit.cover)),
+                ),
         ),
           title: Text(productName!, style: theme.textTheme.headline1),
       subtitle: Text("Quantity $quantity",

@@ -23,7 +23,7 @@ class _ProductViewState extends State<ProductView> {
 
   @override
   void initState() {
-    _counterController.text = "1";
+    _counterController.text = widget.product.cartQuantity.toString();
     counter = widget.product.cartQuantity ?? 1;
     super.initState();
   }
@@ -97,25 +97,24 @@ class _ProductViewState extends State<ProductView> {
                   height: height * 0.01,
                 ),
                 ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                    padding: EdgeInsets.all(height * 0.02),
-                    decoration: BoxDecoration(color: theme.primaryColor),
-                    child: Column(
-                      children: [
-                        Text('Total',style:theme.textTheme.bodyText2),
-                        SizedBox(
-                  height: height * 0.01,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                      padding: EdgeInsets.all(height * 0.02),
+                      decoration: BoxDecoration(color: theme.primaryColor),
+                      child: Column(
+                        children: [
+                          Text('Total', style: theme.textTheme.bodyText2),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
+                          Text(
+                            "GHS ${widget.product.sellingPrice! * counter}",
+                            style: theme.textTheme.headline2,
+                          ),
+                        ],
+                      )),
                 ),
-                        Text(
-                          "GHS ${widget.product.sellingPrice! * counter}",
-                          style:
-                              theme.textTheme.headline2,
-                        ),
-                      ],
-                    )),
-              ),
-              SizedBox(
+                SizedBox(
                   height: height * 0.02,
                 ),
                 SizedBox(
@@ -260,6 +259,7 @@ class ProductAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var image = base64Decode(product.imageb64!);
     return Container(
         width: width * 0.45,
         height: height * 0.25,
@@ -283,8 +283,7 @@ class ProductAvatar extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(height * 0.1),
                     image: DecorationImage(
-                        image: MemoryImage(base64Decode(product.imageb64!)),
-                        fit: BoxFit.cover)),
+                        image: MemoryImage(image), fit: BoxFit.cover)),
               ));
   }
 }

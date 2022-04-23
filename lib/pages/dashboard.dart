@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_is_not_empty
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/config/colors.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/inventory.dart';
-
 
 import 'addproduct.dart';
 import 'category.dart';
@@ -87,11 +90,16 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             GridMenuItem(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AddProductScreen()));
+                                if (!(Provider.of<GeneralProvider>(context,
+                                        listen: false)
+                                    .categories!
+                                    .isEmpty)) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const AddProductScreen()));
+                                }
                               },
                               label: "Add Product",
                               icon: Icons.shopping_bag,

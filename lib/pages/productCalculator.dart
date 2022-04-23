@@ -100,7 +100,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                             width: width * 0.65,
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (builder) => ProductView(

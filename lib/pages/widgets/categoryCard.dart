@@ -39,11 +39,6 @@ class CategoryCard extends StatelessWidget {
                     ? theme.textTheme.headline2!.copyWith(fontSize:largeFont!)
                     : theme.textTheme.headline1!.copyWith(fontSize:largeFont!,color: theme.primaryColor),
               ),
-              // Icon(
-              //   Icons.category_outlined,
-              //   color: index!.isEven ? Colors.white : theme.primaryColor,
-              //   size: 50,
-              // ),
               SizedBox(height:height*0.01),
               Text(
                 categoryName!,

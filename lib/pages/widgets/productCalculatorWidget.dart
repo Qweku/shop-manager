@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 
-import '../../components/textFields.dart';
-import '../../models/ShopModel.dart';
+
 
 class ItemDetail extends StatelessWidget {
   const ItemDetail({

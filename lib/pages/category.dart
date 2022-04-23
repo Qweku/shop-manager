@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
-
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/productlist.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
-
 import 'widgets/categoryCard.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -60,48 +58,46 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
               ),
             ),
-            Expanded(
-              //height: height*0.5,
-              child: categories.isEmpty
+          categories.isEmpty
                   ? Center(
+                    heightFactor: height *0.015,
                       child: Text(
                         'No Categories',
                         style:
-                            theme.textTheme.headline1!.copyWith(fontSize: 25),
+                            theme.textTheme.headline1!.copyWith(fontSize: 25,color: Colors.blueGrey),
                       ),
                     )
-                  : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: height * 0.02),
-                      child: GridView.builder(
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.only(top: height * 0.04),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20,
-                                  childAspectRatio: 2 / 2.7),
-                          itemCount: categories.length,
-                          itemBuilder: (context, index) {
-                            return CategoryCard(
-                              index: index,
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProductListScreen(
-                                              categoryIndex: index,
-                                            )));
-                              },
-                              smallFont: 20.0,
-                              largeFont: 50.0,
-                              categoryName: "${categories[index].categoryName}",
-                              categoryInitial: categories[index]
-                                  .categoryName!
-                                  .substring(0, 2),
-                            );
-                          }),
-                    ),
+                  :  Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: height * 0.02),
+                child: GridView.builder(
+                    physics: BouncingScrollPhysics(),
+                    padding: EdgeInsets.only(top: height * 0.04),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: 2 / 2.7),
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      return CategoryCard(
+                        index: index,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProductListScreen(
+                                        categoryIndex: index,
+                                      )));
+                        },
+                        smallFont: 20.0,
+                        largeFont: 50.0,
+                        categoryName: "${categories[index].categoryName}",
+                        categoryInitial:
+                            categories[index].categoryName!.substring(0, 2),
+                      );
+                    }),
+              ),
             ),
           ],
         ),
