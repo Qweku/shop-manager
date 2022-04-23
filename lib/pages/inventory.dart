@@ -27,6 +27,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   Product? product;
   String? imagePath;
   bool isList = false;
+  int isSelected = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -81,30 +82,24 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   height: height * 0.15,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: categories.categories!.length,
+                      itemCount: categories.categories!.length + 1,
                       itemBuilder: (context, index) {
-                        return SizedBox(
-                          width: width * 0.3,
-                          child: CategoryCard(
-                            index: index,
-                            onTap: () {
-                              // categories =
-                              //     categories.categories[index];
-                              // categories.categorised = true;
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => ProductListScreen(
-                              //               categoryIndex: index,
-                              //             )));
-                            },
-                            smallFont: 12.0,
-                            largeFont: 25.0,
-                            categoryName:
-                                "${categories.categories![index].categoryName}",
-                            categoryInitial: categories
-                                .categories![index].categoryName!
-                                .substring(0, 2),
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isSelected = index;
+                            });
+                          },
+                          child: SizedBox(
+                            width: width * 0.3,
+                            child: CategoryCard(
+                              index: index,
+                              selected: isSelected == index ? true : false,
+                              smallFont: 12.0,
+                              largeFont: 25.0,
+                              categoryName:
+                                  "${(index == 0) ? "ALL" : categories.categories![index - 1].categoryName}",
+                            ),
                           ),
                         );
                       }),
@@ -132,7 +127,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
                                             childAspectRatio: 2 / 2.9),
-                                    itemCount: categories.inventory.length,
+                                    itemCount: isSelected == 0
+                                        ? categories.inventory.length
+                                        : categories.categories![isSelected - 1]
+                                            .products!.length,
                                     itemBuilder: (context, index) {
                                       return Padding(
                                         padding: EdgeInsets.only(
@@ -149,28 +147,57 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ProductView(
-                                                          product: categories
-                                                              .inventory[index],
+                                                          product: isSelected ==
+                                                                  0
+                                                              ? categories
+                                                                      .inventory[
+                                                                  index]
+                                                              : categories
+                                                                  .categories![
+                                                                      isSelected -
+                                                                          1]
+                                                                  .products![index],
                                                         )));
                                           },
                                           index: index,
-                                          image64: categories
-                                                  .inventory[index].imageb64 ??
-                                              "",
-                                          productName: categories
-                                              .inventory[index].productName,
-                                          quantity: categories
-                                              .inventory[index].quantity
-                                              .toString(),
+                                          image64: isSelected == 0
+                                              ? categories.inventory[index]
+                                                      .imageb64 ??
+                                                  ""
+                                              : categories
+                                                      .categories![
+                                                          isSelected - 1]
+                                                      .products![index]
+                                                      .imageb64 ??
+                                                  "",
+                                          productName: isSelected == 0
+                                              ? categories
+                                                  .inventory[index].productName
+                                              : categories
+                                                  .categories![isSelected - 1]
+                                                  .products![index]
+                                                  .productName,
+                                          quantity: isSelected == 0
+                                              ? categories
+                                                  .inventory[index].quantity
+                                                  .toString()
+                                              : categories
+                                                  .categories![isSelected - 1]
+                                                  .products![index]
+                                                  .quantity
+                                                  .toString(),
                                           price:
-                                              "GHS ${categories.inventory[index].sellingPrice.toString()}",
+                                              "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
                                         ),
                                       );
                                     })
                                 : ListView.builder(
                                     physics: BouncingScrollPhysics(),
                                     padding: EdgeInsets.zero,
-                                    itemCount: categories.inventory.length,
+                                    itemCount: isSelected == 0
+                                        ? categories.inventory.length
+                                        : categories.categories![isSelected - 1]
+                                            .products!.length,
                                     itemBuilder: (context, index) {
                                       return ProductListTile(
                                         onTap: () {
@@ -184,16 +211,33 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                                       )));
                                         },
                                         index: index,
-                                        image64:
-                                            categories.inventory[index].imageb64 ??
+                                        image64: isSelected == 0
+                                            ? categories.inventory[index]
+                                                    .imageb64 ??
+                                                ""
+                                            : categories
+                                                    .categories![isSelected - 1]
+                                                    .products![index]
+                                                    .imageb64 ??
                                                 "",
-                                        productName:
-                                            categories.inventory[index].productName,
-                                        quantity: categories
-                                            .inventory[index].quantity
-                                            .toString(),
+                                        productName: isSelected == 0
+                                            ? categories
+                                                .inventory[index].productName
+                                            : categories
+                                                .categories![isSelected - 1]
+                                                .products![index]
+                                                .productName,
+                                        quantity: isSelected == 0
+                                            ? categories
+                                                .inventory[index].quantity
+                                                .toString()
+                                            : categories
+                                                .categories![isSelected - 1]
+                                                .products![index]
+                                                .quantity
+                                                .toString(),
                                         price:
-                                            "GHS ${categories.inventory[index].sellingPrice.toString()}",
+                                            "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
                                       );
                                     })),
                       ))

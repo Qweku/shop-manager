@@ -110,7 +110,7 @@ class ProductListTile extends StatelessWidget {
       this.productName,
       this.quantity,
       this.price,
-      required this.image64,
+        this.image64 ="",
       this.index,
       this.onTap})
       : super(key: key);
@@ -124,7 +124,7 @@ class ProductListTile extends StatelessWidget {
           leading:  CircleAvatar(
           radius: height * 0.03,
           backgroundColor: theme.primaryColor,
-          child: ( image64 ?? "").isEmpty
+          child:  image64  .isEmpty
               ? Center(
                   child: Text(
                     productName!.substring(0, 2).toUpperCase(),

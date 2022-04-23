@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String? categoryName, categoryInitial;
+  final String? categoryName;
   final int? index;
+  final bool? selected;
   final double? smallFont, largeFont;
   final Function()? onTap;
-  const CategoryCard({Key? key, this.categoryName, this.onTap, this.index, this.categoryInitial, this.smallFont, this.largeFont})
+  const CategoryCard(
+      {Key? key,
+      this.categoryName,
+      this.onTap,
+      this.index,
+      this.smallFont,
+      this.largeFont,
+      this.selected = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
-
+    // Color background = index == 0
+    //     ? Colors.blueGrey
+    //     : index!.isEven
+    //         ? theme.primaryColor
+    //         : Colors.white;
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -21,7 +33,7 @@ class CategoryCard extends StatelessWidget {
           padding: EdgeInsets.all(height * 0.02),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              color: index!.isEven ? theme.primaryColor : Colors.white,
+              color: !selected! ? theme.primaryColor : Colors.white,
               // ignore: prefer_const_literals_to_create_immutables
               boxShadow: [
                 const BoxShadow(
@@ -34,17 +46,25 @@ class CategoryCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                categoryInitial!,
-                style: index!.isEven
-                    ? theme.textTheme.headline2!.copyWith(fontSize:largeFont!)
-                    : theme.textTheme.headline1!.copyWith(fontSize:largeFont!,color: theme.primaryColor),
+                categoryName!.substring(0, 3),
+                style:
+                    // index!.isEven
+                    !selected!
+                        ? theme.textTheme.headline2!
+                            .copyWith(fontSize: largeFont!)
+                        : theme.textTheme.headline1!.copyWith(
+                            fontSize: largeFont!, color: theme.primaryColor),
               ),
-              SizedBox(height:height*0.01),
+              SizedBox(height: height * 0.01),
               Text(
                 categoryName!,
-                style: index!.isEven
-                    ? theme.textTheme.headline2!.copyWith(fontSize:smallFont!)
-                    : theme.textTheme.headline1!.copyWith(fontSize:smallFont!,color: theme.primaryColor),
+                style:
+                    // index!.isEven
+                    !selected!
+                        ? theme.textTheme.headline2!
+                            .copyWith(fontSize: smallFont!)
+                        : theme.textTheme.headline1!.copyWith(
+                            fontSize: smallFont!, color: theme.primaryColor),
               ),
             ],
           ),

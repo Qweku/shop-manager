@@ -128,8 +128,8 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFromCart(Product product) {
-    cart.remove(product);
+  void removeFromCart(int index) {
+    cart.removeAt(index);
     notifyListeners();
   }
 

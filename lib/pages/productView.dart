@@ -20,11 +20,12 @@ class ProductView extends StatefulWidget {
 class _ProductViewState extends State<ProductView> {
   TextEditingController _counterController = TextEditingController();
   int counter = 1;
-
+ late var productImage ;
   @override
   void initState() {
     _counterController.text = widget.product.cartQuantity.toString();
     counter = widget.product.cartQuantity ?? 1;
+     productImage = base64Decode(widget.product.imageb64!);
     super.initState();
   }
 
@@ -40,7 +41,7 @@ class _ProductViewState extends State<ProductView> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: width * 0.05),
             child: GestureDetector(
-                onTap: () => Navigator.push(
+                onTap: () => Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (builder) => const ProductCalculator())),
@@ -223,8 +224,7 @@ class _ProductViewState extends State<ProductView> {
               //right: 0,
               //bottom: 0,
               child: ProductAvatar(
-                  width: width,
-                  height: height,
+                image: productImage,
                   product: widget.product,
                   theme: theme),
             ),
@@ -244,20 +244,22 @@ class _ProductViewState extends State<ProductView> {
 class ProductAvatar extends StatelessWidget {
   const ProductAvatar({
     Key? key,
-    required this.width,
-    required this.height,
+ 
+    required this.image,
     required this.product,
     required this.theme,
   }) : super(key: key);
 
-  final double width;
-  final double height;
+   
+  final image;
   final Product product;
   final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
-    var image = base64Decode(product.imageb64!);
+    // var image = base64Decode(product.imageb64!);
+      double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Container(
         width: width * 0.45,
         height: height * 0.25,

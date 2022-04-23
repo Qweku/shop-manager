@@ -17,48 +17,22 @@ class ProductCalculator extends StatefulWidget {
 }
 
 class _ProductCalculatorState extends State<ProductCalculator> {
-  final totalPrice = TextEditingController();
-  final quantityItem = TextEditingController();
-  final amountReceived = TextEditingController();
-  bool items = false;
-  double totalCost = 0.00;
+    final amountReceived = TextEditingController();
+   double totalCost = 0.00;
   double balance = 0.00;
-  double itemPrice = 13.00;
-  int quantity = 1;
-  static int indx = 0;
-  final TextEditingController _counterController = TextEditingController();
-  int counter = 1;
-
-  @override
-  void dispose() {
-    quantityItem.dispose();
-    _counterController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    Provider.of<GeneralProvider>(context, listen: false)
-        .cart
-        .forEach((element) {
-      setState(() {
-        totalCost += element.sellingPrice! * element.cartQuantity!;
-      });
-    });
-    _counterController.text = "1";
-
-    super.initState();
-  }
-
-  // calculateTotal() {
-  //   quantity = int.parse(quantityItem.text);
-  //   totalCost = itemPrice * quantity;
-  // }
+     
+   
+ 
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    totalCost = 0;
+    context.watch<GeneralProvider>().cart.forEach((element) {
+      totalCost += element.sellingPrice! * element.cartQuantity!;
+    });
+
     final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -90,11 +64,9 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: height * 0.15),
-                      itemCount:
-                          Provider.of<GeneralProvider>(context, listen: false)
-                              .cart
-                              .length,
+                      itemCount: context.watch<GeneralProvider>().cart.length,
                       itemBuilder: (context, index) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
                             width: width * 0.65,
@@ -118,64 +90,19 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                       .cart[index]),
                             ),
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(height * 0.01),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: theme.primaryColorLight),
-                                child: GestureDetector(
-                                    onTap: () {
-                                      counter =
-                                          int.parse(_counterController.text);
-                                      if (counter > 1) {
-                                        setState(() {
-                                          counter--;
-                                        });
-                                      }
-                                      _counterController.text =
-                                          counter.toString();
-                                    },
-                                    child: Icon(Icons.remove,
-                                        size: 15, color: theme.primaryColor)),
+                          Padding(
+                            padding: EdgeInsets.only(right: width * 0.05),
+                            child: IconButton(
+                              onPressed: () {
+                                context
+                                    .read<GeneralProvider>()
+                                    .removeFromCart(index);
+                              },
+                              icon: Icon(
+                                Icons.delete,
+                                color: theme.primaryColorLight,
                               ),
-                              SizedBox(
-                                width: width * 0.13,
-                                child: CustomTextField(
-                                  textAlign: TextAlign.center,
-                                  keyboard: TextInputType.number,
-                                  controller: _counterController,
-                                  hintColor: theme.primaryColor,
-                                  style: theme.textTheme.bodyText2,
-                                  onChanged: (text) {
-                                    counter =
-                                        int.parse(_counterController.text);
-                                  },
-                                  //hintText: '1',
-                                  //borderColor: theme.primaryColorLight
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(height * 0.01),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: theme.primaryColorLight),
-                                child: GestureDetector(
-                                    onTap: () {
-                                      counter =
-                                          int.parse(_counterController.text);
-                                      setState(() {
-                                        counter++;
-                                      });
-
-                                      _counterController.text =
-                                          counter.toString();
-                                    },
-                                    child: Icon(Icons.add,
-                                        size: 15, color: theme.primaryColor)),
-                              ),
-                            ],
+                            ),
                           )
                         ],
                       ),
@@ -212,7 +139,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                       style: theme.textTheme.bodyText2),
                                   SizedBox(height: height * 0.01),
                                   Text(
-                                    "GHS ${totalCost * counter}",
+                                    "GHS $totalCost ",
                                     textAlign: TextAlign.center,
                                     style: theme.textTheme.headline2,
                                   ),
