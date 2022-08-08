@@ -172,7 +172,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               color: ShopColors.primaryColor),
           child: Text(
             'Upload image',
-            style: TextStyle(fontSize: 20, color: ShopColors.secondaryColor),
+            style: TextStyle(fontSize: 14, color: ShopColors.secondaryColor),
           ),
         ));
   }
@@ -193,7 +193,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           child: Text(
             'Take photo',
             style: TextStyle(
-                fontSize: 20,
+                fontSize: 14,
                 color: ShopColors.primaryColor,
                 fontWeight: FontWeight.bold),
           ),
@@ -248,7 +248,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 50, bottom: 20),
+                padding: const EdgeInsets.only(top: 30, bottom: 20),
                 child: Text(
                     (widget.toEdit!)
                         ? "Edit Product Detail"

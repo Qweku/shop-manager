@@ -109,6 +109,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
+      isScrollControlled: true,
         backgroundColor: theme.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -118,6 +119,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         context: context,
         builder: (BuildContext bc) {
           return Container(
+            height:height*0.7,
             padding: EdgeInsets.all(height * 0.02),
             child: Wrap(
               spacing: 20,
@@ -142,7 +144,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           Icon(Icons.add_box, color: Colors.white, size: 20),
                       style: theme.textTheme.bodyText2),
                 ),
-                SizedBox(height: height * 0.04),
+                SizedBox(height: height * 0.1),
                 Button(
                   color: theme.primaryColorLight,
                   textColor: theme.primaryColor,
