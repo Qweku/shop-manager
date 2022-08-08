@@ -155,7 +155,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final TextAlign textAlign;
-  final Function(String)? onChanged;
+  final ValueChanged<String>? onChanged;
   final Color hintColor;
   final bool? readOnly;
   final bool? autoFocus;

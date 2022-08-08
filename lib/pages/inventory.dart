@@ -77,6 +77,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding:  EdgeInsets.all(width*0.03),
+                  child: ItemSearchBar(),
+                ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: height * 0.01),
                   height: height * 0.15,
