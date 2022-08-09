@@ -44,6 +44,15 @@ class GeneralProvider extends ChangeNotifier {
   List<ProductCategory>? get categories => _categories;
   bool get categorised => _categorised;
 
+  String _query = "";
+
+  String get query => _query;
+
+  set query(String query) {
+    _query = query;
+    notifyListeners();
+  }
+
   set categorised(bool isCated) {
     _categorised = isCated;
     notifyListeners();
@@ -118,11 +127,11 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeProductFromCategories(int cartegoryIndex,Product product) {
+  void removeProductFromCategories(int cartegoryIndex, Product product) {
     categories![cartegoryIndex].products!.remove(product);
     notifyListeners();
   }
-  
+
   void addToCart(Product product) {
     cart.add(product);
     notifyListeners();
