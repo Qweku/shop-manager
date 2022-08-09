@@ -31,12 +31,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
   int isSelected = 0;
   List<Product> productItems = [];
   List<Product> searchItem(String query) {
-       productItems.clear();
-     for (ProductCategory element
+    productItems.clear();
+    for (ProductCategory element
         in Provider.of<GeneralProvider>(context, listen: false).categories!) {
       productItems.addAll(element.products!.where((elements) =>
           elements.productName!.toLowerCase().contains(query.toLowerCase())));
- 
     }
     return productItems;
   }
