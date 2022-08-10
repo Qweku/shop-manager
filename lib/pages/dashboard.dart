@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 
 import 'addproduct.dart';
@@ -107,7 +108,13 @@ class _DashboardState extends State<Dashboard> {
                               iconColor: theme.primaryColor,
                             ),
                             GridMenuItem(
-                              onTap: () {},
+                              onTap: () {
+                                 Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Accounts()));
+                              },
                               label: "Accounts",
                               icon: Icons.receipt_long,
                               menuColor: theme.primaryColor,

@@ -22,6 +22,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   String query = "";
   bool isList = false;
   bool isScrolled = false;
+  bool boxScroll = false;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -45,93 +46,98 @@ class _InventoryScreenState extends State<InventoryScreen> {
               : Icon(Icons.list, color: theme.primaryColorLight),
         ),
         body: SafeArea(
-          top: false,
-          child: NestedScrollView(
-            controller: _scrollController,
-              floatHeaderSlivers: true,
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                _scrollController.addListener(() {
-                  if(innerBoxIsScrolled){
-                    setState(() {
-                      isScrolled = true;
-                    });
-                  }else{
-                    setState(() {
-                      isScrolled = false;
-                    });
-                  }
-                });
-                return [
-                  SliverAppBar(
-                    expandedHeight: height * 0.2,
-                    pinned: true,
-                    floating: true,
-                    // snap:true,
-                    automaticallyImplyLeading: false,
-                    flexibleSpace: FlexibleSpaceBar(
-                      title:
-                          Text('Inventory', style: theme.textTheme.headline2),
-                      background: ClipPath(
-                        clipper: BottomClipper(),
-                        child: Container(
-                          width: width,
-                          padding: EdgeInsets.only(
-                              right: height * 0.02,
-                              left: height * 0.02,
-                              top: height * 0.1,
-                              bottom: height * 0.07),
-                          color: theme.primaryColor,
-                          child: HeaderSection(
-                            height: height,
-                            theme: theme,
-                            width: width,
-                            onPressed: () {
-                              // showSearch(
-                              //     //useRootNavigator: true,
-                              //     context: context,
-                              //     delegate: Search());
-                              // print('SEARCH');
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                    bottom: AppBar(
-                      automaticallyImplyLeading: isScrolled,
-                      elevation: 0,
-                      backgroundColor:
-                          !isScrolled ? Colors.transparent : theme.primaryColor,
-                      title: !isScrolled
-                          ? Padding(
-                              padding: EdgeInsets.all(width * 0.03),
-                              child: ItemSearchBar(
-                                valueCallback: (valueCallback) {
-                                  setState(() {
-                                    query = valueCallback;
-                                  });
-                                },
+            top: false,
+            child: Builder(builder: (context) {
+              _scrollController.addListener(() {
+                if (boxScroll) {
+                  setState(() {
+                    isScrolled = true;
+                  });
+                } else {
+                  setState(() {
+                    isScrolled = false;
+                  });
+                }
+              });
+              return NestedScrollView(
+                controller: _scrollController,
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  boxScroll = innerBoxIsScrolled;
+                  return [
+                    SliverAppBar(
+                      expandedHeight: height * 0.2,
+                      pinned: true,
+                      floating: true,
+                      // snap:true,
+                      automaticallyImplyLeading: false,
+
+                      flexibleSpace: FlexibleSpaceBar(
+                        // title:
+                        //     Text('Inventory', style: theme.textTheme.headline2),
+                        background: 
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipPath(
+                              clipper: BottomClipper(),
+                              child: Container(
+                                width: width,
+                                padding: EdgeInsets.only(
+                                    right: height * 0.02,
+                                    left: height * 0.02,
+                                    top: height * 0.1,
+                                    bottom: height * 0.07),
+                                color: theme.primaryColor,
+                                child: HeaderSection(
+                                  height: height,
+                                  theme: theme,
+                                  width: width,
+                                  onPressed: () {
+                                    // showSearch(
+                                    //     //useRootNavigator: true,
+                                    //     context: context,
+                                    //     delegate: Search());
+                                    // print('SEARCH');
+                                  },
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,left:0,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal:width * 0.05),
+                                child: SizedBox(
+                                  width: width*0.8,
+                                  child: ItemSearchBar(
+                                    valueCallback: (valueCallback) {
+                                      setState(() {
+                                        query = valueCallback;
+                                      });
+                                    },
+                                  ),
+                                ),
                               ),
                             )
-                          : Text('Inventory', style: theme.textTheme.headline2),
+                          ],
+                        ),
+                      
+                      ),
+                      backgroundColor: Colors.white,
+                      
                     ),
-                  ),
-                ];
-              },
-              body: Column(children: [
-                Expanded(
-                    child: AnimatedSwitcher(
-                        duration: Duration(microseconds: 100),
-                        child: (query.isEmpty)
-                            ? InventoryList(
-                                isList: isList,
-                              )
-                            : InventorySearchList(
-                                query: query, isList: isList))),
-              ]),
-            )
-         
-        ));
+                  ];
+                },
+                body: AnimatedSwitcher(
+                    duration: Duration(microseconds: 100),
+                    child: (query.isEmpty)
+                        ? InventoryList(
+                            isList: isList,
+                          )
+                        : InventorySearchList(query: query, isList: isList)),
+              );
+            })));
   }
 }
 
@@ -170,16 +176,8 @@ class HeaderSection extends StatelessWidget {
                 )),
           ],
         ),
-        // Container(
-        //   decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(10),
-        //       color: theme.primaryColor),
-        //   child: IconButton(
-        //     icon: Icon(Icons.search, color: theme.primaryColorLight, size: 30),
-        //     onPressed: onPressed,
-        //   ),
-        // )
       ],
     );
   }
 }
+
