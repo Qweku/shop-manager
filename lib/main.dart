@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/pages/login/onboarding.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/theme.dart';
 import 'package:provider/provider.dart';
-
 
 import 'models/GeneralProvider.dart';
 
 main() async {
   await Hive.initFlutter();
 
-  runApp(ChangeNotifierProvider<GeneralProvider>(
-      create: (context) => GeneralProvider(), child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => GeneralProvider()),
+    ChangeNotifierProvider(create: (_) => ApplicationState()),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -33,23 +35,25 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Shop Manager',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: const Color(0xFF0D47A1),
-       primaryColorLight: Colors.white,
-       primaryColorDark: const Color.fromARGB(255, 7, 7, 7),
-       fontFamily: "Montserrat",
-       textTheme: const TextTheme(
-         headline1:  TextStyle(fontSize:20,color: Color.fromARGB(255, 0, 0, 0)),
-         headline2: TextStyle(fontSize:20,color: Colors.white),
-         bodyText1: TextStyle(fontSize: 14,color:Color.fromARGB(255, 0, 0, 0)),
-         bodyText2: TextStyle(fontSize: 14,color:Color.fromARGB(255, 255, 255, 255))
-       ),
-        primarySwatch: Colors.blue,
-      ),
-      home: const OnboardingScreen()
-      //LoginScreen(),
-    );
+        title: 'Shop Manager',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: const Color(0xFF0D47A1),
+          primaryColorLight: Colors.white,
+          primaryColorDark: const Color.fromARGB(255, 7, 7, 7),
+          fontFamily: "Montserrat",
+          textTheme: const TextTheme(
+              headline1:
+                  TextStyle(fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)),
+              headline2: TextStyle(fontSize: 20, color: Colors.white),
+              bodyText1:
+                  TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 0, 0)),
+              bodyText2: TextStyle(
+                  fontSize: 14, color: Color.fromARGB(255, 255, 255, 255))),
+          primarySwatch: Colors.blue,
+        ),
+        home: const OnboardingScreen()
+        //LoginScreen(),
+        );
   }
 }
