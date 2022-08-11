@@ -214,7 +214,7 @@ class _SignUpState extends State<SignUp> {
                                   _passwordController.text.trim(),
                                   (e) => _loginError(e))
                               .onError((error, stackTrace) => null);
-                               navigatorKey.currentState!.popUntil((route)=>route.isFirst);
+                               navigatorKey.currentState!.pop((route)=>route);
                         }
 
                        

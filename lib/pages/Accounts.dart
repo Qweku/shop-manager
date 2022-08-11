@@ -29,7 +29,7 @@ class _AccountsState extends State<Accounts> {
                     bottom: height * 0.07),
                 color: theme.primaryColor,
                 child: HeaderSection(
-                  title: 'Accounts',
+                  title: 'Account History',
                   height: height,
                   width: width,
                   theme: theme,
@@ -37,6 +37,28 @@ class _AccountsState extends State<Accounts> {
                 ),
               ),
             ),
+            
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: width * 0.05,
+              ),
+              child: Container(
+                width: width*0.9,
+                padding: EdgeInsets.all(width*0.05),
+                decoration: BoxDecoration(
+                  color:Color.fromARGB(255, 239, 245, 255),
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  Text('Grand Total',style:theme.textTheme.headline1!.copyWith(fontSize:17)),
+                  SizedBox(height:height*0.01),
+                   Text('GHS2000.00',style:theme.textTheme.headline1!.copyWith(color:theme.primaryColor)),
+                ]),
+              ),
+            ),
+            SizedBox(height:height*0.02),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: width * 0.05,
@@ -63,17 +85,19 @@ class _AccountsState extends State<Accounts> {
               ),
             ),
             SizedBox(height: height * 0.03),
-            ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.05, vertical: height * 0.01),
-                    child: AccountList(width:width,theme: theme),
-                  );
-                })
+            Expanded(
+              child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: 25,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.05, vertical: height * 0.01),
+                      child: AccountList(width:width,theme: theme),
+                    );
+                  }),
+            )
           ],
         ),
       ),

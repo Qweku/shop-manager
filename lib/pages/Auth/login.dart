@@ -213,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     _passwordController.text,
                                     (e) => _loginError(e))
                                 .onError((error, stackTrace) => null);
-                               navigatorKey.currentState!.popUntil((route)=>route.isActive);
+                              navigatorKey.currentState!.pop((route)=>route);
                                   }
                             
                           },

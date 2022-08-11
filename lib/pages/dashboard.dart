@@ -120,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
                                           builder: (context) =>
                                               const Accounts()));
                               },
-                              label: "Accounts",
+                              label: "Account History",
                               icon: Icons.receipt_long,
                               menuColor: theme.primaryColor,
                               iconColor: theme.primaryColorLight,
