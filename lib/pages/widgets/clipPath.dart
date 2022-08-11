@@ -56,3 +56,53 @@ class BottomLineClipper extends CustomClipper<Path> {
   }
 }
 
+class HeaderSection extends StatelessWidget {
+  const HeaderSection({
+    Key? key,
+    required this.height,
+    //required this.widget,
+    required this.theme,
+    required this.width,
+    this.onPressed, required this.title,
+  }) : super(key: key);
+
+  final double height;
+  //final ProductListScreen widget;
+  final ThemeData theme;
+  final String title;
+  final double width;
+  final Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              textAlign: TextAlign.left,
+              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+            ),
+            SizedBox(
+                width: width * 0.1,
+                child: Divider(
+                  color: theme.primaryColorLight,
+                  thickness: 5,
+                )),
+          ],
+        ),
+        // Container(
+        //   decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(10),
+        //       color: theme.primaryColorLight),
+        //   child: IconButton(
+        //       onPressed: onPressed,
+        //       icon: Icon(Icons.add, color: theme.primaryColor)),
+        // )
+      ],
+    );
+  }
+}

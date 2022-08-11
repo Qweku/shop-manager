@@ -32,37 +32,34 @@ class ProductCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Container(
-                  height: height * 0.23,
-                  width: width * 0.4,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: index!.isEven ? theme.primaryColor : Colors.white,
-                      boxShadow: [
-                        const BoxShadow(
-                            offset: Offset(2, 2),
-                            color: Color.fromARGB(31, 0, 0, 0),
-                            blurRadius: 2,
-                            spreadRadius: 1)
-                      ]),
-                  child: image64.isEmpty
-                      ? Center(
-                          child: Text(
-                            productName!.substring(0, 2).toUpperCase(),
-                            style: index!.isEven
-                                ? theme.textTheme.headline2!
-                                    .copyWith(fontSize: 60)
-                                : theme.textTheme.headline1!.copyWith(
-                                    fontSize: 70, color: theme.primaryColor),
-                          ),
-                        )
-                      : Image.memory(
-                          base64Decode(image64),
-                          fit: BoxFit.cover,
-                        )),
-            ),
+            Container(
+                height: height * 0.23,
+                width: width * 0.4,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: index!.isEven ? theme.primaryColor : Colors.white,
+                    boxShadow: [
+                      const BoxShadow(
+                          offset: Offset(2, 2),
+                          color: Color.fromARGB(255, 238, 238, 238),
+                          blurRadius: 2,
+                          spreadRadius: 1)
+                    ]),
+                child: image64.isEmpty
+                    ? Center(
+                        child: Text(
+                          productName!.substring(0, 2).toUpperCase(),
+                          style: index!.isEven
+                              ? theme.textTheme.headline2!
+                                  .copyWith(fontSize: 60)
+                              : theme.textTheme.headline1!.copyWith(
+                                  fontSize: 70, color: theme.primaryColor),
+                        ),
+                      )
+                    : Image.memory(
+                        base64Decode(image64),
+                        fit: BoxFit.cover,
+                      )),
             SizedBox(height: height * 0.01),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

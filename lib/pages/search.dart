@@ -93,7 +93,7 @@ class _ItemSearchBarState extends State<ItemSearchBar> {
     return CustomTextField(
       hintText: 'Search Item',
       prefixIcon: Icon(Icons.search, color: theme.primaryColor),
-      borderColor: theme.primaryColor,
+      color: Color.fromARGB(255, 247, 247, 247),
       style: theme.textTheme.bodyText1,
       onChanged: (searchValue) {
         widget.valueCallback(searchValue);
