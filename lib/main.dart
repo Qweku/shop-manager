@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
-import 'package:shop_manager/pages/login/onboarding.dart';
+import 'package:shop_manager/pages/Auth/onboarding.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/theme.dart';
 import 'package:provider/provider.dart';
