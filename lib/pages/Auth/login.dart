@@ -10,9 +10,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
+import 'package:shop_manager/main.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function? toggleScreen;
@@ -109,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           vertical: height * 0.02),
                       child: CustomTextField(
                         maxLines: 1,
-                        obscure: true,
+                        obscure: obsure,
                         borderColor: theme.primaryColor,
                         style: theme.textTheme.bodyText1,
                         prefixIcon: Icon(Icons.lock,
@@ -198,6 +200,9 @@ class _LoginScreenState extends State<LoginScreen> {
             
                                     return null;
                                   }else{
+                                    showDialog(context: context, 
+                                    barrierDismissible: false,
+                                    builder: (context)=>Center(child:CircularProgressIndicator(color: theme.primaryColorLight,)));
                                     await ApplicationState()
                                 .verifyEmail(_emailController.text,
                                     (e) => _loginError(e))
@@ -208,6 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     _passwordController.text,
                                     (e) => _loginError(e))
                                 .onError((error, stackTrace) => null);
+                               navigatorKey.currentState!.popUntil((route)=>route.isActive);
                                   }
                             
                           },

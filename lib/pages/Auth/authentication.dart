@@ -28,7 +28,7 @@ class _AuthenticationState extends State<Authentication> {
     return WillPopScope(
       onWillPop: () => _backButton(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        //resizeToAvoidBottomInset: false,
         backgroundColor: theme.primaryColor,
         body: Stack(
           children: [
@@ -46,27 +46,30 @@ class _AuthenticationState extends State<Authentication> {
               radius:width*0.4,
               backgroundColor:Colors.black.withOpacity(0.4)
             )),
-            SizedBox(
-              height: height,
+            Container(
+              alignment: const Alignment(0,0),
+              
               width: width,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: theme.primaryColorLight,
-                      radius: width * 0.12,
-                      child:
-                          Icon(Icons.shop_2, color: theme.primaryColor, size: 30),
-                    ),
-                    SizedBox(height:height*0.01),
-                    Text('Shop Manager',style: theme.textTheme.headline2,),
-                    SizedBox(height: height * 0.05),
-                    AnimatedSwitcher(duration: const Duration(milliseconds: 700),
-                    child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),
-                    )
-                    
-                  ]),
+              child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: theme.primaryColorLight,
+                        radius: width * 0.12,
+                        child:
+                            Icon(Icons.shop_2, color: theme.primaryColor, size: 30),
+                      ),
+                      SizedBox(height:height*0.01),
+                      Text('Shop Manager',style: theme.textTheme.headline2,),
+                      SizedBox(height: height * 0.05),
+                      AnimatedSwitcher(duration: const Duration(milliseconds: 700),
+                      child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),
+                      )
+                      
+                    ]),
+              ),
             ),
           ],
         ),

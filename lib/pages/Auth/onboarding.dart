@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
+import 'package:shop_manager/pages/wrapper.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key, this.title}) : super(key: key);
@@ -132,7 +133,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const Authentication()));
+                                                const Wrapper()));
                                   },
                                   child: Text('Get Started',
                                       style: theme.textTheme.bodyText2!

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/pages/Auth/onboarding.dart';
@@ -9,13 +10,13 @@ import 'models/GeneralProvider.dart';
 
 main() async {
   await Hive.initFlutter();
-
+Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => GeneralProvider()),
     ChangeNotifierProvider(create: (_) => ApplicationState()),
   ], child: const MyApp()));
 }
-
+final navigatorKey = GlobalKey<NavigatorState>();
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -35,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
         title: 'Shop Manager',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

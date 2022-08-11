@@ -7,6 +7,7 @@ import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
+import 'package:shop_manager/pages/widgets/drawerMenu.dart';
 
 import 'addproduct.dart';
 import 'category.dart';
@@ -27,6 +28,10 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
         bottomNavigationBar: const BottomNav(),
         backgroundColor: ShopColors.primaryColor,
+        appBar: AppBar(elevation: 0,backgroundColor:theme.primaryColor,actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications_active,color:theme.primaryColorLight))
+        ],),
+        drawer: const DrawerWidget(),
         body: Stack(
           children: [
             Positioned(
@@ -34,7 +39,7 @@ class _DashboardState extends State<Dashboard> {
               right: 0,
               left: 0,
               child: Container(
-                height: height * 0.5,
+                height: height * 0.45,
                 decoration: BoxDecoration(
                     color: ShopColors.secondaryColor,
                     borderRadius: BorderRadius.only(
@@ -48,7 +53,7 @@ class _DashboardState extends State<Dashboard> {
               width: width,
               color: Colors.transparent,
               child: Padding(
-                padding: const EdgeInsets.only(top: 100, right: 20, left: 20),
+                padding:  EdgeInsets.only(top: height*0.08, right: width*0.05, left: width*0.05),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -61,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
                             Padding(
                               padding:
                                   const EdgeInsets.only(bottom: 20, top: 10),
-                              child: Text("Shop",
+                              child: Text("Shop Manager",
                                   style: TextStyle(
                                       fontSize: 20,
                                       color: ShopColors.primaryColor)),
