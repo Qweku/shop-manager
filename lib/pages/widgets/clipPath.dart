@@ -60,18 +60,18 @@ class HeaderSection extends StatelessWidget {
   const HeaderSection({
     Key? key,
     required this.height,
-    //required this.widget,
+     this.trailing = const SizedBox(),
     required this.theme,
     required this.width,
-    this.onPressed, required this.title,
+    required this.title,
   }) : super(key: key);
 
   final double height;
-  //final ProductListScreen widget;
+  final Widget trailing;
   final ThemeData theme;
   final String title;
   final double width;
-  final Function()? onPressed;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -94,14 +94,7 @@ class HeaderSection extends StatelessWidget {
                 )),
           ],
         ),
-        // Container(
-        //   decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(10),
-        //       color: theme.primaryColorLight),
-        //   child: IconButton(
-        //       onPressed: onPressed,
-        //       icon: Icon(Icons.add, color: theme.primaryColor)),
-        // )
+        trailing
       ],
     );
   }
