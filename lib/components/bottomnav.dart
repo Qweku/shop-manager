@@ -1,60 +1,46 @@
+import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:shop_manager/config/colors.dart';
-import 'package:shop_manager/pages/productCalculator.dart';
 
 class BottomNav extends StatelessWidget {
-  const BottomNav({Key? key}) : super(key: key);
-
-
+  final onChange;
+  const BottomNav({Key? key, this.onChange}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: ShopColors.secondaryColor,
-         
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          GestureDetector(
-              child: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: Icon(Icons.home,size:30,color:ShopColors.primaryColor)),
-              onTap: () {
-                //Navigator.pushNamed(context, "/dashboard");
-              }),
-          GestureDetector(
-              child: SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: Icon(Icons.account_balance_wallet,size:30,color:ShopColors.primaryColor)),
-              onTap: () {
-                
-              }),
-          
-          GestureDetector(
-            onTap:(){
-              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ProductCalculator()));
-            },
-            child:SizedBox(
-              height: 30,
-              width: 30,
-              child: Icon(Icons.monetization_on,size:30,color:ShopColors.primaryColor)),
-          )
-        
-        ]),
+    final theme = Theme.of(context);
+    return FluidNavBar(
+      icons: [
+        FluidNavBarIcon(
+            icon: Icons.dashboard,
+            selectedForegroundColor: Colors.white,
+            //backgroundColor: theme.primaryColor,
+            extras: {"label": "downloads"}),
+        FluidNavBarIcon(
+            icon: Icons.home,
+            selectedForegroundColor: Colors.white,
+            //backgroundColor: theme.primaryColor,
+            extras: {"label": "home"}),
+        FluidNavBarIcon(
+            icon: Icons.line_axis,
+            selectedForegroundColor: Colors.white,
+           // backgroundColor: theme.primaryColor,
+            extras: {"label": "shop"}),
+        // FluidNavBarIcon(
+        //     svgPath: "assets/conference.svg",
+        //     backgroundColor: Color(0xFF34A950),
+        //     extras: {"label": "conference"}),
+      ],
+      onChange: onChange,
+      style: FluidNavBarStyle(
+          iconBackgroundColor: theme.primaryColor,
+          iconUnselectedForegroundColor: Colors.white,
+          barBackgroundColor: theme.primaryColor),
+      scaleFactor: 1.5,
+      defaultIndex: 1,
+      itemBuilder: (icon, item) => Semantics(
+        label: icon.extras!["label"],
+        child: item,
       ),
-
-       );
+    );
   }
 }

@@ -81,7 +81,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                       backgroundColor: theme.primaryColorLight,
                       radius: width * 0.12,
                       child:
-                          Icon(Icons.shop_2, color: theme.primaryColor, size: 30),
+                          Icon(Icons.shop_2, color: theme.primaryColor, size: 35),
                     ),
                 ),
                   SizedBox(height:height*0.01),
@@ -92,7 +92,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
             ),
             Container(
               alignment: Alignment(0, 0.9),
-              child: Text('@ c r e a t e d b y Q w e k u & Y F l i c k r',
+              child: Text('@ c r e a t e d b y Q w e k u & Y - F l i c k r',
                   style: TextStyle(color:Colors.white,fontSize:12)),
             )
           ],

@@ -41,82 +41,81 @@ class _InventorySearchListState extends State<InventorySearchList> {
     //var categories = context.watch<GeneralProvider>();
     var categories = context.watch<GeneralProvider>();
     final theme = Theme.of(context);
-    return Expanded(
-      child: Column(
-        children: [
-          (searchItem(widget.query).isEmpty)
-              ? Center(
-                  child: Text(
-                    'No Products',
-                    style: theme.textTheme.headline1!
-                        .copyWith(fontSize: 25, color: Colors.blueGrey),
-                  ),
-                )
-              : Expanded(
-                  child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: height * 0.01),
-                  child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 800),
-                      child: !widget.isList
-                          ? GridView.builder(
-                              physics: BouncingScrollPhysics(),
-                              padding: EdgeInsets.only(top: height * 0.02),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 2 / 2.9),
-                              itemCount: productItems.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: index.isEven ? height * 0.02 : 0,
-                                      bottom: index.isOdd ? height * 0.02 : 0),
-                                  child: ProductCard(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ProductView(
-                                                    product:
-                                                        productItems[index],
-                                                  )));
-                                    },
-                                    index: index,
-                                    image64: productItems[index].imageb64 ?? "",
-                                    productName:
-                                        productItems[index].productName,
-                                    quantity:
-                                        productItems[index].quantity.toString(),
-                                    price:
-                                        "GHS ${productItems[index].sellingPrice.toString()}",
-                                  ),
-                                );
-                              })
-                          : ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              itemCount: productItems.length,
-                              itemBuilder: (context, index) {
-                                return ProductListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ProductView(
-                                                  product: productItems[index],
-                                                )));
-                                  },
-                                  index: index,
-                                  image64: productItems[index].imageb64 ?? "",
-                                  productName:
-                                      productItems[index].quantity.toString(),
-                                  price:
-                                      "GHS ${productItems[index].sellingPrice.toString()}",
-                                );
-                              })),
-                ))
-        ],
-      ),
+    return Column(
+      children: [
+        (searchItem(widget.query).isEmpty)
+            ? Center(
+                child: Text(
+                  'No Products',
+                  style: theme.textTheme.headline1!
+                      .copyWith(fontSize: 25, color: Colors.blueGrey),
+                ),
+              )
+            : Expanded(
+              child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: height * 0.01),
+              child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 800),
+                  child: !widget.isList
+                      ? GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.only(top: height * 0.02),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 2 / 2.9),
+                          itemCount: productItems.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  top: index.isEven ? height * 0.02 : 0,
+                                  bottom: index.isOdd ? height * 0.02 : 0),
+                              child: ProductCard(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProductView(
+                                                product:
+                                                    productItems[index],
+                                              )));
+                                },
+                                index: index,
+                                image64: productItems[index].imageb64 ?? "",
+                                productName:
+                                    productItems[index].productName,
+                                quantity:
+                                    productItems[index].quantity.toString(),
+                                price:
+                                    "GHS ${productItems[index].sellingPrice.toString()}",
+                              ),
+                            );
+                          })
+                      : ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemCount: productItems.length,
+                          itemBuilder: (context, index) {
+                            return ProductListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProductView(
+                                              product: productItems[index],
+                                            )));
+                              },
+                              index: index,
+                              image64: productItems[index].imageb64 ?? "",
+                              productName:
+                                  productItems[index].quantity.toString(),
+                              price:
+                                  "GHS ${productItems[index].sellingPrice.toString()}",
+                            );
+                          })),
+                ),
+            )
+      ],
     );
   }
 }

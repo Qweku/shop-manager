@@ -129,7 +129,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                   ];
                 },
-                body: AnimatedSwitcher(
+                body:
+                AnimatedSwitcher(
                     duration: Duration(microseconds: 100),
                     child: (query.isEmpty)
                         ? InventoryList(

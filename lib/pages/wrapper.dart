@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 
@@ -14,7 +13,7 @@ class Wrapper extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const Dashboard();
+            return const MyHomeScreen();
           } else {
             return const Authentication();
           }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
 class Accounts extends StatefulWidget {
-  const Accounts({Key? key}) : super(key: key);
+  final String? tag;
+  const Accounts({Key? key, this.tag}) : super(key: key);
 
   @override
   State<Accounts> createState() => _AccountsState();
@@ -25,7 +26,7 @@ class _AccountsState extends State<Accounts> {
                 padding: EdgeInsets.only(
                     right: height * 0.02,
                     left: height * 0.02,
-                    top: height * 0.13,
+                    top: widget.tag=='dashboard'?0:height * 0.13,
                     bottom: height * 0.07),
                 color: theme.primaryColor,
                 child: HeaderSection(
