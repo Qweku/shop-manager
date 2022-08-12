@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
+import 'package:shop_manager/pages/Auth/Launcher.dart';
 import 'package:shop_manager/pages/Auth/onboarding.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/theme.dart';
@@ -54,7 +55,7 @@ class _MyAppState extends State<MyApp> {
                   fontSize: 14, color: Color.fromARGB(255, 255, 255, 255))),
           primarySwatch: Colors.blue,
         ),
-        home: const OnboardingScreen()
+        home: const Launcher()
         //LoginScreen(),
         );
   }

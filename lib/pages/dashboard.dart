@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_is_not_empty
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/config/colors.dart';
@@ -25,127 +28,154 @@ class _DashboardState extends State<Dashboard> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
-    return Scaffold(
-        bottomNavigationBar: const BottomNav(),
-        backgroundColor: ShopColors.primaryColor,
-        appBar: AppBar(elevation: 0,backgroundColor:theme.primaryColor,actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.notifications_active,color:theme.primaryColorLight))
-        ],),
-        drawer: const DrawerWidget(),
-        body: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: Container(
-                height: height * 0.45,
-                decoration: BoxDecoration(
-                    color: ShopColors.secondaryColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(width * 0.5),
-                      //bottomRight: Radius.circular(width * 0.5)
-                    )),
+    return WillPopScope(
+      onWillPop: () => _backButton(),
+      child: Scaffold(
+          bottomNavigationBar: const BottomNav(),
+          backgroundColor: ShopColors.primaryColor,
+          appBar: AppBar(elevation: 0,backgroundColor:theme.primaryColor,actions: [
+            IconButton(onPressed: (){}, icon: Icon(Icons.notifications_active,color:theme.primaryColorLight))
+          ],),
+          drawer: const DrawerWidget(),
+          body: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                right: 0,
+                left: 0,
+                child: Container(
+                  height: height * 0.45,
+                  decoration: BoxDecoration(
+                      color: ShopColors.secondaryColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(width * 0.5),
+                        //bottomRight: Radius.circular(width * 0.5)
+                      )),
+                ),
               ),
-            ),
-            Container(
-              height: height,
-              width: width,
-              color: Colors.transparent,
-              child: Padding(
-                padding:  EdgeInsets.only(top: height*0.08, right: width*0.05, left: width*0.05),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        height: height * 0.14,
-                        child: Column(
-                          children: [
-                            Icon(Icons.shop_two_outlined,
-                                size: 50, color: ShopColors.primaryColor),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 20, top: 10),
-                              child: Text("Shop Manager",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: ShopColors.primaryColor)),
-                            ),
-                          ],
-                        )),
-                    SizedBox(
-                        height: height * 0.53,
-                        child: GridView.count(
-                          padding: EdgeInsets.zero,
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 20,
-                          children: [
-                            GridMenuItem(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const CategoryScreen()));
-                              },
-                              label: "Categories",
-                              icon: Icons.category,
-                              menuColor: theme.primaryColorLight,
-                              iconColor: theme.primaryColor,
-                            ),
-                            GridMenuItem(
-                              onTap: () {
-                                if (!(Provider.of<GeneralProvider>(context,
-                                        listen: false)
-                                    .categories!
-                                    .isEmpty)) {
+              Container(
+                height: height,
+                width: width,
+                color: Colors.transparent,
+                child: Padding(
+                  padding:  EdgeInsets.only(top: height*0.08, right: width*0.05, left: width*0.05),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          height: height * 0.14,
+                          child: Column(
+                            children: [
+                              Icon(Icons.shop_two_outlined,
+                                  size: 50, color: ShopColors.primaryColor),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 20, top: 10),
+                                child: Text("Shop Manager",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: ShopColors.primaryColor)),
+                              ),
+                            ],
+                          )),
+                      SizedBox(
+                          height: height * 0.53,
+                          child: GridView.count(
+                            padding: EdgeInsets.zero,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 20,
+                            children: [
+                              GridMenuItem(
+                                onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const AddProductScreen()));
-                                }
-                              },
-                              label: "Add Product",
-                              icon: Icons.shopping_bag,
-                              menuColor: theme.primaryColorLight,
-                              iconColor: theme.primaryColor,
-                            ),
-                            GridMenuItem(
-                              onTap: () {
-                                 Navigator.push(
+                                              const CategoryScreen()));
+                                },
+                                label: "Categories",
+                                icon: Icons.category,
+                                menuColor: theme.primaryColorLight,
+                                iconColor: theme.primaryColor,
+                              ),
+                              GridMenuItem(
+                                onTap: () {
+                                  if (!(Provider.of<GeneralProvider>(context,
+                                          listen: false)
+                                      .categories!
+                                      .isEmpty)) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const AddProductScreen()));
+                                  }
+                                },
+                                label: "Add Product",
+                                icon: Icons.shopping_bag,
+                                menuColor: theme.primaryColorLight,
+                                iconColor: theme.primaryColor,
+                              ),
+                              GridMenuItem(
+                                onTap: () {
+                                   Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Accounts()));
+                                },
+                                label: "Account History",
+                                icon: Icons.receipt_long,
+                                menuColor: theme.primaryColor,
+                                iconColor: theme.primaryColorLight,
+                              ),
+                              GridMenuItem(
+                                onTap: () {
+                                  Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const Accounts()));
-                              },
-                              label: "Account History",
-                              icon: Icons.receipt_long,
-                              menuColor: theme.primaryColor,
-                              iconColor: theme.primaryColorLight,
-                            ),
-                            GridMenuItem(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const InventoryScreen()));
-                              },
-                              label: "Inventory",
-                              icon: Icons.inventory,
-                              menuColor: theme.primaryColor,
-                              iconColor: theme.primaryColorLight,
-                            ),
-                          ],
-                        )),
-                  ],
+                                              const InventoryScreen()));
+                                },
+                                label: "Inventory",
+                                icon: Icons.inventory,
+                                menuColor: theme.primaryColor,
+                                iconColor: theme.primaryColorLight,
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
+  }
+   _backButton() {
+    return showDialog<bool>(
+        context: context,
+        builder: (c) => AlertDialog(
+              title: const Text("Warning"),
+              content: const Text("Do you really want to exit?"),
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      if (Platform.isIOS) {
+                        exit(0);
+                      }
+                      if (Platform.isAndroid) {
+                        return await SystemChannels.platform
+                            .invokeMethod<void>('SystemNavigator.pop');
+                      }
+                    },
+                    child: const Text("Yes")),
+                TextButton(
+                    onPressed: () => Navigator.pop(c, false),
+                    child: const Text("No"))
+              ],
+            ));
   }
 }
 
