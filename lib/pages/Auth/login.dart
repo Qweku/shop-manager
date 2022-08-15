@@ -69,8 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return AnimatedContainer(
+      padding: EdgeInsets.only(bottom:height*0.03),
             duration: const Duration(milliseconds: 700),
-            height: height * 0.5,
+           // height: height * 0.5,
             width: width*0.9,
             decoration: BoxDecoration(
                 color: theme.primaryColorLight,

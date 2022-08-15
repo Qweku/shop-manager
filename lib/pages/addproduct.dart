@@ -310,7 +310,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           ],
                         )),
                         Padding(
-                          padding:  EdgeInsets.only(top:height*0.05),
+                          padding:  EdgeInsets.only(top:height*0.02),
                           child: Align( alignment: Alignment(0,0),child: Text('Attach Image',style: theme.textTheme.bodyText2)),
                         ),
                     Padding(

@@ -50,8 +50,9 @@ class _SignUpState extends State<SignUp> {
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return AnimatedContainer(
+        padding: EdgeInsets.only(bottom:height*0.03),
         duration: const Duration(milliseconds: 700),
-        height: height * 0.6,
+        //height: height * 0.6,
         width: width * 0.9,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(width * 0.05),

@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 
-
-
 class ItemDetail extends StatelessWidget {
   const ItemDetail({
     Key? key,
     required this.theme,
     required this.item,
+    this.backgroundColor,
+    this.textColor,
   }) : super(key: key);
 
   final ThemeData theme;
   final Product item;
+  final Color? backgroundColor, textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +21,13 @@ class ItemDetail extends StatelessWidget {
     return ListTile(
         leading: CircleAvatar(
           radius: height * 0.03,
-          backgroundColor: theme.primaryColorLight,
+          backgroundColor: backgroundColor ?? theme.primaryColorLight,
           child: (item.imageb64 ?? "").isEmpty
               ? Center(
                   child: Text(
                     item.productName!.substring(0, 2).toUpperCase(),
                     style: theme.textTheme.headline1!
-                        .copyWith(fontSize: 20, color: theme.primaryColor),
+                        .copyWith(fontSize: 20, color: textColor??theme.primaryColor),
                   ),
                 )
               : Container(
@@ -39,8 +40,11 @@ class ItemDetail extends StatelessWidget {
                           fit: BoxFit.cover)),
                 ),
         ),
-        title: Text(item.productName!, style: theme.textTheme.bodyText2),
+        title: Text(item.productName!,
+            style: theme.textTheme.bodyText2!
+                .copyWith(color: textColor ?? Colors.white)),
         subtitle: Text("GHS ${item.sellingPrice}",
-            style: theme.textTheme.bodyText2!.copyWith(fontSize: 12)));
+            style: theme.textTheme.bodyText2!
+                .copyWith(fontSize: 12, color: textColor ?? Colors.white)));
   }
 }

@@ -49,7 +49,7 @@ class _InventoryListState extends State<InventoryList> {
                     });
                   },
                   child: SizedBox(
-                    width: width * 0.25,
+                    width: width * 0.27,
                     child: CategoryCard(
                       index: index,
                       selected: isSelected == index ? true : false,

@@ -67,9 +67,12 @@ class ProductCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      productName!,
-                      style: theme.textTheme.bodyText1,
+                    SizedBox(
+                      width: width*0.2,
+                      child: Text(
+                        productName!,
+                        style: theme.textTheme.bodyText1,
+                      ),
                     ),
                     Text(
                       "Quantity: $quantity",

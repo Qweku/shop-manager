@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/pages/Summary.dart';
 import 'package:shop_manager/pages/productView.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
@@ -21,7 +23,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
    double totalCost = 0.00;
   double balance = 0.00;
      
-   
+   bool isDone =false;
  
 
   @override
@@ -32,6 +34,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
     context.watch<GeneralProvider>().cart.forEach((element) {
       totalCost += element.sellingPrice! * element.cartQuantity!;
     });
+
 
     final theme = Theme.of(context);
     return Scaffold(
@@ -180,14 +183,37 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   child: Container(
                     color: theme.primaryColor,
                     padding: EdgeInsets.all(height * 0.03),
-                    child: Button(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Button(
                       onTap: () {
-                        _bottomDrawSheet(context);
+                       Navigator.pop(context);
                       },
-                      buttonText: 'Proceed',
-                      color: theme.primaryColorLight,
-                      textColor: theme.primaryColor,
-                      width: width,
+                      buttonText: 'Cancel',
+                      borderColor: theme.primaryColorLight,
+                      textColor: theme.primaryColorLight,
+                      width: width*0.4,
+                      shadowColor: Colors.transparent,
+                    ),
+                        Button(
+                          onTap: () {
+                            if(!isDone){
+                              _bottomDrawSheet(context);
+                            }else{
+                              Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (builder) => const SummaryScreen()));
+                            }
+                            
+                          },
+                          buttonText: isDone?'Done':'Proceed',
+                          color: theme.primaryColorLight,
+                          textColor: theme.primaryColor,
+                          width: width*0.4,
+                        ),
+                      ],
                     ),
                   ))
             ],
@@ -227,6 +253,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   ),
                   child: CustomTextField(
                       controller: amountReceived,
+                      keyboard: TextInputType.number,
                       onChanged: (text) {
                         setState(() {
                           double amt = double.parse(amountReceived.text);
@@ -248,7 +275,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   buttonText: "Done",
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());
-
+                    isDone = true;
                     Navigator.pop(context);
                   },
                 ),
