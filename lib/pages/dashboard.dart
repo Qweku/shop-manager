@@ -64,7 +64,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           _content = const Dashboard();
           break;
         case 2:
-          _content = const Accounts(tag:'dashboard');
+          _content = const Accounts(tag: 'dashboard');
           break;
       }
       _content = AnimatedSwitcher(
@@ -192,16 +192,16 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             GridMenuItem(
                               onTap: () {
-                                if (!(Provider.of<GeneralProvider>(context,
-                                        listen: false)
-                                    .categories!
-                                    .isEmpty)) {
+                                // if (!(Provider.of<GeneralProvider>(context,
+                                //         listen: false)
+                                //     .categories!
+                                //     .isEmpty)) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               const AddProductScreen()));
-                                }
+                                // }
                               },
                               label: "Add Product",
                               icon: Icons.shopping_bag,

@@ -60,7 +60,7 @@ class Shop {
 
 class ProductCategory {
   ProductCategory({
-    this.categoryName,
+    this.categoryName = 'Uncategorised',
     this.categorydescription,
     this.categoryId,
     this.products,
@@ -77,8 +77,8 @@ class ProductCategory {
   String toJson() => json.encode(toMap());
 
   factory ProductCategory.fromMap(Map<String, dynamic> json) => ProductCategory(
-        categoryName: json["categoryName"] ?? null,
-        categorydescription: json["categorydescription"] ?? null,
+        categoryName: json["categoryName"]  ,
+        categorydescription: json["categorydescription"]  ,
         categoryId: json["categoryID"] ?? null,
         products: json["Products"] == null
             ? null

@@ -6,7 +6,7 @@ import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
-import 'package:shop_manager/pages/productlist.dart';
+import 'package:shop_manager/pages/categorylist.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'widgets/categoryCard.dart';
 
@@ -58,46 +58,46 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
               ),
             ),
-          categories.isEmpty
-                  ? Center(
-                    heightFactor: height *0.015,
-                      child: Text(
-                        'No Categories',
-                        style:
-                            theme.textTheme.headline1!.copyWith(fontSize: 25,color: Colors.blueGrey),
-                      ),
-                    )
-                  :  Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: height * 0.02),
-                child: GridView.builder(
-                    physics: BouncingScrollPhysics(),
-                    padding: EdgeInsets.only(top: height * 0.04),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20,
-                        childAspectRatio: 2 / 2.7),
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      return CategoryCard(
-                        index: index,
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProductListScreen(
-                                        categoryIndex: index,
-                                      )));
-                        },
-                        smallFont: 20.0,
-                        largeFont: 50.0,
-                        categoryName: "${categories[index].categoryName}",
-                         
-                      );
-                    }),
-              ),
-            ),
+            categories.isEmpty
+                ? Center(
+                    heightFactor: height * 0.015,
+                    child: Text(
+                      'No Categories',
+                      style: theme.textTheme.headline1!
+                          .copyWith(fontSize: 25, color: Colors.blueGrey),
+                    ),
+                  )
+                : Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: height * 0.02),
+                      child: GridView.builder(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.only(top: height * 0.04),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                  childAspectRatio: 2 / 2.7),
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            return CategoryCard(
+                              index: index,
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProductListScreen(
+                                              categoryIndex: index,
+                                            )));
+                              },
+                              smallFont: 20.0,
+                              largeFont: 50.0,
+                              categoryName: "${categories[index].categoryName}",
+                            );
+                          }),
+                    ),
+                  ),
           ],
         ),
       ),
@@ -109,7 +109,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
-      isScrollControlled: true,
+        isScrollControlled: true,
         backgroundColor: theme.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -119,7 +119,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         context: context,
         builder: (BuildContext bc) {
           return Container(
-            height:height*0.7,
+            height: height * 0.7,
             padding: EdgeInsets.all(height * 0.02),
             child: Wrap(
               spacing: 20,

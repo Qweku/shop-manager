@@ -19,12 +19,11 @@ class ProductCalculator extends StatefulWidget {
 }
 
 class _ProductCalculatorState extends State<ProductCalculator> {
-    final amountReceived = TextEditingController();
-   double totalCost = 0.00;
+  final amountReceived = TextEditingController();
+  double totalCost = 0.00;
   double balance = 0.00;
-     
-   bool isDone =false;
- 
+
+  bool isDone = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,6 @@ class _ProductCalculatorState extends State<ProductCalculator> {
     context.watch<GeneralProvider>().cart.forEach((element) {
       totalCost += element.sellingPrice! * element.cartQuantity!;
     });
-
 
     final theme = Theme.of(context);
     return Scaffold(
@@ -187,31 +185,31 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Button(
-                      onTap: () {
-                       Navigator.pop(context);
-                      },
-                      buttonText: 'Cancel',
-                      borderColor: theme.primaryColorLight,
-                      textColor: theme.primaryColorLight,
-                      width: width*0.4,
-                      shadowColor: Colors.transparent,
-                    ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          buttonText: 'Cancel',
+                          borderColor: theme.primaryColorLight,
+                          textColor: theme.primaryColorLight,
+                          width: width * 0.4,
+                          shadowColor: Colors.transparent,
+                        ),
                         Button(
                           onTap: () {
-                            if(!isDone){
+                            if (!isDone) {
                               _bottomDrawSheet(context);
-                            }else{
+                            } else {
                               Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (builder) => const SummaryScreen()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (builder) =>
+                                          const SummaryScreen()));
                             }
-                            
                           },
-                          buttonText: isDone?'Done':'Proceed',
+                          buttonText: isDone ? 'Done' : 'Proceed',
                           color: theme.primaryColorLight,
                           textColor: theme.primaryColor,
-                          width: width*0.4,
+                          width: width * 0.4,
                         ),
                       ],
                     ),

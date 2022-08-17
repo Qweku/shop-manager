@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
@@ -16,7 +18,7 @@ class InventoryList extends StatefulWidget {
 
 class _InventoryListState extends State<InventoryList> {
   List<String>? imagePaths;
-  
+
   Product? product;
   String? imagePath;
   String query = "";
@@ -71,108 +73,108 @@ class _InventoryListState extends State<InventoryList> {
                 ),
               )
             : Expanded(
-              child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: height * 0.01),
-              child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 800),
-                  child: !widget.isList
-                      ? GridView.builder(
-                          // shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          padding: EdgeInsets.only(top: height * 0.01),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 2 / 2.9),
-                          itemCount: isSelected == 0
-                              ? categories.inventory.length
-                              : categories.categories![isSelected - 1]
-                                  .products!.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                  top: index.isEven ? height * 0.02 : 0,
-                                  bottom: index.isOdd ? height * 0.02 : 0),
-                              child: ProductCard(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ProductView(
-                                                product: isSelected == 0
-                                                    ? categories
-                                                        .inventory[index]
-                                                    : categories
-                                                        .categories![
-                                                            isSelected - 1]
-                                                        .products![index],
-                                              )));
-                                },
-                                index: index,
-                                image64: isSelected == 0
-                                    ? categories
-                                            .inventory[index].imageb64 ??
-                                        ""
-                                    : categories.categories![isSelected - 1]
-                                            .products![index].imageb64 ??
-                                        "",
-                                productName: isSelected == 0
-                                    ? categories
-                                        .inventory[index].productName
-                                    : categories.categories![isSelected - 1]
-                                        .products![index].productName,
-                                quantity: isSelected == 0
-                                    ? categories.inventory[index].quantity
-                                        .toString()
-                                    : categories.categories![isSelected - 1]
-                                        .products![index].quantity
-                                        .toString(),
-                                price:
-                                    "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
-                              ),
-                            );
-                          })
-                      : ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemCount: isSelected == 0
-                              ? categories.inventory.length
-                              : categories.categories![isSelected - 1]
-                                  .products!.length,
-                          itemBuilder: (context, index) {
-                            return ProductListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProductView(
-                                              product: categories
-                                                  .inventory[index],
-                                            )));
-                              },
-                              index: index,
-                              image64: isSelected == 0
-                                  ? categories.inventory[index].imageb64 ??
-                                      ""
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: height * 0.01),
+                  child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 800),
+                      child: !widget.isList
+                          ? GridView.builder(
+                              // shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              padding: EdgeInsets.only(top: height * 0.01),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 2 / 2.9),
+                              itemCount: isSelected == 0
+                                  ? categories.inventory.length
                                   : categories.categories![isSelected - 1]
-                                          .products![index].imageb64 ??
-                                      "",
-                              productName: isSelected == 0
-                                  ? categories.inventory[index].productName
+                                      .products!.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                      top: index.isEven ? height * 0.02 : 0,
+                                      bottom: index.isOdd ? height * 0.02 : 0),
+                                  child: ProductCard(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => ProductView(
+                                                    product: isSelected == 0
+                                                        ? categories
+                                                            .inventory[index]
+                                                        : categories
+                                                            .categories![
+                                                                isSelected - 1]
+                                                            .products![index],
+                                                  )));
+                                    },
+                                    index: index,
+                                    image64: isSelected == 0
+                                        ? categories
+                                                .inventory[index].imageb64 ??
+                                            ""
+                                        : categories.categories![isSelected - 1]
+                                                .products![index].imageb64 ??
+                                            "",
+                                    productName: isSelected == 0
+                                        ? categories
+                                            .inventory[index].productName
+                                        : categories.categories![isSelected - 1]
+                                            .products![index].productName,
+                                    quantity: isSelected == 0
+                                        ? categories.inventory[index].quantity
+                                            .toString()
+                                        : categories.categories![isSelected - 1]
+                                            .products![index].quantity
+                                            .toString(),
+                                    price:
+                                        "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
+                                  ),
+                                );
+                              })
+                          : ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              padding: EdgeInsets.zero,
+                              itemCount: isSelected == 0
+                                  ? categories.inventory.length
                                   : categories.categories![isSelected - 1]
-                                      .products![index].productName,
-                              quantity: isSelected == 0
-                                  ? categories.inventory[index].quantity
-                                      .toString()
-                                  : categories.categories![isSelected - 1]
-                                      .products![index].quantity
-                                      .toString(),
-                              price:
-                                  "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
-                            );
-                          })),
+                                      .products!.length,
+                              itemBuilder: (context, index) {
+                                return ProductListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ProductView(
+                                                  product: categories
+                                                      .inventory[index],
+                                                )));
+                                  },
+                                  index: index,
+                                  image64: isSelected == 0
+                                      ? categories.inventory[index].imageb64 ??
+                                          ""
+                                      : categories.categories![isSelected - 1]
+                                              .products![index].imageb64 ??
+                                          "",
+                                  productName: isSelected == 0
+                                      ? categories.inventory[index].productName
+                                      : categories.categories![isSelected - 1]
+                                          .products![index].productName,
+                                  quantity: isSelected == 0
+                                      ? categories.inventory[index].quantity
+                                          .toString()
+                                      : categories.categories![isSelected - 1]
+                                          .products![index].quantity
+                                          .toString(),
+                                  price:
+                                      "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
+                                );
+                              })),
                 ),
-            )
+              )
       ],
     );
   }

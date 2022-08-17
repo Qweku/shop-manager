@@ -61,13 +61,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         theme: theme,
                         width: width,
                         onPressed: () {
-                          Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddProductScreen()))
-                              .then((value) {
-                            setState(() {});
-                          });
+                          // Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (context) => AddProductScreen()))
+                          //     .then((value) {
+                          //   setState(() {});
+                          // });
                         },
                       ),
                     ),
