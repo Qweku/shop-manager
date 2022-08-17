@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/pages/widgets/clipPath.dart';
 
 
 import 'package:shop_manager/pages/widgets/productCard.dart';
 
-import '../widgets/clipPath.dart';
-
+ 
 class InventoryProductList extends StatefulWidget {
   const InventoryProductList({
     Key? key,
@@ -20,8 +20,7 @@ class InventoryProductList extends StatefulWidget {
 
 class _InventoryProductListState extends State<InventoryProductList> {
   String query = "";
-  bool isList = false;
-  bool isScrolled = false;
+   bool isScrolled = false;
   bool boxScroll = false;
   int isSelected = 0;
 
@@ -36,17 +35,17 @@ class _InventoryProductListState extends State<InventoryProductList> {
     final theme = Theme.of(context);
     return Scaffold(
         backgroundColor: Colors.white,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: theme.primaryColor,
-          onPressed: () {
-            setState(() {
-              isList = !isList;
-            });
-          },
-          child: isList
-              ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
-              : Icon(Icons.list, color: theme.primaryColorLight),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   backgroundColor: theme.primaryColor,
+        //   onPressed: () {
+        //     setState(() {
+        //       isList = !isList;
+        //     });
+        //   },
+        //   child: isList
+        //       ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
+        //       : Icon(Icons.list, color: theme.primaryColorLight),
+        // ),
         body: SafeArea(
             top: false,
             child: Builder(builder: (context) {
