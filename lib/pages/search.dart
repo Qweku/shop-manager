@@ -84,7 +84,7 @@ class _ItemSearchBarState extends State<ItemSearchBar> {
     super.initState();
 
     shop = context.read<GeneralProvider>();
-    productList = shop.categories!;
+    productList = shop.categories;
   }
 
   @override

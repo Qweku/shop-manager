@@ -27,7 +27,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     double height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
-    var categories = context.watch<GeneralProvider>().categories!;
+    var categories = context.watch<GeneralProvider>().categories;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       // appBar: AppBar(
@@ -154,7 +154,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     GestureDetector(
                       onTap: () {
                         Provider.of<GeneralProvider>(context, listen: false)
-                            .categories!
+                            .categories
                             .remove(category);
 
                         Navigator.pop(context);
@@ -264,7 +264,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     }
                     // context.watch<GeneralProvider>().categories =
                     Provider.of<GeneralProvider>(context, listen: false)
-                        .categories!
+                        .categories
                         .add(ProductCategory(
                             categoryName: categoryName.text, products: []));
                     categoryName.clear();
@@ -329,7 +329,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     }
 
                     if (Provider.of<GeneralProvider>(context, listen: false)
-                        .categories!
+                        .categories
                         .any((element) =>
                             element.categoryName!.toLowerCase() ==
                             categoryName.text.toLowerCase())) {
@@ -349,7 +349,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     if (edit) {
                       if (categoryName.text.isNotEmpty) {
                         Provider.of<GeneralProvider>(context, listen: false)
-                            .categories!
+                            .categories
                             .firstWhere(
                                 (element) => element == productCategory!)
                             .categoryName = categoryName.text;
@@ -359,7 +359,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       return;
                     } else {
                       Provider.of<GeneralProvider>(context, listen: false)
-                          .categories!
+                          .categories
                           .add(ProductCategory(
                               categoryName: categoryName.text, products: []));
                       categoryName.clear();

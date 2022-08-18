@@ -4,22 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 
 class GeneralProvider extends ChangeNotifier {
-  ProductCategory _category = ProductCategory();
-  ProductCategory _modelCategory = ProductCategory();
-  Product _product = Product();
-  Product _modelProduct = Product();
   Shop _shop = Shop();
-
+  ProductCategory _category = ProductCategory();
+  Product _product = Product();
+  List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
   List<Product> _cart = [];
-  List<Product> _modelInventory = [];
-  List<ProductCategory>? _categories = [];
-  bool _categorised = false;
 
   Shop get shop {
-    // debugPrint(categories!.first.categoryName);
     _shop.productCategory = categories;
-
     return _shop;
   }
 
@@ -27,25 +20,15 @@ class GeneralProvider extends ChangeNotifier {
   ProductCategory get category => _category;
   List<Product> get inventory {
     _inventory.clear();
-    for (var element in categories!) {
+    for (var element in categories) {
       _inventory.addAll(element.products!);
     }
     return _inventory;
   }
 
-  Product get modelProduct => _modelProduct;
-  ProductCategory get modelCategory {
-    _modelCategory.products = modelInventory;
-    return _modelCategory;
-  }
-
-  List<Product> get modelInventory => _modelInventory;
   List<Product> get cart => _cart;
-  List<ProductCategory>? get categories => _categories;
-  bool get categorised => _categorised;
-
+  List<ProductCategory> get categories => _categories;
   String _query = "";
-
   String get query => _query;
 
   set query(String query) {
@@ -53,29 +36,8 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set categorised(bool isCated) {
-    _categorised = isCated;
-    notifyListeners();
-  }
-
   set shop(Shop currentShop) {
     _shop = currentShop;
-    notifyListeners();
-  }
-
-  set modelCategory(ProductCategory modelCategory) {
-    _modelCategory = modelCategory;
-    // Notify listeners, in case the new catalog provides information
-    // different from the previous one. For example, availability of an item
-    // might have changed.
-    notifyListeners();
-  }
-
-  set modelInventory(List<Product> modelInventory) {
-    _modelInventory = modelInventory;
-    // Notify listeners, in case the new catalog provides information
-    // different from the previous one. For example, availability of an item
-    // might have changed.
     notifyListeners();
   }
 
@@ -87,14 +49,6 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // set inventory(List<Product> inventory) {
-  //   _inventory = inventory;
-  //   // Notify listeners, in case the new catalog provides information
-  //   // different from the previous one. For example, availability of an item
-  //   // might have changed.
-  //   notifyListeners();
-  // }
-
   set cart(List<Product> cart) {
     _cart = cart;
     // Notify listeners, in case the new catalog provides information
@@ -103,7 +57,7 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set categories(List<ProductCategory>? categories) {
+  set categories(List<ProductCategory> categories) {
     _categories = categories;
     // Notify listeners, in case the new catalog provides information
     // different from the previous one. For example, availability of an item
@@ -119,16 +73,8 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set modelProduct(Product modelProduct) {
-    _modelProduct = modelProduct;
-    // Notify listeners, in case the new catalog provides information
-    // different from the previous one. For example, availability of an item
-    // might have changed.
-    notifyListeners();
-  }
-
   void removeProductFromCategories(int cartegoryIndex, Product product) {
-    categories![cartegoryIndex].products!.remove(product);
+    categories[cartegoryIndex].products!.remove(product);
     notifyListeners();
   }
 
@@ -142,5 +88,13 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loadCategory() {}
+  void removeFromCategory(Product product) {
+    category.products!.remove(product);
+    notifyListeners();
+  }  
+  
+  void addToCategory(Product product) {
+    category.products!.add(product);
+    notifyListeners();
+  }
 }

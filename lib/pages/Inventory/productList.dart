@@ -5,10 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
-
 import 'package:shop_manager/pages/widgets/productCard.dart';
 
- 
 class InventoryProductList extends StatefulWidget {
   const InventoryProductList({
     Key? key,
@@ -20,7 +18,7 @@ class InventoryProductList extends StatefulWidget {
 
 class _InventoryProductListState extends State<InventoryProductList> {
   String query = "";
-   bool isScrolled = false;
+  bool isScrolled = false;
   bool boxScroll = false;
   int isSelected = 0;
 
@@ -113,10 +111,14 @@ class _InventoryProductListState extends State<InventoryProductList> {
                 body: Column(
                   children: [
                     SizedBox(height: height * 0.03),
-                    categories.categories!.isEmpty
+                    categories.categories
+                            .skipWhile((value) =>
+                                value.categoryName != 'Uncategorised')
+                            .toList()
+                            .isEmpty
                         ? Center(
                             child: Text(
-                              'No Products',
+                              'No Uncategorised Products',
                               style: theme.textTheme.headline1!.copyWith(
                                   fontSize: 25, color: Colors.blueGrey),
                             ),
@@ -130,10 +132,13 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                   child: ListView.builder(
                                       physics: const BouncingScrollPhysics(),
                                       padding: EdgeInsets.zero,
-                                      itemCount:  categories
-                                              .categories!.skipWhile((value) => value.categoryName != 'Uncategorised').toList()[0]
-                                              .products!
-                                              .length,
+                                      itemCount: categories.categories
+                                          .skipWhile((value) =>
+                                              value.categoryName !=
+                                              'Uncategorised')
+                                          .toList()[0]
+                                          .products!
+                                          .length,
                                       itemBuilder: (context, index) {
                                         return ProductListTile(
                                           onTap: () {
@@ -147,22 +152,31 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                             //             )));
                                           },
                                           index: index,
-                                          image64:   categories
-                                                      .categories!.skipWhile((value) => value.categoryName != 'Uncategorised').toList()[0]
-                                                      .products![index]
-                                                      .imageb64 ??
-                                                  "",
-                                          productName:  categories
-                                                  .categories!.skipWhile((value) => value.categoryName != 'Uncategorised').toList()[0]
+                                          image64: categories.categories
+                                                  .skipWhile((value) =>
+                                                      value.categoryName !=
+                                                      'Uncategorised')
+                                                  .toList()[0]
                                                   .products![index]
-                                                  .productName,
-                                          quantity:   categories
-                                                  .categories!.skipWhile((value) => value.categoryName != 'Uncategorised').toList()[0]
-                                                  .products![index]
-                                                  .quantity
-                                                  .toString(),
+                                                  .imageb64 ??
+                                              "",
+                                          productName: categories.categories
+                                              .skipWhile((value) =>
+                                                  value.categoryName !=
+                                                  'Uncategorised')
+                                              .toList()[0]
+                                              .products![index]
+                                              .productName,
+                                          quantity: categories.categories
+                                              .skipWhile((value) =>
+                                                  value.categoryName !=
+                                                  'Uncategorised')
+                                              .toList()[0]
+                                              .products![index]
+                                              .quantity
+                                              .toString(),
                                           price:
-                                              "GHS ${  categories.categories!.skipWhile((value) => value.categoryName != 'Uncategorised').toList()[0].products![index].sellingPrice.toString()}",
+                                              "GHS ${categories.categories.skipWhile((value) => value.categoryName != 'Uncategorised').toList()[0].products![index].sellingPrice.toString()}",
                                         );
                                       })),
                             ),

@@ -194,13 +194,13 @@ class _DashboardState extends State<Dashboard> {
                               onTap: () {
                                 // if (!(Provider.of<GeneralProvider>(context,
                                 //         listen: false)
-                                //     .categories!
+                                //     .categories
                                 //     .isEmpty)) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AddProductScreen()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AddProductScreen()));
                                 // }
                               },
                               label: "Add Product",

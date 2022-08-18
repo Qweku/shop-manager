@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/Inventory/productList.dart';
 
 import 'addproduct.dart';
 import 'widgets/clipPath.dart';
@@ -30,14 +31,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: theme.primaryColor,
-        onPressed: (){setState(() {
-        isList = !isList;
-      });
-      
-      },
-      child: isList ? Icon(Icons.dashboard_customize,color:theme.primaryColorLight):
-       Icon(Icons.list,color:theme.primaryColorLight),
-      
+        onPressed: () {
+          setState(() {
+            isList = !isList;
+          });
+        },
+        child: isList
+            ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
+            : Icon(Icons.list, color: theme.primaryColorLight),
       ),
       body: SafeArea(
         top: false,
@@ -61,115 +62,116 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         theme: theme,
                         width: width,
                         onPressed: () {
-                          // Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (context) => AddProductScreen()))
-                          //     .then((value) {
-                          //   setState(() {});
-                          // });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      InventoryProductList())).then((value) {
+                            setState(() {});
+                          });
                         },
                       ),
                     ),
                   ),
                   Consumer<GeneralProvider>(builder: (builder, state, child) {
                     return Expanded(
-                        child: state.categories![widget.categoryIndex].products!
+                        child: state.categories[widget.categoryIndex].products!
                                 .isEmpty
                             ? Center(
                                 child: Text(
                                   'No Products',
-                                  style: theme.textTheme.headline1!
-                                      .copyWith(fontSize: 25,color: Colors.blueGrey),
+                                  style: theme.textTheme.headline1!.copyWith(
+                                      fontSize: 25, color: Colors.blueGrey),
                                 ),
                               )
                             : Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: height * 0.01),
                                 child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 800),
-                                  child: !isList ? GridView.builder(
-                                      physics: BouncingScrollPhysics(),
-                                      padding:
-                                          EdgeInsets.only(top: height * 0.02),
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              childAspectRatio: 2 / 2.9),
-                                      itemCount: context
-                                          .watch<GeneralProvider>()
-                                          .categories![widget.categoryIndex]
-                                          .products!
-                                          .length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              top: index.isEven
-                                                  ? height * 0.02
-                                                  : 0,
-                                              bottom: index.isOdd
-                                                  ? height * 0.02
-                                                  : 0),
-                                          child: ProductCard(
-                                            onTap: () {
-                                              _bottomDrawSheet(
-                                                  context,
-                                                  state
-                                                      .categories![
-                                                          widget.categoryIndex]
-                                                      .products![index]);
-                                            },
-                                            index: index,
-                                            image64: state
-                                                    .categories![
-                                                        widget.categoryIndex]
-                                                    .products![index]
-                                                    .imageb64 ??
-                                                '',
-                                            productName:
-                                                "${state.categories![widget.categoryIndex].products![index].productName}",
-                                            quantity:
-                                                "${state.categories![widget.categoryIndex].products![index].quantity}",
-                                            price:
-                                                "GHS ${state.categories![widget.categoryIndex].products![index].sellingPrice}",
-                                          ),
-                                        );
-                                      }): ListView.builder(
-                                         physics: BouncingScrollPhysics(),
-                                        padding: EdgeInsets.zero,
-                                        itemCount: context
-                                          .watch<GeneralProvider>()
-                                          .categories![widget.categoryIndex]
-                                          .products!
-                                          .length,
-                                        itemBuilder: (context,index) {
-                                          return ProductListTile(
-
-                                            onTap: () {
+                                    duration: const Duration(milliseconds: 800),
+                                    child: !isList
+                                        ? GridView.builder(
+                                            physics: BouncingScrollPhysics(),
+                                            padding: EdgeInsets.only(
+                                                top: height * 0.02),
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                    childAspectRatio: 2 / 2.9),
+                                            itemCount: context
+                                                .watch<GeneralProvider>()
+                                                .categories[
+                                                    widget.categoryIndex]
+                                                .products!
+                                                .length,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: index.isEven
+                                                        ? height * 0.02
+                                                        : 0,
+                                                    bottom: index.isOdd
+                                                        ? height * 0.02
+                                                        : 0),
+                                                child: ProductCard(
+                                                  onTap: () {
+                                                    _bottomDrawSheet(
+                                                        context,
+                                                        state
+                                                            .categories[widget
+                                                                .categoryIndex]
+                                                            .products![index]);
+                                                  },
+                                                  index: index,
+                                                  image64: state
+                                                          .categories[widget
+                                                              .categoryIndex]
+                                                          .products![index]
+                                                          .imageb64 ??
+                                                      '',
+                                                  productName:
+                                                      "${state.categories[widget.categoryIndex].products![index].productName}",
+                                                  quantity:
+                                                      "${state.categories[widget.categoryIndex].products![index].quantity}",
+                                                  price:
+                                                      "GHS ${state.categories[widget.categoryIndex].products![index].sellingPrice}",
+                                                ),
+                                              );
+                                            })
+                                        : ListView.builder(
+                                            physics: BouncingScrollPhysics(),
+                                            padding: EdgeInsets.zero,
+                                            itemCount: context
+                                                .watch<GeneralProvider>()
+                                                .categories[
+                                                    widget.categoryIndex]
+                                                .products!
+                                                .length,
+                                            itemBuilder: (context, index) {
+                                              return ProductListTile(
+                                                onTap: () {
                                                   _bottomDrawSheet(
                                                       context,
                                                       state
-                                                          .categories![
-                                                              widget.categoryIndex]
+                                                          .categories[widget
+                                                              .categoryIndex]
                                                           .products![index]);
                                                 },
                                                 index: index,
                                                 image64: state
-                                                        .categories![
-                                                            widget.categoryIndex]
+                                                        .categories[widget
+                                                            .categoryIndex]
                                                         .products![index]
                                                         .imageb64 ??
                                                     '',
                                                 productName:
-                                                    "${state.categories![widget.categoryIndex].products![index].productName}",
+                                                    "${state.categories[widget.categoryIndex].products![index].productName}",
                                                 quantity:
-                                                    "${state.categories![widget.categoryIndex].products![index].quantity}",
+                                                    "${state.categories[widget.categoryIndex].products![index].quantity}",
                                                 price:
-                                                    "GHS ${state.categories![widget.categoryIndex].products![index].sellingPrice}",
-                                          );
-                                        }
-                                      )
-                                ),
+                                                    "GHS ${state.categories[widget.categoryIndex].products![index].sellingPrice}",
+                                              );
+                                            })),
                               ));
                   })
                 ]),
@@ -227,7 +229,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         Provider.of<GeneralProvider>(context, listen: false)
                             .removeProductFromCategories(
                                 widget.categoryIndex, product);
-                      Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                       child: Column(
                         children: [
@@ -278,7 +280,7 @@ class HeaderSection extends StatelessWidget {
           children: [
             Text(
                 Provider.of<GeneralProvider>(context, listen: false)
-                    .categories![widget.categoryIndex]
+                    .categories[widget.categoryIndex]
                     .categoryName!,
                 textAlign: TextAlign.left,
                 style: theme.textTheme.headline2),

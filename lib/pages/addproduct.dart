@@ -86,31 +86,31 @@ class _AddProductScreenState extends State<AddProductScreen> {
               imageb64: imageString);
           // product.ca = context
           //     .read<GeneralProvider>()
-          //     .categories![categoryIndex]
+          //     .categories[categoryIndex]
           //     .categoryName;
 
           // Provider.of<GeneralProvider>(context, listen: false)
-          //     .categories![categoryIndex]
+          //     .categories[categoryIndex]
           //     .products!
           //     .add(product);
 
           if (widget.toEdit!) {
             Provider.of<GeneralProvider>(context, listen: false)
-                .categories![categoryIndex]
+                .categories[categoryIndex]
                 .products!
                 .removeWhere((element) => element == widget.product);
             Provider.of<GeneralProvider>(context, listen: false)
-                .categories![categoryIndex]
+                .categories[categoryIndex]
                 .products!
                 .add(product);
           } else {
             if (!(Provider.of<GeneralProvider>(context, listen: false)
-                .categories![categoryIndex]
+                .categories[categoryIndex]
                 .products!
                 .any(
                     (element) => element.productName == product.productName))) {
               Provider.of<GeneralProvider>(context, listen: false)
-                  .categories![categoryIndex]
+                  .categories[categoryIndex]
                   .products!
                   .add(product);
             } else {
@@ -124,7 +124,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           await shopBox.put("shopDetail", shopJson);
 
           // print(Provider.of<GeneralProvider>(context, listen: false)
-          //     .categories![categoryIndex]
+          //     .categories[categoryIndex]
           //     .products!
           //     [1]
           //     .categoryName);
@@ -155,7 +155,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void initState() {
     for (var item
-        in Provider.of<GeneralProvider>(context, listen: false).categories!) {
+        in Provider.of<GeneralProvider>(context, listen: false).categories) {
       cat.add(item.categoryName);
     }
 
@@ -167,7 +167,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ? ""
           : widget.product!.imageb64!;
       _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
-          .categories!
+          .categories
           .firstWhere((element) => element.products!.contains(widget.product))
           .categoryName;
     }
@@ -309,14 +309,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             CounterWidget(counterController: productQuantity)
                           ],
                         )),
-                        Padding(
-                          padding:  EdgeInsets.only(top:height*0.02),
-                          child: Align( alignment: Alignment(0,0),child: Text('Attach Image',style: theme.textTheme.bodyText2)),
-                        ),
+                    Padding(
+                      padding: EdgeInsets.only(top: height * 0.02),
+                      child: Align(
+                          alignment: Alignment(0, 0),
+                          child: Text('Attach Image',
+                              style: theme.textTheme.bodyText2)),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Align(
-                        alignment: Alignment(0,0),
+                        alignment: Alignment(0, 0),
                         child: GestureDetector(
                           onTap: () {
                             _attachImage(context);
@@ -344,8 +347,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             width: width * 0.4,
                                             decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.0),
+                                                    BorderRadius.circular(20.0),
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   const BoxShadow(
@@ -364,8 +366,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                     .textTheme.headline1!
                                                     .copyWith(
                                                         fontSize: 70,
-                                                        color: theme
-                                                            .primaryColor),
+                                                        color:
+                                                            theme.primaryColor),
                                               ),
                                             ))
                                         : ClipRRect(

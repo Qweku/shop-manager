@@ -42,7 +42,7 @@ class _InventoryListState extends State<InventoryList> {
           height: height * 0.12,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: categories.categories!.length + 1,
+              itemCount: categories.categories.length + 1,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
@@ -58,13 +58,13 @@ class _InventoryListState extends State<InventoryList> {
                       smallFont: 10.0,
                       largeFont: 20.0,
                       categoryName:
-                          "${(index == 0) ? "ALL" : categories.categories![index - 1].categoryName}",
+                          "${(index == 0) ? "ALL" : categories.categories[index - 1].categoryName}",
                     ),
                   ),
                 );
               }),
         ),
-        categories.categories!.isEmpty
+        categories.categories.isEmpty
             ? Center(
                 child: Text(
                   'No Products',
@@ -88,7 +88,7 @@ class _InventoryListState extends State<InventoryList> {
                                       childAspectRatio: 2 / 2.9),
                               itemCount: isSelected == 0
                                   ? categories.inventory.length
-                                  : categories.categories![isSelected - 1]
+                                  : categories.categories[isSelected - 1]
                                       .products!.length,
                               itemBuilder: (context, index) {
                                 return Padding(
@@ -105,7 +105,7 @@ class _InventoryListState extends State<InventoryList> {
                                                         ? categories
                                                             .inventory[index]
                                                         : categories
-                                                            .categories![
+                                                            .categories[
                                                                 isSelected - 1]
                                                             .products![index],
                                                   )));
@@ -115,22 +115,22 @@ class _InventoryListState extends State<InventoryList> {
                                         ? categories
                                                 .inventory[index].imageb64 ??
                                             ""
-                                        : categories.categories![isSelected - 1]
+                                        : categories.categories[isSelected - 1]
                                                 .products![index].imageb64 ??
                                             "",
                                     productName: isSelected == 0
                                         ? categories
                                             .inventory[index].productName
-                                        : categories.categories![isSelected - 1]
+                                        : categories.categories[isSelected - 1]
                                             .products![index].productName,
                                     quantity: isSelected == 0
                                         ? categories.inventory[index].quantity
                                             .toString()
-                                        : categories.categories![isSelected - 1]
+                                        : categories.categories[isSelected - 1]
                                             .products![index].quantity
                                             .toString(),
                                     price:
-                                        "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
+                                        "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories[isSelected - 1].products![index].sellingPrice.toString()}",
                                   ),
                                 );
                               })
@@ -139,7 +139,7 @@ class _InventoryListState extends State<InventoryList> {
                               padding: EdgeInsets.zero,
                               itemCount: isSelected == 0
                                   ? categories.inventory.length
-                                  : categories.categories![isSelected - 1]
+                                  : categories.categories[isSelected - 1]
                                       .products!.length,
                               itemBuilder: (context, index) {
                                 return ProductListTile(
@@ -156,21 +156,21 @@ class _InventoryListState extends State<InventoryList> {
                                   image64: isSelected == 0
                                       ? categories.inventory[index].imageb64 ??
                                           ""
-                                      : categories.categories![isSelected - 1]
+                                      : categories.categories[isSelected - 1]
                                               .products![index].imageb64 ??
                                           "",
                                   productName: isSelected == 0
                                       ? categories.inventory[index].productName
-                                      : categories.categories![isSelected - 1]
+                                      : categories.categories[isSelected - 1]
                                           .products![index].productName,
                                   quantity: isSelected == 0
                                       ? categories.inventory[index].quantity
                                           .toString()
-                                      : categories.categories![isSelected - 1]
+                                      : categories.categories[isSelected - 1]
                                           .products![index].quantity
                                           .toString(),
                                   price:
-                                      "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories![isSelected - 1].products![index].sellingPrice.toString()}",
+                                      "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories[isSelected - 1].products![index].sellingPrice.toString()}",
                                 );
                               })),
                 ),
