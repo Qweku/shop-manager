@@ -80,9 +80,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
           Product product = Product(
               productName: productName.text,
               sellingPrice:
-                  double.tryParse(productPrice.text.replaceRange(0, 3, "")),
-              quantity: int.tryParse(productQuantity.text),
-              costPrice: double.tryParse(productPrice.text),
+                  double.tryParse(productPrice.text.replaceRange(0, 3, "")) ?? 0,
+              quantity: int.tryParse(productQuantity.text) ?? 0,
+              costPrice: double.tryParse(productPrice.text) ?? 0,
               imageb64: imageString);
           // product.ca = context
           //     .read<GeneralProvider>()

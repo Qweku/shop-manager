@@ -151,14 +151,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             String shopJson = shopBox.get("shopDetail",
                                 defaultValue: "{}");
 
-                            Provider.of<GeneralProvider>(context,
-                                    listen: false)
-                                .shop = Shop.fromJson(shopJson);
+                            // Provider.of<GeneralProvider>(context,
+                            //         listen: false)
+                            //     .shop = Shop.fromJson(shopJson);
 
                             Provider.of<GeneralProvider>(context,
                                         listen: false)
                                     .categories =
-                                Shop.fromJson(shopJson).productCategory ??
+                                // Shop.fromJson(shopJson).productCategory ??
                                     [];
                             //         if (_emailController.text.isEmpty ||
                             //           _emailController.text.length < 4) {

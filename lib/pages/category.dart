@@ -266,7 +266,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     Provider.of<GeneralProvider>(context, listen: false)
                         .categories
                         .add(ProductCategory(
-                            categoryName: categoryName.text, products: []));
+                            categoryName: categoryName.text, ));
                     categoryName.clear();
                     Navigator.pop(context);
                     // setState(() {
@@ -361,7 +361,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       Provider.of<GeneralProvider>(context, listen: false)
                           .categories
                           .add(ProductCategory(
-                              categoryName: categoryName.text, products: []));
+                              categoryName: categoryName.text,  ));
                       categoryName.clear();
                       Navigator.pop(context);
                       return;

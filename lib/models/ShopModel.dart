@@ -5,6 +5,9 @@
 // ignore_for_file: unnecessary_null_in_if_null_operators, prefer_null_aware_operators
 
 import 'dart:convert';
+import 'package:hive/hive.dart';
+
+part 'ShopModel.g.dart';
 
 class ShopModel {
   ShopModel({
@@ -13,11 +16,11 @@ class ShopModel {
 
   Shop? shop;
 
-  factory ShopModel.fromJson(String str) => ShopModel.fromMap(json.decode(str));
+  // factory ShopModel.fromJson(String str) => ShopModel.fromMap(json.decode(str));
 
-  factory ShopModel.fromMap(Map<String, dynamic> json) => ShopModel(
-        shop: json["Shop"] == null ? null : Shop.fromMap(json["Shop"]),
-      );
+  // factory ShopModel.fromMap(Map<String, dynamic> json) => ShopModel(
+  //       shop: json["Shop"] == null ? null : Shop.fromMap(json["Shop"]),
+  //     );
 
   Map<String, dynamic> toMap() => {
         "Shop": shop == null ? null : shop!.toMap(),
@@ -35,18 +38,18 @@ class Shop {
   int? shopId;
   List<ProductCategory>? productCategory;
 
-  factory Shop.fromJson(String str) => Shop.fromMap(json.decode(str));
+  // factory Shop.fromJson(String str) => Shop.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Shop.fromMap(Map<String, dynamic> json) => Shop(
-        shopName: json["shopName"],
-        shopId: json["shopID"],
-        productCategory: json["ProductCategory"] == null
-            ? null
-            : List<ProductCategory>.from(
-                json["ProductCategory"].map((x) => ProductCategory.fromMap(x))),
-      );
+  // factory Shop.fromMap(Map<String, dynamic> json) => Shop(
+  //       shopName: json["shopName"],
+  //       shopId: json["shopID"],
+  //       productCategory: json["ProductCategory"] == null
+  //           ? null
+  //           : List<ProductCategory>.from(
+  //               json["ProductCategory"].map((x) => ProductCategory.fromMap(x))),
+  //     );
 
   Map<String, dynamic> toMap() => {
         "shopName": shopName,
@@ -57,32 +60,37 @@ class Shop {
       };
 }
 
-class ProductCategory {
+@HiveType(typeId: 1)
+class ProductCategory extends HiveObject {
   ProductCategory({
     this.categoryName = 'Uncategorised',
     this.categorydescription,
     this.categoryId,
     this.products,
   });
-
+  @HiveField(0)
   String? categoryName;
+  @HiveField(1)
   String? categorydescription;
+  @HiveField(2)
   int? categoryId;
-  List<Product>? products;
+  @HiveField(3)
+  HiveList<Product>? products;
 
-  factory ProductCategory.fromJson(String str) =>
-      ProductCategory.fromMap(json.decode(str));
-  String toJson() => json.encode(toMap());
+ 
+  // factory ProductCategory.fromJson(String str) =>
+  //     ProductCategory.fromMap(json.decode(str));
+  // String toJson() => json.encode(toMap());
 
-  factory ProductCategory.fromMap(Map<String, dynamic> json) => ProductCategory(
-        categoryName: json["categoryName"],
-        categorydescription: json["categorydescription"],
-        categoryId: json["categoryID"],
-        products: json["Products"] == null
-            ? null
-            : List<Product>.from(
-                json["Products"].map((x) => Product.fromMap(x))),
-      );
+  // factory ProductCategory.fromMap(Map<String, dynamic> json) => ProductCategory(
+  //       categoryName: json["categoryName"],
+  //       categorydescription: json["categorydescription"],
+  //       categoryId: json["categoryID"],
+  //       products: json["Products"] == null
+  //           ? null
+  //           : List<Product>.from(
+  //               json["Products"].map((x) => Product.fromMap(x))),
+  //     );
 
   Map<String, dynamic> toMap() => {
         "categoryName": categoryName,
@@ -94,7 +102,8 @@ class ProductCategory {
       };
 }
 
-class Product {
+@HiveType(typeId: 0)
+class Product extends HiveObject {
   Product({
     this.productName,
     this.sellingPrice,
@@ -106,13 +115,28 @@ class Product {
     this.productId,
   });
 
+  @HiveField(0)
   String? productName;
+
+  @HiveField(1)
   String? itemcategory;
+
+  @HiveField(2)
   double? sellingPrice;
+
+  @HiveField(3)
   double? costPrice;
+
+  @HiveField(4)
   String? imageb64;
+
+  @HiveField(5)
   int? quantity;
+
+  @HiveField(6)
   int? cartQuantity;
+
+  @HiveField(7)
   int? productId;
 
   factory Product.fromJson(String str) => Product.fromMap(json.decode(str));
