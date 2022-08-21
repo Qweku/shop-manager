@@ -2,11 +2,13 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
@@ -50,9 +52,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
         imageString = base64Encode(File(image.path).readAsBytesSync());
       });
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
   _imgFromGallery() async {
@@ -68,31 +68,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
-  // _removeimage() {
-  //   setState(() {
-  //     _image = null;
-  //   });
-  // }
-
   Widget _submitButton() {
     return InkWell(
         onTap: () async {
+          var productBox = Hive.box<Product>('Product');
+    var categoryBox = Hive.box<ProductCategory>('Category');
+
           Product product = Product(
               productName: productName.text,
               sellingPrice:
-                  double.tryParse(productPrice.text.replaceRange(0, 3, "")) ?? 0,
+                  double.tryParse(productPrice.text.replaceRange(0, 3, "")) ??
+                      0,
               quantity: int.tryParse(productQuantity.text) ?? 0,
               costPrice: double.tryParse(productPrice.text) ?? 0,
               imageb64: imageString);
-          // product.ca = context
-          //     .read<GeneralProvider>()
-          //     .categories[categoryIndex]
-          //     .categoryName;
-
-          // Provider.of<GeneralProvider>(context, listen: false)
-          //     .categories[categoryIndex]
-          //     .products!
-          //     .add(product);
 
           if (widget.toEdit!) {
             Provider.of<GeneralProvider>(context, listen: false)
@@ -103,6 +92,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 .categories[categoryIndex]
                 .products!
                 .add(product);
+// await categoryBox.getAt(categoryBox.values.toList().indexOf(widget.product!))!
+            await productBox
+                .getAt(productBox.values.toList().indexOf(widget.product!))!
+                .delete();
+            await productBox.add(product);
           } else {
             if (!(Provider.of<GeneralProvider>(context, listen: false)
                 .categories[categoryIndex]
@@ -113,21 +107,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   .categories[categoryIndex]
                   .products!
                   .add(product);
+
+              await productBox.add(product);
             } else {
-              debugPrint(" ERROR PRODUCT ALREADY EXIST ");
+              Notifier().toast(
+                  context: context,
+                  message: "ERROR PRODUCT ALREADY EXIST!",
+                  color: Colors.red);
             }
           }
 
-          String shopJson = Provider.of<GeneralProvider>(context, listen: false)
-              .shop
-              .toJson();
-          await shopBox.put("shopDetail", shopJson);
-
-          // print(Provider.of<GeneralProvider>(context, listen: false)
-          //     .categories[categoryIndex]
-          //     .products!
-          //     [1]
-          //     .categoryName);
+ 
           Navigator.pop(context);
         },
         child: Container(
@@ -171,19 +161,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
           .firstWhere((element) => element.products!.contains(widget.product))
           .categoryName;
     }
-    Hive.close().then((value) {
-      Hive.openBox('shop').then((value) {
-        shopBox = value;
-      });
-    });
+    // Hive.close().then((value) {
+    //   Hive.openBox('shop').then((value) {
+    //     shopBox = value;
+    //   });
+    // });
     super.initState();
   }
 
-  @override
-  void dispose() {
-    shopBox.close();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //    super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

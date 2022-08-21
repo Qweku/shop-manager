@@ -77,21 +77,6 @@ class ProductCategory extends HiveObject {
   @HiveField(3)
   HiveList<Product>? products;
 
- 
-  // factory ProductCategory.fromJson(String str) =>
-  //     ProductCategory.fromMap(json.decode(str));
-  // String toJson() => json.encode(toMap());
-
-  // factory ProductCategory.fromMap(Map<String, dynamic> json) => ProductCategory(
-  //       categoryName: json["categoryName"],
-  //       categorydescription: json["categorydescription"],
-  //       categoryId: json["categoryID"],
-  //       products: json["Products"] == null
-  //           ? null
-  //           : List<Product>.from(
-  //               json["Products"].map((x) => Product.fromMap(x))),
-  //     );
-
   Map<String, dynamic> toMap() => {
         "categoryName": categoryName,
         "categorydescription": categorydescription,

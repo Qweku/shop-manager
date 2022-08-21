@@ -57,8 +57,16 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set inventory(List<Product> inventory) {
+    _inventory = List.from(inventory);
+    // Notify listeners, in case the new catalog provides information
+    // different from the previous one. For example, availability of an item
+    // might have changed.
+    notifyListeners();
+  }
+
   set categories(List<ProductCategory> categories) {
-    _categories = categories;
+    _categories = List.from(categories);
     // Notify listeners, in case the new catalog provides information
     // different from the previous one. For example, availability of an item
     // might have changed.
@@ -91,8 +99,8 @@ class GeneralProvider extends ChangeNotifier {
   void removeFromCategory(Product product) {
     category.products!.remove(product);
     notifyListeners();
-  }  
-  
+  }
+
   void addToCategory(Product product) {
     category.products!.add(product);
     notifyListeners();

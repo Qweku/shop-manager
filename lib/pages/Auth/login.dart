@@ -24,18 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isShown = true;
   bool isNot = false;
   double num = 0.4;
-  //double maxH = MediaQuery.of(context).size.height;
   IconData visibility = Icons.visibility_off;
-  late Box shopBox;
-  void launchHive() async {
-    shopBox = await Hive.openBox<String>("shop");
-  }
 
-  @override
-  void initState() {
-    launchHive();
-    super.initState();
-  }
 
   void _loginError(Exception e, ) {
     showDialog<void>(
@@ -148,18 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             // ApplicationState().startLoginFlow();
                             
 
-                            String shopJson = shopBox.get("shopDetail",
-                                defaultValue: "{}");
-
-                            // Provider.of<GeneralProvider>(context,
-                            //         listen: false)
-                            //     .shop = Shop.fromJson(shopJson);
-
-                            Provider.of<GeneralProvider>(context,
-                                        listen: false)
-                                    .categories =
-                                // Shop.fromJson(shopJson).productCategory ??
-                                    [];
+                          
                             //         if (_emailController.text.isEmpty ||
                             //           _emailController.text.length < 4) {
                             //         ScaffoldMessenger.of(context).showSnackBar(

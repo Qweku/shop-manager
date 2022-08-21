@@ -12,7 +12,7 @@ import 'widgets/productCard.dart';
 
 class ProductListScreen extends StatefulWidget {
   int categoryIndex;
-  ProductListScreen({Key? key, required this.categoryIndex}) : super(key: key);
+    ProductListScreen({Key? key, required this.categoryIndex}) : super(key: key);
 
   @override
   _ProductListScreenState createState() => _ProductListScreenState();

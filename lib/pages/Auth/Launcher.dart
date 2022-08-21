@@ -3,9 +3,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shop_manager/pages/wrapper.dart';
-
-
 
 class Launcher extends StatefulWidget {
   const Launcher({Key? key}) : super(key: key);
@@ -17,17 +16,19 @@ class Launcher extends StatefulWidget {
 class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
-   late Animation<double> _animation2;
+  late Animation<double> _animation2;
+
+ 
 
   @override
   void initState() {
-    super.initState();
+     super.initState();
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 3),
     );
     _animation = CurvedAnimation(parent: _controller, curve: Curves.bounceOut);
-    _animation2=Tween<double>(begin: 0.0, end: 1.2).animate(_controller);
+    _animation2 = Tween<double>(begin: 0.0, end: 1.2).animate(_controller);
     _controller.forward();
     startTime();
   }
@@ -44,56 +45,57 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
   }
 
   void navigationPage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Wrapper()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
   }
 
   @override
   Widget build(BuildContext context) {
-     double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return Scaffold(
         backgroundColor: theme.primaryColor,
         body: Stack(
           children: [
-             Positioned(
-              top:-height*0.15,
-              right:-width*0.5,
-              child: CircleAvatar(
-              radius:width*0.6,
-              backgroundColor:Colors.black.withOpacity(0.4)
-            )),
-             Positioned(
-              bottom:-height*0.1,
-              left:-width*0.1,
-              child: CircleAvatar(
-              radius:width*0.4,
-              backgroundColor:Colors.black.withOpacity(0.4)
-            )),
+            Positioned(
+                top: -height * 0.15,
+                right: -width * 0.5,
+                child: CircleAvatar(
+                    radius: width * 0.6,
+                    backgroundColor: Colors.black.withOpacity(0.4))),
+            Positioned(
+                bottom: -height * 0.1,
+                left: -width * 0.1,
+                child: CircleAvatar(
+                    radius: width * 0.4,
+                    backgroundColor: Colors.black.withOpacity(0.4))),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                ScaleTransition(
-                  scale: _animation,
-                  child: CircleAvatar(
+                  ScaleTransition(
+                    scale: _animation,
+                    child: CircleAvatar(
                       backgroundColor: theme.primaryColorLight,
                       radius: width * 0.12,
-                      child:
-                          Icon(Icons.shop_2, color: theme.primaryColor, size: 35),
+                      child: Icon(Icons.shop_2,
+                          color: theme.primaryColor, size: 35),
                     ),
-                ),
-                  SizedBox(height:height*0.01),
+                  ),
+                  SizedBox(height: height * 0.01),
                   FadeTransition(
-                    opacity: _animation2,
-                    child: Text('Shop Manager',style: theme.textTheme.headline2,)),
-              ],),
+                      opacity: _animation2,
+                      child: Text(
+                        'Shop Manager',
+                        style: theme.textTheme.headline2,
+                      )),
+                ],
+              ),
             ),
             Container(
               alignment: Alignment(0, 0.9),
               child: Text('@ c r e a t e d b y Q w e k u & Y - F l i c k r',
-                  style: TextStyle(color:Colors.white,fontSize:12)),
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
             )
           ],
         ));

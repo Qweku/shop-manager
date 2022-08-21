@@ -4,10 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
@@ -27,8 +29,14 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   @override
   void initState() {
-    _content = const Dashboard();
+    var productBox = Hive.box<Product>('Product');
+    var categoryBox = Hive.box<ProductCategory>('Category');
 
+    Provider.of<GeneralProvider>(context, listen: false).inventory =
+        productBox.values.toList();
+    Provider.of<GeneralProvider>(context, listen: false).categories =
+        categoryBox.values.toList();
+    _content = const Dashboard();
     super.initState();
   }
 
@@ -117,10 +125,6 @@ class _DashboardState extends State<Dashboard> {
     final theme = Theme.of(context);
     return Scaffold(
         backgroundColor: ShopColors.primaryColor,
-        // appBar: AppBar(elevation: 0,backgroundColor:theme.primaryColor,actions: [
-        //   IconButton(onPressed: (){}, icon: Icon(Icons.notifications_active,color:theme.primaryColorLight))
-        // ],),
-        // drawer: const DrawerWidget(),
         body: Stack(
           children: [
             Positioned(
@@ -133,7 +137,6 @@ class _DashboardState extends State<Dashboard> {
                     color: ShopColors.secondaryColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(width * 0.5),
-                      //bottomRight: Radius.circular(width * 0.5)
                     )),
               ),
             ),

@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -231,42 +233,29 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   textColor: theme.primaryColor,
                   width: width,
                   buttonText: "Done",
-                  onTap: () {
+                  onTap: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
 
                     if (!edit && categoryName.text.isEmpty) {
-                      ScaffoldMessenger.of(bc)
-                          // .showMaterialBanner(
-                          //     MaterialBanner(
-                          //       leading: CircleAvatar(backgroundColor: Colors.red,child: Icon(Icons.notification_important),),
-                          //         content: Text('Type a NAME!',
-                          //             textAlign: TextAlign.center,
-                          //             style: theme.textTheme.bodyText2),
-                          //         actions: <Widget>[
-                          //       TextButton(
-                          //         onPressed: () {
-                          //           Navigator.pop(context);
-                          //         },
-                          //         child: Text('Dismiss'),
-                          //       ),
-                          //     ]));
-                          .showSnackBar(
-                        SnackBar(
-                            backgroundColor: Color.fromARGB(255, 255, 17, 1),
-                            content: Text('Type a NAME!',
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodyText2),
-                            duration: Duration(seconds: 5),
-                            behavior: SnackBarBehavior.floating,
-                            shape: StadiumBorder()),
-                      );
+                      Notifier().toast(
+                          context: bc,
+                          message: 'Type a NAME!',
+                          color: Color.fromARGB(255, 255, 17, 1));
+
                       return;
                     }
                     // context.watch<GeneralProvider>().categories =
                     Provider.of<GeneralProvider>(context, listen: false)
                         .categories
                         .add(ProductCategory(
-                            categoryName: categoryName.text, ));
+                          categoryName: categoryName.text,
+                        ));
+                    var categoryBox = Hive.box<ProductCategory>('Category');
+
+                    await categoryBox.add(ProductCategory(
+                      categoryName: categoryName.text,
+                    ));
+
                     categoryName.clear();
                     Navigator.pop(context);
                     // setState(() {
@@ -311,20 +300,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
             actions: [
               TextButton(
                   style: TextButton.styleFrom(backgroundColor: Colors.white),
-                  onPressed: () {
+                  onPressed: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
+                    var categoryBox = Hive.box<ProductCategory>('Category');
 
                     if (!edit && categoryName.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            backgroundColor: Color.fromARGB(255, 255, 17, 1),
-                            content: Text('Type a CATEGORY NAME!',
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodyText2),
-                            duration: Duration(seconds: 3),
-                            behavior: SnackBarBehavior.floating,
-                            shape: StadiumBorder()),
-                      );
+                      Notifier().toast(
+                          context: context,
+                          message: 'Type a CATEGORY NAME!',
+                          color: Color.fromARGB(255, 255, 17, 1));
+
                       return;
                     }
 
@@ -333,16 +318,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         .any((element) =>
                             element.categoryName!.toLowerCase() ==
                             categoryName.text.toLowerCase())) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            backgroundColor: Color.fromARGB(255, 255, 17, 1),
-                            content: Text('Name Already Exists!',
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodyText2),
-                            duration: Duration(seconds: 3),
-                            behavior: SnackBarBehavior.floating,
-                            shape: StadiumBorder()),
-                      );
+                      Notifier().toast(
+                          context: context,
+                          message: 'Name Already Exists!',
+                          color: Color.fromARGB(255, 255, 17, 1));
+
                       return;
                     }
 
@@ -354,6 +334,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 (element) => element == productCategory!)
                             .categoryName = categoryName.text;
                       }
+
                       categoryName.clear();
                       Navigator.pop(context);
                       return;
@@ -361,7 +342,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       Provider.of<GeneralProvider>(context, listen: false)
                           .categories
                           .add(ProductCategory(
-                              categoryName: categoryName.text,  ));
+                            categoryName: categoryName.text,
+                          ));
+
+                      await categoryBox.add(ProductCategory(
+                        categoryName: categoryName.text,
+                      ));
                       categoryName.clear();
                       Navigator.pop(context);
                       return;
