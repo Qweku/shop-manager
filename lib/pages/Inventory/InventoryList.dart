@@ -58,13 +58,15 @@ class _InventoryListState extends State<InventoryList> {
                       smallFont: 10.0,
                       largeFont: 20.0,
                       categoryName:
-                          "${(index == 0) ? "ALL" : categories.categories[index - 1].categoryName}",
+                          (index == 0) ? "ALL" : categories.categories[index - 1].categoryName,
                     ),
                   ),
                 );
               }),
         ),
-        categories.categories.isEmpty
+        ((isSelected == 0)
+                ? categories.inventory.isEmpty
+                : categories.categories[isSelected - 1].products?.isEmpty ?? [].isEmpty)
             ? Center(
                 child: Text(
                   'No Products',

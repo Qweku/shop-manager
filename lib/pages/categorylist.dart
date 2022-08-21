@@ -12,7 +12,7 @@ import 'widgets/productCard.dart';
 
 class ProductListScreen extends StatefulWidget {
   int categoryIndex;
-    ProductListScreen({Key? key, required this.categoryIndex}) : super(key: key);
+  ProductListScreen({Key? key, required this.categoryIndex}) : super(key: key);
 
   @override
   _ProductListScreenState createState() => _ProductListScreenState();
@@ -29,17 +29,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.primaryColor,
-        onPressed: () {
-          setState(() {
-            isList = !isList;
-          });
-        },
-        child: isList
-            ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
-            : Icon(Icons.list, color: theme.primaryColorLight),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: theme.primaryColor,
+      //   onPressed: () {
+      //     setState(() {
+      //       isList = !isList;
+      //     });
+      //   },
+      //   child: isList
+      //       ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
+      //       : Icon(Icons.list, color: theme.primaryColorLight),
+      // ),
       body: SafeArea(
         top: false,
         child: Stack(
@@ -75,8 +75,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                   Consumer<GeneralProvider>(builder: (builder, state, child) {
                     return Expanded(
-                        child: state.categories[widget.categoryIndex].products!
-                                .isEmpty
+                        child: state.categories[widget.categoryIndex].products
+                                    ?.isEmpty ??
+                                [].isEmpty
                             ? Center(
                                 child: Text(
                                   'No Products',
@@ -281,7 +282,7 @@ class HeaderSection extends StatelessWidget {
             Text(
                 Provider.of<GeneralProvider>(context, listen: false)
                     .categories[widget.categoryIndex]
-                    .categoryName!,
+                    .categoryName,
                 textAlign: TextAlign.left,
                 style: theme.textTheme.headline2),
             Text(

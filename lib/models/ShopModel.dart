@@ -62,20 +62,20 @@ class Shop {
 
 @HiveType(typeId: 1)
 class ProductCategory extends HiveObject {
-  ProductCategory({
-    this.categoryName = 'Uncategorised',
+  ProductCategory(
+    this.categoryName, {
     this.categorydescription,
     this.categoryId,
-    this.products,
+    
   });
   @HiveField(0)
-  String? categoryName;
+  String categoryName;
   @HiveField(1)
   String? categorydescription;
   @HiveField(2)
   int? categoryId;
   @HiveField(3)
-  HiveList<Product>? products;
+  HiveList<Product>? products  ;
 
   Map<String, dynamic> toMap() => {
         "categoryName": categoryName,

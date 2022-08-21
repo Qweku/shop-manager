@@ -248,12 +248,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     Provider.of<GeneralProvider>(context, listen: false)
                         .categories
                         .add(ProductCategory(
-                          categoryName: categoryName.text,
+                          categoryName.text,
                         ));
                     var categoryBox = Hive.box<ProductCategory>('Category');
 
                     await categoryBox.add(ProductCategory(
-                      categoryName: categoryName.text,
+                       categoryName.text,
                     ));
 
                     categoryName.clear();
@@ -316,7 +316,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     if (Provider.of<GeneralProvider>(context, listen: false)
                         .categories
                         .any((element) =>
-                            element.categoryName!.toLowerCase() ==
+                            element.categoryName.toLowerCase() ==
                             categoryName.text.toLowerCase())) {
                       Notifier().toast(
                           context: context,
@@ -342,11 +342,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       Provider.of<GeneralProvider>(context, listen: false)
                           .categories
                           .add(ProductCategory(
-                            categoryName: categoryName.text,
+                              categoryName.text,
                           ));
 
                       await categoryBox.add(ProductCategory(
-                        categoryName: categoryName.text,
+                        categoryName.text,
                       ));
                       categoryName.clear();
                       Navigator.pop(context);

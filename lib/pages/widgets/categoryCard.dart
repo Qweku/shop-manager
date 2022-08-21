@@ -58,6 +58,7 @@ class CategoryCard extends StatelessWidget {
               SizedBox(height: height * 0.01),
               Text(
                 categoryName!,
+                overflow: TextOverflow.ellipsis ,
                 style:
                     // index!.isEven
                     !selected!

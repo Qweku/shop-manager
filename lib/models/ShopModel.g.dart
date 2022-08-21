@@ -17,11 +17,10 @@ class ProductCategoryAdapter extends TypeAdapter<ProductCategory> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ProductCategory(
-      categoryName: fields[0] as String?,
+      fields[0] as String,
       categorydescription: fields[1] as String?,
       categoryId: fields[2] as int?,
-      products: (fields[3] as HiveList?)?.castHiveList(),
-    );
+    )..products = (fields[3] as HiveList?)?.castHiveList();
   }
 
   @override

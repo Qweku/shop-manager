@@ -5,7 +5,7 @@ import 'package:shop_manager/models/ShopModel.dart';
 
 class GeneralProvider extends ChangeNotifier {
   Shop _shop = Shop();
-  ProductCategory _category = ProductCategory();
+  ProductCategory _category = ProductCategory('Uncategorised');
   Product _product = Product();
   List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
@@ -18,14 +18,8 @@ class GeneralProvider extends ChangeNotifier {
 
   Product get product => _product;
   ProductCategory get category => _category;
-  List<Product> get inventory {
-    _inventory.clear();
-    for (var element in categories) {
-      _inventory.addAll(element.products!);
-    }
-    return _inventory;
-  }
-
+  List<Product> get inventory => _inventory;
+ 
   List<Product> get cart => _cart;
   List<ProductCategory> get categories => _categories;
   String _query = "";
