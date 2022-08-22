@@ -33,9 +33,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     var categoryBox = Hive.box<ProductCategory>('Category');
 
     Provider.of<GeneralProvider>(context, listen: false).inventory =
-        productBox.values.toList();
+        List.from(productBox.values);
     Provider.of<GeneralProvider>(context, listen: false).categories =
-        categoryBox.values.toList();
+        List.from(categoryBox.values.toList());
     _content = const Dashboard();
     super.initState();
   }

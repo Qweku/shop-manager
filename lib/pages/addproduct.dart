@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -34,9 +33,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   File? _image;
 
   late Box shopBox;
-  String? _selectedCategory;
+  ProductCategory? _selectedCategory;
   String imageString = '';
-  List<String?> cat = [];
+  List<ProductCategory> categoryList = [];
   //String imagePath;
   final picker = ImagePicker();
 
@@ -64,21 +63,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
         imageString = base64Encode(File(image.path).readAsBytesSync());
       });
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
+  var productBox = Hive.box<Product>('Product');
+  var categoryBox = Hive.box<ProductCategory>('Category');
   Widget _submitButton() {
     return InkWell(
         onTap: () async {
-          var productBox = Hive.box<Product>('Product');
-    var categoryBox = Hive.box<ProductCategory>('Category');
-
           Product product = Product(
               productName: productName.text,
               sellingPrice:
                   double.tryParse(productPrice.text.replaceRange(0, 3, "")) ??
                       0,
+              itemcategory: _selectedCategory?.categoryName ?? 'Uncategorised',
               quantity: int.tryParse(productQuantity.text) ?? 0,
               costPrice: double.tryParse(productPrice.text) ?? 0,
               imageb64: imageString);
@@ -92,32 +91,56 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 .categories[categoryIndex]
                 .products!
                 .add(product);
-// await categoryBox.getAt(categoryBox.values.toList().indexOf(widget.product!))!
             await productBox
                 .getAt(productBox.values.toList().indexOf(widget.product!))!
                 .delete();
             await productBox.add(product);
           } else {
             if (!(Provider.of<GeneralProvider>(context, listen: false)
-                .categories[categoryIndex]
-                .products!
+                .inventory
                 .any(
                     (element) => element.productName == product.productName))) {
               Provider.of<GeneralProvider>(context, listen: false)
-                  .categories[categoryIndex]
-                  .products!
+                  .inventory
                   .add(product);
 
               await productBox.add(product);
+
+              if (_selectedCategory?.categoryName.isNotEmpty ?? false) {
+                Provider.of<GeneralProvider>(context, listen: false)
+                    .categories
+                    .singleWhere((element) => element == _selectedCategory)
+                    .products = HiveList(productBox);
+                Provider.of<GeneralProvider>(context, listen: false)
+                    .categories
+                    .singleWhere((element) => element == _selectedCategory)
+                    .products!
+                    .addAll(productBox.values.where((value) =>
+                        value.itemcategory!.toLowerCase() ==
+                        _selectedCategory!.categoryName.toLowerCase()));
+
+                categoryBox.values
+                    .firstWhere((element) => element == _selectedCategory)
+                    .products = HiveList(productBox);
+                categoryBox.values
+                    .firstWhere((element) => element == _selectedCategory)
+                    .products!
+                    .addAll(productBox.values.where((value) =>
+                        value.itemcategory!.toLowerCase() ==
+                        _selectedCategory!.categoryName.toLowerCase()));
+                categoryBox.values
+                    .firstWhere((element) => element == _selectedCategory)
+                    .save();
+              }
             } else {
               Notifier().toast(
                   context: context,
                   message: "ERROR PRODUCT ALREADY EXIST!",
                   color: Colors.red);
+              return;
             }
           }
 
- 
           Navigator.pop(context);
         },
         child: Container(
@@ -144,10 +167,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   void initState() {
-    for (var item
-        in Provider.of<GeneralProvider>(context, listen: false).categories) {
-      cat.add(item.categoryName);
-    }
+    categoryList = List.from(
+        Provider.of<GeneralProvider>(context, listen: false).categories);
 
     if (widget.toEdit!) {
       productName.text = widget.product!.productName!;
@@ -158,21 +179,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
           : widget.product!.imageb64!;
       _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
           .categories
-          .firstWhere((element) => element.products!.contains(widget.product))
-          .categoryName;
+          .firstWhere((element) => element.products!.contains(widget.product));
     }
-    // Hive.close().then((value) {
-    //   Hive.openBox('shop').then((value) {
-    //     shopBox = value;
-    //   });
-    // });
+
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //    super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -225,8 +236,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 color: ShopColors.primaryColor)),
                         child: TextField(
                           controller: productPrice,
-                          //textAlign: TextAlign.center,
-
                           keyboardType: TextInputType.number,
                           style: TextStyle(
                               color: ShopColors.textColor, fontSize: 15),
@@ -271,15 +280,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             style: theme.textTheme.bodyText2,
                           ),
                           value: _selectedCategory,
-                          onChanged: (dynamic newValue) {
+                          onChanged: (newValue) {
                             setState(() {
-                              categoryIndex = cat.indexOf(newValue);
+                              _selectedCategory = newValue as ProductCategory;
+                              categoryIndex = categoryList.indexOf(newValue);
                             });
-                          },
-                          items: cat.map((location) {
+                            debugPrint(
+                                "Test: ${productBox.values.where((value) => value.itemcategory!.toLowerCase() == _selectedCategory!.categoryName .toLowerCase()).length}");
+                           },
+                          items: categoryList.map((location) {
                             return DropdownMenuItem(
                               child: Text(
-                                location!,
+                                location.categoryName,
                                 style: theme.textTheme
                                     .bodyText2, /* ,style: TextStyle(color: Colors.white), */
                               ),

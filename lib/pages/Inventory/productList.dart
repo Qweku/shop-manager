@@ -111,9 +111,9 @@ class _InventoryProductListState extends State<InventoryProductList> {
                 body: Column(
                   children: [
                     SizedBox(height: height * 0.03),
-                    categories.categories
+                    categories.inventory
                             .skipWhile((value) =>
-                                value.categoryName != 'Uncategorised')
+                                value.itemcategory != 'Uncategorised')
                             .toList()
                             .isEmpty
                         ? Center(
@@ -132,12 +132,10 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                   child: ListView.builder(
                                       physics: const BouncingScrollPhysics(),
                                       padding: EdgeInsets.zero,
-                                      itemCount: categories.categories
+                                      itemCount: categories.inventory
                                           .skipWhile((value) =>
-                                              value.categoryName !=
+                                              value.itemcategory !=
                                               'Uncategorised')
-                                          .toList()[0]
-                                          .products!
                                           .length,
                                       itemBuilder: (context, index) {
                                         return ProductListTile(
@@ -152,31 +150,28 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                             //             )));
                                           },
                                           index: index,
-                                          image64: categories.categories
+                                          image64: categories.inventory
                                                   .skipWhile((value) =>
-                                                      value.categoryName !=
+                                                      value.itemcategory !=
                                                       'Uncategorised')
-                                                  .toList()[0]
-                                                  .products![index]
+                                                  .toList()[index]
                                                   .imageb64 ??
                                               "",
-                                          productName: categories.categories
+                                          productName: categories.inventory
                                               .skipWhile((value) =>
-                                                  value.categoryName !=
+                                                  value.itemcategory !=
                                                   'Uncategorised')
-                                              .toList()[0]
-                                              .products![index]
+                                              .toList()[index]
                                               .productName,
-                                          quantity: categories.categories
+                                          quantity: categories.inventory
                                               .skipWhile((value) =>
-                                                  value.categoryName !=
+                                                  value.itemcategory !=
                                                   'Uncategorised')
-                                              .toList()[0]
-                                              .products![index]
+                                              .toList()[index]
                                               .quantity
                                               .toString(),
                                           price:
-                                              "GHS ${categories.categories.skipWhile((value) => value.categoryName != 'Uncategorised').toList()[0].products![index].sellingPrice.toString()}",
+                                              "GHS ${categories.inventory.skipWhile((value) => value.itemcategory != 'Uncategorised').toList()[index].sellingPrice.toString()}",
                                         );
                                       })),
                             ),

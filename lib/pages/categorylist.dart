@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -11,8 +12,9 @@ import 'widgets/clipPath.dart';
 import 'widgets/productCard.dart';
 
 class ProductListScreen extends StatefulWidget {
-  int categoryIndex;
-  ProductListScreen({Key? key, required this.categoryIndex}) : super(key: key);
+  final int categoryIndex;
+  const ProductListScreen({Key? key, required this.categoryIndex})
+      : super(key: key);
 
   @override
   _ProductListScreenState createState() => _ProductListScreenState();
@@ -21,13 +23,26 @@ class ProductListScreen extends StatefulWidget {
 class _ProductListScreenState extends State<ProductListScreen> {
   final categoryName = TextEditingController();
   bool isList = false;
+  @override
+  void initState() {
+    var categoryBox = Hive.box<ProductCategory>('Category');
+    var pBox = Hive.box<Product>('Product');
+    debugPrint(
+        'Length:   ${categoryBox.values.first.products?.length.toString()}');
+    debugPrint('p-ength:   ${pBox.values.length.toString()}');
+    super.initState();
+  } 
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
-
+    // Provider.of<GeneralProvider>(context, listen: false)
+    //     .categories
+    //     .forEach((element) {
+    //   print(element.products!.first.productName);
+    // });
     return Scaffold(
       // floatingActionButton: FloatingActionButton(
       //   backgroundColor: theme.primaryColor,
