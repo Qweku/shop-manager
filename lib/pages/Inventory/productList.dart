@@ -1,16 +1,18 @@
 // ignore_for_file: unnecessary_cast, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 
 import 'package:shop_manager/pages/widgets/productCard.dart';
 
 class InventoryProductList extends StatefulWidget {
-  const InventoryProductList({
-    Key? key,
-  }) : super(key: key);
+  final ProductCategory category;
+  const InventoryProductList({Key? key, required this.category})
+      : super(key: key);
 
   @override
   _InventoryProductListState createState() => _InventoryProductListState();
@@ -20,10 +22,12 @@ class _InventoryProductListState extends State<InventoryProductList> {
   String query = "";
   bool isScrolled = false;
   bool boxScroll = false;
-  int isSelected = 0;
+  bool selection = false;
+  List<Product> isSelected = [];
 
   final ScrollController _scrollController = ScrollController();
-
+  var productBox = Hive.box<Product>('Product');
+  var categoryBox = Hive.box<ProductCategory>('Category');
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -64,47 +68,125 @@ class _InventoryProductListState extends State<InventoryProductList> {
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   boxScroll = innerBoxIsScrolled;
                   return [
-                    SliverAppBar(
-                      expandedHeight: height * 0.2,
-                      pinned: true,
-                      floating: true,
-                      // snap:true,
-                      automaticallyImplyLeading: false,
+                    SliverVisibility(
+                      visible: !selection,
+                      sliver: SliverAppBar(
+                        expandedHeight: height * 0.2,
+                        pinned: false,
+                        floating: false,
+                        // snap:true,
+                        automaticallyImplyLeading: false,
 
-                      flexibleSpace: FlexibleSpaceBar(
-                        // title:
-                        //     Text('Inventory', style: theme.textTheme.headline2),
-                        background: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            ClipPath(
-                              clipper: BottomClipper(),
-                              child: Container(
-                                width: width,
-                                padding: EdgeInsets.only(
-                                    right: height * 0.02,
-                                    left: height * 0.02,
-                                    top: height * 0.1,
-                                    bottom: height * 0.07),
-                                color: theme.primaryColor,
-                                child: HeaderSection(
-                                  height: height,
-                                  theme: theme,
+                        flexibleSpace: FlexibleSpaceBar(
+                          // title:
+                          //     Text('Inventory', style: theme.textTheme.headline2),
+                          background: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              ClipPath(
+                                clipper: BottomClipper(),
+                                child: Container(
                                   width: width,
-                                  onPressed: () {
-                                    // showSearch(
-                                    //     //useRootNavigator: true,
-                                    //     context: context,
-                                    //     delegate: Search());
-                                    // print('SEARCH');
-                                  },
+                                  padding: EdgeInsets.only(
+                                      right: height * 0.02,
+                                      left: height * 0.02,
+                                      top: height * 0.1,
+                                      bottom: height * 0.07),
+                                  color: theme.primaryColor,
+                                  child: HeaderSection(
+                                    height: height,
+                                    theme: theme,
+                                    width: width,
+                                    onPressed: () {
+                                      // showSearch(
+                                      //     //useRootNavigator: true,
+                                      //     context: context,
+                                      //     delegate: Search());
+                                      // print('SEARCH');
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                        // backgroundColor: theme.primaryColor,
+                        backgroundColor: Colors.transparent,
                       ),
-                      backgroundColor: Colors.white,
+                      replacementSliver: SliverToBoxAdapter(
+                          child: AppBar(
+                        elevation: 0,
+                        leading: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selection = false;
+                              });
+                              isSelected.clear();
+                            },
+                            child: Icon(
+                              Icons.close,
+                              size: 32,
+                            )),
+                        title: Text('${isSelected.length} selected'),
+                        actions: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 26.0, vertical: 10),
+                            child: GestureDetector(
+                              onTap: (() {
+                                Provider.of<GeneralProvider>(context,
+                                        listen: false)
+                                    .inventory
+                                    .forEach((element) async {
+                                  if (isSelected.contains(element)) {
+                                    productBox.values
+                                            .singleWhere((elements) =>
+                                                elements == element)
+                                            .itemcategory =
+                                        widget.category.categoryName;
+                                    await productBox.values
+                                        .singleWhere(
+                                            (elements) => elements == element)
+                                        .save();
+                                    element.itemcategory =
+                                        widget.category.categoryName;
+                                    Provider.of<GeneralProvider>(context,
+                                            listen: false)
+                                        .categories
+                                        .singleWhere((element) =>
+                                            element == widget.category)
+                                        .products = HiveList(productBox);
+                                    Provider.of<GeneralProvider>(context,
+                                            listen: false)
+                                        .categories
+                                        .singleWhere((element) =>
+                                            element == widget.category)
+                                        .products!
+                                        .addAll(productBox.values.where(
+                                            (value) =>
+                                                value.itemcategory!
+                                                    .toLowerCase() ==
+                                                widget.category.categoryName
+                                                    .toLowerCase()));
+                                    HiveFunctions()
+                                        .saveToCategory(widget.category);
+                                    Navigator.pop(context);
+                                  }
+                                });
+                              }),
+                              child: Icon(
+                                Icons.check,
+                                size: 32,
+                              ),
+                            ),
+                          ),
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(horizontal: 16,vertical: 20),
+                          //   child: Text('Done',style: theme.appBarTheme.titleTextStyle,),
+                          // ),
+                        ],
+                        backgroundColor: theme.primaryColor,
+                      )),
                     ),
                   ];
                 },
@@ -112,8 +194,8 @@ class _InventoryProductListState extends State<InventoryProductList> {
                   children: [
                     SizedBox(height: height * 0.03),
                     categories.inventory
-                            .skipWhile((value) =>
-                                value.itemcategory != 'Uncategorised')
+                            .where((value) =>
+                                value.itemcategory == 'Uncategorised')
                             .toList()
                             .isEmpty
                         ? Center(
@@ -133,45 +215,71 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                       physics: const BouncingScrollPhysics(),
                                       padding: EdgeInsets.zero,
                                       itemCount: categories.inventory
-                                          .skipWhile((value) =>
-                                              value.itemcategory !=
+                                          .where((value) =>
+                                              value.itemcategory ==
                                               'Uncategorised')
                                           .length,
                                       itemBuilder: (context, index) {
-                                        return ProductListTile(
+                                        return GestureDetector(
                                           onTap: () {
-                                            // Navigator.push(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //         builder: (context) =>
-                                            //             ProductView(
-                                            //               product: categories
-                                            //                   .inventory[index],
-                                            //             )));
-                                          },
-                                          index: index,
-                                          image64: categories.inventory
-                                                  .skipWhile((value) =>
-                                                      value.itemcategory !=
+                                            setState(() {
+                                              selection = true;
+                                            });
+
+                                            if (isSelected.contains(categories
+                                                .inventory
+                                                .where((value) =>
+                                                    value.itemcategory ==
+                                                    'Uncategorised')
+                                                .toList()[index])) {
+                                              isSelected.removeWhere((element) =>
+                                                  element ==
+                                                  categories.inventory
+                                                      .where((value) =>
+                                                          value.itemcategory ==
+                                                          'Uncategorised')
+                                                      .toList()[index]);
+                                            } else {
+                                              isSelected.add(categories
+                                                  .inventory
+                                                  .where((value) =>
+                                                      value.itemcategory ==
                                                       'Uncategorised')
-                                                  .toList()[index]
-                                                  .imageb64 ??
-                                              "",
-                                          productName: categories.inventory
-                                              .skipWhile((value) =>
-                                                  value.itemcategory !=
-                                                  'Uncategorised')
-                                              .toList()[index]
-                                              .productName,
-                                          quantity: categories.inventory
-                                              .skipWhile((value) =>
-                                                  value.itemcategory !=
-                                                  'Uncategorised')
-                                              .toList()[index]
-                                              .quantity
-                                              .toString(),
-                                          price:
-                                              "GHS ${categories.inventory.skipWhile((value) => value.itemcategory != 'Uncategorised').toList()[index].sellingPrice.toString()}",
+                                                  .toList()[index]);
+                                            }
+                                          },
+                                          child: ProductListTile(
+                                            isSelected: isSelected.contains(
+                                                categories.inventory
+                                                    .where((value) =>
+                                                        value.itemcategory ==
+                                                        'Uncategorised')
+                                                    .toList()[index]),
+                                            onTap: () {},
+                                            index: index,
+                                            image64: categories.inventory
+                                                    .where((value) =>
+                                                        value.itemcategory ==
+                                                        'Uncategorised')
+                                                    .toList()[index]
+                                                    .imageb64 ??
+                                                "",
+                                            productName: categories.inventory
+                                                .where((value) =>
+                                                    value.itemcategory ==
+                                                    'Uncategorised')
+                                                .toList()[index]
+                                                .productName,
+                                            quantity: categories.inventory
+                                                .where((value) =>
+                                                    value.itemcategory ==
+                                                    'Uncategorised')
+                                                .toList()[index]
+                                                .quantity
+                                                .toString(),
+                                            price:
+                                                "GHS ${categories.inventory.where((value) => value.itemcategory == 'Uncategorised').toList()[index].sellingPrice.toString()}",
+                                          ),
                                         );
                                       })),
                             ),

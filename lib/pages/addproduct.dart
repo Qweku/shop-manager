@@ -119,18 +119,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         value.itemcategory!.toLowerCase() ==
                         _selectedCategory!.categoryName.toLowerCase()));
 
-                categoryBox.values
-                    .firstWhere((element) => element == _selectedCategory)
-                    .products = HiveList(productBox);
-                categoryBox.values
-                    .firstWhere((element) => element == _selectedCategory)
-                    .products!
-                    .addAll(productBox.values.where((value) =>
-                        value.itemcategory!.toLowerCase() ==
-                        _selectedCategory!.categoryName.toLowerCase()));
-                categoryBox.values
-                    .firstWhere((element) => element == _selectedCategory)
-                    .save();
+                        
+                HiveFunctions().saveToCategory(_selectedCategory!);
+                // categoryBox.values
+                //     .firstWhere((element) => element == _selectedCategory)
+                //     .products = HiveList(productBox);
+                // categoryBox.values
+                //     .firstWhere((element) => element == _selectedCategory)
+                //     .products!
+                //     .addAll(productBox.values.where((value) =>
+                //         value.itemcategory!.toLowerCase() ==
+                //         _selectedCategory!.categoryName.toLowerCase()));
+                // categoryBox.values
+                //     .firstWhere((element) => element == _selectedCategory)
+                //     .save();
               }
             } else {
               Notifier().toast(
@@ -286,8 +288,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               categoryIndex = categoryList.indexOf(newValue);
                             });
                             debugPrint(
-                                "Test: ${productBox.values.where((value) => value.itemcategory!.toLowerCase() == _selectedCategory!.categoryName .toLowerCase()).length}");
-                           },
+                                "Test: ${productBox.values.where((value) => value.itemcategory!.toLowerCase() == _selectedCategory!.categoryName.toLowerCase()).length}");
+                          },
                           items: categoryList.map((location) {
                             return DropdownMenuItem(
                               child: Text(

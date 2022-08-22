@@ -68,7 +68,7 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: width*0.2,
+                      width: width * 0.2,
                       child: Text(
                         productName!,
                         style: theme.textTheme.bodyText1,
@@ -105,12 +105,14 @@ class ProductListTile extends StatelessWidget {
   final String image64;
   final int? index;
   final Function()? onTap;
+  final bool  isSelected;
   const ProductListTile(
       {Key? key,
       this.productName,
       this.quantity,
       this.price,
-        this.image64 ="",
+      this.image64 = "",
+      this.isSelected = false,
       this.index,
       this.onTap})
       : super(key: key);
@@ -120,43 +122,41 @@ class ProductListTile extends StatelessWidget {
     final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-        return ListTile(
-          leading:  CircleAvatar(
-          radius: height * 0.03,
-          backgroundColor: theme.primaryColor,
-          child:  image64  .isEmpty
-              ? Center(
-                  child: Text(
-                    productName!.substring(0, 2).toUpperCase(),
-                    style: theme.textTheme.headline1!
-                        .copyWith(fontSize: 20, color: theme.primaryColorLight),
-                  ),
-                )
-              : Container(
-                  // width: width * 0.45,
-                  // height: height * 0.25,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(height * 0.1),
-                      image: DecorationImage(
-                          image: MemoryImage(base64Decode(image64)),
-                          fit: BoxFit.cover)),
+    return ListTile(
+      tileColor: isSelected ? theme.primaryColor : Colors.transparent,
+      leading: CircleAvatar(
+        radius: height * 0.03,
+        backgroundColor:  isSelected ? theme.primaryColorLight : theme.primaryColor,
+        child: image64.isEmpty
+            ? Center(
+                child: Text(
+                  productName!.substring(0, 2).toUpperCase(),
+                  style:  theme.textTheme.headline1!
+                      .copyWith(fontSize: 20, color: isSelected ? theme.primaryColor : theme.primaryColorLight),
                 ),
-        ),
-          title: Text(productName!, style: theme.textTheme.headline1),
-      subtitle: Text("Quantity $quantity",
-          style: theme.textTheme.bodyText1),
-          trailing: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                    padding: EdgeInsets.all(height * 0.01),
-                    decoration: BoxDecoration(color: theme.primaryColor),
-                    child: Text(
-                      price!,
-                      style:
-                          theme.textTheme.bodyText2!.copyWith(fontSize: 12),
-                    )),
+              )
+            : Container(
+                // width: width * 0.45,
+                // height: height * 0.25,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(height * 0.1),
+                    image: DecorationImage(
+                        image: MemoryImage(base64Decode(image64)),
+                        fit: BoxFit.cover)),
               ),
-        );
-     
+      ),
+      title: Text(productName!, style: isSelected ? theme.textTheme.headline2: theme.textTheme.headline1),
+      subtitle: Text("Quantity $quantity", style:  isSelected ? theme.textTheme.bodyText2 : theme.textTheme.bodyText1),
+      trailing: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+            padding: EdgeInsets.all(height * 0.01),
+            decoration: BoxDecoration(color: isSelected ? theme.primaryColorLight : theme.primaryColor),
+            child: Text(
+              price!,
+              style: isSelected ? theme.textTheme.bodyText2!.copyWith(fontSize: 12,color: theme.primaryColor) : theme.textTheme.bodyText2!.copyWith(fontSize: 12),
+            )),
+      ),
+    );
   }
 }

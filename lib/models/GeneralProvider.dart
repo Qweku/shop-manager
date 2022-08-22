@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 
 class GeneralProvider extends ChangeNotifier {
@@ -19,7 +20,7 @@ class GeneralProvider extends ChangeNotifier {
   Product get product => _product;
   ProductCategory get category => _category;
   List<Product> get inventory => _inventory;
- 
+
   List<Product> get cart => _cart;
   List<ProductCategory> get categories => _categories;
   String _query = "";
@@ -98,5 +99,26 @@ class GeneralProvider extends ChangeNotifier {
   void addToCategory(Product product) {
     category.products!.add(product);
     notifyListeners();
+  }
+}
+
+class HiveFunctions {
+  var productBox = Hive.box<Product>('Product');
+  var categoryBox = Hive.box<ProductCategory>('Category');
+
+  void saveToCategory(ProductCategory _selectedCategory) {
+    categoryBox.values
+        .firstWhere((element) => element == _selectedCategory)
+        .products = HiveList(productBox);
+    categoryBox.values
+        .firstWhere((element) => element == _selectedCategory)
+        .products!
+        .addAll(productBox.values.where((value) =>
+            value.itemcategory!.toLowerCase() ==
+            _selectedCategory.categoryName.toLowerCase()));
+    categoryBox.values
+        .firstWhere((element) => element == _selectedCategory)
+        .save();
+    return;
   }
 }

@@ -25,13 +25,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
   bool isList = false;
   @override
   void initState() {
-    var categoryBox = Hive.box<ProductCategory>('Category');
-    var pBox = Hive.box<Product>('Product');
-    debugPrint(
-        'Length:   ${categoryBox.values.first.products?.length.toString()}');
-    debugPrint('p-ength:   ${pBox.values.length.toString()}');
     super.initState();
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +75,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      InventoryProductList())).then((value) {
-                            setState(() {});
-                          });
+                                  builder: (context) => InventoryProductList(
+                                        category: Provider.of<GeneralProvider>(
+                                                context,
+                                                listen: false)
+                                            .categories[widget.categoryIndex],
+                                      )));
                         },
                       ),
                     ),
