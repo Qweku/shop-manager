@@ -31,6 +31,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   void initState() {
     var productBox = Hive.box<Product>('Product');
     var categoryBox = Hive.box<ProductCategory>('Category');
+    HiveFunctions().reArrangeCategory();
 
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         List.from(productBox.values);

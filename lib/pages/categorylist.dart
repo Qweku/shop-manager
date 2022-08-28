@@ -80,7 +80,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                 context,
                                                 listen: false)
                                             .categories[widget.categoryIndex],
-                                      )));
+                                      ))).then((value) {
+                            setState(() {});
+                            return;
+                          });
                         },
                       ),
                     ),
@@ -194,7 +197,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     );
   }
 
-  void _bottomDrawSheet(context, Product product) {
+  void _bottomDrawSheet(BuildContext context, Product product) {
     final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     showModalBottomSheet(
@@ -205,7 +208,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               topRight: const Radius.circular(20.0)),
         ),
         context: context,
-        builder: (BuildContext bc) {
+        builder: (context) {
           return Container(
             padding: EdgeInsets.all(height * 0.02),
             child: Wrap(
@@ -223,7 +226,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 builder: (builder) => AddProductScreen(
                                       toEdit: true,
                                       product: product,
-                                    )));
+                                    ))).then((value) {setState(() {
+                                      
+                                    });
+                          Navigator.pop(context);
+                        });
                       },
                       child: Column(
                         children: [
@@ -253,7 +260,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 Icon(Icons.delete, color: theme.primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Delete', style: theme.textTheme.bodyText2)
+                          Text('Remove', style: theme.textTheme.bodyText2)
                         ],
                       ),
                     ),

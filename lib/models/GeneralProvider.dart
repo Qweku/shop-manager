@@ -54,18 +54,14 @@ class GeneralProvider extends ChangeNotifier {
 
   set inventory(List<Product> inventory) {
     _inventory = List.from(inventory);
-    // Notify listeners, in case the new catalog provides information
-    // different from the previous one. For example, availability of an item
-    // might have changed.
-    notifyListeners();
+
+    // notifyListeners();
   }
 
   set categories(List<ProductCategory> categories) {
     _categories = List.from(categories);
-    // Notify listeners, in case the new catalog provides information
-    // different from the previous one. For example, availability of an item
-    // might have changed.
-    notifyListeners();
+
+    // notifyListeners();
   }
 
   set product(Product product) {
@@ -78,6 +74,16 @@ class GeneralProvider extends ChangeNotifier {
 
   void removeProductFromCategories(int cartegoryIndex, Product product) {
     categories[cartegoryIndex].products!.remove(product);
+    categoryBox.values
+        .singleWhere(((element) => element == categories[cartegoryIndex]))
+      ..products!.remove(product)
+      ..save();
+    productBox.values.singleWhere(((element) => element == product))
+      ..itemcategory = 'Uncategorised'
+      ..save();
+    inventory.singleWhere(((element) => element == product)).itemcategory =
+        'Uncategorised';
+
     notifyListeners();
   }
 
@@ -100,6 +106,28 @@ class GeneralProvider extends ChangeNotifier {
     category.products!.add(product);
     notifyListeners();
   }
+
+  var productBox = Hive.box<Product>('Product');
+  var categoryBox = Hive.box<ProductCategory>('Category');
+
+  void saveToCategory(ProductCategory selectedCategory) {
+    categories.singleWhere(
+        (element) => element.categoryName == selectedCategory.categoryName)
+      ..products = HiveList(productBox)
+      //     ;
+      // categories
+      //     .singleWhere((element) => element == selectedCategory)
+      ..products!.addAll(productBox.values.where((value) =>
+          value.itemcategory!.toLowerCase() ==
+          selectedCategory.categoryName.toLowerCase()));
+  }
+
+  void reArrangeCategory() {
+    for (var category in categories) {
+      saveToCategory(category);
+    }
+    return;
+  }
 }
 
 class HiveFunctions {
@@ -107,18 +135,26 @@ class HiveFunctions {
   var categoryBox = Hive.box<ProductCategory>('Category');
 
   void saveToCategory(ProductCategory _selectedCategory) {
-    categoryBox.values
-        .firstWhere((element) => element == _selectedCategory)
-        .products = HiveList(productBox);
-    categoryBox.values
-        .firstWhere((element) => element == _selectedCategory)
-        .products!
-        .addAll(productBox.values.where((value) =>
-            value.itemcategory!.toLowerCase() ==
-            _selectedCategory.categoryName.toLowerCase()));
-    categoryBox.values
-        .firstWhere((element) => element == _selectedCategory)
-        .save();
+    categoryBox.values.firstWhere(
+        (element) => element.categoryName == _selectedCategory.categoryName)
+      ..products = HiveList(productBox)
+      //     ;
+      // categoryBox.values
+      //     .firstWhere((element) => element.categoryName == _selectedCategory.categoryName)
+      ..products!.addAll(productBox.values.where((value) =>
+          value.itemcategory!.toLowerCase() ==
+          _selectedCategory.categoryName.toLowerCase()))
+      // ;
+      // categoryBox.values
+      //     .firstWhere((element) => element == _selectedCategory)
+      ..save();
+    return;
+  }
+
+  void reArrangeCategory() {
+    for (var category in categoryBox.values) {
+      saveToCategory(category);
+    }
     return;
   }
 }

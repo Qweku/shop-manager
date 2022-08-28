@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/counter.dart';
 
 class AddProductScreen extends StatefulWidget {
-  final bool? toEdit;
+  final bool toEdit;
   final Product? product;
   const AddProductScreen({Key? key, this.toEdit = false, this.product})
       : super(key: key);
@@ -26,6 +27,11 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  final CurrencyTextInputFormatter formatter = CurrencyTextInputFormatter(
+      turnOffGrouping: true,
+      decimalDigits: 2,
+      // locale: 'usa',
+      symbol: 'GHS ');
   final productName = TextEditingController();
   final productPrice = TextEditingController();
   final productCategory = TextEditingController();
@@ -75,26 +81,36 @@ class _AddProductScreenState extends State<AddProductScreen> {
           Product product = Product(
               productName: productName.text,
               sellingPrice:
-                  double.tryParse(productPrice.text.replaceRange(0, 3, "")) ??
+                  double.tryParse(formatter.getUnformattedValue().toString()) ??
                       0,
               itemcategory: _selectedCategory?.categoryName ?? 'Uncategorised',
               quantity: int.tryParse(productQuantity.text) ?? 0,
               costPrice: double.tryParse(productPrice.text) ?? 0,
               imageb64: imageString);
 
-          if (widget.toEdit!) {
+          if (widget.toEdit) {
+            await productBox.values
+                .singleWhere((element) => element == widget.product)
+              ..quantity = product.quantity
+              ..costPrice = product.costPrice
+              ..sellingPrice = product.sellingPrice
+              ..itemcategory = product.itemcategory
+              ..costPrice = product.costPrice
+              ..imageb64 = product.imageb64
+              ..save();
+
             Provider.of<GeneralProvider>(context, listen: false)
-                .categories[categoryIndex]
-                .products!
-                .removeWhere((element) => element == widget.product);
+                .inventory
+                .singleWhere((element) => element == widget.product)
+              ..quantity = product.quantity
+              ..sellingPrice = product.sellingPrice
+              ..itemcategory = product.itemcategory
+              ..costPrice = product.costPrice
+              ..imageb64 = product.imageb64;
+
             Provider.of<GeneralProvider>(context, listen: false)
-                .categories[categoryIndex]
-                .products!
-                .add(product);
-            await productBox
-                .getAt(productBox.values.toList().indexOf(widget.product!))!
-                .delete();
-            await productBox.add(product);
+                .reArrangeCategory();
+            HiveFunctions().reArrangeCategory();
           } else {
             if (!(Provider.of<GeneralProvider>(context, listen: false)
                 .inventory
@@ -108,31 +124,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
               if (_selectedCategory?.categoryName.isNotEmpty ?? false) {
                 Provider.of<GeneralProvider>(context, listen: false)
-                    .categories
-                    .singleWhere((element) => element == _selectedCategory)
-                    .products = HiveList(productBox);
-                Provider.of<GeneralProvider>(context, listen: false)
-                    .categories
-                    .singleWhere((element) => element == _selectedCategory)
-                    .products!
-                    .addAll(productBox.values.where((value) =>
-                        value.itemcategory!.toLowerCase() ==
-                        _selectedCategory!.categoryName.toLowerCase()));
+                    .saveToCategory(_selectedCategory!);
 
-                        
                 HiveFunctions().saveToCategory(_selectedCategory!);
-                // categoryBox.values
-                //     .firstWhere((element) => element == _selectedCategory)
-                //     .products = HiveList(productBox);
-                // categoryBox.values
-                //     .firstWhere((element) => element == _selectedCategory)
-                //     .products!
-                //     .addAll(productBox.values.where((value) =>
-                //         value.itemcategory!.toLowerCase() ==
-                //         _selectedCategory!.categoryName.toLowerCase()));
-                // categoryBox.values
-                //     .firstWhere((element) => element == _selectedCategory)
-                //     .save();
               }
             } else {
               Notifier().toast(
@@ -172,16 +166,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
     categoryList = List.from(
         Provider.of<GeneralProvider>(context, listen: false).categories);
 
-    if (widget.toEdit!) {
+    if (widget.toEdit) {
       productName.text = widget.product!.productName!;
-      productPrice.text = widget.product!.sellingPrice!.toString();
+      productPrice.text =
+          formatter.format(widget.product!.sellingPrice!.toString());
       productQuantity.text = widget.product!.quantity!.toString();
       imageString = (widget.product!.imageb64 ?? "").isEmpty
           ? ""
           : widget.product!.imageb64!;
       _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
           .categories
-          .firstWhere((element) => element.products!.contains(widget.product));
+          .singleWhere((element) => element.products!.contains(widget.product));
     }
 
     super.initState();
@@ -209,7 +204,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 30, bottom: 20),
                       child: Text(
-                          (widget.toEdit!)
+                          (widget.toEdit)
                               ? "Edit Product Detail"
                               : "Let's add the products in your shop",
                           style: TextStyle(
@@ -236,7 +231,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 width: 2,
                                 style: BorderStyle.solid,
                                 color: ShopColors.primaryColor)),
-                        child: TextField(
+                        child: TextFormField(
+                          // initialValue: formatter.format(productPrice.text),
                           controller: productPrice,
                           keyboardType: TextInputType.number,
                           style: TextStyle(
@@ -250,11 +246,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   color: ShopColors.primaryColor,
                                   fontSize: 15)),
                           inputFormatters: [
-                            CurrencyTextInputFormatter(
-                                turnOffGrouping: true,
-                                decimalDigits: 2,
-                                // locale: 'usa',
-                                symbol: 'GHS '),
+                            formatter,
                           ],
                         ),
                       ),
@@ -287,8 +279,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               _selectedCategory = newValue as ProductCategory;
                               categoryIndex = categoryList.indexOf(newValue);
                             });
-                            debugPrint(
-                                "Test: ${productBox.values.where((value) => value.itemcategory!.toLowerCase() == _selectedCategory!.categoryName.toLowerCase()).length}");
                           },
                           items: categoryList.map((location) {
                             return DropdownMenuItem(
@@ -343,7 +333,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       fit: BoxFit.cover,
                                     ),
                                   )
-                                : (widget.toEdit!)
+                                : (widget.toEdit)
                                     ? (widget.product!.imageb64 ?? "").isEmpty
                                         ? Container(
                                             height: height * 0.23,

@@ -3,7 +3,8 @@ import 'package:shop_manager/components/textFields.dart';
 
 class CounterWidget extends StatefulWidget {
   final TextEditingController counterController;
-  const CounterWidget({Key? key, required this.counterController}) : super(key: key);
+  const CounterWidget({Key? key, required this.counterController})
+      : super(key: key);
 
   @override
   State<CounterWidget> createState() => _CounterWidgetState();
@@ -13,16 +14,18 @@ class _CounterWidgetState extends State<CounterWidget> {
   int counter = 1;
   @override
   void initState() {
-    widget.counterController.text = '0';
+    widget.counterController.text = widget.counterController.text.isEmpty
+        ? '0'
+        : widget.counterController.text;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Row(
-      
       children: [
         Container(
           padding: EdgeInsets.all(height * 0.01),
@@ -39,7 +42,8 @@ class _CounterWidgetState extends State<CounterWidget> {
                 }
                 widget.counterController.text = counter.toString();
               },
-              child: Icon(Icons.remove, size: 15, color: theme.primaryColorLight)),
+              child:
+                  Icon(Icons.remove, size: 15, color: theme.primaryColorLight)),
         ),
         SizedBox(
           width: width * 0.15,

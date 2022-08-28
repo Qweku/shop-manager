@@ -102,8 +102,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 },
                                 smallFont: 20.0,
                                 largeFont: 50.0,
-                                categoryName:
-                                    categories[index].categoryName,
+                                categoryName: categories[index].categoryName,
                               ),
                             );
                           }),
@@ -253,7 +252,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     var categoryBox = Hive.box<ProductCategory>('Category');
 
                     await categoryBox.add(ProductCategory(
-                       categoryName.text,
+                      categoryName.text,
                     ));
 
                     categoryName.clear();
@@ -330,9 +329,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       if (categoryName.text.isNotEmpty) {
                         Provider.of<GeneralProvider>(context, listen: false)
                             .categories
-                            .firstWhere(
+                            .singleWhere(
                                 (element) => element == productCategory!)
-                            .categoryName = categoryName.text;
+                          ..categoryName = categoryName.text
+                          ..save();
+
+                        categoryBox.values.singleWhere(
+                            (element) => element == productCategory!)
+                          ..categoryName = categoryName.text
+                          ..save();
                       }
 
                       categoryName.clear();
@@ -342,9 +347,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       Provider.of<GeneralProvider>(context, listen: false)
                           .categories
                           .add(ProductCategory(
-                              categoryName.text,
+                            categoryName.text,
                           ));
-
                       await categoryBox.add(ProductCategory(
                         categoryName.text,
                       ));
