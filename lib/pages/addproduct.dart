@@ -15,6 +15,7 @@ import 'package:shop_manager/config/colors.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/addProductSuccess.dart';
 import 'package:shop_manager/pages/widgets/counter.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -364,8 +365,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               return;
                             }
                           }
+                            Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const AddProductSuccess()));
 
-                          Navigator.pop(context);
+                          //Navigator.pop(context);
                         },
                       ),
                     ),
