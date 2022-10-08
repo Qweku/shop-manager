@@ -3,7 +3,10 @@ import 'package:shop_manager/components/textFields.dart';
 
 class CounterWidget extends StatefulWidget {
   final TextEditingController counterController;
-  const CounterWidget({Key? key, required this.counterController})
+  final Color? borderColor;
+  final TextStyle? style;
+  const CounterWidget(
+      {Key? key, required this.counterController, this.borderColor, this.style})
       : super(key: key);
 
   @override
@@ -31,7 +34,8 @@ class _CounterWidgetState extends State<CounterWidget> {
           padding: EdgeInsets.all(height * 0.01),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: theme.primaryColorLight)),
+              border: Border.all(
+                  color: widget.borderColor ?? theme.primaryColorLight)),
           child: GestureDetector(
               onTap: () {
                 counter = int.parse(widget.counterController.text);
@@ -42,8 +46,9 @@ class _CounterWidgetState extends State<CounterWidget> {
                 }
                 widget.counterController.text = counter.toString();
               },
-              child:
-                  Icon(Icons.remove, size: 15, color: theme.primaryColorLight)),
+              child: Icon(Icons.remove,
+                  size: 15,
+                  color: widget.borderColor ?? theme.primaryColorLight)),
         ),
         SizedBox(
           width: width * 0.15,
@@ -51,8 +56,8 @@ class _CounterWidgetState extends State<CounterWidget> {
             textAlign: TextAlign.center,
             keyboard: TextInputType.number,
             controller: widget.counterController,
-            hintColor: theme.primaryColorLight,
-            style: theme.textTheme.bodyText2,
+            hintColor: widget.borderColor ?? theme.primaryColorLight,
+            style: widget.style??theme.textTheme.bodyText2,
             onChanged: (text) {
               counter = int.parse(widget.counterController.text);
             },
@@ -64,7 +69,7 @@ class _CounterWidgetState extends State<CounterWidget> {
           padding: EdgeInsets.all(height * 0.01),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: theme.primaryColorLight)),
+              border: Border.all(color: widget.borderColor??theme.primaryColorLight)),
           child: GestureDetector(
               onTap: () {
                 counter = int.parse(widget.counterController.text);
@@ -73,7 +78,7 @@ class _CounterWidgetState extends State<CounterWidget> {
                 });
                 widget.counterController.text = counter.toString();
               },
-              child: Icon(Icons.add, size: 15, color: theme.primaryColorLight)),
+              child: Icon(Icons.add, size: 15, color: widget.borderColor??theme.primaryColorLight)),
         ),
       ],
     );

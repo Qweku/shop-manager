@@ -12,6 +12,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
+import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
 
 import 'addproduct.dart';
@@ -47,17 +48,17 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     return WillPopScope(
       onWillPop: () => _backButton(),
       child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: theme.primaryColor,
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.notifications_active,
-                      color: theme.primaryColorLight))
-            ],
-          ),
-          drawer: const DrawerWidget(),
+          // appBar: AppBar(
+          //   elevation: 0,
+          //   backgroundColor: theme.primaryColor,
+          //   actions: [
+          //     IconButton(
+          //         onPressed: () {},
+          //         icon: Icon(Icons.notifications_active,
+          //             color: theme.primaryColorLight))
+          //   ],
+          // ),
+          // drawer: const DrawerWidget(),
           bottomNavigationBar: BottomNav(onChange: _handleNavigationChange),
           body: _content),
     );
@@ -67,13 +68,19 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     setState(() {
       switch (index) {
         case 0:
-          _content = Container();
+          _content = const CategoryScreen();
           break;
         case 1:
-          _content = const Dashboard();
+          _content = const AddProductScreen();
           break;
         case 2:
-          _content = const Accounts(tag: 'dashboard');
+          _content = const Dashboard();
+          break;
+        case 3:
+          _content = const Accounts();
+          break;
+        case 4:
+          _content = const InventoryScreen();
           break;
       }
       _content = AnimatedSwitcher(
@@ -119,13 +126,26 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  List<String> period = ['1D', '1W', '1M', '1Y'];
+  int tap = 0;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return Scaffold(
-        backgroundColor: ShopColors.primaryColor,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: theme.primaryColor,
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.notifications_active,
+                    color: theme.primaryColorLight))
+          ],
+        ),
+        drawer: const DrawerWidget(),
+        backgroundColor: theme.primaryColorLight,
         body: Stack(
           children: [
             Positioned(
@@ -133,12 +153,12 @@ class _DashboardState extends State<Dashboard> {
               right: 0,
               left: 0,
               child: Container(
-                height: height * 0.45,
+                height: height * 0.3,
                 decoration: BoxDecoration(
-                    color: ShopColors.secondaryColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(width * 0.5),
-                    )),
+                    color: theme.primaryColor,
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10))),
               ),
             ),
             Container(
@@ -151,95 +171,107 @@ class _DashboardState extends State<Dashboard> {
                     right: width * 0.05,
                     left: width * 0.05),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                        height: height * 0.2,
+                        // height: height * 0.23,
                         child: Column(
                           children: [
-                            CircleAvatar(
-                              backgroundColor: theme.primaryColorLight,
-                              radius: width * 0.12,
-                              child: Icon(Icons.shop_2,
-                                  color: theme.primaryColor, size: 35),
+                            Text('Total Earnings',
+                                style: theme.textTheme.bodyText2),
+                            const SizedBox(
+                              height: 10,
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(bottom: 20, top: 10),
-                              child: Text("Shop Manager",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: ShopColors.primaryColor)),
+                            Text(
+                              'GHS 20945.90',
+                              style: theme.textTheme.headline2!
+                                  .copyWith(fontSize: 25),
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                  period.length,
+                                  (index) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              tap = index;
+                                            });
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            width: width * 0.15,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.white),
+                                              color: tap == index
+                                                  ? Colors.white
+                                                  : Colors.transparent,
+                                            ),
+                                            child: Text(
+                                              period[index],
+                                              textAlign: TextAlign.center,
+                                              style: theme.textTheme.bodyText2!
+                                                  .copyWith(
+                                                      color: tap == index
+                                                          ? theme.primaryColor
+                                                          : Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      )),
+                            )
                           ],
                         )),
-                    SizedBox(
-                        height: height * 0.53,
+                        Padding(
+                          padding:  EdgeInsets.symmetric(vertical: height*0.04),
+                          child:  const ShopBarChart(),
+                        ),
+                    Expanded(
+                        // height: height * 0.53,
                         child: GridView.count(
-                          padding: EdgeInsets.zero,
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 20,
-                          children: [
-                            GridMenuItem(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const CategoryScreen()));
-                              },
-                              label: "Categories",
-                              icon: Icons.category,
-                              menuColor: theme.primaryColorLight,
-                              iconColor: theme.primaryColor,
-                            ),
-                            GridMenuItem(
-                              onTap: () {
-                                // if (!(Provider.of<GeneralProvider>(context,
-                                //         listen: false)
-                                //     .categories
-                                //     .isEmpty)) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AddProductScreen()));
-                                // }
-                              },
-                              label: "Add Product",
-                              icon: Icons.shopping_bag,
-                              menuColor: theme.primaryColorLight,
-                              iconColor: theme.primaryColor,
-                            ),
-                            GridMenuItem(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Accounts()));
-                              },
-                              label: "Account History",
-                              icon: Icons.receipt_long,
-                              menuColor: theme.primaryColor,
-                              iconColor: theme.primaryColorLight,
-                            ),
-                            GridMenuItem(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const InventoryScreen()));
-                              },
-                              label: "Inventory",
-                              icon: Icons.inventory,
-                              menuColor: theme.primaryColor,
-                              iconColor: theme.primaryColorLight,
-                            ),
-                          ],
-                        )),
+                      padding: EdgeInsets.zero,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 20,
+                      childAspectRatio: 1.7,
+                      children: [
+                        ItemStatus(
+                         status: 'GHS 3.5K',
+                          label: "Total Sales",
+                          icon: Icons.monetization_on,
+                          menuColor: theme.primaryColor,
+                          iconColor: theme.primaryColorLight,
+                        ),
+                        ItemStatus(
+                          status:'GHS 1.2K' ,
+                          label: "Total Expenses",
+                          icon: Icons.auto_graph,
+                          menuColor: theme.primaryColor,
+                          iconColor: theme.primaryColorLight,
+                        ),
+                        ItemStatus(
+                          status: '5',
+                          label: "Low Stock",
+                          icon: Icons.arrow_circle_down,
+                          menuColor: theme.primaryColor,
+                          iconColor: theme.primaryColorLight,
+                        ),
+                        ItemStatus(
+                          status: '132',
+                          label: "Inventory",
+                          icon: Icons.inventory,
+                          menuColor: theme.primaryColor,
+                          iconColor: theme.primaryColorLight,
+                        ),
+                      ],
+                    )),
                   ],
                 ),
               ),
@@ -249,37 +281,52 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-class GridMenuItem extends StatelessWidget {
+class ItemStatus extends StatelessWidget {
   final Function()? onTap;
   final Color menuColor, iconColor;
-  final String label;
+  final String label,status;
   final IconData icon;
-  const GridMenuItem({
+  const ItemStatus({
     Key? key,
     this.onTap,
     required this.menuColor,
     required this.iconColor,
     required this.label,
-    required this.icon,
+    required this.icon, required this.status,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: menuColor,
-              border: Border.all(color: iconColor, width: 2)),
+              ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 40, color: iconColor),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(label,
-                    style: TextStyle(fontSize: 20, color: iconColor)),
+              Text(
+                status,
+                style: theme.textTheme.headline1!
+                    .copyWith(color: iconColor),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(icon, size: 20, color: iconColor),
+                   const SizedBox(
+                width: 10,
+              ),
+                  Text(label, style: theme.textTheme.bodyText1!.copyWith(color:iconColor)),
+                ],
               ),
             ],
           )),

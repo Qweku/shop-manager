@@ -11,24 +11,28 @@ class BottomNav extends StatelessWidget {
     return FluidNavBar(
       icons: [
         FluidNavBarIcon(
-            icon: Icons.dashboard,
+            icon: Icons.category,
             selectedForegroundColor: Colors.white,
             //backgroundColor: theme.primaryColor,
-            extras: {"label": "downloads"}),
+            extras: {"label": "catgories"}),
         FluidNavBarIcon(
-            icon: Icons.home,
+            icon: Icons.shopping_bag,
             selectedForegroundColor: Colors.white,
             //backgroundColor: theme.primaryColor,
-            extras: {"label": "home"}),
+            extras: {"label": "add product"}),
         FluidNavBarIcon(
-            icon: Icons.line_axis,
+            icon: Icons.dashboard_customize,
             selectedForegroundColor: Colors.white,
            // backgroundColor: theme.primaryColor,
-            extras: {"label": "shop"}),
-        // FluidNavBarIcon(
-        //     svgPath: "assets/conference.svg",
-        //     backgroundColor: Color(0xFF34A950),
-        //     extras: {"label": "conference"}),
+            extras: {"label": "dashboard"}),
+        FluidNavBarIcon(
+            icon:Icons.receipt_long,
+             selectedForegroundColor: Colors.white,
+            extras: {"label": "accounts"}),
+          FluidNavBarIcon(
+            icon:Icons.inventory,
+             selectedForegroundColor: Colors.white,
+            extras: {"label": "inventory"}),
       ],
       onChange: onChange,
       style: FluidNavBarStyle(
@@ -36,7 +40,7 @@ class BottomNav extends StatelessWidget {
           iconUnselectedForegroundColor: Colors.white,
           barBackgroundColor: theme.primaryColor),
       scaleFactor: 1.5,
-      defaultIndex: 1,
+      defaultIndex: 2,
       itemBuilder: (icon, item) => Semantics(
         label: icon.extras!["label"],
         child: item,

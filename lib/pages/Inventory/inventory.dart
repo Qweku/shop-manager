@@ -66,7 +66,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   boxScroll = innerBoxIsScrolled;
                   return [
                     SliverAppBar(
-                      expandedHeight: height * 0.2,
+                      expandedHeight: height * 0.23,
                       pinned: true,
                       floating: true,
                       // snap:true,

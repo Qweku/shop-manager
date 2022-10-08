@@ -164,7 +164,7 @@ class CustomTextField extends StatelessWidget {
       this.hintText,
       this.controller,
       this.keyboard,
-      this.maxLines=1,
+      this.maxLines = 1,
       this.borderColor = Colors.transparent,
       this.color = Colors.transparent,
       this.style,
@@ -307,9 +307,11 @@ class AmountTextField extends StatefulWidget {
   final TextEditingController? controller;
   final Color borderColor;
   final Color color;
+  final Color? hintColor;
   final TextStyle? style;
   final String? hintText;
- // Country? currency;
+  final Icon? prefixIcon;
+  // Country? currency;
   final void Function(String text)? onChanged;
   final bool? readOnly;
   AmountTextField(
@@ -320,8 +322,9 @@ class AmountTextField extends StatefulWidget {
       this.color = Colors.transparent,
       this.readOnly = false,
       this.style,
-     // this.currency,
-      this.onChanged})
+      // this.currency,
+      this.onChanged,
+      this.prefixIcon, this.hintColor})
       : super(key: key);
 
   @override
@@ -340,47 +343,33 @@ class _AmountTextFieldState extends State<AmountTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5),
-      child: Container(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        //width: MediaQuery.of(context).size.width * 0.55,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-              width: 1, style: BorderStyle.solid, color: widget.borderColor),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+            width: 1, style: BorderStyle.solid, color: widget.borderColor),
+      ),
+      child: TextField(
+        readOnly: widget.readOnly!,
+        controller: widget.controller,
+        textAlign: TextAlign.justify,
+        onChanged: widget.onChanged,
+        keyboardType: TextInputType.number,
+        style: widget.style,
+        decoration: InputDecoration(
+          prefixIcon: widget.prefixIcon,
+          border: InputBorder.none,
+          hintText: "GHS 0.00",
+          hintStyle: TextStyle(color: widget.hintColor),
+          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15.0),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 10, top: 10),
-              height: 50,
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: TextField(
-                readOnly: widget.readOnly!,
-                controller: widget.controller,
-                textAlign: TextAlign.justify,
-                onChanged: widget.onChanged,
-                keyboardType: TextInputType.number,
-                style: widget.style,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "GHS 0.00",
-                  hintStyle: widget.style,
-                ),
-                inputFormatters: [
-                  CurrencyTextInputFormatter(
-                      turnOffGrouping: true,
-                      decimalDigits: 2,
-                      // locale: 'GH',
-                      symbol: "GHS "),
-                ],
-              ),
-            ),
-            
-          ],
-        ),
+        inputFormatters: [
+          CurrencyTextInputFormatter(
+              turnOffGrouping: true,
+              decimalDigits: 2,
+              // locale: 'GH',
+              symbol: "GHS "),
+        ],
       ),
     );
   }

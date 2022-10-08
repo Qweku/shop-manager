@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/config/colors.dart';
@@ -75,91 +76,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   var productBox = Hive.box<Product>('Product');
   var categoryBox = Hive.box<ProductCategory>('Category');
-  Widget _submitButton() {
-    return InkWell(
-        onTap: () async {
-          Product product = Product(
-              productName: productName.text,
-              sellingPrice:
-                  double.tryParse(formatter.getUnformattedValue().toString()) ??
-                      0,
-              itemcategory: _selectedCategory?.categoryName ?? 'Uncategorised',
-              quantity: int.tryParse(productQuantity.text) ?? 0,
-              costPrice: double.tryParse(productPrice.text) ?? 0,
-              imageb64: imageString);
-
-          if (widget.toEdit) {
-            await productBox.values
-                .singleWhere((element) => element == widget.product)
-              ..quantity = product.quantity
-              ..costPrice = product.costPrice
-              ..sellingPrice = product.sellingPrice
-              ..itemcategory = product.itemcategory
-              ..costPrice = product.costPrice
-              ..imageb64 = product.imageb64
-              ..save();
-
-            Provider.of<GeneralProvider>(context, listen: false)
-                .inventory
-                .singleWhere((element) => element == widget.product)
-              ..quantity = product.quantity
-              ..sellingPrice = product.sellingPrice
-              ..itemcategory = product.itemcategory
-              ..costPrice = product.costPrice
-              ..imageb64 = product.imageb64;
-
-            Provider.of<GeneralProvider>(context, listen: false)
-                .reArrangeCategory();
-            HiveFunctions().reArrangeCategory();
-          } else {
-            if (!(Provider.of<GeneralProvider>(context, listen: false)
-                .inventory
-                .any(
-                    (element) => element.productName == product.productName))) {
-              Provider.of<GeneralProvider>(context, listen: false)
-                  .inventory
-                  .add(product);
-
-              await productBox.add(product);
-
-              if (_selectedCategory?.categoryName.isNotEmpty ?? false) {
-                Provider.of<GeneralProvider>(context, listen: false)
-                    .saveToCategory(_selectedCategory!);
-
-                HiveFunctions().saveToCategory(_selectedCategory!);
-              }
-            } else {
-              Notifier().toast(
-                  context: context,
-                  message: "ERROR PRODUCT ALREADY EXIST!",
-                  color: Colors.red);
-              return;
-            }
-          }
-
-          Navigator.pop(context);
-        },
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(vertical: 13),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              //border: Border.all(color: BaseColors.secondaryColor, width: 1),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.black45,
-                    offset: Offset(1, 3),
-                    blurRadius: 5,
-                    spreadRadius: 1)
-              ],
-              color: ShopColors.primaryColor),
-          child: Text(
-            'Done',
-            style: TextStyle(fontSize: 20, color: ShopColors.secondaryColor),
-          ),
-        ));
-  }
 
   @override
   void initState() {
@@ -189,7 +105,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: ShopColors.secondaryColor,
+      backgroundColor: theme.primaryColorLight,
       body: SafeArea(
         child: SizedBox(
           height: height,
@@ -207,71 +123,48 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           (widget.toEdit)
                               ? "Edit Product Detail"
                               : "Let's add the products in your shop",
-                          style: TextStyle(
-                              color: ShopColors.textColor, fontSize: 25)),
+                          style: theme.textTheme.headline1!.copyWith(color:theme.primaryColor)),
                     ),
                     Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: CustomTextField(
-                          prefixIcon: Icon(Icons.add_box,
-                              color: theme.primaryColorLight, size: 20),
+                          prefixIcon: Icon(Icons.add_box, color: Colors.grey),
                           hintText: "Product name",
-                          borderColor: theme.primaryColorLight,
+                          borderColor: Colors.grey,
                           controller: productName,
-                          style: theme.textTheme.bodyText2,
-                          hintColor: Colors.white,
+                          style: theme.textTheme.bodyText1,
+                          hintColor: Colors.grey,
                         )),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                                width: 2,
-                                style: BorderStyle.solid,
-                                color: ShopColors.primaryColor)),
-                        child: TextFormField(
-                          // initialValue: formatter.format(productPrice.text),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: AmountTextField(
+                          prefixIcon: Icon(Icons.money, color: Colors.grey),
+                          hintText: "GHS 0.00",
+                          borderColor: Colors.grey,
                           controller: productPrice,
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(
-                              color: ShopColors.textColor, fontSize: 15),
-                          decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.money,
-                                  color: ShopColors.primaryColor, size: 20),
-                              hintText: "GHS 00.00",
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                  color: ShopColors.primaryColor,
-                                  fontSize: 15)),
-                          inputFormatters: [
-                            formatter,
-                          ],
-                        ),
-                      ),
-                    ),
+                          style: theme.textTheme.bodyText1,
+                          hintColor: Colors.grey,
+                        )),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         height: 50,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: ShopColors.primaryColor, width: 2),
+                            border: Border.all(color: Colors.grey, width: 1),
                             borderRadius: BorderRadius.circular(20)),
                         child: DropdownButtonFormField(
-                          dropdownColor: Colors.black,
-                          style: TextStyle(color: Colors.black),
+                          //dropdownColor: Colors.black,
+                          style: theme.textTheme.bodyText1,
                           decoration: InputDecoration(
-                              hintStyle: TextStyle(color: Colors.white),
+                              hintStyle: TextStyle(color: Colors.grey),
                               border: InputBorder.none,
                               enabled: false,
                               fillColor: Colors.transparent,
                               filled: true),
                           hint: Text(
                             'Select Category',
-                            style: theme.textTheme.bodyText2,
+                            style: TextStyle(color: Colors.grey),
                           ),
                           value: _selectedCategory,
                           onChanged: (newValue) {
@@ -285,7 +178,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               child: Text(
                                 location.categoryName,
                                 style: theme.textTheme
-                                    .bodyText2, /* ,style: TextStyle(color: Colors.white), */
+                                    .bodyText1, /* ,style: TextStyle(color: Colors.white), */
                               ),
                               value: location,
                             );
@@ -298,8 +191,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Quantity', style: theme.textTheme.bodyText2),
-                            CounterWidget(counterController: productQuantity)
+                            Text('Quantity', style: theme.textTheme.bodyText1),
+                            CounterWidget(
+                                borderColor: Colors.grey,
+                                style: theme.textTheme.bodyText1,
+                                counterController: productQuantity)
                           ],
                         )),
                     Padding(
@@ -307,7 +203,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       child: Align(
                           alignment: Alignment(0, 0),
                           child: Text('Attach Image',
-                              style: theme.textTheme.bodyText2)),
+                              style: theme.textTheme.bodyText1)),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -322,7 +218,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             height: height * 0.25,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: ShopColors.primaryColor),
+                                color:Colors.grey),
                             child: _image != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
@@ -341,7 +237,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(20.0),
-                                                color: Colors.white,
+                                                color: Colors.grey,
                                                 boxShadow: [
                                                   const BoxShadow(
                                                       offset: Offset(2, 2),
@@ -356,11 +252,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                     .substring(0, 2)
                                                     .toUpperCase(),
                                                 style: theme
-                                                    .textTheme.headline1!
+                                                    .textTheme.headline2!
                                                     .copyWith(
                                                         fontSize: 70,
-                                                        color:
-                                                            theme.primaryColor),
+                                                        color: theme
+                                                            .primaryColorLight),
                                               ),
                                             ))
                                         : ClipRRect(
@@ -384,7 +280,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                         height: height * 0.25,
                                         child: Icon(
                                           Icons.camera_alt,
-                                          color: ShopColors.secondaryColor,
+                                          color: theme.primaryColorLight,
                                           size: 30,
                                         ),
                                       ),
@@ -392,18 +288,102 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(height:height*0.05),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Button(
+                        width: width,
+                        color: theme.primaryColor,
+                        buttonText: 'Done',
+                        onTap: () async {
+                          Product product = Product(
+                              productName: productName.text,
+                              sellingPrice: double.tryParse(formatter
+                                      .getUnformattedValue()
+                                      .toString()) ??
+                                  0,
+                              itemcategory: _selectedCategory?.categoryName ??
+                                  'Uncategorised',
+                              quantity: int.tryParse(productQuantity.text) ?? 0,
+                              costPrice:
+                                  double.tryParse(productPrice.text) ?? 0,
+                              imageb64: imageString);
+
+                          if (widget.toEdit) {
+                            await productBox.values.singleWhere(
+                                (element) => element == widget.product)
+                              ..quantity = product.quantity
+                              ..costPrice = product.costPrice
+                              ..sellingPrice = product.sellingPrice
+                              ..itemcategory = product.itemcategory
+                              ..costPrice = product.costPrice
+                              ..imageb64 = product.imageb64
+                              ..save();
+
+                            Provider.of<GeneralProvider>(context, listen: false)
+                                .inventory
+                                .singleWhere(
+                                    (element) => element == widget.product)
+                              ..quantity = product.quantity
+                              ..sellingPrice = product.sellingPrice
+                              ..itemcategory = product.itemcategory
+                              ..costPrice = product.costPrice
+                              ..imageb64 = product.imageb64;
+
+                            Provider.of<GeneralProvider>(context, listen: false)
+                                .reArrangeCategory();
+                            HiveFunctions().reArrangeCategory();
+                          } else {
+                            if (!(Provider.of<GeneralProvider>(context,
+                                    listen: false)
+                                .inventory
+                                .any((element) =>
+                                    element.productName ==
+                                    product.productName))) {
+                              Provider.of<GeneralProvider>(context,
+                                      listen: false)
+                                  .inventory
+                                  .add(product);
+
+                              await productBox.add(product);
+
+                              if (_selectedCategory?.categoryName.isNotEmpty ??
+                                  false) {
+                                Provider.of<GeneralProvider>(context,
+                                        listen: false)
+                                    .saveToCategory(_selectedCategory!);
+
+                                HiveFunctions()
+                                    .saveToCategory(_selectedCategory!);
+                              }
+                            } else {
+                              Notifier().toast(
+                                  context: context,
+                                  message: "ERROR PRODUCT ALREADY EXIST!",
+                                  color: Colors.red);
+                              return;
+                            }
+                          }
+
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               )),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: _submitButton(),
-                ),
-              )
+              // Positioned(
+              //   bottom: 0,
+              //   right: 0,
+              //   left: 0,
+              //   child: Container(
+              //     color: theme.primaryColorLight,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(20),
+              //       child: _submitButton(),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),

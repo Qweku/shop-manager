@@ -46,6 +46,7 @@ dependencies:
   fluid_bottom_nav_bar:
   intl_phone_number_input: ^0.7.0+2
   datetime_picker_formfield: ^2.0.1
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   hive_generator: ^1.1.3
