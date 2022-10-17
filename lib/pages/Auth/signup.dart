@@ -55,7 +55,7 @@ class _SignUpState extends State<SignUp> {
         //height: height * 0.6,
         width: width * 0.9,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(width * 0.05),
+            borderRadius: BorderRadius.circular(20),
             color: theme.primaryColorLight),
         child: Padding(
           padding: EdgeInsets.only(
@@ -78,7 +78,7 @@ class _SignUpState extends State<SignUp> {
                   child: CustomTextField(
                     controller: _emailController,
                     borderColor: theme.primaryColor,
-                    hintText: "Username or email",
+                    hintText: "Email",
                     hintColor: theme.primaryColor,
                     style: theme.textTheme.bodyText2!
                         .copyWith(color: theme.primaryColor),

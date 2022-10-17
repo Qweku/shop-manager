@@ -14,6 +14,9 @@ class SummaryScreen extends StatefulWidget {
 }
 
 class _SummaryScreenState extends State<SummaryScreen> {
+  String day = DateTime.now().day.toString();
+  String month = DateTime.now().month.toString();
+  String year = DateTime.now().year.toString();
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -67,8 +70,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(DateTime.now().day.toString() +"-"+
-                            DateTime.now().month.toString()+"-"+DateTime.now().year.toString(),
+                          Text(
+                            DateTime.now().day < 10
+                                ? "0" + day
+                                : day +
+                                    "-" +
+                                    month +
+                                    "-" +
+                                    year,
                             style: theme.textTheme.bodyText1,
                           ),
                           Text('#0001', style: theme.textTheme.bodyText1),
@@ -88,7 +97,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   .cart[index]);
                         }),
                     SizedBox(height: height * 0.03),
-                    Divider(
+                    const Divider(
                       color: Colors.grey,
                       thickness: 1,
                     ),

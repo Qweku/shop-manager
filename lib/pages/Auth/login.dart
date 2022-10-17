@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/main.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -62,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
         width: width * 0.9,
         decoration: BoxDecoration(
             color: theme.primaryColorLight,
-            borderRadius: BorderRadius.circular(width * 0.05)),
+            borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: EdgeInsets.only(
               top: height * 0.05, right: height * 0.03, left: height * 0.03),
@@ -132,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MyHomeScreen()));
+                            builder: (context) => Responsive.isMobile()?MyHomeScreen():TabletDashboard()));
                     // ApplicationState().startLoginFlow();
 
                     //         if (_emailController.text.isEmpty ||

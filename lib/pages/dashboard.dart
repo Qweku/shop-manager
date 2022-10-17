@@ -7,12 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
 
 import 'addproduct.dart';
@@ -241,37 +243,14 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 20,
                       childAspectRatio: 1.7,
-                      children: [
-                        ItemStatus(
-                         status: 'GHS 3.5K',
-                          label: "Total Sales",
-                          icon: Icons.monetization_on,
+                      children: List.generate(statusList.length, (index) => 
+                      ItemStatus(
+                         status: statusList[index]['status'],
+                          label: statusList[index]['label'],
+                          icon: statusList[index]['icon'],
                           menuColor: theme.primaryColor,
                           iconColor: theme.primaryColorLight,
-                        ),
-                        ItemStatus(
-                          status:'GHS 1.2K' ,
-                          label: "Total Expenses",
-                          icon: Icons.auto_graph,
-                          menuColor: theme.primaryColor,
-                          iconColor: theme.primaryColorLight,
-                        ),
-                        ItemStatus(
-                          status: '5',
-                          label: "Low Stock",
-                          icon: Icons.arrow_circle_down,
-                          menuColor: theme.primaryColor,
-                          iconColor: theme.primaryColorLight,
-                        ),
-                        ItemStatus(
-                          status: '132',
-                          label: "Inventory",
-                          icon: Icons.inventory,
-                          menuColor: theme.primaryColor,
-                          iconColor: theme.primaryColorLight,
-                        ),
-                      ],
-                    )),
+                        ),))),
                   ],
                 ),
               ),
@@ -321,7 +300,7 @@ class ItemStatus extends StatelessWidget {
               Row(
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(icon, size: 20, color: iconColor),
+                  Icon(icon, size: Responsive.isMobile()?20:40, color: iconColor),
                    const SizedBox(
                 width: 10,
               ),

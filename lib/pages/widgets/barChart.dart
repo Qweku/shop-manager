@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class SimpleBarChart extends StatelessWidget {
@@ -244,10 +245,10 @@ class ShopBarChartState extends State<ShopBarChart> {
     var theme=Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(10),
-      height:  height * 0.25 ,
+      height:  height * 0.3 ,
       width:  width ,
       decoration: BoxDecoration(
-          color: theme.primaryColor,
+          color: Responsive.isMobile()?theme.primaryColor:theme.primaryColorDark,
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(
@@ -257,7 +258,16 @@ class ShopBarChartState extends State<ShopBarChart> {
                 spreadRadius: 1),
            
           ]),
-      child: const SimpleBarChart(),
+      child: Column(
+        children: [
+          Text('Total Sales',style: theme.textTheme.headline2,),
+          SizedBox(height:height*0.01),
+          SizedBox(
+            height:  height * 0.3 ,
+      width:  width ,
+            child: const SimpleBarChart()),
+        ],
+      ),
     );
   }
 }

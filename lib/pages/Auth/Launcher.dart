@@ -4,6 +4,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:shop_manager/components/responsive.dart';
+import 'package:shop_manager/pages/Auth/authentication.dart';
 import 'package:shop_manager/pages/wrapper.dart';
 
 class Launcher extends StatefulWidget {
@@ -45,7 +47,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
   }
 
   void navigationPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Responsive.isMobile()?Wrapper():const TabletAuth()));
   }
 
   @override
@@ -77,7 +79,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                     scale: _animation,
                     child: CircleAvatar(
                       backgroundColor: theme.primaryColorLight,
-                      radius: width * 0.12,
+                      radius: Responsive.isMobile()?width * 0.12:width*0.05,
                       child: Icon(Icons.shop_2,
                           color: theme.primaryColor, size: 35),
                     ),
