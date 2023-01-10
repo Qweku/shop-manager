@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
+import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
@@ -140,10 +141,7 @@ class _DashboardState extends State<Dashboard> {
           elevation: 0,
           backgroundColor: theme.primaryColor,
           actions: [
-            IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.notifications_active,
-                    color: theme.primaryColorLight))
+            const NotificationIconButton(quantity: 1)
           ],
         ),
         drawer: const DrawerWidget(),
@@ -183,7 +181,7 @@ class _DashboardState extends State<Dashboard> {
                             Text('Total Earnings',
                                 style: theme.textTheme.bodyText2),
                             const SizedBox(
-                              height: 10,
+                              height: 8,
                             ),
                             Text(
                               'GHS 20945.90',
@@ -232,12 +230,13 @@ class _DashboardState extends State<Dashboard> {
                           ],
                         )),
                         Padding(
-                          padding:  EdgeInsets.symmetric(vertical: height*0.04),
+                          padding:  EdgeInsets.symmetric(vertical: height*0.03),
                           child:  const ShopBarChart(),
                         ),
                     Expanded(
                         // height: height * 0.53,
                         child: GridView.count(
+                          physics: const NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.zero,
                       crossAxisCount: 2,
                       crossAxisSpacing: 10,

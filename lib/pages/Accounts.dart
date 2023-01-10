@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class Accounts extends StatefulWidget {
   final String? tag;
@@ -71,33 +72,33 @@ class _AccountsState extends State<Accounts> {
               ),
             ),
             SizedBox(height: height * 0.02),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: width * 0.05,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                      width: width * 0.3,
-                      child: Text('Item Name',
-                          style: theme.textTheme.bodyText1!
-                              .copyWith(fontWeight: FontWeight.bold))),
-                  SizedBox(
-                      width: width * 0.3,
-                      child: Text('Quantity',
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyText1!
-                              .copyWith(fontWeight: FontWeight.bold))),
-                  SizedBox(
-                      width: width * 0.3,
-                      child: Text('Total',
-                          textAlign: TextAlign.end,
-                          style: theme.textTheme.bodyText1!
-                              .copyWith(fontWeight: FontWeight.bold))),
-                ],
-              ),
-            ),
+            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: height * 0.01,
+                                  horizontal: width * 0.05),
+                              color: Color.fromARGB(255, 197, 196, 196),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: Text('Items',
+                                          style: theme.textTheme.bodyText1!.copyWith(
+                                              fontWeight: FontWeight.bold))),
+                                  Expanded(
+                                      child: Text('Date',
+                                          style: theme.textTheme.bodyText1!.copyWith(
+                                              fontWeight: FontWeight.bold))),
+                                  Expanded(
+                                      child: Text('Quantity',
+                                          style: theme.textTheme.bodyText1!.copyWith(
+                                              fontWeight: FontWeight.bold))),
+                                  Expanded(
+                                      child: Text('Amount',
+                                          textAlign: TextAlign.right,
+                                          style: theme.textTheme.bodyText1!.copyWith(
+                                              fontWeight: FontWeight.bold))),
+                                ],
+                              ),
+                            ),
             SizedBox(height: height * 0.03),
             Expanded(
               child: ListView.builder(
@@ -108,7 +109,11 @@ class _AccountsState extends State<Accounts> {
                     return Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: width * 0.05, vertical: height * 0.01),
-                      child: AccountList(width: width, theme: theme),
+                      child: const SummaryListItem(
+                        item:'Ideal Milk',
+                        amount: "8.00",
+                        quantity: "3",
+                        date: '04/01/2023',),
                     );
                   }),
             )
@@ -189,33 +194,38 @@ class _AccountsState extends State<Accounts> {
   }
 }
 
-class AccountList extends StatelessWidget {
-  const AccountList({
-    Key? key,
-    required this.theme,
-    required this.width,
-  }) : super(key: key);
 
-  final ThemeData theme;
-  final double width;
+
+class SummaryListItem extends StatelessWidget {
+  final String item, amount, date, quantity;
+
+  const SummaryListItem({
+    Key? key,
+    required this.item,
+    required this.amount,
+    required this.date,
+    required this.quantity,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-            width: width * 0.3,
-            child: Text('Milk', style: theme.textTheme.bodyText1)),
-        SizedBox(
-            width: width * 0.3,
-            child: Text('2',
-                textAlign: TextAlign.center, style: theme.textTheme.bodyText1)),
-        SizedBox(
-            width: width * 0.3,
-            child: Text('GHS12.00',
-                textAlign: TextAlign.end, style: theme.textTheme.bodyText1)),
-      ],
+    var theme=Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Expanded(child: Text(item.toTitleCase(), style: theme.textTheme.bodyText1,overflow: TextOverflow.ellipsis,)),
+          Expanded(child: Text(date, style: theme.textTheme.bodyText1)),
+          Expanded(
+              child: Text(quantity,
+                  textAlign: TextAlign.center, style: theme.textTheme.bodyText1)),
+          Expanded(
+              child: Text(
+                  "GHS $amount",
+                  textAlign: TextAlign.right,
+                  style: theme.textTheme.bodyText1)),
+        ],
+      ),
     );
   }
 }

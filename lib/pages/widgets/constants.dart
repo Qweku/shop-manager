@@ -17,3 +17,11 @@ List<Map<String, dynamic>> statusList = [
 Color primaryColor =  const Color(0xFF0D47A1);
  Color primaryColorDark = const Color.fromARGB(255, 14, 14, 14);
 
+extension StringExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
+}

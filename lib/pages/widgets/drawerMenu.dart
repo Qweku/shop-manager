@@ -21,17 +21,17 @@ class DrawerWidget extends StatelessWidget {
               decoration: BoxDecoration(
               ),
               child:
-                  Column(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                     CircleAvatar(
                           backgroundColor: theme.primaryColor,
-                          radius: width * 0.1,
+                          radius: 30,
                           child:
                               Icon(Icons.shop_2, color: theme.primaryColorLight, size: 30),
                         ),
-                        SizedBox(height:height*0.01),
-                        Text('Shop Manager',style: theme.textTheme.headline2!.copyWith(color:theme.primaryColor),),
+                        SizedBox(width:width*0.02),
+                        Text('ShopMate',style: theme.textTheme.headline2!.copyWith(color:theme.primaryColor),),
                   ]),
             ),
           ),

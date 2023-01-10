@@ -52,7 +52,7 @@ class SimpleBarChart extends StatelessWidget {
               var style = TextStyle(
                 color: Responsive.isMobile()?Colors.white:Color.fromARGB(255, 92, 92, 92),
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: Responsive.isMobile()?12:14,
               );
               Widget text;
               switch (value.toInt()) {
@@ -245,7 +245,7 @@ class ShopBarChartState extends State<ShopBarChart> {
     var theme=Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(10),
-      height:  height * 0.3 ,
+      height:  Responsive.isMobile()?height * 0.27:height * 0.3 ,
       width:  width ,
       decoration: BoxDecoration(
           color: Responsive.isMobile()?theme.primaryColor:Colors.white,
@@ -260,10 +260,10 @@ class ShopBarChartState extends State<ShopBarChart> {
           ]),
       child: Column(
         children: [
-          Text('Total Sales',style: theme.textTheme.headline1,),
+          Text('Total Sales',style: theme.textTheme.headline1!.copyWith(color:Responsive.isMobile()?Colors.white:Colors.black),),
           SizedBox(height:height*0.01),
           SizedBox(
-            height:  height * 0.3 ,
+            height:  Responsive.isMobile()?height * 0.2:height*0.3 ,
       width:  width ,
             child: const SimpleBarChart()),
         ],

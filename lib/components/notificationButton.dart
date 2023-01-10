@@ -21,7 +21,7 @@ class NotificationIconButton extends StatelessWidget {
         IconButton(
             onPressed: onTap,
             icon:
-                 Icon(Icons.notifications_outlined, color: primaryColor, size: Responsive.isMobile()?30:35)),
+                 Icon(Icons.notifications_outlined, color: Responsive.isMobile()?Colors.white:primaryColor, size: Responsive.isMobile()?30:35)),
         Positioned(
             top: height * 0.005,
             left:Responsive.isMobile()? width * 0.03:width*0.01,
