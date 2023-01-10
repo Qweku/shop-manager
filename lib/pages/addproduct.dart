@@ -16,6 +16,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/addProductSuccess.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/counter.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -74,6 +75,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       debugPrint(e.toString());
     }
   }
+  bool isChecked = false;
 
   var productBox = Hive.box<Product>('Product');
   var categoryBox = Hive.box<ProductCategory>('Category');
@@ -187,105 +189,138 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Quantity', style: theme.textTheme.bodyText1),
-                            CounterWidget(
-                                borderColor: Colors.grey,
-                                style: theme.textTheme.bodyText1,
-                                counterController: productQuantity)
-                          ],
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(top: height * 0.02),
-                      child: Align(
-                          alignment: Alignment(0, 0),
-                          child: Text('Attach Image',
-                              style: theme.textTheme.bodyText1)),
-                    ),
+                    
+                    // Padding(
+                    //   padding: EdgeInsets.only(top: height * 0.02),
+                    //   child: Align(
+                    //       alignment: Alignment(0, 0),
+                    //       child: Text('Attach Image',
+                    //           style: theme.textTheme.bodyText1)),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Align(
                         alignment: Alignment(0, 0),
-                        child: GestureDetector(
-                          onTap: () {
-                            _attachImage(context);
-                          },
-                          child: Container(
-                            width: width * 0.45,
-                            height: height * 0.25,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color:Colors.grey),
-                            child: _image != null
-                                ? ClipRRect(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                _attachImage(context);
+                              },
+                              child: Container(
+                                width: width * 0.45,
+                                height: height * 0.25,
+                                decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    child: Image.file(
-                                      _image!,
-                                      width: width * 0.45,
-                                      height: height * 0.25,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : (widget.toEdit)
-                                    ? (widget.product!.imageb64 ?? "").isEmpty
-                                        ? Container(
-                                            height: height * 0.23,
-                                            width: width * 0.4,
-                                            decoration: BoxDecoration(
+                                    color:Colors.grey),
+                                child: _image != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.file(
+                                          _image!,
+                                          width: width * 0.45,
+                                          height: height * 0.25,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : (widget.toEdit)
+                                        ? (widget.product!.imageb64 ?? "").isEmpty
+                                            ? Container(
+                                                height: height * 0.23,
+                                                width: width * 0.4,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(20.0),
+                                                    color: Colors.grey,
+                                                    boxShadow: [
+                                                      const BoxShadow(
+                                                          offset: Offset(2, 2),
+                                                          color: Color.fromARGB(
+                                                              31, 0, 0, 0),
+                                                          blurRadius: 2,
+                                                          spreadRadius: 1)
+                                                    ]),
+                                                child: Center(
+                                                  child: Text(
+                                                    widget.product!.productName!
+                                                        .substring(0, 2)
+                                                        .toUpperCase(),
+                                                    style: theme
+                                                        .textTheme.headline2!
+                                                        .copyWith(
+                                                            fontSize: 70,
+                                                            color: theme
+                                                                .primaryColorLight),
+                                                  ),
+                                                ))
+                                            : ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                                color: Colors.grey,
-                                                boxShadow: [
-                                                  const BoxShadow(
-                                                      offset: Offset(2, 2),
-                                                      color: Color.fromARGB(
-                                                          31, 0, 0, 0),
-                                                      blurRadius: 2,
-                                                      spreadRadius: 1)
-                                                ]),
-                                            child: Center(
-                                              child: Text(
-                                                widget.product!.productName!
-                                                    .substring(0, 2)
-                                                    .toUpperCase(),
-                                                style: theme
-                                                    .textTheme.headline2!
-                                                    .copyWith(
-                                                        fontSize: 70,
-                                                        color: theme
-                                                            .primaryColorLight),
-                                              ),
-                                            ))
-                                        : ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: Image.memory(
-                                              base64Decode(
-                                                  widget.product!.imageb64!),
-                                              width: width * 0.45,
-                                              height: height * 0.25,
-                                              fit: BoxFit.cover,
+                                                    BorderRadius.circular(20),
+                                                child: Image.memory(
+                                                  base64Decode(
+                                                      widget.product!.imageb64!),
+                                                  width: width * 0.45,
+                                                  height: height * 0.25,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
                                             ),
-                                          )
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                          //color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        width: width * 0.45,
-                                        height: height * 0.25,
-                                        child: Icon(
-                                          Icons.camera_alt,
-                                          color: theme.primaryColorLight,
-                                          size: 30,
-                                        ),
-                                      ),
-                          ),
+                                            width: width * 0.45,
+                                            height: height * 0.25,
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              color: theme.primaryColorLight,
+                                              size: 30,
+                                            ),
+                                          ),
+                              ),
+                            ),
+                          SizedBox(width:width*0.05),
+                         Expanded(
+                           child: Column(children: [
+                            Padding(
+                                                 padding: const EdgeInsets.symmetric(vertical: 10),
+                                                 child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Quantity', style: theme.textTheme.bodyText1),
+                               SizedBox(height:height*0.02),
+                              CounterWidget(
+                                  borderColor: Colors.grey,
+                                  style: theme.textTheme.bodyText1,
+                                  counterController: productQuantity)
+                            ],
+                                                 )),
+                                                 Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Checkbox(                              
+                                    value: isChecked, 
+                                    activeColor: primaryColor,
+                                    onChanged: (val){
+                                    setState(() {
+                                      val = isChecked;
+                                    });
+                                  }),
+                                  //SizedBox(width:width*0.03),
+                                  Text('Low Stock Alert', style: theme.textTheme.bodyText1),
+                                  
+                                ],
+                              ),
+                               Text('Check if you want to receive alerts when this stock is running out', style: theme.textTheme.bodyText1!.copyWith(color:Colors.grey)),
+                            ],
+                                                 )
+                           ],),
+                         )
+                          ],
                         ),
                       ),
                     ),

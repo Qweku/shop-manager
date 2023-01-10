@@ -63,7 +63,7 @@ class _AuthenticationState extends State<Authentication> {
                             Icon(Icons.shop_2, color: theme.primaryColor, size: 30),
                       ),
                       SizedBox(height:height*0.01),
-                      Text('Shop Manager',style: theme.textTheme.headline2,),
+                      Text('ShopMate',style: theme.textTheme.headline2,),
                       SizedBox(height: height * 0.05),
                       AnimatedSwitcher(duration: const Duration(milliseconds: 700),
                       child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),

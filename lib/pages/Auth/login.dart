@@ -12,6 +12,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
 import 'package:shop_manager/pages/dashboard.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function? toggleScreen;
@@ -73,12 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: Text(
-                "WELCOME BACK",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: theme.primaryColor),
-              ),
+                "Welcome back",
+                style: theme.textTheme.headline2!.copyWith(color:primaryColor))
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: height * 0.02),

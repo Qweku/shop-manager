@@ -63,12 +63,12 @@ class _SignUpState extends State<SignUp> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: Text(
-                    "Create an Account",
+                    "Create an account",
                     style: theme.textTheme.headline1!
                         .copyWith(color: theme.primaryColor),
                   ),
