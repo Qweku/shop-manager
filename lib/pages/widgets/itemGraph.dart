@@ -30,10 +30,10 @@ class _ItemGraphState extends State<ItemGraph> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Total Earnings',
-            style: theme.textTheme.bodyText2),
+            style: theme.textTheme.bodyText1!.copyWith(color:Colors.grey)),
           SizedBox(height: height * 0.01),
         Text('GHS 20945.90',
-            style: theme.textTheme.headline2),
+            style: theme.textTheme.headline1),
         SizedBox(height: height * 0.02),
          
        
@@ -69,9 +69,9 @@ class _ItemGraphState extends State<ItemGraph> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     var style = TextStyle(
-      color: Color.fromARGB(255, 255, 255, 255),
+      color: Responsive.isMobile()?Color.fromARGB(255, 255, 255, 255):Color.fromARGB(255, 92, 92, 92),
       fontWeight: FontWeight.bold,
-      fontSize: Responsive.isTablet()?16:12,
+      fontSize: Responsive.isTablet()?14:12,
     );
     Widget text;
     switch (value.toInt()) {
@@ -110,9 +110,9 @@ class _ItemGraphState extends State<ItemGraph> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     var style = TextStyle(
-      color: Color.fromARGB(255, 255, 255, 255),
+      color: Responsive.isMobile()?Color.fromARGB(255, 255, 255, 255):Color.fromARGB(255, 92, 92, 92),
       fontWeight: FontWeight.bold,
-      fontSize: Responsive.isTablet()?16:12,
+      fontSize: Responsive.isTablet()?14:12,
     );
     String text;
     switch (value.toInt()) {
@@ -139,20 +139,21 @@ class _ItemGraphState extends State<ItemGraph> {
     return LineChartData(
       gridData: FlGridData(
         show: true,
-        drawVerticalLine: false,
+        drawVerticalLine: true,
         horizontalInterval: 1,
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
             color: Color.fromARGB(255, 46, 46, 46),
             strokeWidth: 0.5,
-            dashArray: [5,10]
+            dashArray: [2,5]
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: Color.fromARGB(255, 46, 46, 46),
             strokeWidth: 1,
+             dashArray: [2,5]
           );
         },
       ),

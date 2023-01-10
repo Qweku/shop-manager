@@ -49,36 +49,36 @@ class SimpleBarChart extends StatelessWidget {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: (double value, TitleMeta meta) {
-              const style = TextStyle(
-                color: Colors.white,
+              var style = TextStyle(
+                color: Responsive.isMobile()?Colors.white:Color.fromARGB(255, 92, 92, 92),
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               );
               Widget text;
               switch (value.toInt()) {
                 case 0:
-                  text = const Text('Mon', style: style);
+                  text =  Text('Mon', style: style);
                   break;
                 case 1:
-                  text = const Text('Tue', style: style);
+                  text =  Text('Tue', style: style);
                   break;
                 case 2:
-                  text = const Text('Wed', style: style);
+                  text =  Text('Wed', style: style);
                   break;
                 case 3:
-                  text = const Text('Thu', style: style);
+                  text =  Text('Thu', style: style);
                   break;
                 case 4:
-                  text = const Text('Fri', style: style);
+                  text =  Text('Fri', style: style);
                   break;
                 case 5:
-                  text = const Text('Sat', style: style);
+                  text =  Text('Sat', style: style);
                   break;
                 // case 6:
                 //   text = const Text('', style: style);
                 //   break;
                 default:
-                  text = const Text('', style: style);
+                  text =  Text('', style: style);
                   break;
               }
               return Padding(
@@ -96,36 +96,36 @@ class SimpleBarChart extends StatelessWidget {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: (double value, TitleMeta meta) {
-              const style = TextStyle(
-                color: Colors.white,
+              var style = TextStyle(
+                color: Responsive.isMobile()?Colors.white:Color.fromARGB(255, 92, 92, 92),
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               );
               Widget text;
               switch (value.toInt()) {
                 case 0:
-                  text = const Text('230', style: style);
+                  text =  Text('230', style: style);
                   break;
                 case 1:
-                  text = const Text('520', style: style);
+                  text =  Text('520', style: style);
                   break;
                 case 2:
-                  text = const Text('780', style: style);
+                  text =  Text('780', style: style);
                   break;
                 case 3:
-                  text = const Text('800', style: style);
+                  text =  Text('800', style: style);
                   break;
                 case 4:
-                  text = const Text('750', style: style);
+                  text =  Text('750', style: style);
                   break;
                 case 5:
-                  text = const Text('520', style: style);
+                  text =  Text('520', style: style);
                   break;
                 // case 6:
                 //   text = const Text('', style: style);
                 //   break;
                 default:
-                  text = const Text('', style: style);
+                  text =  Text('', style: style);
                   break;
               }
               return Padding(
@@ -155,7 +155,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 11,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color:  Responsive.isMobile()?Colors.white:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -167,7 +167,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 10,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color:  Responsive.isMobile()?Colors.white:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -179,7 +179,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 14,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color:  Responsive.isMobile()?Colors.white:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -191,7 +191,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 15,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color:  Responsive.isMobile()?Colors.white:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -203,7 +203,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 13,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color:  Responsive.isMobile()?Colors.white:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -215,7 +215,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 10,
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: Responsive.isMobile()?Colors.white:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -248,19 +248,19 @@ class ShopBarChartState extends State<ShopBarChart> {
       height:  height * 0.3 ,
       width:  width ,
       decoration: BoxDecoration(
-          color: Responsive.isMobile()?theme.primaryColor:theme.primaryColorDark,
+          color: Responsive.isMobile()?theme.primaryColor:Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(
                 offset: Offset(0, 1),
-                color: Color.fromARGB(255, 47, 48, 121),
+                color: Color.fromARGB(255, 231, 231, 238),
                 blurRadius: 2,
                 spreadRadius: 1),
            
           ]),
       child: Column(
         children: [
-          Text('Total Sales',style: theme.textTheme.headline2,),
+          Text('Total Sales',style: theme.textTheme.headline1,),
           SizedBox(height:height*0.01),
           SizedBox(
             height:  height * 0.3 ,

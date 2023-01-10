@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
               child: Text(
-                "WELCOME",
+                "WELCOME BACK",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 25,

@@ -158,7 +158,7 @@ class _TabletAuthState extends State<TabletAuth> {
                         children: [
                           Text(isToggle?'Welcome,':'Hi, ',style: theme.textTheme.headline2,),
                           SizedBox(height: height * 0.01),
-                          Text(isToggle?'Sign up to get started':'Login to continue from where you left off',style: theme.textTheme.bodyText2,),
+                          Text(isToggle?'Sign up to get started':"We've missed you, login to continue",style: theme.textTheme.bodyText2,),
                           SizedBox(height: height * 0.05),
                           AnimatedSwitcher(duration: const Duration(milliseconds: 700),
                           child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),

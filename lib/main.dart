@@ -61,10 +61,10 @@ class _MyAppState extends State<MyApp> {
           fontFamily: "Montserrat",
           textTheme:  TextTheme(
               headline1:
-                  TextStyle(fontSize: Responsive.isMobile()?20:30, color: Color.fromARGB(255, 0, 0, 0)),
+                  TextStyle(fontSize: Responsive.isMobile()?20:25, color: Color.fromARGB(255, 0, 0, 0)),
               headline2: TextStyle(fontSize: Responsive.isMobile()?20:30, color: Colors.white),
               bodyText1:
-                  TextStyle(fontSize: Responsive.isMobile()?14:20, color: Color.fromARGB(255, 0, 0, 0)),
+                  TextStyle(fontSize: Responsive.isMobile()?14:18, color: Color.fromARGB(255, 0, 0, 0)),
               bodyText2: TextStyle(
                   fontSize: Responsive.isMobile()?14:20, color: Color.fromARGB(255, 255, 255, 255))),
           primarySwatch: Colors.blue,

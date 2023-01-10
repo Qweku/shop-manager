@@ -24,8 +24,8 @@ class _SideMenuState extends State<SideMenu> {
     return Container(
       padding: EdgeInsets.symmetric(vertical:height * 0.05),
       height: height,
-      width: width * 0.2,
-      color: theme.primaryColorDark,
+      width: width * 0.17,
+      color: Colors.white,
       child: Column(
         children: [
           Padding(
@@ -34,17 +34,13 @@ class _SideMenuState extends State<SideMenu> {
                 padding: EdgeInsets.all(width * 0.01),
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Column(children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.shop_2,
-                      color: theme.primaryColor,
-                    ),
+                child: Row(children: [
+                  Icon(
+                    Icons.shop_2,
+                    color: theme.primaryColor,
                   ),
-                  SizedBox(height: 10),
-                  Text('Shop Manager', style: theme.textTheme.bodyText2)
+                  SizedBox(width: 10),
+                  Text('ShopMate',textAlign: TextAlign.center, style: theme.textTheme.bodyText1)
                 ])),
           ),
           Divider(
@@ -68,25 +64,27 @@ class _SideMenuState extends State<SideMenu> {
                         padding: EdgeInsets.all(width * 0.01),
                         //width: width * 0.08,
                         duration: const Duration(milliseconds: 600),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 bottomLeft: Radius.circular(20)),
-                            color: indxBttn == index
-                                ? theme.primaryColor
-                                : theme.primaryColorDark),
+                            ),
                         child: Row(
                           children: [
                             Icon(sideMenu[index]['icon'],
-                                size: 35,
-                                color: Colors.white),
+                                //size: 35,
+                                color: indxBttn == index
+                                ? theme.primaryColor
+                                :Colors.grey),
                             const SizedBox(
                               width: 20,
                             ),
                             Text(
                               sideMenu[index]['menu'],
-                              style: theme.textTheme.bodyText2!.copyWith(
-                                fontSize: 17,
+                              style: theme.textTheme.bodyText1!.copyWith(
+                                fontSize: 17,color:indxBttn == index
+                                ? theme.primaryColor
+                                :Colors.grey
                                 
                               ),
                             )

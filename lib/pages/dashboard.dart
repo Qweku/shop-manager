@@ -300,7 +300,7 @@ class ItemStatus extends StatelessWidget {
               Row(
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(icon, size: Responsive.isMobile()?20:40, color: iconColor),
+                  Icon(icon, size: Responsive.isMobile()?20:30, color: iconColor),
                    const SizedBox(
                 width: 10,
               ),

@@ -88,7 +88,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                   FadeTransition(
                       opacity: _animation2,
                       child: Text(
-                        'Shop Manager',
+                        'ShopMate',
                         style: theme.textTheme.headline2,
                       )),
                 ],

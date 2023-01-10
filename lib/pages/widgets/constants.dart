@@ -10,6 +10,10 @@ List<Map<String, dynamic>> statusList = [
   {'status':'GHS 3.5K','label':'Total Sales','icon':Icons.monetization_on},
   {'status':'GHS 1.2K','label':'Total Expenses','icon':Icons.auto_graph},
   {'status':'5','label':'Low Stock','icon':Icons.arrow_circle_down},
-  {'status':'132','label':'Total Sales','icon':Icons.inventory},
+  {'status':'132','label':'Total Stock','icon':Icons.inventory},
   ];
+
+
+Color primaryColor =  const Color(0xFF0D47A1);
+ Color primaryColorDark = const Color.fromARGB(255, 14, 14, 14);
 
