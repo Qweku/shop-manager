@@ -52,10 +52,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-        title: 'Shop Manager',
+        title: 'ShopMate',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color(0xFF0D47A1),
+          primaryColor: Color.fromARGB(255, 13, 71, 161),
           primaryColorLight: Colors.white,
           primaryColorDark: Color.fromARGB(255, 14, 14, 14),
           fontFamily: "Montserrat",
