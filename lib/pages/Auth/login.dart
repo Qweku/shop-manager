@@ -1,15 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
-import 'package:shop_manager/main.dart';
-import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
@@ -53,6 +54,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController shopController = TextEditingController();
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    shopController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -68,14 +78,24 @@ class _LoginScreenState extends State<LoginScreen> {
             borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: EdgeInsets.only(
-              top: height * 0.05, right: height * 0.03, left: height * 0.03),
+              top: height * 0.03, right: height * 0.03, left: height * 0.03),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 30),
-              child: Text(
-                "Welcome back",
-                style: theme.textTheme.headline2!.copyWith(color:primaryColor))
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Text("Welcome back",
+                    style: theme.textTheme.headline2!
+                        .copyWith(color: primaryColor))),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: height * 0.02),
+              child: CustomTextField(
+                borderColor: theme.primaryColor,
+                hintText: "Shop Name",
+                hintColor: theme.primaryColor,
+                controller: shopController,
+                style: theme.textTheme.bodyText1,
+                prefixIcon: Icon(Icons.shopify, color: theme.primaryColor),
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: height * 0.02),
@@ -128,10 +148,51 @@ class _LoginScreenState extends State<LoginScreen> {
                   textColor: theme.primaryColorLight,
                   buttonText: 'Login',
                   onTap: () async {
+                    // if (shopController.text.isEmpty  ) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //         backgroundColor:
+                    //             const Color.fromARGB(255, 255, 17, 1),
+                    //         content: Text('Shop Name is Empty!',
+                    //             textAlign: TextAlign.center,
+                    //             style: theme.textTheme.bodyText2),
+                    //         duration: const Duration(milliseconds: 1500),
+                    //         behavior: SnackBarBehavior.floating,
+                    //         shape: const StadiumBorder()),
+                    //   );
+
+                    //   return;
+                    // }
+
+                    try {
+
+                    LocalStore()
+                        .retrieve(shopController.text.isEmpty
+                            ? 'demo'
+                            : shopController.text)
+                        .then((value) {
+                           Provider.of<GeneralProvider>(context, listen: false).shop =
+                        shopProductsFromJson(value ?? "");
+                          return  ;
+                        });
+                    // log('1');
+                    // log(shopController.text.isEmpty.toString());
+                    // log("2");
+                    // Provider.of<GeneralProvider>(context, listen: false).shop =
+                    //     shopProductsFromJson();
+                    } on Exception catch (e) {
+                      Provider.of<GeneralProvider>(context, listen: false)
+                              .shop =
+                          ShopProducts(id: 0, shopname: 'demo', products: []);
+                      // log("HEERREE");
+                    }
+
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Responsive.isMobile()?MyHomeScreen():TabletDashboard()));
+                            builder: (context) => Responsive.isMobile()
+                                ? MyHomeScreen()
+                                : TabletDashboard()));
                     // ApplicationState().startLoginFlow();
 
                     //         if (_emailController.text.isEmpty ||

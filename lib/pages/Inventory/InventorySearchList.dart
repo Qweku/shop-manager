@@ -27,11 +27,16 @@ class _InventorySearchListState extends State<InventorySearchList> {
   List<Product> productItems = [];
   List<Product> searchItem(String query) {
     productItems.clear();
-    for (ProductCategory element
-        in Provider.of<GeneralProvider>(context, listen: false).categories) {
-      productItems.addAll(element.products!.where((elements) =>
-          elements.productName!.toLowerCase().contains(query.toLowerCase())));
-    }
+    // for (Product element
+    //     in Provider.of<GeneralProvider>(context, listen: false).inventory) {
+    //   productItems.addAll(element.where((elements) =>
+    //       elements.productName!.toLowerCase().contains(query.toLowerCase())));
+    // }
+    productItems = List.from(Provider.of<GeneralProvider>(context,
+            listen: false)
+        .inventory
+        .where((element) =>
+            element.productName!.toLowerCase().contains(query.toLowerCase())));
     return productItems;
   }
 
@@ -82,11 +87,13 @@ class _InventorySearchListState extends State<InventorySearchList> {
                                                   )));
                                     },
                                     index: index,
-                                    image64: productItems[index].imageb64 ?? "",
+                                    image64:
+                                        productItems[index].productImage ?? "",
                                     productName:
                                         productItems[index].productName,
-                                    quantity:
-                                        productItems[index].quantity.toString(),
+                                    quantity: productItems[index]
+                                        .productQuantity
+                                        .toString(),
                                     price:
                                         "GHS ${productItems[index].sellingPrice.toString()}",
                                   ),
@@ -107,9 +114,11 @@ class _InventorySearchListState extends State<InventorySearchList> {
                                                 )));
                                   },
                                   index: index,
-                                  image64: productItems[index].imageb64 ?? "",
-                                  productName:
-                                      productItems[index].quantity.toString(),
+                                  image64:
+                                      productItems[index].productImage ?? "",
+                                  productName: productItems[index]
+                                      .productQuantity
+                                      .toString(),
                                   price:
                                       "GHS ${productItems[index].sellingPrice.toString()}",
                                 );

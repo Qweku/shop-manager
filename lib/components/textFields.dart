@@ -1,6 +1,7 @@
 //ignore_for_file: file_names, prefer_const_constructors
 //import 'package:country_select/country_select.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
@@ -148,6 +149,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboard;
   final int maxLines;
+  final int? maxLength;
   final Color borderColor;
   final Color color;
   final TextStyle? style;
@@ -159,10 +161,12 @@ class CustomTextField extends StatelessWidget {
   final Color hintColor;
   final bool? readOnly;
   final bool? autoFocus;
+  final List<TextInputFormatter>? inputFormatters;
   const CustomTextField(
       {Key? key,
       this.hintText,
       this.controller,
+      this.maxLength,
       this.keyboard,
       this.maxLines = 1,
       this.borderColor = Colors.transparent,
@@ -175,6 +179,7 @@ class CustomTextField extends StatelessWidget {
       this.hintColor = Colors.grey,
       this.prefixIcon,
       this.onChanged,
+      this.inputFormatters,
       this.autoFocus = false})
       : super(key: key);
 
@@ -188,7 +193,7 @@ class CustomTextField extends StatelessWidget {
           ),
           color: color,
           borderRadius: BorderRadius.circular(20)),
-      child: TextFormField(
+      child: TextField(
         autofocus: autoFocus!,
         obscureText: obscure,
         readOnly: readOnly!,
@@ -197,9 +202,14 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboard,
         controller: controller,
         textAlign: textAlign,
+        maxLength: maxLength,
         style: style,
+        inputFormatters:  
+          inputFormatters  
+         ,
         decoration: InputDecoration(
           hintText: hintText,
+          counterText: '',
           hintStyle: TextStyle(color: hintColor),
           suffixIcon: suffixIcon,
           prefixIcon: prefixIcon,
@@ -311,6 +321,7 @@ class AmountTextField extends StatefulWidget {
   final TextStyle? style;
   final String? hintText;
   final Icon? prefixIcon;
+  final TextInputFormatter inputFormatters;
   // Country? currency;
   final void Function(String text)? onChanged;
   final bool? readOnly;
@@ -324,7 +335,9 @@ class AmountTextField extends StatefulWidget {
       this.style,
       // this.currency,
       this.onChanged,
-      this.prefixIcon, this.hintColor})
+      this.prefixIcon,
+      required this.inputFormatters,
+      this.hintColor})
       : super(key: key);
 
   @override
@@ -356,19 +369,16 @@ class _AmountTextFieldState extends State<AmountTextField> {
         onChanged: widget.onChanged,
         keyboardType: TextInputType.number,
         style: widget.style,
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
         decoration: InputDecoration(
           prefixIcon: widget.prefixIcon,
           border: InputBorder.none,
-          hintText: "GHS 0.00",
+          hintText: widget.hintText ?? "GHS 0.00",
           hintStyle: TextStyle(color: widget.hintColor),
           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15.0),
         ),
         inputFormatters: [
-          CurrencyTextInputFormatter(
-              turnOffGrouping: true,
-              decimalDigits: 2,
-              // locale: 'GH',
-              symbol: "GHS "),
+          widget.inputFormatters,
         ],
       ),
     );

@@ -44,29 +44,36 @@ class _InventoryListState extends State<InventoryList> {
               scrollDirection: Axis.horizontal,
               itemCount: categories.categories.length + 1,
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isSelected = index;
-                    });
-                  },
-                  child: SizedBox(
-                    width: width * 0.27,
-                    child: CategoryCard(
-                      index: index,
-                      selected: isSelected == index ? true : false,
-                      smallFont: 10.0,
-                      largeFont: 20.0,
-                      categoryName:
-                          (index == 0) ? "ALL" : categories.categories[index - 1].categoryName,
-                    ),
-                  ),
-                );
+                return  
+                     GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isSelected = index;
+                          });
+                        },
+                        child: SizedBox(
+                          width: width * 0.27,
+                          child: CategoryCard(
+                            index: index,
+                            selected: isSelected == index ? true : false,
+                            smallFont: 10.0,
+                            largeFont: 20.0,
+                            categoryName: (index == 0)
+                                ? "ALL"
+                                : categories.categories[index - 1].categoryName,
+                          ),
+                        ),
+                      );
               }),
         ),
         ((isSelected == 0)
                 ? categories.inventory.isEmpty
-                : categories.categories[isSelected - 1].products?.isEmpty ?? [].isEmpty)
+                : categories.inventory
+                    .where((element) =>
+                        element.productCategory ==
+                        categories.categories[isSelected - 1]).toSet()
+                    .toList()
+                    .isEmpty)
             ? Center(
                 child: Text(
                   'No Products',
@@ -90,8 +97,12 @@ class _InventoryListState extends State<InventoryList> {
                                       childAspectRatio: 2 / 2.9),
                               itemCount: isSelected == 0
                                   ? categories.inventory.length
-                                  : categories.categories[isSelected - 1]
-                                      .products!.length,
+                                  : categories.inventory
+                                      .where((element) =>
+                                          element.productCategory ==
+                                          categories.categories[isSelected - 1])
+                                      .toList()
+                                      .length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: EdgeInsets.only(
@@ -106,33 +117,54 @@ class _InventoryListState extends State<InventoryList> {
                                                     product: isSelected == 0
                                                         ? categories
                                                             .inventory[index]
-                                                        : categories
-                                                            .categories[
-                                                                isSelected - 1]
-                                                            .products![index],
+                                                        : categories.inventory
+                                                            .where((element) =>
+                                                                element
+                                                                    .productCategory ==
+                                                                categories
+                                                                        .categories[
+                                                                    isSelected -
+                                                                        1])
+                                                            .toList()[index],
                                                   )));
                                     },
                                     index: index,
                                     image64: isSelected == 0
-                                        ? categories
-                                                .inventory[index].imageb64 ??
+                                        ? categories.inventory[index]
+                                                .productImage ??
                                             ""
-                                        : categories.categories[isSelected - 1]
-                                                .products![index].imageb64 ??
+                                        : categories.inventory
+                                                .where((element) =>
+                                                    element.productCategory ==
+                                                    categories.categories[
+                                                        isSelected - 1])
+                                                .toList()[index]
+                                                .productImage ??
                                             "",
                                     productName: isSelected == 0
                                         ? categories
                                             .inventory[index].productName
-                                        : categories.categories[isSelected - 1]
-                                            .products![index].productName,
+                                        : categories.inventory
+                                            .where((element) =>
+                                                element.productCategory ==
+                                                categories
+                                                    .categories[isSelected - 1])
+                                            .toList()[index]
+                                            .productName,
                                     quantity: isSelected == 0
-                                        ? categories.inventory[index].quantity
+                                        ? categories
+                                            .inventory[index].productQuantity
                                             .toString()
-                                        : categories.categories[isSelected - 1]
-                                            .products![index].quantity
+                                        : categories.inventory
+                                            .where((element) =>
+                                                element.productCategory ==
+                                                categories
+                                                    .categories[isSelected - 1])
+                                            .toList()[index]
+                                            .productQuantity
                                             .toString(),
                                     price:
-                                        "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories[isSelected - 1].products![index].sellingPrice.toString()}",
+                                        "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory == categories.categories[isSelected - 1]).toList()[index].sellingPrice.toString()}",
                                   ),
                                 );
                               })
@@ -141,8 +173,12 @@ class _InventoryListState extends State<InventoryList> {
                               padding: EdgeInsets.zero,
                               itemCount: isSelected == 0
                                   ? categories.inventory.length
-                                  : categories.categories[isSelected - 1]
-                                      .products!.length,
+                                  : categories.inventory
+                                      .where((element) =>
+                                          element.productCategory ==
+                                          categories.categories[isSelected - 1])
+                                      .toList()
+                                      .length,
                               itemBuilder: (context, index) {
                                 return ProductListTile(
                                   onTap: () {
@@ -156,23 +192,40 @@ class _InventoryListState extends State<InventoryList> {
                                   },
                                   index: index,
                                   image64: isSelected == 0
-                                      ? categories.inventory[index].imageb64 ??
+                                      ? categories
+                                              .inventory[index].productImage ??
                                           ""
-                                      : categories.categories[isSelected - 1]
-                                              .products![index].imageb64 ??
+                                      : categories.inventory
+                                              .where((element) =>
+                                                  element.productCategory ==
+                                                  categories.categories[
+                                                      isSelected - 1])
+                                              .toList()[index]
+                                              .productImage ??
                                           "",
                                   productName: isSelected == 0
                                       ? categories.inventory[index].productName
-                                      : categories.categories[isSelected - 1]
-                                          .products![index].productName,
+                                      : categories.inventory
+                                          .where((element) =>
+                                              element.productCategory ==
+                                              categories
+                                                  .categories[isSelected - 1])
+                                          .toList()[index]
+                                          .productName,
                                   quantity: isSelected == 0
-                                      ? categories.inventory[index].quantity
+                                      ? categories
+                                          .inventory[index].productQuantity
                                           .toString()
-                                      : categories.categories[isSelected - 1]
-                                          .products![index].quantity
+                                      : categories.inventory
+                                          .where((element) =>
+                                              element.productCategory ==
+                                              categories
+                                                  .categories[isSelected - 1])
+                                          .toList()[index]
+                                          .productQuantity
                                           .toString(),
                                   price:
-                                      "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.categories[isSelected - 1].products![index].sellingPrice.toString()}",
+                                      "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory == categories.categories[isSelected - 1]).toList()[index].sellingPrice.toString()}",
                                 );
                               })),
                 ),

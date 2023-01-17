@@ -7,14 +7,16 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Inventory/productList.dart';
 
-import 'addproduct.dart';
-import 'widgets/clipPath.dart';
-import 'widgets/productCard.dart';
+import '../addproduct.dart';
+import '../widgets/clipPath.dart';
+import '../widgets/productCard.dart';
 
 class ProductListScreen extends StatefulWidget {
-  final int categoryIndex;
-  const ProductListScreen({Key? key, required this.categoryIndex})
-      : super(key: key);
+  // final int categoryIndex;
+  const ProductListScreen({
+    Key? key,
+    /* required this.categoryIndex */
+  }) : super(key: key);
 
   @override
   _ProductListScreenState createState() => _ProductListScreenState();
@@ -76,23 +78,22 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => InventoryProductList(
-                                        category: Provider.of<GeneralProvider>(
+                                   /*      category: Provider.of<GeneralProvider>(
                                                 context,
                                                 listen: false)
-                                            .categories[widget.categoryIndex],
-                                      ))).then((value) {
+                                            .category[widget.categoryIndex], */
+                                      )))/* .then((value) {
                             setState(() {});
                             return;
-                          });
+                          }) */;
                         },
                       ),
                     ),
                   ),
                   Consumer<GeneralProvider>(builder: (builder, state, child) {
                     return Expanded(
-                        child: state.categories[widget.categoryIndex].products
-                                    ?.isEmpty ??
-                                [].isEmpty
+                        child: state.inventory.any((element) =>
+                                !(element.productCategory == state.category))
                             ? Center(
                                 child: Text(
                                   'No Products',
@@ -116,9 +117,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                     childAspectRatio: 2 / 2.9),
                                             itemCount: context
                                                 .watch<GeneralProvider>()
-                                                .categories[
-                                                    widget.categoryIndex]
-                                                .products!
+                                                .inventory
+                                                .where((element) =>
+                                                    element.productCategory ==
+                                                    context
+                                                        .read<GeneralProvider>()
+                                                        .category)
                                                 .length,
                                             itemBuilder: (context, index) {
                                               return Padding(
@@ -133,24 +137,34 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                   onTap: () {
                                                     _bottomDrawSheet(
                                                         context,
-                                                        state
-                                                            .categories[widget
-                                                                .categoryIndex]
-                                                            .products![index]);
+                                                        state.inventory
+                                                            .where((element) =>
+                                                                element
+                                                                    .productCategory ==
+                                                                context
+                                                                    .read<
+                                                                        GeneralProvider>()
+                                                                    .category)
+                                                            .toList()[index]);
                                                   },
                                                   index: index,
-                                                  image64: state
-                                                          .categories[widget
-                                                              .categoryIndex]
-                                                          .products![index]
-                                                          .imageb64 ??
+                                                  image64: state.inventory
+                                                          .where((element) =>
+                                                              element
+                                                                  .productCategory ==
+                                                              context
+                                                                  .read<
+                                                                      GeneralProvider>()
+                                                                  .category)
+                                                          .toList()[index]
+                                                          .productImage ??
                                                       '',
                                                   productName:
-                                                      "${state.categories[widget.categoryIndex].products![index].productName}",
+                                                      "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productName}",
                                                   quantity:
-                                                      "${state.categories[widget.categoryIndex].products![index].quantity}",
+                                                      "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productQuantity}",
                                                   price:
-                                                      "GHS ${state.categories[widget.categoryIndex].products![index].sellingPrice}",
+                                                      "GHS ${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].sellingPrice}",
                                                 ),
                                               );
                                             })
@@ -159,33 +173,47 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             padding: EdgeInsets.zero,
                                             itemCount: context
                                                 .watch<GeneralProvider>()
-                                                .categories[
-                                                    widget.categoryIndex]
-                                                .products!
+                                                .inventory
+                                                .where((element) =>
+                                                    element.productCategory ==
+                                                    context
+                                                        .read<GeneralProvider>()
+                                                        .category)
+                                                .toList()
                                                 .length,
                                             itemBuilder: (context, index) {
                                               return ProductListTile(
                                                 onTap: () {
                                                   _bottomDrawSheet(
                                                       context,
-                                                      state
-                                                          .categories[widget
-                                                              .categoryIndex]
-                                                          .products![index]);
+                                                      state.inventory
+                                                          .where((element) =>
+                                                              element
+                                                                  .productCategory ==
+                                                              context
+                                                                  .read<
+                                                                      GeneralProvider>()
+                                                                  .category)
+                                                          .toList()[index]);
                                                 },
                                                 index: index,
-                                                image64: state
-                                                        .categories[widget
-                                                            .categoryIndex]
-                                                        .products![index]
-                                                        .imageb64 ??
+                                                image64: state.inventory
+                                                        .where((element) =>
+                                                            element
+                                                                .productCategory ==
+                                                            context
+                                                                .read<
+                                                                    GeneralProvider>()
+                                                                .category)
+                                                        .toList()[index]
+                                                        .productImage ??
                                                     '',
                                                 productName:
-                                                    "${state.categories[widget.categoryIndex].products![index].productName}",
+                                                    "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productName}",
                                                 quantity:
-                                                    "${state.categories[widget.categoryIndex].products![index].quantity}",
+                                                    "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productQuantity}",
                                                 price:
-                                                    "GHS ${state.categories[widget.categoryIndex].products![index].sellingPrice}",
+                                                    "GHS ${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].sellingPrice}",
                                               );
                                             })),
                               ));
@@ -226,9 +254,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 builder: (builder) => AddProductScreen(
                                       toEdit: true,
                                       product: product,
-                                    ))).then((value) {setState(() {
-                                      
-                                    });
+                                    ))).then((value) {
+                          setState(() {});
                           Navigator.pop(context);
                         });
                       },
@@ -247,8 +274,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     GestureDetector(
                       onTap: () {
                         Provider.of<GeneralProvider>(context, listen: false)
-                            .removeProductFromCategories(
-                                widget.categoryIndex, product);
+                            .removeFromCategory(
+                                product);
                         Navigator.pop(context);
                       },
                       child: Column(
@@ -299,9 +326,9 @@ class HeaderSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-                Provider.of<GeneralProvider>(context, listen: false)
-                    .categories[widget.categoryIndex]
-                    .categoryName,
+                context.read<GeneralProvider>()
+                    .category
+                    .categoryName!,
                 textAlign: TextAlign.left,
                 style: theme.textTheme.headline2),
             Text(

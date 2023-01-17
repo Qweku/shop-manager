@@ -24,7 +24,7 @@ class ItemDetail extends StatelessWidget {
         leading: CircleAvatar(
           radius: height * 0.03,
           backgroundColor: backgroundColor ?? theme.primaryColorLight,
-          child: (item.imageb64 ?? "").isEmpty
+          child: (item.productImage ?? "").isEmpty
               ? Center(
                   child: Text(
                     item.productName!.substring(0, 2).toUpperCase(),
@@ -38,7 +38,7 @@ class ItemDetail extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(height * 0.1),
                       image: DecorationImage(
-                          image: MemoryImage(base64Decode(item.imageb64!)),
+                          image: MemoryImage(base64Decode(item.productImage!)),
                           fit: BoxFit.cover)),
                 ),
         ),

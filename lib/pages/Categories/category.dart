@@ -1,16 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
-import 'package:shop_manager/pages/categorylist.dart';
+import 'package:shop_manager/pages/Categories/categorylist.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
-import 'widgets/categoryCard.dart';
+import '../widgets/categoryCard.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
@@ -21,8 +21,15 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   final categoryName = TextEditingController();
+  final categoryDescription = TextEditingController();
 
   bool isV = false;
+  @override
+  void dispose() {
+    categoryDescription.dispose();
+    categoryName.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,13 +99,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               child: CategoryCard(
                                 index: index,
                                 onTap: () {
+                                  context.read<GeneralProvider>().category =
+                                      categories[index];
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               ProductListScreen(
-                                                categoryIndex: index,
-                                              )));
+                                                  // categoryIndex: index,
+                                                  )));
                                 },
                                 smallFont: 20.0,
                                 largeFont: 50.0,
@@ -244,16 +253,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       return;
                     }
                     // context.watch<GeneralProvider>().categories =
-                    Provider.of<GeneralProvider>(context, listen: false)
-                        .categories
-                        .add(ProductCategory(
-                          categoryName.text,
-                        ));
-                    var categoryBox = Hive.box<ProductCategory>('Category');
+                    // Provider.of<GeneralProvider>(context, listen: false)
+                    //     .categories
+                    //     .add(ProductCategory(
+                    //       categoryName.text,
+                    //     ));
+                    // var categoryBox = Hive.box<ProductCategory>('Category');
 
-                    await categoryBox.add(ProductCategory(
-                      categoryName.text,
-                    ));
+                    // await categoryBox.add(ProductCategory(
+                    //   categoryName.text,
+                    // ));
 
                     categoryName.clear();
                     Navigator.pop(context);
@@ -278,6 +287,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
     showDialog(
         context: context,
         builder: ((context) {
+          if (edit) {
+            categoryName.text = productCategory!.categoryName!;
+            categoryDescription.text = productCategory.categoryDescription!;
+          }
           return AlertDialog(
             backgroundColor: theme.primaryColor,
             title: !edit
@@ -287,21 +300,38 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 : Text("Edit Category",
                     style: theme.textTheme.headline2!
                         .copyWith(color: Colors.white)),
-            content: CustomTextField(
-                controller: categoryName,
-                hintText:
-                    edit ? productCategory!.categoryName : 'Category Name',
-                hintColor: Colors.white,
-                borderColor: Colors.white,
-                prefixIcon: Icon(Icons.add_box, color: Colors.white, size: 20),
-                style: theme.textTheme.bodyText2),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomTextField(
+                    controller: categoryName,
+                    hintText:
+                        edit ? productCategory!.categoryName : 'Category Name',
+                    hintColor: Colors.white,
+                    borderColor: Colors.white,
+                    prefixIcon:
+                        Icon(Icons.add_box, color: Colors.white, size: 20),
+                    style: theme.textTheme.bodyText2),
+                CustomTextField(
+                    controller: categoryDescription,
+                    hintText: edit
+                        ? productCategory!.categoryDescription
+                        : 'Category Description',
+                    hintColor: Colors.white,
+                    borderColor: Colors.white,
+                    maxLines: 5,
+                    // prefixIcon:
+                    //     Icon(Icons.add_box, color: Colors.white, size: 20),
+                    style: theme.textTheme.bodyText2),
+              ],
+            ),
             actionsAlignment: MainAxisAlignment.spaceBetween,
             actions: [
               TextButton(
                   style: TextButton.styleFrom(backgroundColor: Colors.white),
                   onPressed: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    var categoryBox = Hive.box<ProductCategory>('Category');
+                    // var categoryBox = Hive.box<ProductCategory>('Category');
 
                     if (!edit && categoryName.text.isEmpty) {
                       Notifier().toast(
@@ -311,48 +341,51 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
                       return;
                     }
-
-                    if (Provider.of<GeneralProvider>(context, listen: false)
-                        .categories
-                        .any((element) =>
-                            element.categoryName.toLowerCase() ==
-                            categoryName.text.toLowerCase())) {
-                      Notifier().toast(
-                          context: context,
-                          message: 'Name Already Exists!',
-                          color: Color.fromARGB(255, 255, 17, 1));
-
-                      return;
-                    }
+                    //  ProductCategory category = ProductCategory(
+                    //   cid: context.read<GeneralProvider>().categories.last.cid,
+                    //   categoryName: categoryName.text,
+                    //   categoryDescription: categoryDescription.text
+                    // );
 
                     if (edit) {
-                      if (categoryName.text.isNotEmpty) {
-                        Provider.of<GeneralProvider>(context, listen: false)
-                            .categories
-                            .singleWhere(
-                                (element) => element == productCategory!)
-                          ..categoryName = categoryName.text
-                          ..save();
+                      if (categoryName.text.isEmpty) {
+                        ProductCategory category = ProductCategory(
+                            cid: productCategory!.cid,
+                            categoryName: categoryName.text,
+                            categoryDescription: categoryDescription.text);
 
-                        categoryBox.values.singleWhere(
-                            (element) => element == productCategory!)
-                          ..categoryName = categoryName.text
-                          ..save();
+                        context
+                            .read<GeneralProvider>()
+                            .editCategory(productCategory);
                       }
 
                       categoryName.clear();
                       Navigator.pop(context);
                       return;
                     } else {
-                      Provider.of<GeneralProvider>(context, listen: false)
-                          .categories
-                          .add(ProductCategory(
-                            categoryName.text,
-                          ));
-                      await categoryBox.add(ProductCategory(
-                        categoryName.text,
-                      ));
+                      ProductCategory category = ProductCategory(
+                          cid:
+                              context.read<GeneralProvider>().categories.isEmpty
+                                  ? 1
+                                  : context
+                                          .read<GeneralProvider>()
+                                          .categories
+                                          .last
+                                          .cid +
+                                      1,
+                          categoryName: categoryName.text,
+                          categoryDescription: categoryDescription.text);
+                      if (!context
+                          .read<GeneralProvider>()
+                          .addCategory(category)) {
+                        Notifier().toast(
+                            context: context,
+                            message: 'Name Already Exists!',
+                            color: Color.fromARGB(255, 255, 17, 1));
+                      }
+
                       categoryName.clear();
+                      categoryDescription.clear();
                       Navigator.pop(context);
                       return;
                     }

@@ -5,7 +5,7 @@ import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Auth/Launcher.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -19,11 +19,11 @@ main() async {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   }
-  await Hive.initFlutter();
-  Hive.registerAdapter(ProductAdapter());
-  Hive.registerAdapter(ProductCategoryAdapter());
-  await Hive.openBox<Product>('Product');
-  await Hive.openBox<ProductCategory>('Category');
+  // await Hive.initFlutter();
+  // Hive.registerAdapter(ProductAdapter());
+  // Hive.registerAdapter(ProductCategoryAdapter());
+  // await Hive.openBox<Product>('Product');
+  // await Hive.openBox<ProductCategory>('Category');
 Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => GeneralProvider()),

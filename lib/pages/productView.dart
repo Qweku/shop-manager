@@ -18,14 +18,19 @@ class ProductView extends StatefulWidget {
 }
 
 class _ProductViewState extends State<ProductView> {
-  TextEditingController _counterController = TextEditingController();
+  final TextEditingController _counterController = TextEditingController();
   int counter = 1;
- late var productImage ;
+  late var productImage;
   @override
   void initState() {
-    _counterController.text = widget.product.cartQuantity.toString();
+    _counterController.text =
+        Provider.of<GeneralProvider>(context, listen: false)
+            .cart
+            .firstWhere((element) => element == widget.product,orElse: () => Product(pid: -1,cartQuantity: 1),)
+            .cartQuantity 
+            .toString();
     counter = widget.product.cartQuantity ?? 1;
-     productImage = base64Decode(widget.product.imageb64!);
+    productImage = base64Decode(widget.product.productImage!);
     super.initState();
   }
 
@@ -88,13 +93,12 @@ class _ProductViewState extends State<ProductView> {
                           style: theme.textTheme.bodyText1!
                               .copyWith(fontSize: 12)),
                       SizedBox(height: height * 0.01),
-                      Text("${widget.product.quantity!}",
+                      Text("${widget.product.productQuantity}",
                           style: theme.textTheme.headline1!
                               .copyWith(color: theme.primaryColor)),
                     ],
                   ),
                 ),
-                
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
@@ -175,14 +179,14 @@ class _ProductViewState extends State<ProductView> {
                           padding: EdgeInsets.all(height * 0.01),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: (counter < widget.product.quantity!)
+                              color: (counter < widget.product.productQuantity!)
                                   ? theme.primaryColor
                                   : Colors.blueGrey),
                           child: GestureDetector(
                               onTap: () {
                                 counter =
                                     int.tryParse(_counterController.text)!;
-                                if (counter < widget.product.quantity!) {
+                                if (counter < widget.product.productQuantity!) {
                                   setState(() {
                                     counter++;
                                     widget.product.cartQuantity = counter;
@@ -224,9 +228,7 @@ class _ProductViewState extends State<ProductView> {
               //right: 0,
               //bottom: 0,
               child: ProductAvatar(
-                image: productImage,
-                  product: widget.product,
-                  theme: theme),
+                  image: productImage, product: widget.product, theme: theme),
             ),
           ],
         ),
@@ -244,13 +246,11 @@ class _ProductViewState extends State<ProductView> {
 class ProductAvatar extends StatelessWidget {
   const ProductAvatar({
     Key? key,
- 
     required this.image,
     required this.product,
     required this.theme,
   }) : super(key: key);
 
-   
   final image;
   final Product product;
   final ThemeData theme;
@@ -258,18 +258,18 @@ class ProductAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var image = base64Decode(product.imageb64!);
-      double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Container(
         width: width * 0.45,
         height: height * 0.25,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(height * 0.1),
-            color: (product.imageb64 ?? "").isEmpty
+            color: (product.productImage ?? "").isEmpty
                 ? theme.primaryColor
                 : theme.primaryColorLight,
             border: Border.all(color: theme.primaryColorLight, width: 3)),
-        child: (product.imageb64 ?? "").isEmpty
+        child: (product.productImage ?? "").isEmpty
             ? Center(
                 child: Text(
                   product.productName!.substring(0, 2).toUpperCase(),

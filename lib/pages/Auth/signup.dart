@@ -1,8 +1,15 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/main.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
+import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/models/localStore.dart';
+import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
+import 'package:shop_manager/pages/dashboard.dart';
 
 class SignUp extends StatefulWidget {
   final Function? toggleScreen;
@@ -40,6 +47,7 @@ class _SignUpState extends State<SignUp> {
         });
   }
 
+  final TextEditingController shopController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -50,7 +58,7 @@ class _SignUpState extends State<SignUp> {
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return AnimatedContainer(
-        padding: EdgeInsets.only(bottom:height*0.03),
+        padding: EdgeInsets.only(bottom: height * 0.03),
         duration: const Duration(milliseconds: 700),
         //height: height * 0.6,
         width: width * 0.9,
@@ -59,14 +67,14 @@ class _SignUpState extends State<SignUp> {
             color: theme.primaryColorLight),
         child: Padding(
           padding: EdgeInsets.only(
-              left: height * 0.03, right: height * 0.03, top: height * 0.05),
+              left: height * 0.03, right: height * 0.03, top: height * 0.03),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
+                  padding: const EdgeInsets.only(bottom: 15),
                   child: Text(
                     "Create an account",
                     style: theme.textTheme.headline1!
@@ -74,7 +82,19 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: height * 0.02),
+                  padding: EdgeInsets.symmetric(vertical: height * 0.015),
+                  child: CustomTextField(
+                    controller: shopController,
+                    borderColor: theme.primaryColor,
+                    hintText: "Shop Name",
+                    hintColor: theme.primaryColor,
+                    style: theme.textTheme.bodyText2!
+                        .copyWith(color: theme.primaryColor),
+                    prefixIcon: Icon(Icons.shopify, color: theme.primaryColor),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: height * 0.015),
                   child: CustomTextField(
                     controller: _emailController,
                     borderColor: theme.primaryColor,
@@ -86,7 +106,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: height * 0.02),
+                  padding: EdgeInsets.symmetric(vertical: height * 0.015),
                   child: CustomTextField(
                     controller: _passwordController,
                     maxLines: 1,
@@ -118,7 +138,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: height * 0.02),
+                  padding: EdgeInsets.symmetric(vertical: height * 0.015),
                   child: CustomTextField(
                     controller: _confirmPasswordController,
                     maxLines: 1,
@@ -154,6 +174,22 @@ class _SignUpState extends State<SignUp> {
                         top: height * 0.04, bottom: height * 0.01),
                     child: Button(
                       onTap: () async {
+                        if (shopController.text.isEmpty ||
+                            shopController.text.length < 4) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 255, 17, 1),
+                                content: Text('Shop Name is Empty!',
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.bodyText2),
+                                duration: const Duration(milliseconds: 1500),
+                                behavior: SnackBarBehavior.floating,
+                                shape: const StadiumBorder()),
+                          );
+
+                          return;
+                        }
                         if (_emailController.text.isEmpty ||
                             _emailController.text.length < 4) {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -168,8 +204,9 @@ class _SignUpState extends State<SignUp> {
                                 shape: const StadiumBorder()),
                           );
 
-                          return null;
-                        } else if (_passwordController.text.isEmpty ||
+                          return;
+                        }
+                        if (_passwordController.text.isEmpty ||
                             _passwordController.text.length < 4) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -184,8 +221,9 @@ class _SignUpState extends State<SignUp> {
                                 shape: const StadiumBorder()),
                           );
 
-                          return null;
-                        } else if (_passwordController.text !=
+                          return;
+                        }
+                        if (_passwordController.text !=
                             _confirmPasswordController.text) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -199,26 +237,38 @@ class _SignUpState extends State<SignUp> {
                                 shape: const StadiumBorder()),
                           );
 
-                          return null;
-                        } else {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => Center(
-                                      child: CircularProgressIndicator(
-                                    color: theme.primaryColorLight,
-                                  )));
-                          await ApplicationState()
-                              .registerAccount(
-                                  _emailController.text.trim(),
-                                  _emailController.text.trim(),
-                                  _passwordController.text.trim(),
-                                  (e) => _loginError(e))
-                              .onError((error, stackTrace) => null);
-                               navigatorKey.currentState!.pop((route)=>route);
+                          return;
                         }
 
-                       
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => Center(
+                                    child: CircularProgressIndicator(
+                                  color: theme.primaryColorLight,
+                                )));
+
+                        ShopProducts shop = ShopProducts(
+                            id: 0, shopname: shopController.text, products: []);
+
+                        LocalStore().store(
+                            shopController.text, shopProductsToJson(shop));
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Responsive.isMobile()
+                                    ? MyHomeScreen()
+                                    : TabletDashboard()),
+                            (route) => false);
+
+                        // await ApplicationState()
+                        //     .registerAccount(
+                        //         _emailController.text.trim(),
+                        //         _emailController.text.trim(),
+                        //         _passwordController.text.trim(),
+                        //         (e) => _loginError(e))
+                        //     .onError((error, stackTrace) => null);
+                        // navigatorKey.currentState!.pop((route) => route);
                       },
                       color: theme.primaryColor,
                       buttonText: "Signup",

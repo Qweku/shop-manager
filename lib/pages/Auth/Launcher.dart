@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
 import 'package:shop_manager/pages/wrapper.dart';

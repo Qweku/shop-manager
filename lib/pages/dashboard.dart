@@ -1,17 +1,17 @@
 // ignore_for_file: prefer_is_not_empty
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+// import 'package:hive_flutter/adapters.dart';
 import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
-import 'package:shop_manager/config/colors.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
-import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
@@ -19,7 +19,7 @@ import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
 
 import 'addproduct.dart';
-import 'category.dart';
+import 'Categories/category.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
@@ -30,17 +30,23 @@ class MyHomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget? _content;
-
+  LocalStore localStore = LocalStore();
   @override
   void initState() {
-    var productBox = Hive.box<Product>('Product');
-    var categoryBox = Hive.box<ProductCategory>('Category');
-    HiveFunctions().reArrangeCategory();
-
+    // var productBox = Hive.box<Product>('Product');
+    // var categoryBox = Hive.box<ProductCategory>('Category');
+    // HiveFunctions().reArrangeCategory();
+    log('5');
     Provider.of<GeneralProvider>(context, listen: false).inventory =
-        List.from(productBox.values);
+        Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Provider.of<GeneralProvider>(context, listen: false).categories =
-        List.from(categoryBox.values.toList());
+        Provider.of<GeneralProvider>(context, listen: false)
+            .inventory
+            .map((e) => e.productCategory!)
+            .toSet()
+            .toList();
+    log('6');
+
     _content = const Dashboard();
     super.initState();
   }
@@ -140,9 +146,7 @@ class _DashboardState extends State<Dashboard> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: theme.primaryColor,
-          actions: [
-            const NotificationIconButton(quantity: 1)
-          ],
+          actions: [const NotificationIconButton(quantity: 1)],
         ),
         drawer: const DrawerWidget(),
         backgroundColor: theme.primaryColorLight,
@@ -177,79 +181,81 @@ class _DashboardState extends State<Dashboard> {
                     SizedBox(
                         // height: height * 0.23,
                         child: Column(
-                          children: [
-                            Text('Total Earnings',
-                                style: theme.textTheme.bodyText2),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'GHS 20945.90',
-                              style: theme.textTheme.headline2!
-                                  .copyWith(fontSize: 25),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(
-                                  period.length,
-                                  (index) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              tap = index;
-                                            });
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(10),
-                                            width: width * 0.15,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.white),
-                                              color: tap == index
-                                                  ? Colors.white
-                                                  : Colors.transparent,
-                                            ),
-                                            child: Text(
-                                              period[index],
-                                              textAlign: TextAlign.center,
-                                              style: theme.textTheme.bodyText2!
-                                                  .copyWith(
-                                                      color: tap == index
-                                                          ? theme.primaryColor
-                                                          : Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      )),
-                            )
-                          ],
-                        )),
-                        Padding(
-                          padding:  EdgeInsets.symmetric(vertical: height*0.03),
-                          child:  const ShopBarChart(),
+                      children: [
+                        Text('Total Earnings',
+                            style: theme.textTheme.bodyText2),
+                        const SizedBox(
+                          height: 8,
                         ),
+                        Text(
+                          'GHS 20945.90',
+                          style:
+                              theme.textTheme.headline2!.copyWith(fontSize: 25),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                              period.length,
+                              (index) => Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          tap = index;
+                                        });
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        width: width * 0.15,
+                                        decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.white),
+                                          color: tap == index
+                                              ? Colors.white
+                                              : Colors.transparent,
+                                        ),
+                                        child: Text(
+                                          period[index],
+                                          textAlign: TextAlign.center,
+                                          style: theme.textTheme.bodyText2!
+                                              .copyWith(
+                                                  color: tap == index
+                                                      ? theme.primaryColor
+                                                      : Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                        )
+                      ],
+                    )),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: height * 0.03),
+                      child: const ShopBarChart(),
+                    ),
                     Expanded(
                         // height: height * 0.53,
                         child: GridView.count(
-                          physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 20,
-                      childAspectRatio: 1.7,
-                      children: List.generate(statusList.length, (index) => 
-                      ItemStatus(
-                         status: statusList[index]['status'],
-                          label: statusList[index]['label'],
-                          icon: statusList[index]['icon'],
-                          menuColor: theme.primaryColor,
-                          iconColor: theme.primaryColorLight,
-                        ),))),
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 1.7,
+                            children: List.generate(
+                              statusList.length,
+                              (index) => ItemStatus(
+                                status: statusList[index]['status'],
+                                label: statusList[index]['label'],
+                                icon: statusList[index]['icon'],
+                                menuColor: theme.primaryColor,
+                                iconColor: theme.primaryColorLight,
+                              ),
+                            ))),
                   ],
                 ),
               ),
@@ -262,7 +268,7 @@ class _DashboardState extends State<Dashboard> {
 class ItemStatus extends StatelessWidget {
   final Function()? onTap;
   final Color menuColor, iconColor;
-  final String label,status;
+  final String label, status;
   final IconData icon;
   const ItemStatus({
     Key? key,
@@ -270,7 +276,8 @@ class ItemStatus extends StatelessWidget {
     required this.menuColor,
     required this.iconColor,
     required this.label,
-    required this.icon, required this.status,
+    required this.icon,
+    required this.status,
   }) : super(key: key);
 
   @override
@@ -279,19 +286,18 @@ class ItemStatus extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: menuColor,
-              ),
+            borderRadius: BorderRadius.circular(20),
+            color: menuColor,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 status,
-                style: theme.textTheme.headline1!
-                    .copyWith(color: iconColor),
+                style: theme.textTheme.headline1!.copyWith(color: iconColor),
               ),
               const SizedBox(
                 height: 10,
@@ -299,11 +305,14 @@ class ItemStatus extends StatelessWidget {
               Row(
                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(icon, size: Responsive.isMobile()?20:30, color: iconColor),
-                   const SizedBox(
-                width: 10,
-              ),
-                  Text(label, style: theme.textTheme.bodyText1!.copyWith(color:iconColor)),
+                  Icon(icon,
+                      size: Responsive.isMobile() ? 20 : 30, color: iconColor),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(label,
+                      style: theme.textTheme.bodyText1!
+                          .copyWith(color: iconColor)),
                 ],
               ),
             ],

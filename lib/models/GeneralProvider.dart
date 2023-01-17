@@ -2,20 +2,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:shop_manager/models/SharedPreferences.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/models/localStore.dart';
+
+LocalStore storage = LocalStore();
 
 class GeneralProvider extends ChangeNotifier {
-  Shop _shop = Shop();
-  ProductCategory _category = ProductCategory('Uncategorised');
-  Product _product = Product();
+  ShopProducts _shop = ShopProducts(id: 0,shopname: 'demo', products: []);
+  ProductCategory _category = ProductCategory(cid: -1);
+  Product _product = Product(pid: -1);
   List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
   List<Product> _cart = [];
 
-  Shop get shop {
-    _shop.productCategory = categories;
-    return _shop;
-  }
+  ShopProducts get shop => _shop;
 
   Product get product => _product;
   ProductCategory get category => _category;
@@ -31,7 +32,7 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set shop(Shop currentShop) {
+  set shop(ShopProducts currentShop) {
     _shop = currentShop;
     notifyListeners();
   }
@@ -72,24 +73,47 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeProductFromCategories(int cartegoryIndex, Product product) {
-    categories[cartegoryIndex].products!.remove(product);
-    categoryBox.values
-        .singleWhere(((element) => element == categories[cartegoryIndex]))
-      ..products!.remove(product)
-      ..save();
-    productBox.values.singleWhere(((element) => element == product))
-      ..itemcategory = 'Uncategorised'
-      ..save();
-    inventory.singleWhere(((element) => element == product)).itemcategory =
-        'Uncategorised';
-
-    notifyListeners();
+  Future<void> saveToShop(List<Product> products) async {
+    _shop.products = products;
+    // notifyListeners();
+    storage.store(_shop.shopname ?? 'demo', shopProductsToJson(_shop));
   }
 
   void addToCart(Product product) {
     cart.add(product);
     notifyListeners();
+  }
+
+  bool addCategory(ProductCategory newCategory) {
+    if (_categories.any((element) =>
+        element.categoryName!.toLowerCase() ==
+        newCategory.categoryName!.toLowerCase())) {
+      return false;
+    }
+    _categories.add(newCategory);
+    notifyListeners();
+    return true;
+  }
+
+  bool editCategory(ProductCategory newCategory) {
+    if (!_categories.any((element) => element.cid == newCategory.cid)) {
+      return false;
+    }
+    _categories.any((element) {
+      if (element.cid == newCategory.cid) {
+        element.categoryName = newCategory.categoryName;
+        element.categoryDescription = newCategory.categoryDescription;
+        for (var elements in _inventory) {
+          if (elements.productCategory!.cid == newCategory.cid) {
+            elements.productCategory = newCategory;
+          }
+        }
+      }
+      return true;
+    });
+    notifyListeners();
+    saveToShop(_inventory);
+    return true;
   }
 
   void removeFromCart(int index) {
@@ -98,63 +122,85 @@ class GeneralProvider extends ChangeNotifier {
   }
 
   void removeFromCategory(Product product) {
-    category.products!.remove(product);
+    _inventory.singleWhere((element) => element == product).productCategory =
+        ProductCategory(cid: 0);
+    saveToShop(_inventory);
     notifyListeners();
   }
 
-  void addToCategory(Product product) {
-    category.products!.add(product);
+  void deleteProduct(Product product) {
+    _inventory.remove(product);
     notifyListeners();
+    saveToShop(_inventory);
   }
 
-  var productBox = Hive.box<Product>('Product');
-  var categoryBox = Hive.box<ProductCategory>('Category');
-
-  void saveToCategory(ProductCategory selectedCategory) {
-    categories.singleWhere(
-        (element) => element.categoryName == selectedCategory.categoryName)
-      ..products = HiveList(productBox)
-      //     ;
-      // categories
-      //     .singleWhere((element) => element == selectedCategory)
-      ..products!.addAll(productBox.values.where((value) =>
-          value.itemcategory!.toLowerCase() ==
-          selectedCategory.categoryName.toLowerCase()));
+  void addProduct(Product product) {
+    _inventory.add(product);
+    notifyListeners();
+    saveToShop(_inventory);
   }
 
-  void reArrangeCategory() {
-    for (var category in categories) {
-      saveToCategory(category);
-    }
-    return;
-  }
-}
-
-class HiveFunctions {
-  var productBox = Hive.box<Product>('Product');
-  var categoryBox = Hive.box<ProductCategory>('Category');
-
-  void saveToCategory(ProductCategory _selectedCategory) {
-    categoryBox.values.firstWhere(
-        (element) => element.categoryName == _selectedCategory.categoryName)
-      ..products = HiveList(productBox)
-      //     ;
-      // categoryBox.values
-      //     .firstWhere((element) => element.categoryName == _selectedCategory.categoryName)
-      ..products!.addAll(productBox.values.where((value) =>
-          value.itemcategory!.toLowerCase() ==
-          _selectedCategory.categoryName.toLowerCase()))
-      // ;
-      // categoryBox.values
-      //     .firstWhere((element) => element == _selectedCategory)
-      ..save();
-    return;
+  void editProduct(Product product) {
+    _inventory.singleWhere((element) => element.pid == product.pid)
+      ..productCategory = product.productCategory
+      ..productImage = product.productImage
+      ..productName = product.productName
+      ..productQuantity = product.productQuantity
+      ..sellingPrice = product.sellingPrice
+      ..costPrice = product.costPrice;
+    notifyListeners();
+    saveToShop(_inventory);
   }
 
-  void reArrangeCategory() {
-    for (var category in categoryBox.values) {
-      saveToCategory(category);
-    }
-    return;
-  }
+//   var productBox = Hive.box<Product>('Product');
+//   var categoryBox = Hive.box<ProductCategory>('Category');
+
+//   void saveToCategory(ProductCategory selectedCategory) {
+//     categories.singleWhere(
+//         (element) => element.categoryName == selectedCategory.categoryName)
+//       ..products = HiveList(productBox)
+//       //     ;
+//       // categories
+//       //     .singleWhere((element) => element == selectedCategory)
+//       ..products!.addAll(productBox.values.where((value) =>
+//           value.itemcategory!.toLowerCase() ==
+//           selectedCategory.categoryName.toLowerCase()));
+//   }
+
+//   void reArrangeCategory() {
+//     for (var category in categories) {
+//       saveToCategory(category);
+//     }
+//     return;
+//   }
+// }
+
+// class HiveFunctions {
+//   var productBox = Hive.box<Product>('Product');
+//   var categoryBox = Hive.box<ProductCategory>('Category');
+
+//   void saveToCategory(ProductCategory _selectedCategory) {
+//     categoryBox.values.firstWhere(
+//         (element) => element.categoryName == _selectedCategory.categoryName)
+//       ..products = HiveList(productBox)
+//       //     ;
+//       // categoryBox.values
+//       //     .firstWhere((element) => element.categoryName == _selectedCategory.categoryName)
+//       ..products!.addAll(productBox.values.where((value) =>
+//           value.itemcategory!.toLowerCase() ==
+//           _selectedCategory.categoryName.toLowerCase()))
+//       // ;
+//       // categoryBox.values
+//       //     .firstWhere((element) => element == _selectedCategory)
+//       ..save();
+//     return;
+//   }
+
+//   void reArrangeCategory() {
+//     for (var category in categoryBox.values) {
+//       saveToCategory(category);
+//     }
+//     return;
+//   }
+// }
 }

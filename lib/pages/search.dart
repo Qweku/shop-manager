@@ -42,11 +42,11 @@ class Search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<Product> productItems = [];
 
-    productList.where((element) {
-      productItems = List.from(element.products!.where((elements) =>
-          elements.productName!.toLowerCase().contains(query.toLowerCase())));
-      return false;
-    });
+     productItems = List.from(Provider.of<GeneralProvider>(context,
+            listen: false)
+        .inventory
+        .where((element) =>
+            element.productName!.toLowerCase().contains(query.toLowerCase())));
     return (productList.isEmpty)
         ? Center(
             child: const Text("No Data"),
@@ -103,13 +103,11 @@ class _ItemSearchBarState extends State<ItemSearchBar> {
 
   void searchItem(String query) {
     late final List<Product> productItems;
-    productList.where((element) {
-      productItems = element.products!
-          .where((elements) =>
-              elements.productName!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-      return false;
-    });
+    productItems = List.from(Provider.of<GeneralProvider>(context,
+            listen: false)
+        .inventory
+        .where((element) =>
+            element.productName!.toLowerCase().contains(query.toLowerCase())));
     // products!.where((element) {
     //   final titleLower = element.productName!.toLowerCase();
     //   final searchLower = query.toLowerCase();

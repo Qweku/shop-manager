@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_cast, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -10,9 +10,11 @@ import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/productCard.dart';
 
 class InventoryProductList extends StatefulWidget {
-  final ProductCategory category;
-  const InventoryProductList({Key? key, required this.category})
-      : super(key: key);
+  // final ProductCategory category;
+  const InventoryProductList({
+    Key? key,
+    /* required this.category */
+  }) : super(key: key);
 
   @override
   _InventoryProductListState createState() => _InventoryProductListState();
@@ -26,8 +28,8 @@ class _InventoryProductListState extends State<InventoryProductList> {
   List<Product> isSelected = [];
 
   final ScrollController _scrollController = ScrollController();
-  var productBox = Hive.box<Product>('Product');
-  var categoryBox = Hive.box<ProductCategory>('Category');
+  // var productBox = Hive.box<Product>('Product');
+  // var categoryBox = Hive.box<ProductCategory>('Category');
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -139,37 +141,38 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                     .inventory
                                     .forEach((element) async {
                                   if (isSelected.contains(element)) {
-                                    productBox.values
-                                            .singleWhere((elements) =>
-                                                elements == element)
-                                            .itemcategory =
-                                        widget.category.categoryName;
-                                    await productBox.values
-                                        .singleWhere(
-                                            (elements) => elements == element)
-                                        .save();
-                                    element.itemcategory =
-                                        widget.category.categoryName;
-                                    Provider.of<GeneralProvider>(context,
-                                            listen: false)
-                                        .categories
-                                        .singleWhere((element) =>
-                                            element == widget.category)
-                                        .products = HiveList(productBox);
-                                    Provider.of<GeneralProvider>(context,
-                                            listen: false)
-                                        .categories
-                                        .singleWhere((element) =>
-                                            element == widget.category)
-                                        .products!
-                                        .addAll(productBox.values.where(
-                                            (value) =>
-                                                value.itemcategory!
-                                                    .toLowerCase() ==
-                                                widget.category.categoryName
-                                                    .toLowerCase()));
-                                    HiveFunctions()
-                                        .saveToCategory(widget.category);
+                                    // productBox.values
+                                    //         .singleWhere((elements) =>
+                                    //             elements == element)
+                                    //         .itemcategory =
+                                    //     widget.category.categoryName;
+                                    // await productBox.values
+                                    //     .singleWhere(
+                                    //         (elements) => elements == element)
+                                    //     .save();
+                                    element.productCategory = context
+                                        .read<GeneralProvider>()
+                                        .category;
+                                    // Provider.of<GeneralProvider>(context,
+                                    //         listen: false)
+                                    //     .categories
+                                    //     .singleWhere((element) =>
+                                    //         element == widget.category)
+                                    //     .products = HiveList(productBox);
+                                    // Provider.of<GeneralProvider>(context,
+                                    //         listen: false)
+                                    //     .categories
+                                    //     .singleWhere((element) =>
+                                    //         element == widget.category)
+                                    //     .products!
+                                    //     .addAll(productBox.values.where(
+                                    //         (value) =>
+                                    //             value.itemcategory!
+                                    //                 .toLowerCase() ==
+                                    //             widget.category.categoryName
+                                    //                 .toLowerCase()));
+                                    // HiveFunctions()
+                                    //     .saveToCategory(widget.category);
                                     Navigator.pop(context);
                                   }
                                 });
@@ -194,8 +197,7 @@ class _InventoryProductListState extends State<InventoryProductList> {
                   children: [
                     SizedBox(height: height * 0.03),
                     categories.inventory
-                            .where((value) =>
-                                value.itemcategory == 'Uncategorised')
+                            .where((value) => value.productCategory!.cid == 0)
                             .toList()
                             .isEmpty
                         ? Center(
@@ -216,8 +218,7 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                       padding: EdgeInsets.zero,
                                       itemCount: categories.inventory
                                           .where((value) =>
-                                              value.itemcategory ==
-                                              'Uncategorised')
+                                              value.productCategory!.cid == 0)
                                           .length,
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
@@ -229,22 +230,25 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                             if (isSelected.contains(categories
                                                 .inventory
                                                 .where((value) =>
-                                                    value.itemcategory ==
-                                                    'Uncategorised')
+                                                    value
+                                                        .productCategory!.cid ==
+                                                    0)
                                                 .toList()[index])) {
                                               isSelected.removeWhere((element) =>
                                                   element ==
                                                   categories.inventory
                                                       .where((value) =>
-                                                          value.itemcategory ==
-                                                          'Uncategorised')
+                                                          value.productCategory!
+                                                              .cid ==
+                                                          0)
                                                       .toList()[index]);
                                             } else {
                                               isSelected.add(categories
                                                   .inventory
                                                   .where((value) =>
-                                                      value.itemcategory ==
-                                                      'Uncategorised')
+                                                      value.productCategory!
+                                                          .cid ==
+                                                      0)
                                                   .toList()[index]);
                                             }
                                           },
@@ -252,33 +256,37 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                             isSelected: isSelected.contains(
                                                 categories.inventory
                                                     .where((value) =>
-                                                        value.itemcategory ==
-                                                        'Uncategorised')
+                                                        value.productCategory!
+                                                            .cid ==
+                                                        0)
                                                     .toList()[index]),
                                             onTap: () {},
                                             index: index,
                                             image64: categories.inventory
                                                     .where((value) =>
-                                                        value.itemcategory ==
-                                                        'Uncategorised')
+                                                        value.productCategory!
+                                                            .cid ==
+                                                        0)
                                                     .toList()[index]
-                                                    .imageb64 ??
+                                                    .productImage ??
                                                 "",
                                             productName: categories.inventory
                                                 .where((value) =>
-                                                    value.itemcategory ==
-                                                    'Uncategorised')
+                                                    value
+                                                        .productCategory!.cid ==
+                                                    0)
                                                 .toList()[index]
                                                 .productName,
                                             quantity: categories.inventory
                                                 .where((value) =>
-                                                    value.itemcategory ==
-                                                    'Uncategorised')
+                                                    value
+                                                        .productCategory!.cid ==
+                                                    0)
                                                 .toList()[index]
-                                                .quantity
+                                                .productQuantity
                                                 .toString(),
                                             price:
-                                                "GHS ${categories.inventory.where((value) => value.itemcategory == 'Uncategorised').toList()[index].sellingPrice.toString()}",
+                                                "GHS ${categories.inventory.where((value) => value.productCategory!.cid == 0).toList()[index].sellingPrice.toString()}",
                                           ),
                                         );
                                       })),
