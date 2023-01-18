@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
@@ -30,9 +32,8 @@ class _InventoryListState extends State<InventoryList> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    //var categories = context.watch<GeneralProvider>();
-    var categories = context.watch<GeneralProvider>();
-    final theme = Theme.of(context);
+     var categories = context.watch<GeneralProvider>();
+     final theme = Theme.of(context);
     return Column(
       children: [
         SizedBox(height: height * 0.03),
@@ -42,28 +43,30 @@ class _InventoryListState extends State<InventoryList> {
           height: height * 0.12,
           child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: categories.categories.length + 1,
+              itemCount: categories.categories.toSet().toList().length + 1,
               itemBuilder: (context, index) {
-                return  
-                     GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isSelected = index;
-                          });
-                        },
-                        child: SizedBox(
-                          width: width * 0.27,
-                          child: CategoryCard(
-                            index: index,
-                            selected: isSelected == index ? true : false,
-                            smallFont: 10.0,
-                            largeFont: 20.0,
-                            categoryName: (index == 0)
-                                ? "ALL"
-                                : categories.categories[index - 1].categoryName,
-                          ),
-                        ),
-                      );
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isSelected = index;
+                    });
+                  },
+                  child: SizedBox(
+                    width: width * 0.27,
+                    child: CategoryCard(
+                      index: index,
+                      selected: isSelected == index ? true : false,
+                      smallFont: 10.0,
+                      largeFont: 20.0,
+                      categoryName: (index == 0)
+                          ? "ALL"
+                          : categories.categories
+                              .toSet()
+                              .toList()[index - 1]
+                              .categoryName,
+                    ),
+                  ),
+                );
               }),
         ),
         ((isSelected == 0)
@@ -71,7 +74,8 @@ class _InventoryListState extends State<InventoryList> {
                 : categories.inventory
                     .where((element) =>
                         element.productCategory ==
-                        categories.categories[isSelected - 1]).toSet()
+                        categories.categories[isSelected - 1])
+                    .toSet()
                     .toList()
                     .isEmpty)
             ? Center(
@@ -101,6 +105,7 @@ class _InventoryListState extends State<InventoryList> {
                                       .where((element) =>
                                           element.productCategory ==
                                           categories.categories[isSelected - 1])
+                                      .toSet()
                                       .toList()
                                       .length,
                               itemBuilder: (context, index) {

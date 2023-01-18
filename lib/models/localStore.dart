@@ -5,22 +5,27 @@ import 'package:flutter/rendering.dart';
 import 'package:localstorage/localstorage.dart';
 
 class LocalStore {
-  final LocalStorage keep = LocalStorage('shop-mate');
+  final LocalStorage keep = LocalStorage('shop_mate.json');
 
   void store(String key, String value) {
     // log(value);
     // log(key);
     // keep.ready.then((v) => keep.setItem(key, value));
-    keep.setItem(key, value, ((nonEncodable) {
-      log(nonEncodable.toString());
+    keep.setItem(
+      key,
+      value, /* ((nonEncodable) {
+      // log(nonEncodable.toString());
       return value;
-    }));
+    }) */
+    );
+    var x = keep.getItem(key);
+    log("Value: " + x + '\n Key: ' + key);
   }
 
   Future<String?> retrieve(String key) async {
     String item = '';
-
-    log(keep.getItem(key) ?? "more".toString());
+    log('Key: ' + key);
+    log(keep.getItem(key));
     item = await keep.getItem(key) ?? '';
 
     return item;

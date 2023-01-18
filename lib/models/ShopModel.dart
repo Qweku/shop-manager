@@ -156,7 +156,9 @@ import 'dart:developer';
 // }
 
 ShopProducts shopProductsFromJson(String str) {
-  log('Model');
+  log('b');
+  log(str);
+  log('a');
    final jsonData = json.decode(str);
   return ShopProducts.fromJson(jsonData);
 }
@@ -237,17 +239,17 @@ class Product {
         "productQuantity": productQuantity,
         "cartQuantity": cartQuantity,
         "isLowStock": isLowStock,
-        "productCategory": productCategory!.toJson(),
+        "productCategory": productCategory?.toJson(),
       };
 }
 
 class ProductCategory {
-  int cid;
+  int? cid;
   String? categoryName;
   String? categoryDescription;
 
   ProductCategory({
-    required this.cid,
+      this.cid = 0,
     /* required */ this.categoryName = 'Uncategorised',
     this.categoryDescription = 'No Description',
   });

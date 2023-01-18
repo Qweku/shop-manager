@@ -11,6 +11,7 @@ import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
@@ -36,17 +37,25 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     // var productBox = Hive.box<Product>('Product');
     // var categoryBox = Hive.box<ProductCategory>('Category');
     // HiveFunctions().reArrangeCategory();
-    log('5');
+    // log('5');
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Provider.of<GeneralProvider>(context, listen: false).categories =
         Provider.of<GeneralProvider>(context, listen: false)
             .inventory
-            .map((e) => e.productCategory!)
+            .map((e) => e.productCategory ?? ProductCategory(cid: 0))
             .toSet()
             .toList();
-    log('6');
-
+    // log('6');
+    if (Provider.of<GeneralProvider>(context, listen: false)
+        .categories
+        .isEmpty) {
+      Provider.of<GeneralProvider>(context, listen: false).categories.add(
+          ProductCategory(
+              cid: 0,
+              categoryName: "Uncategorised",
+              categoryDescription: 'No Description'));
+    }
     _content = const Dashboard();
     super.initState();
   }

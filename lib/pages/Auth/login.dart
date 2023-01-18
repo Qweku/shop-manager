@@ -164,28 +164,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     //   return;
                     // }
 
-                    try {
-
+                    // try {
                     LocalStore()
                         .retrieve(shopController.text.isEmpty
                             ? 'demo'
                             : shopController.text)
                         .then((value) {
-                           Provider.of<GeneralProvider>(context, listen: false).shop =
-                        shopProductsFromJson(value ?? "");
-                          return  ;
-                        });
+                      if (value!.isEmpty) {
+                        log('empty');
+                        Provider.of<GeneralProvider>(context, listen: false)
+                                .shop =
+                            ShopProducts(id: 0, shopname: 'demo', products: []);
+                      } else {
+                        log('not empty');
+                        Provider.of<GeneralProvider>(context, listen: false)
+                            .shop = shopProductsFromJson(value);
+                      }
+                      return;
+                    });
                     // log('1');
                     // log(shopController.text.isEmpty.toString());
                     // log("2");
                     // Provider.of<GeneralProvider>(context, listen: false).shop =
                     //     shopProductsFromJson();
-                    } on Exception catch (e) {
-                      Provider.of<GeneralProvider>(context, listen: false)
-                              .shop =
-                          ShopProducts(id: 0, shopname: 'demo', products: []);
-                      // log("HEERREE");
-                    }
+                    // } on Exception catch (e) {
+                    //   Provider.of<GeneralProvider>(context, listen: false)
+                    //           .shop =
+                    //       ShopProducts(id: 0, shopname: 'demo', products: []);
+                    //   // log("HEERREE");
+                    // }
 
                     Navigator.pushReplacement(
                         context,

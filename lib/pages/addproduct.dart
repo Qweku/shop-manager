@@ -98,7 +98,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   void initState() {
     categoryList = List.from(
         Provider.of<GeneralProvider>(context, listen: false).categories);
-
+    _selectedCategory = categoryList.first;
     if (widget.toEdit) {
       productName.text = widget.product!.productName!;
       productPrice.text =
@@ -393,7 +393,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   0,
                               productQuantity:
                                   int.tryParse(productQuantity.text) ?? 0,
-                            
                               productImage: imageString,
                               isLowStock: isChecked,
                               productCategory: ProductCategory(
@@ -442,8 +441,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                           .getUnformattedValue()
                                           .toString()) ??
                                       0,
-                                  productCategory: _selectedCategory ??
-                                      ProductCategory(cid: 0),
+                                  productCategory:
+                                      _selectedCategory /*  ??
+                                      ProductCategory(
+                                          cid: 0,
+                                          categoryName: 'Uncategorised',
+                                          categoryDescription:
+                                              'No Description') */
+                                  ,
                                   isLowStock: isChecked,
                                   productQuantity:
                                       int.tryParse(productQuantity.text) ?? 0,

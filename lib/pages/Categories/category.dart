@@ -371,7 +371,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                           .read<GeneralProvider>()
                                           .categories
                                           .last
-                                          .cid +
+                                          .cid! +
                                       1,
                           categoryName: categoryName.text,
                           categoryDescription: categoryDescription.text);
