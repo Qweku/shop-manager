@@ -18,20 +18,24 @@ main() async {
   if (screenWidth >= 800) {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  } else {
+    await SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
   // await Hive.initFlutter();
   // Hive.registerAdapter(ProductAdapter());
   // Hive.registerAdapter(ProductCategoryAdapter());
   // await Hive.openBox<Product>('Product');
   // await Hive.openBox<ProductCategory>('Category');
-Firebase.initializeApp();
+  Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => GeneralProvider()),
     ChangeNotifierProvider(create: (_) => ApplicationState()),
-  ], 
-  child: const MyApp()));
+  ], child: const MyApp()));
 }
+
 final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -51,7 +55,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey,
+        navigatorKey: navigatorKey,
         title: 'Shop Manager',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -59,14 +63,19 @@ class _MyAppState extends State<MyApp> {
           primaryColorLight: Colors.white,
           primaryColorDark: Color.fromARGB(255, 14, 14, 14),
           fontFamily: "Montserrat",
-          textTheme:  TextTheme(
-              headline1:
-                  TextStyle(fontSize: Responsive.isMobile()?20:25, color: Color.fromARGB(255, 0, 0, 0)),
-              headline2: TextStyle(fontSize: Responsive.isMobile()?20:25, color: Colors.white),
-              bodyText1:
-                  TextStyle(fontSize: Responsive.isMobile()?12:18, color: Color.fromARGB(255, 0, 0, 0)),
+          textTheme: TextTheme(
+              headline1: TextStyle(
+                  fontSize: Responsive.isMobile() ? 20 : 25,
+                  color: Color.fromARGB(255, 0, 0, 0)),
+              headline2: TextStyle(
+                  fontSize: Responsive.isMobile() ? 20 : 25,
+                  color: Colors.white),
+              bodyText1: TextStyle(
+                  fontSize: Responsive.isMobile() ? 12 : 18,
+                  color: Color.fromARGB(255, 0, 0, 0)),
               bodyText2: TextStyle(
-                  fontSize: Responsive.isMobile()?12:18, color: Color.fromARGB(255, 255, 255, 255))),
+                  fontSize: Responsive.isMobile() ? 12 : 18,
+                  color: Color.fromARGB(255, 255, 255, 255))),
           primarySwatch: Colors.blue,
         ),
         home: const Launcher()

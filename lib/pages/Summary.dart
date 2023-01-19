@@ -22,6 +22,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
     double height = MediaQuery.of(context).size.height;
     final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
+    if (DateTime.now().month < 10) {
+      month = "0"+month;
+    }
     return Scaffold(
       body: Stack(
         children: [
@@ -57,7 +60,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Balance',
+                            Text('Change',
                                 style: theme.textTheme.headline1!
                                     .copyWith(fontSize: 17)),
                             SizedBox(height: height * 0.01),
@@ -73,11 +76,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           Text(
                             DateTime.now().day < 10
                                 ? "0" + day
-                                : day +
-                                    "-" +
-                                    month +
-                                    "-" +
-                                    year,
+                                : day + "-" + month + "-" + year,
                             style: theme.textTheme.bodyText1,
                           ),
                           Text('#0001', style: theme.textTheme.bodyText1),
@@ -90,8 +89,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         itemBuilder: (context, index) {
                           return ItemDetail(
                               theme: theme,
-                              textColor: Colors.black,
-                              backgroundColor: theme.primaryColor,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 233, 233, 233),
+                              textColor: const Color.fromARGB(255, 26, 26, 26),
                               item: Provider.of<GeneralProvider>(context,
                                       listen: false)
                                   .cart[index]);

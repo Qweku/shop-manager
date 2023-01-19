@@ -45,7 +45,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
           style: theme.textTheme.headline1,
         ),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         centerTitle: true,
       ),
@@ -97,8 +97,8 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                               },
                               child: ItemDetail(
                                   backgroundColor:
-                                      Color.fromARGB(255, 233, 233, 233),
-                                  textColor: Color.fromARGB(255, 26, 26, 26),
+                                      const Color.fromARGB(255, 233, 233, 233),
+                                  textColor: const Color.fromARGB(255, 26, 26, 26),
                                   theme: theme,
                                   item: Provider.of<GeneralProvider>(context,
                                           listen: false)
@@ -113,7 +113,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                     .read<GeneralProvider>()
                                     .removeFromCart(index);
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.delete,
                                 color: Colors.red,
                               ),
@@ -125,66 +125,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   ),
                 ],
               ),
-              // Positioned(
-              //   top: height * 0.08,
-              //   child: Padding(
-              //     padding: EdgeInsets.all(height * 0.03),
-              //     child: Card(
-              //       color: primaryColor,
-              //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              //       elevation: 5,
-              //       child: SizedBox(
-              //         height: height * 0.2,
-
-              //         child: Row(
-              //           children: [
-              //             Center(
-              //               child: Container(
-              //                   height: 50,
-              //                   width: width * 0.43,
-              //                   decoration: const BoxDecoration(),
-              //                   child: Column(
-              //                     children: [
-              //                       Text('Total Amount',
-              //                           style: theme.textTheme.bodyText2),
-              //                       SizedBox(height: height * 0.01),
-              //                       Text(
-              //                         "GHS $totalCost ",
-              //                         textAlign: TextAlign.center,
-              //                         style: theme.textTheme.headline2,
-              //                       ),
-              //                     ],
-              //                   )),
-              //             ),
-              //             Container(
-              //                 height: height * 0.1,
-              //                 width: 1,
-              //                 color: theme.primaryColorLight),
-              //             Center(
-              //               child: Container(
-              //                   height: 50,
-              //                   width: width * 0.43,
-              //                   decoration: const BoxDecoration(),
-              //                   child: Column(
-              //                     children: [
-              //                       Text('Change',
-              //                           style: theme.textTheme.bodyText2),
-              //                       SizedBox(height: height * 0.01),
-              //                       Text(
-              //                         "GHS $balance",
-              //                         textAlign: TextAlign.center,
-              //                         style: theme.textTheme.headline2,
-              //                       ),
-              //                     ],
-              //                   )),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
+            
               Positioned(
                   bottom: 0,
                   right: 0,

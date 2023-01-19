@@ -35,7 +35,7 @@ class ProductCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                height: height * 0.23,
+                height: height * 0.2,
                 width: width ,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),

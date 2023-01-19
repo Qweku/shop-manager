@@ -243,30 +243,35 @@ class ShopBarChartState extends State<ShopBarChart> {
   @override
   Widget build(BuildContext context) {
     var theme=Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(10),
-      height:  Responsive.isMobile()?height * 0.27:height * 0.3 ,
-      width:  width ,
-      decoration: BoxDecoration(
-          color: Responsive.isMobile()?theme.primaryColor:Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-                offset: Offset(0, 1),
-                color: Color.fromARGB(255, 231, 231, 238),
-                blurRadius: 2,
-                spreadRadius: 1),
-           
-          ]),
-      child: Column(
-        children: [
-          Text('Total Sales',style: theme.textTheme.headline1!.copyWith(color:Responsive.isMobile()?Colors.white:Colors.black),),
-          SizedBox(height:height*0.01),
-          SizedBox(
-            height:  Responsive.isMobile()?height * 0.2:height*0.3 ,
-      width:  width ,
-            child: const SimpleBarChart()),
-        ],
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+      color: primaryColor,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        height:  Responsive.isMobile()?height * 0.27:height * 0.3 ,
+        width:  width ,
+        // decoration: BoxDecoration(
+        //     color: Responsive.isMobile()?theme.primaryColor:Colors.white,
+        //     borderRadius: BorderRadius.circular(20),
+        //     boxShadow: const [
+        //       BoxShadow(
+        //           offset: Offset(0, 1),
+        //           color: Color.fromARGB(255, 231, 231, 238),
+        //           blurRadius: 2,
+        //           spreadRadius: 1),
+             
+        //     ]),
+        child: Column(
+          children: [
+            Text('Total Sales',style: theme.textTheme.headline1!.copyWith(color:Responsive.isMobile()?Colors.white:Colors.black),),
+            SizedBox(height:height*0.01),
+            SizedBox(
+              height:  Responsive.isMobile()?height * 0.2:height*0.3 ,
+        width:  width ,
+              child: const SimpleBarChart()),
+          ],
+        ),
       ),
     );
   }

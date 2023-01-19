@@ -184,7 +184,7 @@ class _DashboardState extends State<Dashboard> {
                     right: width * 0.05,
                     left: width * 0.05),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -246,25 +246,24 @@ class _DashboardState extends State<Dashboard> {
                       padding: EdgeInsets.symmetric(vertical: height * 0.03),
                       child: const ShopBarChart(),
                     ),
-                    Expanded(
-                        // height: height * 0.53,
-                        child: GridView.count(
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 1.7,
-                            children: List.generate(
-                              statusList.length,
-                              (index) => ItemStatus(
-                                status: statusList[index]['status'],
-                                label: statusList[index]['label'],
-                                icon: statusList[index]['icon'],
-                                menuColor: theme.primaryColor,
-                                iconColor: theme.primaryColorLight,
-                              ),
-                            ))),
+                    GridView.count(
+                      shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: 1.7,
+                        children: List.generate(
+                          statusList.length,
+                          (index) => ItemStatus(
+                            status: statusList[index]['status'],
+                            label: statusList[index]['label'],
+                            icon: statusList[index]['icon'],
+                            menuColor: theme.primaryColor,
+                            iconColor: theme.primaryColorLight,
+                          ),
+                        )),
                   ],
                 ),
               ),
