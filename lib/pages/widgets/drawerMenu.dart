@@ -1,11 +1,22 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/material.dart';
-import 'package:shop_manager/models/FirebaseApplicationState.dart';
+import 'dart:io';
 
-class DrawerWidget extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shop_manager/models/FirebaseApplicationState.dart';
+import 'package:shop_manager/models/services.dart';
+import 'package:shop_manager/pages/Auth/authentication.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
+
+class DrawerWidget extends StatefulWidget {
   const DrawerWidget({Key? key}) : super(key: key);
 
+  @override
+  State<DrawerWidget> createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -16,23 +27,24 @@ class DrawerWidget extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           SizedBox(
-            height:height*0.3,
+            height: height * 0.3,
             child: DrawerHeader(
-              decoration: BoxDecoration(
-              ),
+              decoration: BoxDecoration(),
               child:
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    CircleAvatar(
-                          backgroundColor: theme.primaryColor,
-                          radius: 30,
-                          child:
-                              Icon(Icons.shop_2, color: theme.primaryColorLight, size: 30),
-                        ),
-                        SizedBox(width:width*0.02),
-                        Text('ShopMate',style: theme.textTheme.headline2!.copyWith(color:theme.primaryColor),),
-                  ]),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                CircleAvatar(
+                  backgroundColor: theme.primaryColor,
+                  radius: 30,
+                  child: Icon(Icons.shopify,
+                      color: theme.primaryColorLight, size: 30),
+                ),
+                SizedBox(width: width * 0.02),
+                Text(
+                  'ShopMate',
+                  style: theme.textTheme.headline2!
+                      .copyWith(color: theme.primaryColor),
+                ),
+              ]),
             ),
           ),
           DrawerItem(
@@ -45,20 +57,55 @@ class DrawerWidget extends StatelessWidget {
             text: 'Settings',
             icon: Icons.settings,
           ),
-        
-         
           DrawerItem(
-            onTap: () {
-              ApplicationState().signOut();
-            },
+            onTap: () => _backButton(context),
             text: 'Logout',
             icon: Icons.logout,
           ),
-          
         ],
       ),
     );
   }
+   _backButton(context) {
+    var theme = Theme.of(context);
+    return showDialog<bool>(
+        context: context,
+        builder: (c) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              content: SizedBox(
+                height: height * 0.1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.warning_amber_outlined,
+                        size: 40, color: Color.fromARGB(255, 255, 38, 23)),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Do you really want to logout?",
+                      style: theme.textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Authentication()));
+                     
+                    },
+                    child: const Text("Yes")),
+                TextButton(
+                    onPressed: () => Navigator.pop(c, false),
+                    child: const Text("No"))
+              ],
+            ));
+  }
+
 }
 
 class DrawerItem extends StatelessWidget {
@@ -68,7 +115,7 @@ class DrawerItem extends StatelessWidget {
   const DrawerItem({
     Key? key,
     required this.text,
-     required this.icon,
+    required this.icon,
     this.onTap,
   }) : super(key: key);
 
@@ -86,4 +133,5 @@ class DrawerItem extends StatelessWidget {
         ),
         onTap: onTap);
   }
-}
+
+ }

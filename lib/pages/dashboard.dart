@@ -64,7 +64,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return WillPopScope(
-      onWillPop: () => _backButton(),
+      onWillPop: () => _backButton(context),
       child: Scaffold(
           // appBar: AppBar(
           //   elevation: 0,
@@ -110,12 +110,30 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     });
   }
 
-  _backButton() {
+  _backButton(context) {
+    var theme = Theme.of(context);
     return showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
-              title: const Text("Warning"),
-              content: const Text("Do you really want to exit?"),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              content: SizedBox(
+                height: height * 0.1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.warning_amber_outlined,
+                        size: 40, color: Color.fromARGB(255, 255, 38, 23)),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Do you really want to exit?",
+                      style: theme.textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+              ),
               actions: [
                 TextButton(
                     onPressed: () async {

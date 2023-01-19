@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:localstorage/localstorage.dart';
 
 class LocalStore {
-  final LocalStorage keep = LocalStorage('shop_mate.json');
+  final LocalStorage keep = LocalStorage('shop_mate');
 
   void store(String key, String value) {
     // log(value);
