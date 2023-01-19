@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class ItemDetail extends StatelessWidget {
   const ItemDetail({
@@ -44,9 +45,9 @@ class ItemDetail extends StatelessWidget {
         ),
         title: Text(item.productName!,
             style: theme.textTheme.bodyText2!
-                .copyWith(color: textColor ?? Colors.white)),
+                .copyWith(color: textColor ?? Colors.white,fontWeight: FontWeight.bold)),
         subtitle: Text("GHS ${item.sellingPrice}",
             style: theme.textTheme.bodyText2!
-                .copyWith(fontSize: 12, color: textColor ?? Colors.white)));
+                .copyWith(fontSize: 15, color: primaryColor)));
   }
 }

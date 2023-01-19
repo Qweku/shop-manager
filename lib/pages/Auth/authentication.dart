@@ -60,7 +60,7 @@ class _AuthenticationState extends State<Authentication> {
                         backgroundColor: theme.primaryColorLight,
                         radius: width * 0.12,
                         child:
-                            Icon(Icons.shop_2, color: theme.primaryColor, size: 30),
+                            Icon(Icons.shopify, color: theme.primaryColor, size: 40),
                       ),
                       SizedBox(height:height*0.01),
                       Text('ShopMate',style: theme.textTheme.headline2,),

@@ -8,6 +8,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/Summary.dart';
 import 'package:shop_manager/pages/productView.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 import 'widgets/productCalculatorWidget.dart';
 
@@ -37,7 +38,17 @@ class _ProductCalculatorState extends State<ProductCalculator> {
     final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: ShopColors.secondaryColor,
+      // backgroundColor: ShopColors.secondaryColor,
+      appBar: AppBar(
+        title: Text(
+          "Basket",
+          style: theme.textTheme.headline1,
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        elevation: 0,
+        centerTitle: true,
+      ),
       body: SafeArea(
         top: false,
         child: SizedBox(
@@ -48,23 +59,23 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ClipPath(
-                    clipper: BottomClipper(),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          right: height * 0.02,
-                          left: height * 0.02,
-                          top: height * 0.13,
-                          bottom: height * 0.07),
-                      color: theme.primaryColorLight,
-                      width: width,
-                    ),
-                  ),
+                  // ClipPath(
+                  //   clipper: BottomClipper(),
+                  //   child: Container(
+                  //     padding: EdgeInsets.only(
+                  //         right: height * 0.02,
+                  //         left: height * 0.02,
+                  //         top: height * 0.13,
+                  //         bottom: height * 0.07),
+                  //     color: theme.primaryColorLight,
+                  //     width: width,
+                  //   ),
+                  // ),
                   SizedBox(
                     //height: height * 0.6,
                     child: ListView.builder(
                       shrinkWrap: true,
-                      padding: EdgeInsets.only(top: height * 0.15),
+                      padding: EdgeInsets.only(top: height * 0.03),
                       itemCount: context.watch<GeneralProvider>().cart.length,
                       itemBuilder: (context, index) => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,6 +96,9 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                                     (value) => setState(() {}));
                               },
                               child: ItemDetail(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 233, 233, 233),
+                                  textColor: Color.fromARGB(255, 26, 26, 26),
                                   theme: theme,
                                   item: Provider.of<GeneralProvider>(context,
                                           listen: false)
@@ -101,7 +115,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                               },
                               icon: Icon(
                                 Icons.delete,
-                                color: theme.primaryColorLight,
+                                color: Colors.red,
                               ),
                             ),
                           )
@@ -111,107 +125,112 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   ),
                 ],
               ),
-              Positioned(
-                top: height * 0.08,
-                child: Padding(
-                  padding: EdgeInsets.all(height * 0.03),
-                  child: Container(
-                    height: height * 0.2,
-                    decoration: BoxDecoration(
-                        color: theme.primaryColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                              offset: Offset(2, 2),
-                              color: Colors.black,
-                              blurRadius: 3,
-                              spreadRadius: 1)
-                        ]),
-                    child: Row(
-                      children: [
-                        Center(
-                          child: Container(
-                              height: 50,
-                              width: width * 0.43,
-                              decoration: const BoxDecoration(),
-                              child: Column(
-                                children: [
-                                  Text('Total Amount',
-                                      style: theme.textTheme.bodyText2),
-                                  SizedBox(height: height * 0.01),
-                                  Text(
-                                    "GHS $totalCost ",
-                                    textAlign: TextAlign.center,
-                                    style: theme.textTheme.headline2,
-                                  ),
-                                ],
-                              )),
-                        ),
-                        Container(
-                            height: height * 0.1,
-                            width: 1,
-                            color: theme.primaryColorLight),
-                        Center(
-                          child: Container(
-                              height: 50,
-                              width: width * 0.43,
-                              decoration: const BoxDecoration(),
-                              child: Column(
-                                children: [
-                                  Text('Balance',
-                                      style: theme.textTheme.bodyText2),
-                                  SizedBox(height: height * 0.01),
-                                  Text(
-                                    "GHS $balance",
-                                    textAlign: TextAlign.center,
-                                    style: theme.textTheme.headline2,
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   top: height * 0.08,
+              //   child: Padding(
+              //     padding: EdgeInsets.all(height * 0.03),
+              //     child: Card(
+              //       color: primaryColor,
+              //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              //       elevation: 5,
+              //       child: SizedBox(
+              //         height: height * 0.2,
+
+              //         child: Row(
+              //           children: [
+              //             Center(
+              //               child: Container(
+              //                   height: 50,
+              //                   width: width * 0.43,
+              //                   decoration: const BoxDecoration(),
+              //                   child: Column(
+              //                     children: [
+              //                       Text('Total Amount',
+              //                           style: theme.textTheme.bodyText2),
+              //                       SizedBox(height: height * 0.01),
+              //                       Text(
+              //                         "GHS $totalCost ",
+              //                         textAlign: TextAlign.center,
+              //                         style: theme.textTheme.headline2,
+              //                       ),
+              //                     ],
+              //                   )),
+              //             ),
+              //             Container(
+              //                 height: height * 0.1,
+              //                 width: 1,
+              //                 color: theme.primaryColorLight),
+              //             Center(
+              //               child: Container(
+              //                   height: 50,
+              //                   width: width * 0.43,
+              //                   decoration: const BoxDecoration(),
+              //                   child: Column(
+              //                     children: [
+              //                       Text('Change',
+              //                           style: theme.textTheme.bodyText2),
+              //                       SizedBox(height: height * 0.01),
+              //                       Text(
+              //                         "GHS $balance",
+              //                         textAlign: TextAlign.center,
+              //                         style: theme.textTheme.headline2,
+              //                       ),
+              //                     ],
+              //                   )),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
               Positioned(
                   bottom: 0,
                   right: 0,
                   left: 0,
-                  child: Container(
-                    color: theme.primaryColor,
-                    padding: EdgeInsets.all(height * 0.03),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Button(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          buttonText: 'Cancel',
-                          borderColor: theme.primaryColorLight,
-                          textColor: theme.primaryColorLight,
-                          width: width * 0.4,
-                          shadowColor: Colors.transparent,
-                        ),
-                        Button(
-                          onTap: () {
-                            if (!isDone) {
-                              _bottomDrawSheet(context);
-                            } else {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (builder) =>
-                                          const SummaryScreen()));
-                            }
-                          },
-                          buttonText: isDone ? 'Done' : 'Proceed',
-                          color: theme.primaryColorLight,
-                          textColor: theme.primaryColor,
-                          width: width * 0.4,
-                        ),
-                      ],
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    child: Container(
+                      color: theme.primaryColor,
+                      padding: EdgeInsets.all(height * 0.03),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Total Amount',
+                                  style: theme.textTheme.bodyText2),
+                              SizedBox(height: height * 0.01),
+                              Text(
+                                "GHS $totalCost ",
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.headline2,
+                              ),
+                            ],
+                          ),
+                          Button(
+                            onTap: () {
+                              if (!isDone) {
+                                _bottomDrawSheet(context);
+                              } else {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) =>
+                                            const SummaryScreen()));
+                              }
+                            },
+                            buttonText: isDone ? 'Done' : 'Proceed',
+                            color: theme.primaryColorLight,
+                            textColor: theme.primaryColor,
+                            width: width * 0.4,
+                          ),
+                        ],
+                      ),
                     ),
                   ))
             ],
@@ -235,8 +254,8 @@ class _ProductCalculatorState extends State<ProductCalculator> {
         builder: (BuildContext bc) {
           return Container(
             padding: EdgeInsets.all(height * 0.02),
-            child: Wrap(
-              spacing: 20,
+            child: Column(
+              // spacing: 20,
               children: <Widget>[
                 SizedBox(height: height * 0.02),
                 Padding(
@@ -265,7 +284,19 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                           color: Colors.white, size: 20),
                       style: theme.textTheme.bodyText2),
                 ),
-                SizedBox(height: height * 0.04),
+                SizedBox(height: height * 0.03),
+                Column(
+                  children: [
+                    Text('Change', style: theme.textTheme.bodyText2),
+                    SizedBox(height: height * 0.01),
+                    Text(
+                      "GHS $balance",
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.headline2,
+                    ),
+                  ],
+                ),
+                SizedBox(height: height * 0.045),
                 Button(
                   color: theme.primaryColorLight,
                   textColor: theme.primaryColor,
@@ -277,7 +308,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                     Navigator.pop(context);
                   },
                 ),
-                SizedBox(height: height * 0.4),
+                
               ],
             ),
           );

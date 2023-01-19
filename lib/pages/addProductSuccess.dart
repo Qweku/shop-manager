@@ -37,25 +37,32 @@ class _AddProductSuccessState extends State<AddProductSuccess> {
       body: SizedBox(
         height: height,
         width: width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: theme.primaryColor,
-              child: const Icon(Icons.check, color: Colors.white, size: 50),
-            ),
-            SizedBox(height: height * 0.05),
-            SizedBox(
-                width: width * 0.6,
-                child: Text(
-                  widget.tag=='order'?"Order processed successfully":
-                  'Product added successfully',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headline1!
-                      .copyWith(color: theme.primaryColor),
-                ))
-          ],
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/confetti-gif-2.gif"),
+                  fit: BoxFit.cover)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: theme.primaryColor,
+                child: const Icon(Icons.check, color: Colors.white, size: 50),
+              ),
+              SizedBox(height: height * 0.05),
+              SizedBox(
+                  width: width * 0.6,
+                  child: Text(
+                    widget.tag == 'order'
+                        ? "Order processed successfully"
+                        : 'Product added successfully',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.headline1!
+                        .copyWith(color: theme.primaryColor),
+                  ))
+            ],
+          ),
         ),
       ),
     );

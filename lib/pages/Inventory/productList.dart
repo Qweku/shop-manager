@@ -93,7 +93,7 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                       right: height * 0.02,
                                       left: height * 0.02,
                                       top: height * 0.1,
-                                      bottom: height * 0.07),
+                                      bottom: 0),
                                   color: theme.primaryColor,
                                   child: HeaderSection(
                                     height: height,

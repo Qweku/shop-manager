@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -93,6 +94,46 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   // var productBox = Hive.box<Product>('Product');
   // var categoryBox = Hive.box<ProductCategory>('Category');
+  startTime() async {
+    var _duration = const Duration(seconds: 2);
+    return Timer(_duration, navigationDialog);
+  }
+
+  void navigationDialog() {
+    Navigator.pop(context);
+  }
+
+  void successDialog() {
+    var theme = Theme.of(context);
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => AlertDialog(
+              content: Container(
+                width: width * 0.4,
+                height: height * 0.25,                
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage("assets/confetti-gif-2.gif"),fit: BoxFit.cover)
+                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Color.fromARGB(255, 0, 184, 6),
+                        child: const Icon(Icons.check,
+                            color: Colors.white, size: 50),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('Product added successfully',
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodyText1)
+                    ]),
+              ),
+            ));
+  }
 
   @override
   void initState() {
@@ -115,6 +156,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               (element) => element.cid == widget.product!.productCategory!.cid);
       isChecked = widget.product!.isLowStock ?? false;
     }
+   
 
     super.initState();
   }
@@ -158,27 +200,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           hintColor: Colors.grey,
                         )),
                     Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: AmountTextField(
-                          prefixIcon: Icon(Icons.money, color: Colors.grey),
-                          hintText: "Selling Price",
-                          borderColor: Colors.grey,
-                          controller: productPrice,
-                          style: theme.textTheme.bodyText1,
-                          hintColor: Colors.grey,
-                          inputFormatters: formatter,
-                        )),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: AmountTextField(
-                          prefixIcon: Icon(Icons.money, color: Colors.grey),
-                          hintText: "Cost Price",
-                          borderColor: Colors.grey,
-                          controller: productCostPrice,
-                          style: theme.textTheme.bodyText1,
-                          hintColor: Colors.grey,
-                          inputFormatters: formatter2,
-                        )),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: AmountTextField(
+                              prefixIcon: Icon(Icons.money, color: Colors.grey),
+                              hintText: "Selling Price",
+                              borderColor: Colors.grey,
+                              controller: productPrice,
+                              style: theme.textTheme.bodyText1,
+                              hintColor: Colors.grey,
+                              inputFormatters: formatter,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: AmountTextField(
+                              prefixIcon: Icon(Icons.money, color: Colors.grey),
+                              hintText: "Cost Price",
+                              borderColor: Colors.grey,
+                              controller: productCostPrice,
+                              style: theme.textTheme.bodyText1,
+                              hintColor: Colors.grey,
+                              inputFormatters: formatter2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Container(
@@ -369,7 +419,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: height * 0.01),
+                    SizedBox(height: height * 0.04),
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Button(
@@ -481,11 +531,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               return;
                             }
                           }
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AddProductSuccess()));
+                          successDialog();
+                          productCostPrice.clear();
+                          productName.clear();
+                          productPrice.clear();
+                          productQuantity.clear();
+                           startTime();
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //             const AddProductSuccess()));
 
                           //Navigator.pop(context);
                         },

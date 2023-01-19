@@ -80,8 +80,8 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                     child: CircleAvatar(
                       backgroundColor: theme.primaryColorLight,
                       radius: Responsive.isMobile()?width * 0.12:width*0.05,
-                      child: Icon(Icons.shop_2,
-                          color: theme.primaryColor, size: 35),
+                      child: Icon(Icons.shopify,
+                          color: theme.primaryColor, size: 40),
                     ),
                   ),
                   SizedBox(height: height * 0.01),

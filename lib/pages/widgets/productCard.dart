@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class ProductCard extends StatelessWidget {
   final String? productName, quantity, price;
@@ -27,14 +28,15 @@ class ProductCard extends StatelessWidget {
     // File img = File(base64Decode(image64));
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.all(height * 0.01),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0),),
+        elevation: 5,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
                 height: height * 0.23,
-                width: width * 0.4,
+                width: width ,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
                     color: index!.isEven ? theme.primaryColor : Colors.white,
@@ -61,37 +63,20 @@ class ProductCard extends StatelessWidget {
                         fit: BoxFit.cover,
                       )),
             SizedBox(height: height * 0.01),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: width * 0.2,
-                      child: Text(
-                        productName!,
-                        style: theme.textTheme.bodyText1,
-                      ),
-                    ),
-                    Text(
-                      "Quantity: $quantity",
-                      style: theme.textTheme.bodyText1!.copyWith(fontSize: 12),
-                    ),
-                  ],
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                      padding: EdgeInsets.all(height * 0.01),
-                      decoration: BoxDecoration(color: theme.primaryColor),
-                      child: Text(
-                        price!,
-                        style:
-                            theme.textTheme.bodyText2!.copyWith(fontSize: 12),
-                      )),
-                )
-              ],
+            Text(
+              productName!,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodyText1!.copyWith(fontSize: 14,),
+            ),
+            const SizedBox(height:7),
+            Text(
+              "$quantity / $quantity",
+              style: theme.textTheme.bodyText1!.copyWith(fontSize: 12,color: Colors.grey),
+            ),
+            const SizedBox(height:7),
+            Text(
+              price!,
+              style: theme.textTheme.bodyText1!.copyWith(fontSize: 17,color: primaryColor),
             ),
           ],
         ),
@@ -105,7 +90,7 @@ class ProductListTile extends StatelessWidget {
   final String image64;
   final int? index;
   final Function()? onTap;
-  final bool  isSelected;
+  final bool isSelected;
   const ProductListTile(
       {Key? key,
       this.productName,
@@ -126,13 +111,17 @@ class ProductListTile extends StatelessWidget {
       tileColor: isSelected ? theme.primaryColor : Colors.transparent,
       leading: CircleAvatar(
         radius: height * 0.03,
-        backgroundColor:  isSelected ? theme.primaryColorLight : theme.primaryColor,
+        backgroundColor:
+            isSelected ? theme.primaryColorLight : theme.primaryColor,
         child: image64.isEmpty
             ? Center(
                 child: Text(
                   productName!.substring(0, 2).toUpperCase(),
-                  style:  theme.textTheme.headline1!
-                      .copyWith(fontSize: 20, color: isSelected ? theme.primaryColor : theme.primaryColorLight),
+                  style: theme.textTheme.headline1!.copyWith(
+                      fontSize: 20,
+                      color: isSelected
+                          ? theme.primaryColor
+                          : theme.primaryColorLight),
                 ),
               )
             : Container(
@@ -145,16 +134,27 @@ class ProductListTile extends StatelessWidget {
                         fit: BoxFit.cover)),
               ),
       ),
-      title: Text(productName!, style: isSelected ? theme.textTheme.headline2: theme.textTheme.headline1),
-      subtitle: Text("Quantity $quantity", style:  isSelected ? theme.textTheme.bodyText2 : theme.textTheme.bodyText1),
+      title: Text(productName!,
+          style: isSelected
+              ? theme.textTheme.headline2
+              : theme.textTheme.headline1),
+      subtitle: Text("Quantity $quantity",
+          style: isSelected
+              ? theme.textTheme.bodyText2
+              : theme.textTheme.bodyText1),
       trailing: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Container(
             padding: EdgeInsets.all(height * 0.01),
-            decoration: BoxDecoration(color: isSelected ? theme.primaryColorLight : theme.primaryColor),
+            decoration: BoxDecoration(
+                color:
+                    isSelected ? theme.primaryColorLight : theme.primaryColor),
             child: Text(
               price!,
-              style: isSelected ? theme.textTheme.bodyText2!.copyWith(fontSize: 12,color: theme.primaryColor) : theme.textTheme.bodyText2!.copyWith(fontSize: 12),
+              style: isSelected
+                  ? theme.textTheme.bodyText2!
+                      .copyWith(fontSize: 12, color: theme.primaryColor)
+                  : theme.textTheme.bodyText2!.copyWith(fontSize: 12),
             )),
       ),
     );
