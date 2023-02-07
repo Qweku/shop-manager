@@ -49,7 +49,7 @@ class DrawerWidget extends StatelessWidget {
          
           DrawerItem(
             onTap: () {
-              ApplicationState().signOut();
+             // ApplicationState().signOut();
             },
             text: 'Logout',
             icon: Icons.logout,

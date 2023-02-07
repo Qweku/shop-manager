@@ -1,8 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shop_manager/components/responsive.dart';
-import 'package:shop_manager/models/FirebaseApplicationState.dart';
+// import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Auth/Launcher.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -24,10 +24,10 @@ main() async {
   Hive.registerAdapter(ProductCategoryAdapter());
   await Hive.openBox<Product>('Product');
   await Hive.openBox<ProductCategory>('Category');
-Firebase.initializeApp();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => GeneralProvider()),
-    ChangeNotifierProvider(create: (_) => ApplicationState()),
+    // ChangeNotifierProvider(create: (_) => ApplicationState()),
   ], 
   child: const MyApp()));
 }
@@ -55,18 +55,18 @@ class _MyAppState extends State<MyApp> {
         title: 'ShopMate',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Color.fromARGB(255, 13, 71, 161),
+          primaryColor: const Color.fromARGB(255, 13, 71, 161),
           primaryColorLight: Colors.white,
-          primaryColorDark: Color.fromARGB(255, 14, 14, 14),
+          primaryColorDark: const Color.fromARGB(255, 14, 14, 14),
           fontFamily: "Montserrat",
           textTheme:  TextTheme(
               headline1:
-                  TextStyle(fontSize: Responsive.isMobile()?20:25, color: Color.fromARGB(255, 0, 0, 0)),
+                  TextStyle(fontSize: Responsive.isMobile()?20:25, color: const Color.fromARGB(255, 0, 0, 0)),
               headline2: TextStyle(fontSize: Responsive.isMobile()?20:25, color: Colors.white),
               bodyText1:
-                  TextStyle(fontSize: Responsive.isMobile()?12:18, color: Color.fromARGB(255, 0, 0, 0)),
+                  TextStyle(fontSize: Responsive.isMobile()?12:18, color: const Color.fromARGB(255, 0, 0, 0)),
               bodyText2: TextStyle(
-                  fontSize: Responsive.isMobile()?12:18, color: Color.fromARGB(255, 255, 255, 255))),
+                  fontSize: Responsive.isMobile()?12:18, color: const Color.fromARGB(255, 255, 255, 255))),
           primarySwatch: Colors.blue,
         ),
         home: const Launcher()

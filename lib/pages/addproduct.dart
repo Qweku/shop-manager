@@ -324,6 +324,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         ),
                       ),
                     ),
+                    !isChecked?Container(): Row(
+                       children: [
+                         Text('Low Stock Quantity', style: theme.textTheme.bodyText1),
+                                   SizedBox(width:width*0.03),
+                                  CounterWidget(
+                                      borderColor: Colors.grey,
+                                      style: theme.textTheme.bodyText1,
+                                      counterController: productQuantity),
+                       ],
+                     ),
                     SizedBox(height:height*0.05),
                     Padding(
                       padding: const EdgeInsets.all(20),
