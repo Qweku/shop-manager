@@ -307,7 +307,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     activeColor: primaryColor,
                                     onChanged: (val){
                                     setState(() {
-                                      val = isChecked;
+                                       isChecked = val ?? false;
                                     });
                                   }),
                                   //SizedBox(width:width*0.03),
