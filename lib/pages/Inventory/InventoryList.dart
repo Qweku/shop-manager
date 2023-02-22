@@ -32,43 +32,12 @@ class _InventoryListState extends State<InventoryList> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-     var categories = context.watch<GeneralProvider>();
-     final theme = Theme.of(context);
+    var categories = context.watch<GeneralProvider>();
+    final theme = Theme.of(context);
     return Column(
       children: [
-        SizedBox(height: height * 0.03),
-        SizedBox(
-          // padding: EdgeInsets.symmetric(
-          //     vertical: height * 0.01),
-          height: height * 0.12,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.categories.toSet().toList().length + 1,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isSelected = index;
-                    });
-                  },
-                  child: SizedBox(
-                    width: width * 0.27,
-                    child: CategoryCard(
-                      index: index,
-                      selected: isSelected == index ? true : false,
-                      smallFont: 10.0,
-                      largeFont: 20.0,
-                      categoryName: (index == 0)
-                          ? "ALL"
-                          : categories.categories
-                              .toSet()
-                              .toList()[index - 1]
-                              .categoryName,
-                    ),
-                  ),
-                );
-              }),
-        ),
+       // SizedBox(height: height * 0.03),
+       
         ((isSelected == 0)
                 ? categories.inventory.isEmpty
                 : categories.inventory
@@ -110,10 +79,30 @@ class _InventoryListState extends State<InventoryList> {
                                       .length,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 10,
-                                     ),
+                                  padding: const EdgeInsets.only(
+                                    top: 10,
+                                  ),
                                   child: ProductCard(
+                                    onPressed: () {
+                                      if (!(context
+                                          .read<GeneralProvider>()
+                                          .cart
+                                          .contains(
+                                              categories.inventory[index]))) {
+                                        Provider.of<GeneralProvider>(context,
+                                                listen: false)
+                                            .addToCart(
+                                          isSelected == 0
+                                              ? categories.inventory[index]
+                                              : categories.inventory
+                                                  .where((element) =>
+                                                      element.productCategory ==
+                                                      categories.categories[
+                                                          isSelected - 1])
+                                                  .toList()[index],
+                                        );
+                                      }
+                                    },
                                     onTap: () {
                                       Navigator.push(
                                           context,

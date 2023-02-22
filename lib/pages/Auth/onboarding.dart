@@ -24,7 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     Icons.receipt_long,
   ];
   List<String> splashContent = [
-    "Welcome to your shop manager, where you can manage all your assets with ease!",
+    "Welcome to your ShopMate, where you can manage all your assets with ease!",
     "Organize all your products into categories for easy accessibility",
     "Get timely accounts of all your sales at your convenience",
   ];

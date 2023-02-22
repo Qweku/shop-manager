@@ -159,7 +159,7 @@ ShopProducts shopProductsFromJson(String str) {
   log('b');
   log(str);
   log('a');
-   final jsonData = json.decode(str);
+  final jsonData = json.decode(str);
   return ShopProducts.fromJson(jsonData);
 }
 
@@ -200,6 +200,7 @@ class Product {
   double? costPrice;
   String? productImage;
   int? productQuantity;
+  String? productDescription;
   int? cartQuantity;
   bool? isLowStock;
   ProductCategory? productCategory = ProductCategory(
@@ -213,6 +214,7 @@ class Product {
       this.sellingPrice = 0.0,
       this.costPrice = 0.0,
       this.productImage,
+      this.productDescription,
       this.productQuantity = 0,
       this.cartQuantity = 0,
       this.productCategory,
@@ -224,6 +226,7 @@ class Product {
         sellingPrice: json["sellingPrice"].toDouble(),
         costPrice: json["costPrice"].toDouble(),
         productImage: json["productImage"],
+        productDescription: json["productDescription"],
         productQuantity: json["productQuantity"],
         cartQuantity: json["cartQuantity"],
         isLowStock: json["isLowStock"],
@@ -236,6 +239,7 @@ class Product {
         "sellingPrice": sellingPrice,
         "costPrice": costPrice,
         "productImage": productImage,
+        "productDescription": productDescription,
         "productQuantity": productQuantity,
         "cartQuantity": cartQuantity,
         "isLowStock": isLowStock,
@@ -249,7 +253,7 @@ class ProductCategory {
   String? categoryDescription;
 
   ProductCategory({
-      this.cid = 0,
+    this.cid = 0,
     /* required */ this.categoryName = 'Uncategorised',
     this.categoryDescription = 'No Description',
   });

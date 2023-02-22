@@ -15,6 +15,8 @@ class GeneralProvider extends ChangeNotifier {
   List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
   List<Product> _cart = [];
+   double _subTotal = 0;
+double get subTotal => _subTotal;
 
   ShopProducts get shop => _shop;
 
@@ -125,6 +127,28 @@ class GeneralProvider extends ChangeNotifier {
     _inventory.singleWhere((element) => element == product).productCategory =
         ProductCategory(cid: 0);
     saveToShop(_inventory);
+    notifyListeners();
+  }
+
+   void updateCart(Product product) {
+    for (Product element in _cart) {
+      if (element.pid == product.pid) {
+        element.productQuantity = product.productQuantity;
+      }
+    }
+    notifyListeners();
+  }
+
+   void total(Product product) {
+    double total = 0;
+    for (Product item in _cart) {
+      if (item.pid == product.pid) {
+        total =
+            total + ((item.sellingPrice ?? 0) * (item.productQuantity ?? 0));
+        item.cartQuantity = product.cartQuantity;
+      }
+    }
+    _subTotal = total;
     notifyListeners();
   }
 

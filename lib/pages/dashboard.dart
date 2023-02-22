@@ -260,10 +260,7 @@ class _DashboardState extends State<Dashboard> {
                         )
                       ],
                     )),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: height * 0.03),
-                      child: const ShopBarChart(),
-                    ),
+                    const ShopBarChart(),
                     GridView.count(
                       shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
