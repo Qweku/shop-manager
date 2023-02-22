@@ -68,14 +68,14 @@ class _InventorySearchListState extends State<InventorySearchList> {
                               padding: EdgeInsets.only(top: height * 0.02),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 2 / 2.9),
+                                      crossAxisCount: 3,
+                                      childAspectRatio: 2 / 3.5),
                               itemCount: productItems.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                      top: index.isEven ? height * 0.02 : 0,
-                                      bottom: index.isOdd ? height * 0.02 : 0),
+                                      top: 10,
+                                     ),
                                   child: ProductCard(
                                     onTap: () {
                                       Navigator.push(

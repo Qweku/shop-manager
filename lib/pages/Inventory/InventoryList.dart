@@ -97,8 +97,8 @@ class _InventoryListState extends State<InventoryList> {
                               padding: EdgeInsets.only(top: height * 0.01),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 2 / 2.9),
+                                      crossAxisCount: 3,
+                                      childAspectRatio: 2 / 3.5),
                               itemCount: isSelected == 0
                                   ? categories.inventory.length
                                   : categories.inventory
@@ -111,8 +111,8 @@ class _InventoryListState extends State<InventoryList> {
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                      top: index.isEven ? height * 0.02 : 0,
-                                      bottom: index.isOdd ? height * 0.02 : 0),
+                                      top: 10,
+                                     ),
                                   child: ProductCard(
                                     onTap: () {
                                       Navigator.push(

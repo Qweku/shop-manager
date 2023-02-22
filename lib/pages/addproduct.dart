@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:shop_manager/components/textFields.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/models/api_client.dart';
 import 'package:shop_manager/pages/addProductSuccess.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/counter.dart';
@@ -28,7 +30,7 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  final CurrencyTextInputFormatter formatter = CurrencyTextInputFormatter(
+   final CurrencyTextInputFormatter formatter = CurrencyTextInputFormatter(
       turnOffGrouping: true,
       decimalDigits: 2,
       // locale: 'usa',
@@ -38,6 +40,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       decimalDigits: 2,
       // locale: 'usa',
       symbol: 'GHS ');
+ 
   final productName = TextEditingController();
   final productPrice = TextEditingController();
   final productCostPrice = TextEditingController();
@@ -59,10 +62,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
   ProductCategory? _selectedCategory;
   String imageString = '';
   List<ProductCategory> categoryList = [];
+  Uint8List? imageFile;
   //String imagePath;
   final picker = ImagePicker();
 
   int categoryIndex = 0;
+  getRemoveImage(String imgPath) async {
+    imageFile = await ApiClient().removeBgApi(imgPath);
+    setState(() {});
+  }
 
   Future _imgFromCamera() async {
     try {
@@ -71,6 +79,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       // final toBytes = await
       setState(() {
         _image = File(image!.path);
+        getRemoveImage(image.path);
 
         imageString = base64Encode(File(image.path).readAsBytesSync());
       });
@@ -83,6 +92,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
       setState(() {
         _image = File(image!.path);
+        getRemoveImage(image.path);
         imageString = base64Encode(File(image.path).readAsBytesSync());
       });
     } catch (e) {
@@ -94,7 +104,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   // var productBox = Hive.box<Product>('Product');
   // var categoryBox = Hive.box<ProductCategory>('Category');
-  startTime() async {
+   startTime() async {
     var _duration = const Duration(seconds: 2);
     return Timer(_duration, navigationDialog);
   }
@@ -111,10 +121,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
         builder: (context) => AlertDialog(
               content: Container(
                 width: width * 0.4,
-                height: height * 0.25,                
+                height: height * 0.25,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage("assets/confetti-gif-2.gif"),fit: BoxFit.cover)
-                ),
+                    image: DecorationImage(
+                        image: AssetImage("assets/confetti-gif-2.gif"),
+                        fit: BoxFit.cover)),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -168,265 +179,279 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: theme.primaryColorLight,
-      body: SafeArea(
-        child: SizedBox(
-          height: height,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 20),
-                      child: Text(
-                          (widget.toEdit)
-                              ? "Edit Product Detail"
-                              : "Let's add the products in your shop",
-                          style: theme.textTheme.headline1!
-                              .copyWith(color: theme.primaryColor)),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: CustomTextField(
-                          prefixIcon: Icon(Icons.add_box, color: Colors.grey),
-                          hintText: "Product name",
-                          borderColor: Colors.grey,
-                          controller: productName,
-                          style: theme.textTheme.bodyText1,
-                          hintColor: Colors.grey,
-                        )),
-                    Padding(
+      backgroundColor: primaryColorLight,
+      appBar: AppBar(
+        // iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          (widget.toEdit) ? "Edit Product" : "Add Product",
+          style: theme.textTheme.headline2,
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: primaryColor,
+      ),
+      body: SizedBox(
+        height: height,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30, bottom: 20),
+                    child: Text(
+                        (widget.toEdit)
+                            ? "Edit Product Detail"
+                            : "Let's add the products in your shop",
+                        style: theme.textTheme.headline1!.copyWith(color:theme.primaryColor)),
+                  ),
+                  Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: AmountTextField(
-                              prefixIcon: Icon(Icons.money, color: Colors.grey),
-                              hintText: "Selling Price",
-                              borderColor: Colors.grey,
-                              controller: productPrice,
-                              style: theme.textTheme.bodyText1,
-                              hintColor: Colors.grey,
-                              inputFormatters: formatter,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: AmountTextField(
-                              prefixIcon: Icon(Icons.money, color: Colors.grey),
-                              hintText: "Cost Price",
-                              borderColor: Colors.grey,
-                              controller: productCostPrice,
-                              style: theme.textTheme.bodyText1,
-                              hintColor: Colors.grey,
-                              inputFormatters: formatter2,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: DropdownButtonFormField(
-                          //dropdownColor: Colors.black,
-                          style: theme.textTheme.bodyText1,
-                          decoration: InputDecoration(
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: InputBorder.none,
-                              enabled: false,
-                              fillColor: Colors.transparent,
-                              filled: true),
-                          hint: Text(
-                            'Select Category',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          value: _selectedCategory,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedCategory = newValue as ProductCategory;
-                              categoryIndex = categoryList.indexOf(newValue);
-                            });
-                          },
-                          items: categoryList.map((location) {
-                            return DropdownMenuItem(
-                              child: Text(
-                                location.categoryName!,
-                                style: theme.textTheme
-                                    .bodyText1, /* ,style: TextStyle(color: Colors.white), */
-                              ),
-                              value: location,
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-
-                    // Padding(
-                    //   padding: EdgeInsets.only(top: height * 0.02),
-                    //   child: Align(
-                    //       alignment: Alignment(0, 0),
-                    //       child: Text('Attach Image',
-                    //           style: theme.textTheme.bodyText1)),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Align(
-                        alignment: Alignment(0, 0),
+                      child: CustomTextField(
+                        prefixIcon: Icon(Icons.add_box, color: Colors.grey),
+                        hintText: "Product name",
+                        borderColor: Colors.grey,
+                        controller: productName,
+                        style: theme.textTheme.bodyText1,
+                        hintColor: Colors.grey,
+                      )),
+                   Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                _attachImage(context);
-                              },
-                              child: Container(
-                                width: width * 0.45,
-                                height: height * 0.25,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey),
-                                child: _image != null
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Image.file(
-                                          _image!,
-                                          width: width * 0.45,
-                                          height: height * 0.25,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : (widget.toEdit)
-                                        ? (widget.product!.productImage ?? "")
-                                                .isEmpty
-                                            ? Container(
-                                                height: height * 0.23,
-                                                width: width * 0.4,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20.0),
-                                                    color: Colors.grey,
-                                                    boxShadow: [
-                                                      const BoxShadow(
-                                                          offset: Offset(2, 2),
-                                                          color: Color.fromARGB(
-                                                              31, 0, 0, 0),
-                                                          blurRadius: 2,
-                                                          spreadRadius: 1)
-                                                    ]),
-                                                child: Center(
-                                                  child: Text(
-                                                    widget.product!.productName!
-                                                        .substring(0, 2)
-                                                        .toUpperCase(),
-                                                    style: theme
-                                                        .textTheme.headline2!
-                                                        .copyWith(
-                                                            fontSize: 70,
-                                                            color: theme
-                                                                .primaryColorLight),
-                                                  ),
-                                                ))
-                                            : ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                child: Image.memory(
-                                                  base64Decode(widget
-                                                      .product!.productImage!),
-                                                  width: width * 0.45,
-                                                  height: height * 0.25,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                              //color: Colors.grey[200],
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            width: width * 0.45,
-                                            height: height * 0.25,
-                                            child: Icon(
-                                              Icons.camera_alt,
-                                              color: theme.primaryColorLight,
-                                              size: 30,
-                                            ),
-                                          ),
+                            Expanded(
+                              child: AmountTextField(
+                                prefixIcon:
+                                    Icon(Icons.money, color: Colors.grey),
+                                hintText: "Selling Price",
+                                borderColor: Colors.grey,
+                                controller: productPrice,
+                                style: theme.textTheme.bodyText1,
+                                hintColor: Colors.grey,
+                                inputFormatters: formatter,
                               ),
                             ),
-                            SizedBox(width: width * 0.05),
+                            SizedBox(width: 10),
                             Expanded(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Quantity',
-                                              style: theme.textTheme.bodyText1),
-                                          SizedBox(height: height * 0.02),
-                                          CounterWidget(
-                                              borderColor: Colors.grey,
-                                              style: theme.textTheme.bodyText1,
-                                              counterController:
-                                                  productQuantity)
-                                        ],
-                                      )),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Checkbox(
-                                              value: isChecked,
-                                              activeColor: primaryColor,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  isChecked = val ?? false;
-                                                });
-                                              }),
-                                          //SizedBox(width:width*0.03),
-                                          Text('Low Stock Alert',
-                                              style: theme.textTheme.bodyText1),
-                                        ],
-                                      ),
-                                      Text(
-                                          'Check if you want to receive alerts when this stock is running out',
-                                          style: theme.textTheme.bodyText1!
-                                              .copyWith(color: Colors.grey)),
-                                    ],
-                                  )
-                                ],
+                              child: AmountTextField(
+                                prefixIcon:
+                                    Icon(Icons.money, color: Colors.grey),
+                                hintText: "Cost Price",
+                                borderColor: Colors.grey,
+                                controller: productCostPrice,
+                                style: theme.textTheme.bodyText1,
+                                hintColor: Colors.grey,
+                                inputFormatters: formatter2,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
+                    
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 1),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: DropdownButtonFormField(
+                        //dropdownColor: Colors.black,
+                        style: theme.textTheme.bodyText1,
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(color: Colors.grey),
+                            border: InputBorder.none,
+                            enabled: false,
+                            fillColor: Colors.transparent,
+                            filled: true),
+                        hint: Text(
+                          'Select Category',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        value: _selectedCategory,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedCategory = newValue as ProductCategory;
+                            categoryIndex = categoryList.indexOf(newValue);
+                          });
+                        },
+                        items: categoryList.map((location) {
+                          return DropdownMenuItem(
+                            child: Text(
+                              location.categoryName!,
+                              style: theme.textTheme
+                                  .bodyText1, /* ,style: TextStyle(color: Colors.white), */
+                            ),
+                            value: location,
+                          );
+                        }).toList(),
+                      ),
                     ),
-                    SizedBox(height: height * 0.04),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Button(
-                        width: width,
-                        color: theme.primaryColor,
-                        buttonText: 'Done',
-                        onTap: () async {
+                  ),
+                  
+                   Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: CustomTextField(
+                            maxLines: 5,
+                            prefixIcon: Icon(Icons.edit, color: Colors.grey),
+                            hintText: "Product Description",
+                            borderColor: Colors.grey,
+                            //controller: productDescription,
+                            style: theme.textTheme.bodyText1,
+                            hintColor: Colors.grey,
+                          )),
+                           SizedBox(height: 20,),
+                   
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Align(
+                      alignment: Alignment(0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _attachImage(context);
+                            },
+                            child: Container(
+                              width: width * 0.45,
+                              height: height * 0.25,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: imageFile != null
+                                      ?Colors.white:Colors.grey),
+                              child: imageFile != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.memory(
+                                        imageFile!,
+                                        width: width * 0.45,
+                                        height: height * 0.25,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : (widget.toEdit)
+                                      ? (widget.product!.productImage ?? "").isEmpty
+                                          ? Container(
+                                              height: height * 0.23,
+                                              width: width * 0.4,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20.0),
+                                                  color: Colors.grey,
+                                                  boxShadow: [
+                                                    const BoxShadow(
+                                                        offset: Offset(2, 2),
+                                                        color: Color.fromARGB(
+                                                            31, 0, 0, 0),
+                                                        blurRadius: 2,
+                                                        spreadRadius: 1)
+                                                  ]),
+                                              child: Center(
+                                                child: Text(
+                                                  widget.product!.productName!
+                                                      .substring(0, 2)
+                                                      .toUpperCase(),
+                                                  style: theme
+                                                      .textTheme.headline2!
+                                                      .copyWith(
+                                                          fontSize: 70,
+                                                          color: theme
+                                                              .primaryColorLight),
+                                                ),
+                                              ))
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: Image.memory(
+                                                base64Decode(
+                                                    widget.product!.productImage!),
+                                                width: width * 0.45,
+                                                height: height * 0.25,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            //color: Colors.grey[200],
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          width: width * 0.45,
+                                          height: height * 0.25,
+                                          child: Icon(
+                                            Icons.camera_alt,
+                                            color: theme.primaryColorLight,
+                                            size: 30,
+                                          ),
+                                        ),
+                            ),
+                          ),
+                        SizedBox(width:width*0.05),
+                       Expanded(
+                         child: Column(children: [
+                          Padding(
+                                               padding: const EdgeInsets.symmetric(vertical: 10),
+                                               child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Quantity', style: theme.textTheme.bodyText1),
+                             SizedBox(height:height*0.02),
+                            CounterWidget(
+                                borderColor: Colors.grey,
+                                style: theme.textTheme.bodyText1,
+                                counterController: productQuantity)
+                          ],
+                                               )),
+                                               Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(                              
+                                  value: isChecked, 
+                                  activeColor: primaryColor,
+                                  onChanged: (val){
+                                  setState(() {
+                                     isChecked = val ?? false;
+                                  });
+                                }),
+                                //SizedBox(width:width*0.03),
+                                Text('Low Stock Alert', style: theme.textTheme.bodyText1),
+                                
+                              ],
+                            ),
+                             Text('Check if you want to receive alerts when this stock is running out', style: theme.textTheme.bodyText1!.copyWith(color:Colors.grey)),
+                          ],
+                                               )
+                         ],),
+                       )
+                        ],
+                      ),
+                    ),
+                  ),
+                  !isChecked?Container(): Row(
+                     children: [
+                       Text('Low Stock Quantity', style: theme.textTheme.bodyText1),
+                                 SizedBox(width:width*0.03),
+                                CounterWidget(
+                                    borderColor: Colors.grey,
+                                    style: theme.textTheme.bodyText1,
+                                    counterController: productQuantity),
+                     ],
+                   ),
+                  SizedBox(height:height*0.05),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Button(
+                      width: width,
+                      color: theme.primaryColor,
+                      buttonText: 'Done',
+                      onTap: ()  async {
                           // log(formatter.getUnformattedValue().toString());
                           // log(productPrice.text);
                           if (widget.toEdit) {
@@ -544,26 +569,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           //             const AddProductSuccess()));
 
                           //Navigator.pop(context);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-              // Positioned(
-              //   bottom: 0,
-              //   right: 0,
-              //   left: 0,
-              //   child: Container(
-              //     color: theme.primaryColorLight,
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(20),
-              //       child: _submitButton(),
-              //     ),
-              //   ),
-              // )
-            ],
-          ),
+                        }, ),
+                  ),
+                ],
+              ),
+            )),
+            // Positioned(
+            //   bottom: 0,
+            //   right: 0,
+            //   left: 0,
+            //   child: Container(
+            //     color: theme.primaryColorLight,
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(20),
+            //       child: _submitButton(),
+            //     ),
+            //   ),
+            // )
+          ],
         ),
       ),
     );

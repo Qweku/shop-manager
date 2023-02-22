@@ -4,12 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
-import 'package:shop_manager/main.dart';
-import 'package:shop_manager/models/FirebaseApplicationState.dart';
-import 'package:shop_manager/models/ShopModel.dart';
-import 'package:shop_manager/models/localStore.dart';
-import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
-import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class SignUp extends StatefulWidget {
@@ -194,40 +188,7 @@ class _SignUpState extends State<SignUp> {
                           });
                         } 
                         
-                         if(count == signUpList.length){
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => Center(
-                                      child: CircularProgressIndicator(
-                                    color: theme.primaryColorLight,
-                                  )));
-
-                          ShopProducts shop = ShopProducts(
-                              id: 0,
-                              shopname: shopController.text,
-                              products: []);
-
-                          LocalStore().store(
-                              shopController.text, shopProductsToJson(shop));
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Responsive.isMobile()
-                                      ? MyHomeScreen()
-                                      : TabletDashboard()),
-                              (route) => false);
-                        }
-
-                        // await ApplicationState()
-                        //     .registerAccount(
-                        //         _emailController.text.trim(),
-                        //         _emailController.text.trim(),
-                        //         _passwordController.text.trim(),
-                        //         (e) => _loginError(e))
-                        //     .onError((error, stackTrace) => null);
-                        // navigatorKey.currentState!.pop((route) => route);
-                      },
+                         },
                       color: theme.primaryColor,
                       buttonText:  count == signUpList.length -1 ? "Signup" : "Next",
                       width: width,

@@ -81,7 +81,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                       backgroundColor: theme.primaryColorLight,
                       radius: Responsive.isMobile()?width * 0.12:width*0.05,
                       child: Icon(Icons.shopify,
-                          color: theme.primaryColor, size: 40),
+                          color: theme.primaryColor, size: 35),
                     ),
                   ),
                   SizedBox(height: height * 0.01),

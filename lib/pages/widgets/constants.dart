@@ -15,6 +15,7 @@ List<Map<String, dynamic>> statusList = [
 
 
 Color primaryColor =  const Color(0xFF0D47A1);
+Color primaryColorLight =  Colors.white;
  Color primaryColorDark = const Color.fromARGB(255, 14, 14, 14);
 
 extension StringExtension on String {

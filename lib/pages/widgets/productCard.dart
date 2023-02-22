@@ -9,7 +9,7 @@ class ProductCard extends StatelessWidget {
   final String? productName, quantity, price;
   final String image64;
   final int? index;
-  final Function()? onTap;
+  final Function()? onTap, onLongPress, onPressed;
   const ProductCard(
       {Key? key,
       this.productName,
@@ -17,7 +17,8 @@ class ProductCard extends StatelessWidget {
       this.index,
       this.quantity,
       this.price,
-      required this.image64})
+      required this.image64,
+      this.onLongPress, this.onPressed})
       : super(key: key);
 
   @override
@@ -27,59 +28,94 @@ class ProductCard extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     // File img = File(base64Decode(image64));
     return GestureDetector(
+      onLongPress: onLongPress,
       onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0),),
-        elevation: 5,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                height: height * 0.2,
-                width: width ,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: index!.isEven ? theme.primaryColor : Colors.white,
-                    boxShadow: [
-                      const BoxShadow(
-                          offset: Offset(2, 2),
-                          color: Color.fromARGB(255, 238, 238, 238),
-                          blurRadius: 2,
-                          spreadRadius: 1)
-                    ]),
-                child: image64.isEmpty
-                    ? Center(
-                        child: Text(
-                          productName!.substring(0, 2).toUpperCase(),
-                          style: index!.isEven
-                              ? theme.textTheme.headline2!
-                                  .copyWith(fontSize: 60)
-                              : theme.textTheme.headline1!.copyWith(
-                                  fontSize: 70, color: theme.primaryColor),
-                        ),
-                      )
-                    : Image.memory(
-                        base64Decode(image64),
-                        fit: BoxFit.cover,
-                      )),
-            SizedBox(height: height * 0.01),
-            Text(
-              productName!,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodyText1!.copyWith(fontSize: 14,),
+      child: Stack(
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
             ),
-            const SizedBox(height:7),
-            Text(
-              "$quantity / $quantity",
-              style: theme.textTheme.bodyText1!.copyWith(fontSize: 12,color: Colors.grey),
+            elevation: 5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  child: Container(
+                      height: height * 0.15,
+                      width: width,
+                      decoration: BoxDecoration(
+                        //borderRadius: BorderRadius.circular(20.0),
+                        color:
+                            index!.isEven && image64.isEmpty ? primaryColor : Colors.white,
+                      ),
+                      child: image64.isEmpty
+                          ? Center(
+                              child: Text(
+                                productName!.substring(0, 2).toUpperCase(),
+                                style: index!.isEven
+                                    ? theme.textTheme.headline2!
+                                        .copyWith(fontSize: 30)
+                                    : theme.textTheme.headline1!.copyWith(
+                                        fontSize: 30,
+                                        color: primaryColor),
+                              ),
+                            )
+                          : Image.memory(
+                              base64Decode(image64),
+                              fit: BoxFit.cover,
+                            )),
+                ),
+                // SizedBox(height: height * 0.01),
+                Column(
+                  children: [
+                    Text(
+                      productName!,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyText1!.copyWith(
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "$quantity left",
+                      style: theme.textTheme.bodyText1!
+                          .copyWith(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "$price",
+                      style: theme.textTheme.bodyText1!
+                          .copyWith(fontSize: 15, color: primaryColor),
+                    ),
+                  ],
+                ),
+                SizedBox(height: height * 0.01),
+              ],
             ),
-            const SizedBox(height:7),
-            Text(
-              price!,
-              style: theme.textTheme.bodyText1!.copyWith(fontSize: 17,color: primaryColor),
+          ),
+          Positioned(child: Container(padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 8),
+          color: const Color.fromARGB(255, 255, 245, 160),
+          child: Text("Low Stock!",style:theme.textTheme.bodyText1!.copyWith(fontSize:10,color:Colors.red)),
+          )),
+          Positioned(
+            right: 10,
+            top:10,
+
+              child: CircleAvatar(
+            backgroundColor: index!.isOdd || image64.isNotEmpty ? primaryColor : Colors.white,
+            radius: 15,
+            child: IconButton(
+              icon: Icon(Icons.add,
+                  color: index!.isEven && image64.isEmpty ? primaryColor : Colors.white,
+                  size: 15),
+              onPressed: onPressed,
             ),
-          ],
-        ),
+          ))
+        ],
       ),
     );
   }
