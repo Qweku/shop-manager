@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:shop_manager/models/SharedPreferences.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
@@ -9,14 +8,14 @@ import 'package:shop_manager/models/localStore.dart';
 LocalStore storage = LocalStore();
 
 class GeneralProvider extends ChangeNotifier {
-  ShopProducts _shop = ShopProducts(id: 0,shopname: 'demo', products: []);
+  ShopProducts _shop = ShopProducts(id: 0, shopname: 'demo', products: []);
   ProductCategory _category = ProductCategory(cid: -1);
   Product _product = Product(pid: -1);
   List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
   List<Product> _cart = [];
-   double _subTotal = 0;
-double get subTotal => _subTotal;
+  double _subTotal = 0;
+  double get subTotal => _subTotal;
 
   ShopProducts get shop => _shop;
 
@@ -82,6 +81,12 @@ double get subTotal => _subTotal;
   }
 
   void addToCart(Product product) {
+    if (product.productQuantity < 1) {
+      return;
+    }
+    if (product.cartQuantity < 1) {
+      product.cartQuantity = 1;
+    }
     cart.add(product);
     notifyListeners();
   }
@@ -119,7 +124,18 @@ double get subTotal => _subTotal;
   }
 
   void removeFromCart(int index) {
+    cart[index].cartQuantity = 0;
     cart.removeAt(index);
+    notifyListeners();
+  }
+
+  void processCart() {
+    for (var cartItem in cart) {
+      _inventory
+          .singleWhere((element) => element.pid == cartItem.pid)
+          .productQuantity -= cartItem.cartQuantity;
+    }
+    saveToShop(_inventory);
     notifyListeners();
   }
 
@@ -130,16 +146,16 @@ double get subTotal => _subTotal;
     notifyListeners();
   }
 
-   void updateCart(Product product) {
+  void updateCart(Product product) {
     for (Product element in _cart) {
       if (element.pid == product.pid) {
-        element.productQuantity = product.productQuantity;
+        element.cartQuantity = product.cartQuantity;
       }
     }
     notifyListeners();
   }
 
-   void total(Product product) {
+  void total(Product product) {
     double total = 0;
     for (Product item in _cart) {
       if (item.pid == product.pid) {

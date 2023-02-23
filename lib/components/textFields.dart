@@ -159,11 +159,11 @@ class CustomTextField extends StatelessWidget {
   final TextAlign textAlign;
   final ValueChanged<String>? onChanged;
   final Function()? onEditingComplete;
-final List<TextInputFormatter>? inputFormatters;
+  final List<TextInputFormatter>? inputFormatters;
   final Color hintColor;
   final bool? readOnly;
   final bool? autoFocus;
- 
+
   const CustomTextField(
       {Key? key,
       this.hintText,
@@ -181,7 +181,9 @@ final List<TextInputFormatter>? inputFormatters;
       this.hintColor = Colors.grey,
       this.prefixIcon,
       this.onChanged,
-      this.autoFocus = false, this.onEditingComplete, this.inputFormatters})
+      this.autoFocus = false,
+      this.onEditingComplete,
+      this.inputFormatters})
       : super(key: key);
 
   @override
@@ -203,17 +205,15 @@ final List<TextInputFormatter>? inputFormatters;
         keyboardType: keyboard,
         controller: controller,
         onEditingComplete: onEditingComplete,
-inputFormatters:  
-          inputFormatters  
-         ,
+        inputFormatters: inputFormatters,
         textAlign: textAlign,
         maxLength: maxLength,
         style: style,
-       
+
         decoration: InputDecoration(
           hintText: hintText,
           counterText: '',
-          hintStyle: TextStyle(color: hintColor),
+          hintStyle: style?.copyWith(color: hintColor),
           suffixIcon: suffixIcon,
           prefixIcon: prefixIcon,
           border: InputBorder.none,
@@ -325,7 +325,7 @@ class AmountTextField extends StatefulWidget {
   final TextInputFormatter inputFormatters;
   final String? hintText;
   final Icon? prefixIcon;
-  
+
   // Country? currency;
   final void Function(String text)? onChanged;
   final bool? readOnly;
@@ -339,7 +339,9 @@ class AmountTextField extends StatefulWidget {
       this.style,
       // this.currency,
       this.onChanged,
-      this.prefixIcon, this.hintColor,required this.inputFormatters})
+      this.prefixIcon,
+      this.hintColor,
+      required this.inputFormatters})
       : super(key: key);
 
   @override
@@ -380,7 +382,7 @@ class _AmountTextFieldState extends State<AmountTextField> {
           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15.0),
         ),
         inputFormatters: [
-           widget.inputFormatters,
+          widget.inputFormatters,
         ],
       ),
     );

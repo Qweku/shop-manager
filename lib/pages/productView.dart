@@ -54,7 +54,7 @@ class _ProductViewState extends State<ProductView> {
           CartIconButton(
               quantity: context.watch<GeneralProvider>().cart.length,
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (builder) =>const ProductCalculator(

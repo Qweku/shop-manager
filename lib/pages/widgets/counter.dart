@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/textFields.dart';
@@ -44,8 +44,8 @@ class _CounterWidgetState extends State<CounterWidget> {
           child: GestureDetector(
               onTap: () {
                 counter = int.parse(widget.counterController.text.isEmpty
-                  ? '0'
-                  : widget.counterController.text);
+                    ? '0'
+                    : widget.counterController.text);
                 if (counter > 0) {
                   setState(() {
                     counter--;
@@ -61,8 +61,8 @@ class _CounterWidgetState extends State<CounterWidget> {
           width: width * 0.15,
           child: CustomTextField(
             textAlign: TextAlign.center,
-            keyboard:
-                const TextInputType.numberWithOptions(signed: false, decimal: false),
+            keyboard: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
             controller: widget.counterController,
             hintColor: widget.borderColor ?? theme.primaryColorLight,
             style: widget.style ?? theme.textTheme.bodyText2,
@@ -93,9 +93,9 @@ class _CounterWidgetState extends State<CounterWidget> {
                   color: widget.borderColor ?? theme.primaryColorLight)),
           child: GestureDetector(
               onTap: () {
-                counter =int.parse(widget.counterController.text.isEmpty
-                  ? '0'
-                  : widget.counterController.text);
+                counter = int.parse(widget.counterController.text.isEmpty
+                    ? '0'
+                    : widget.counterController.text);
                 setState(() {
                   counter++;
                 });
@@ -110,17 +110,20 @@ class _CounterWidgetState extends State<CounterWidget> {
   }
 }
 
-
-
 class ItemCounter extends StatefulWidget {
- final Color? color;
+  final Color? color;
   final TextStyle? style;
   final TextEditingController counterController;
   final double width;
   bool? active;
-  Product? product;
-   ItemCounter(
-      {Key? key, required this.counterController, this.color, this.style, required this.width,this.product})
+  Product product;
+  ItemCounter(
+      {Key? key,
+      required this.counterController,
+      this.color,
+      this.style,
+      required this.width,
+      required this.product})
       : super(key: key);
 
   @override
@@ -140,104 +143,100 @@ class _ItemCounterState extends State<ItemCounter> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Row(
       children: [
         IconButton(
           icon: Icon(Icons.remove_circle_outline,
-                size: 30, color: counter == 1 ? Colors.grey : widget.color),
-            onPressed: () {
-               FocusScope.of(context).unfocus();
-              counter = int.parse(widget.counterController.text.isEmpty
-                ? '1'
-                : widget.counterController.text);
-              if (counter > 0) {
-                setState(() {
-                  counter--;
-                }); 
-                if (widget.product != null) {
-                    Product product = Product(
-                      pid: widget.product!.pid,
-                      productName: widget.product?.productName,
-                      sellingPrice: widget.product?.sellingPrice,
-                      productDescription: widget.product?.productDescription,
-                      cartQuantity: counter,
-                      productImage: widget.product?.productImage,
-                    );
-                    context.read<GeneralProvider>().updateCart(product);
-                    context.read<GeneralProvider>().total(product);
-                  } 
-                  
-                  widget.counterController.text = counter.toString();
-              }
-              
+              size: 30, color: counter < 1 ? Colors.grey : widget.color),
+          onPressed: () {
+            FocusScope.of(context).unfocus();
              
-            },
-            ),
+            if (counter > 0) {
+              setState(() {
+                counter--;
+              });
+              if (widget.product != null) {
+                Product product = Product(
+                  pid: widget.product.pid,
+                  productName: widget.product.productName,
+                  sellingPrice: widget.product.sellingPrice,
+                  productDescription: widget.product.productDescription,
+                  cartQuantity: counter,
+                  productImage: widget.product.productImage,
+                );
+                context.read<GeneralProvider>().updateCart(product);
+                context.read<GeneralProvider>().total(product);
+              }
+
+              // widget.counterController.text = counter.toString();
+            }
+          },
+        ),
         SizedBox(
           width: width * 0.15,
           child: CustomTextField(
             textAlign: TextAlign.center,
-            keyboard:
-                const TextInputType.numberWithOptions(signed: false, decimal: false),
-            controller: widget.counterController,
-            
+            readOnly: true,
+            keyboard: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
+            // controller: widget.counterController,
+
             hintColor: widget.color ?? theme.primaryColorLight,
-            style: widget.style ?? theme.textTheme.bodyText2,
+            style: widget.style ??
+                theme.textTheme.bodyText2!.copyWith(color: widget.color),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             maxLines: 1,
             maxLength: 3,
-            hintText: '0',
-             onEditingComplete: () {
-                FocusScope.of(context).unfocus();
-              },
-            onChanged: (text) {
-              if (text.isEmpty) {
-                 setState(() {
-                    widget.counterController.text = '1';
-                    text = '1';
-                  });
-              }
-              counter = int.parse(widget.counterController.text.isEmpty
-                  ? '1'
-                  : widget.counterController.text);
+            hintText:
+                '${context.watch<GeneralProvider>().cart.singleWhere((element) => element.pid == widget.product.pid).cartQuantity}',
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
             },
-            //hintText: '1',
-            //borderColor: theme.primaryColorLight
+            onChanged: (text) {
+              // if (text.isEmpty) {
+              //    setState(() {
+              //       widget.counterController.text = '1';
+              //       text = '1';
+              //     });
+              // }
+              // counter = int.parse(widget.counterController.text.isEmpty
+              //     ? '1'
+              //     : widget.counterController.text);
+            },
           ),
         ),
         IconButton(
-           icon: Icon(Icons.add_circle_outline,
-                size: 30,
-                color: counter == 100 //widget.product!.productQuantity!
-                    ? Colors.grey
-                    : widget.color),
-            onPressed: () {
-              counter =int.parse(widget.counterController.text.isEmpty
-                ? '0'
-                : widget.counterController.text);
-              setState(() {
+          icon: Icon(Icons.add_circle_outline,
+              size: 30,
+              color: counter >widget.product.productQuantity //widget.product!.productQuantity!
+                  ? Colors.grey
+                  : widget.color),
+          onPressed: () {
+            // counter = int.parse(widget.counterController.text.isEmpty
+            //     ? '0'
+            //     : widget.counterController.text);
+            setState(() {
+              if (counter < widget.product.productQuantity) {
                 counter++;
-              });
-               if (widget.product != null) {
-                    Product product = Product(
-                      pid: widget.product!.pid,
-                      productName: widget.product?.productName,
-                     sellingPrice: widget.product?.sellingPrice,
-                      productDescription: widget.product?.productDescription,
-                      cartQuantity: counter,
-                      productImage: widget.product?.productImage,
-                    );
-                    context.read<GeneralProvider>().updateCart(product);
-                    context.read<GeneralProvider>().total(product);
-                  }
-              widget.counterController.text = counter.toString();
-            },
-            ),
+              }
+            });
+            if (widget.product != null) {
+              Product product = Product(
+                pid: widget.product.pid,
+                productName: widget.product.productName,
+                sellingPrice: widget.product.sellingPrice,
+                productDescription: widget.product.productDescription,
+                cartQuantity: counter,
+                productImage: widget.product.productImage,
+              );
+              context.read<GeneralProvider>().updateCart(product);
+              context.read<GeneralProvider>().total(product);
+            }
+            // widget.counterController.text = counter.toString();
+          },
+        ),
       ],
     );
   }
 }
-
-
-

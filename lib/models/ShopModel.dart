@@ -194,13 +194,13 @@ class ShopProducts {
 class Product {
   int pid;
   String? productName;
-  double? sellingPrice;
-  double? costPrice;
+  double sellingPrice;
+  double costPrice;
   String? productImage;
-  int? productQuantity;
+  int productQuantity;
   String? productDescription;
-  int? cartQuantity;
-  bool? isLowStock;
+  int cartQuantity;
+  bool isLowStock;
   ProductCategory? productCategory = ProductCategory(
       cid: 0,
       categoryName: 'Uncategorised',

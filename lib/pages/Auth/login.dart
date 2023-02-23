@@ -2,6 +2,8 @@
 
 
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';

@@ -134,7 +134,7 @@ class HeaderSection extends StatelessWidget {
                 color: Colors.white,
                 quantity: context.watch<GeneralProvider>().cart.length,
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (builder) => ProductCalculator()));

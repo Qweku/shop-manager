@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:hexcolor/hexcolor.dart';
 
 class ShopColors {
   static Color primaryColor = Colors.white;
@@ -10,6 +9,6 @@ class ShopColors {
   //HexColor('#dbbc14');
   static Color textColor = Colors.white;
   static Color textColor2 = Colors.black54;
-  static Color newColor = HexColor('#b30929');
-  static Color iconColor = HexColor('#dbbc14');
+  // static Color newColor = HexColor('#b30929');
+  // static Color iconColor = HexColor('#dbbc14');
 }

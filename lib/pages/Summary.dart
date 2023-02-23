@@ -8,7 +8,6 @@ import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
 
-
 class SummaryScreen extends StatefulWidget {
   final double amountReceived, change, totalCost;
   const SummaryScreen(
@@ -108,7 +107,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         listen: false)
                                     .cart[index]);
                           }),
-                     
                       SizedBox(height: height * 0.03),
                       const Divider(
                         color: Colors.grey,
@@ -162,23 +160,22 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       ),
                       SizedBox(height: height * 0.05),
                       Button(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddProductSuccess(
-                                  tag: 'order',
-                                )));
+                        onTap: () {
+                          context.read<GeneralProvider>().processCart();
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddProductSuccess(
+                                        tag: 'order',
+                                      )));
 
-                   
-                    // print("${context}");
-                    context.read<GeneralProvider>().cart.clear();
-                  },
-                  buttonText: 'Done',
-                  color: primaryColor,
-                  width: width*0.8,
-                ),
-              
+                          // print("${context}");
+                          context.read<GeneralProvider>().cart.clear();
+                        },
+                        buttonText: 'Done',
+                        color: primaryColor,
+                        width: width * 0.8,
+                      ),
                     ],
                   ),
                 ),
@@ -202,7 +199,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
           //                         tag: 'order',
           //                       )));
 
-                   
           //           // print("${context}");
           //           context.read<GeneralProvider>().cartList.clear();
           //         },
@@ -211,7 +207,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
           //         width: width,
           //       ),
           //     ))
-       
         ],
       ),
     );

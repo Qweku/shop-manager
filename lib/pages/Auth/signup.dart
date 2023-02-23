@@ -5,6 +5,9 @@ import 'package:localstorage/localstorage.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
+import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
+import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class SignUp extends StatefulWidget {
@@ -23,6 +26,8 @@ class _SignUpState extends State<SignUp> {
 
   bool obsure = true;
   IconData visibility = Icons.visibility_off;
+  
+  int count = 0;
   void _loginError(
     Exception e,
   ) {
