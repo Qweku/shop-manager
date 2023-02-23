@@ -47,7 +47,7 @@ dependencies:
   intl_phone_number_input: ^0.7.0+2
   datetime_picker_formfield: ^2.0.1
   fl_chart: ^0.55.2
-  localstorage: ^4.0.0+1
+  localstorage: 
 
 dev_dependencies:
   hive_generator: ^1.1.3

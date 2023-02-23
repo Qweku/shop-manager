@@ -156,9 +156,7 @@ import 'dart:developer';
 // }
 
 ShopProducts shopProductsFromJson(String str) {
-  log('b');
   log(str);
-  log('a');
   final jsonData = json.decode(str);
   return ShopProducts.fromJson(jsonData);
 }

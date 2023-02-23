@@ -42,8 +42,8 @@ class _InventoryListState extends State<InventoryList> {
                 ? categories.inventory.isEmpty
                 : categories.inventory
                     .where((element) =>
-                        element.productCategory ==
-                        categories.categories[isSelected - 1])
+                        element.productCategory!.cid ==
+                        categories.categories[isSelected - 1].cid)
                     .toSet()
                     .toList()
                     .isEmpty)
@@ -72,8 +72,8 @@ class _InventoryListState extends State<InventoryList> {
                                   ? categories.inventory.length
                                   : categories.inventory
                                       .where((element) =>
-                                          element.productCategory ==
-                                          categories.categories[isSelected - 1])
+                                          element.productCategory!.cid ==
+                                          categories.categories[isSelected - 1].cid)
                                       .toSet()
                                       .toList()
                                       .length,
@@ -129,9 +129,9 @@ class _InventoryListState extends State<InventoryList> {
                                             ""
                                         : categories.inventory
                                                 .where((element) =>
-                                                    element.productCategory ==
+                                                    element.productCategory!.cid ==
                                                     categories.categories[
-                                                        isSelected - 1])
+                                                        isSelected - 1].cid)
                                                 .toList()[index]
                                                 .productImage ??
                                             "",
@@ -140,9 +140,9 @@ class _InventoryListState extends State<InventoryList> {
                                             .inventory[index].productName
                                         : categories.inventory
                                             .where((element) =>
-                                                element.productCategory ==
+                                                element.productCategory!.cid ==
                                                 categories
-                                                    .categories[isSelected - 1])
+                                                    .categories[isSelected - 1].cid)
                                             .toList()[index]
                                             .productName,
                                     quantity: isSelected == 0
@@ -151,14 +151,14 @@ class _InventoryListState extends State<InventoryList> {
                                             .toString()
                                         : categories.inventory
                                             .where((element) =>
-                                                element.productCategory ==
+                                                element.productCategory!.cid ==
                                                 categories
-                                                    .categories[isSelected - 1])
+                                                    .categories[isSelected - 1].cid)
                                             .toList()[index]
                                             .productQuantity
                                             .toString(),
                                     price:
-                                        "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory == categories.categories[isSelected - 1]).toList()[index].sellingPrice.toString()}",
+                                        "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toString()}",
                                   ),
                                 );
                               })
@@ -169,8 +169,8 @@ class _InventoryListState extends State<InventoryList> {
                                   ? categories.inventory.length
                                   : categories.inventory
                                       .where((element) =>
-                                          element.productCategory ==
-                                          categories.categories[isSelected - 1])
+                                          element.productCategory!.cid ==
+                                          categories.categories[isSelected - 1].cid)
                                       .toList()
                                       .length,
                               itemBuilder: (context, index) {
@@ -191,9 +191,9 @@ class _InventoryListState extends State<InventoryList> {
                                           ""
                                       : categories.inventory
                                               .where((element) =>
-                                                  element.productCategory ==
+                                                  element.productCategory!.cid ==
                                                   categories.categories[
-                                                      isSelected - 1])
+                                                      isSelected - 1].cid)
                                               .toList()[index]
                                               .productImage ??
                                           "",
@@ -201,9 +201,9 @@ class _InventoryListState extends State<InventoryList> {
                                       ? categories.inventory[index].productName
                                       : categories.inventory
                                           .where((element) =>
-                                              element.productCategory ==
+                                              element.productCategory!.cid ==
                                               categories
-                                                  .categories[isSelected - 1])
+                                                  .categories[isSelected - 1].cid)
                                           .toList()[index]
                                           .productName,
                                   quantity: isSelected == 0
@@ -212,14 +212,14 @@ class _InventoryListState extends State<InventoryList> {
                                           .toString()
                                       : categories.inventory
                                           .where((element) =>
-                                              element.productCategory ==
+                                              element.productCategory!.cid ==
                                               categories
-                                                  .categories[isSelected - 1])
+                                                  .categories[isSelected - 1].cid)
                                           .toList()[index]
                                           .productQuantity
                                           .toString(),
                                   price:
-                                      "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory == categories.categories[isSelected - 1]).toList()[index].sellingPrice.toString()}",
+                                      "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toString()}",
                                 );
                               })),
                 ),

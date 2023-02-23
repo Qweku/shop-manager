@@ -40,13 +40,26 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     // log('5');
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
+      Set<String> name = {};
+
     Provider.of<GeneralProvider>(context, listen: false).categories =
-        Provider.of<GeneralProvider>(context, listen: false)
-            .inventory
-            .map((e) => e.productCategory ?? ProductCategory(cid: 0))
-            .toSet()
-            .toList();
-    // log('6');
+        Provider.of<GeneralProvider>(context, listen: false).inventory.map((e) {
+      if (name.add(e.productCategory!.categoryName!)) {
+        return e.productCategory!;
+      } else {
+        return ProductCategory(
+          cid: -1,
+        );
+      }
+    }).toList()
+          ..removeWhere((element) => element.cid == -1);
+
+    log('CATEGORIES: ');
+    log(Provider.of<GeneralProvider>(context, listen: false)
+        .categories
+        .length
+        .toString());
+
     if (Provider.of<GeneralProvider>(context, listen: false)
         .categories
         .isEmpty) {

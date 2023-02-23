@@ -3,6 +3,9 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
@@ -20,6 +23,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  LocalStorage storage = LocalStorage('shop_mate');
+
   bool obsure = true;
   bool isShown = true;
   bool isNot = false;
@@ -143,8 +148,49 @@ class _LoginScreenState extends State<LoginScreen> {
                   // textColor: theme.primaryColorLight,
                   buttonText: 'Login',
                   onTap: () async {
-                  
-                  
+                    // if (shopController.text.isEmpty  ) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //         backgroundColor:
+                    //             const Color.fromARGB(255, 255, 17, 1),
+                    //         content: Text('Shop Name is Empty!',
+                    //             textAlign: TextAlign.center,
+                    //             style: theme.textTheme.bodyText2),
+                    //         duration: const Duration(milliseconds: 1500),
+                    //         behavior: SnackBarBehavior.floating,
+                    //         shape: const StadiumBorder()),
+                    //   );
+
+                    //   return;
+                    // }
+
+                    // try {
+                    var data = await storage.getItem(shopController.text.isEmpty
+                        ? 'demo'
+                        : shopController.text);
+
+                    if (data == null) {
+                      log('empty');
+                      Provider.of<GeneralProvider>(context, listen: false)
+                              .shop =
+                          ShopProducts(id: 0, shopname: 'demo', products: []);
+                    } else {
+                      log('not empty');
+                      Provider.of<GeneralProvider>(context, listen: false)
+                          .shop = shopProductsFromJson(data);
+                    }
+
+                    // log('1');
+                    // log(shopController.text.isEmpty.toString());
+                    // log("2");
+                    // Provider.of<GeneralProvider>(context, listen: false).shop =
+                    //     shopProductsFromJson();
+                    // } on Exception catch (e) {
+                    //   Provider.of<GeneralProvider>(context, listen: false)
+                    //           .shop =
+                    //       ShopProducts(id: 0, shopname: 'demo', products: []);
+                    //   // log("HEERREE");
+                    // }
 
                     Navigator.pushReplacement(
                         context,

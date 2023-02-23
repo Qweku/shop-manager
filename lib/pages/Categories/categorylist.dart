@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -75,17 +74,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         width: width,
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => InventoryProductList(
-                                   /*      category: Provider.of<GeneralProvider>(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => InventoryProductList(
+                                          /*      category: Provider.of<GeneralProvider>(
                                                 context,
                                                 listen: false)
                                             .category[widget.categoryIndex], */
-                                      )))/* .then((value) {
+                                          ))) /* .then((value) {
                             setState(() {});
                             return;
-                          }) */;
+                          }) */
+                              ;
                         },
                       ),
                     ),
@@ -93,7 +93,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   Consumer<GeneralProvider>(builder: (builder, state, child) {
                     return Expanded(
                         child: state.inventory.any((element) =>
-                                !(element.productCategory == state.category))
+                                !(element.productCategory!.cid ==
+                                    state.category.cid))
                             ? Center(
                                 child: Text(
                                   'No Products',
@@ -119,10 +120,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                 .watch<GeneralProvider>()
                                                 .inventory
                                                 .where((element) =>
-                                                    element.productCategory ==
+                                                    element
+                                                        .productCategory!.cid ==
                                                     context
                                                         .read<GeneralProvider>()
-                                                        .category)
+                                                        .category
+                                                        .cid)
                                                 .length,
                                             itemBuilder: (context, index) {
                                               return Padding(
@@ -140,31 +143,35 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                         state.inventory
                                                             .where((element) =>
                                                                 element
-                                                                    .productCategory ==
+                                                                    .productCategory!
+                                                                    .cid ==
                                                                 context
                                                                     .read<
                                                                         GeneralProvider>()
-                                                                    .category)
+                                                                    .category
+                                                                    .cid)
                                                             .toList()[index]);
                                                   },
                                                   index: index,
                                                   image64: state.inventory
                                                           .where((element) =>
                                                               element
-                                                                  .productCategory ==
+                                                                  .productCategory!
+                                                                  .cid ==
                                                               context
                                                                   .read<
                                                                       GeneralProvider>()
-                                                                  .category)
+                                                                  .category
+                                                                  .cid)
                                                           .toList()[index]
                                                           .productImage ??
                                                       '',
                                                   productName:
-                                                      "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productName}",
+                                                      "${state.inventory.where((element) => element.productCategory!.cid == context.read<GeneralProvider>().category.cid).toList()[index].productName}",
                                                   quantity:
-                                                      "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productQuantity}",
+                                                      "${state.inventory.where((element) => element.productCategory!.cid == context.read<GeneralProvider>().category.cid).toList()[index].productQuantity}",
                                                   price:
-                                                      "GHS ${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].sellingPrice}",
+                                                      "GHS ${state.inventory.where((element) => element.productCategory!.cid == context.read<GeneralProvider>().category.cid).toList()[index].sellingPrice}",
                                                 ),
                                               );
                                             })
@@ -175,10 +182,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                 .watch<GeneralProvider>()
                                                 .inventory
                                                 .where((element) =>
-                                                    element.productCategory ==
+                                                    element
+                                                        .productCategory!.cid ==
                                                     context
                                                         .read<GeneralProvider>()
-                                                        .category)
+                                                        .category
+                                                        .cid)
                                                 .toList()
                                                 .length,
                                             itemBuilder: (context, index) {
@@ -189,31 +198,35 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                       state.inventory
                                                           .where((element) =>
                                                               element
-                                                                  .productCategory ==
+                                                                  .productCategory!
+                                                                  .cid ==
                                                               context
                                                                   .read<
                                                                       GeneralProvider>()
-                                                                  .category)
+                                                                  .category
+                                                                  .cid)
                                                           .toList()[index]);
                                                 },
                                                 index: index,
                                                 image64: state.inventory
                                                         .where((element) =>
                                                             element
-                                                                .productCategory ==
+                                                                .productCategory!
+                                                                .cid ==
                                                             context
                                                                 .read<
                                                                     GeneralProvider>()
-                                                                .category)
+                                                                .category
+                                                                .cid)
                                                         .toList()[index]
                                                         .productImage ??
                                                     '',
                                                 productName:
-                                                    "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productName}",
+                                                    "${state.inventory.where((element) => element.productCategory!.cid == context.read<GeneralProvider>().category.cid).toList()[index].productName}",
                                                 quantity:
-                                                    "${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].productQuantity}",
+                                                    "${state.inventory.where((element) => element.productCategory!.cid == context.read<GeneralProvider>().category.cid).toList()[index].productQuantity}",
                                                 price:
-                                                    "GHS ${state.inventory.where((element) => element.productCategory == context.read<GeneralProvider>().category).toList()[index].sellingPrice}",
+                                                    "GHS ${state.inventory.where((element) => element.productCategory!.cid == context.read<GeneralProvider>().category.cid).toList()[index].sellingPrice}",
                                               );
                                             })),
                               ));
@@ -274,8 +287,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     GestureDetector(
                       onTap: () {
                         Provider.of<GeneralProvider>(context, listen: false)
-                            .removeFromCategory(
-                                product);
+                            .removeFromCategory(product);
                         Navigator.pop(context);
                       },
                       child: Column(
@@ -325,12 +337,8 @@ class HeaderSection extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-                context.read<GeneralProvider>()
-                    .category
-                    .categoryName!,
-                textAlign: TextAlign.left,
-                style: theme.textTheme.headline2),
+            Text(context.read<GeneralProvider>().category.categoryName!,
+                textAlign: TextAlign.left, style: theme.textTheme.headline2),
             Text(
               "Product List",
               textAlign: TextAlign.left,
@@ -344,14 +352,16 @@ class HeaderSection extends StatelessWidget {
                 )),
           ],
         ),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: theme.primaryColorLight),
-          child: IconButton(
-              onPressed: onPressed,
-              icon: Icon(Icons.add, color: theme.primaryColor)),
-        )
+        context.read<GeneralProvider>().category.cid == 0
+            ? Container()
+            : Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: theme.primaryColorLight),
+                child: IconButton(
+                    onPressed: onPressed,
+                    icon: Icon(Icons.add, color: theme.primaryColor)),
+              )
       ],
     );
   }
