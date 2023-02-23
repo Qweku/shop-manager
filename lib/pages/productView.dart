@@ -116,7 +116,7 @@ class _ProductViewState extends State<ProductView> {
                             SizedBox(width: width * 0.03),
                             Expanded(
                               child: Text(
-                                  'GHS ${widget.product.sellingPrice!.toStringAsFixed(2)}',
+                                  'GHS ${widget.product.sellingPrice.toStringAsFixed(2)}',
                                   textAlign: TextAlign.end,
                                   style: theme.textTheme.headline1!
                                       .copyWith(color: primaryColor)),
@@ -179,7 +179,7 @@ class _ProductViewState extends State<ProductView> {
                     padding: const EdgeInsets.all(20),
                     child: Row(children: [
                       Text(
-                        "GHS ${(widget.product.sellingPrice!) * counter}0",
+                        "GHS ${(widget.product.sellingPrice) * counter}0",
                         style: theme.textTheme.headline2!.copyWith(fontSize:16),
                       ),
                       const SizedBox(width: 20),
@@ -212,7 +212,7 @@ class _ProductViewState extends State<ProductView> {
                           ),
                           IconButton(
                               onPressed: () {
-                                if (counter < widget.product.productQuantity!) {
+                                if (counter < widget.product.productQuantity) {
                                   setState(() {
                                     counter++;
                                    
@@ -223,8 +223,7 @@ class _ProductViewState extends State<ProductView> {
                               icon: Icon(Icons.add_circle_outline,
                                   size: 30,
                                   color:
-                                      counter == widget.product.productQuantity!
-                                          ? Colors.grey
+                                      counter == widget.product.productQuantity? Colors.grey
                                           : Colors.white))
                         ],
                       )),

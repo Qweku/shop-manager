@@ -15,6 +15,7 @@ import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
+import 'package:shop_manager/pages/low_stock_list.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
@@ -40,7 +41,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     // log('5');
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
-      Set<String> name = {};
+    Set<String> name = {};
 
     Provider.of<GeneralProvider>(context, listen: false).categories =
         Provider.of<GeneralProvider>(context, listen: false).inventory.map((e) {
@@ -275,7 +276,7 @@ class _DashboardState extends State<Dashboard> {
                     )),
                     const ShopBarChart(),
                     GridView.count(
-                      shrinkWrap: true,
+                        shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
                         crossAxisCount: 2,
@@ -285,6 +286,14 @@ class _DashboardState extends State<Dashboard> {
                         children: List.generate(
                           statusList.length,
                           (index) => ItemStatus(
+                            onTap: () {
+                              if (index == 2) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LowStockList()));
+                              }
+                            },
                             status: statusList[index]['status'],
                             label: statusList[index]['label'],
                             icon: statusList[index]['icon'],

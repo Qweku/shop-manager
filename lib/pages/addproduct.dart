@@ -30,7 +30,7 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-   final CurrencyTextInputFormatter formatter = CurrencyTextInputFormatter(
+  final CurrencyTextInputFormatter formatter = CurrencyTextInputFormatter(
       turnOffGrouping: true,
       decimalDigits: 2,
       // locale: 'usa',
@@ -40,21 +40,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
       decimalDigits: 2,
       // locale: 'usa',
       symbol: 'GHS ');
- 
+
   final productName = TextEditingController();
+  final productDescription = TextEditingController();
   final productPrice = TextEditingController();
   final productCostPrice = TextEditingController();
   final productCategory = TextEditingController();
   final productQuantity = TextEditingController();
+  final lowStockQuantity = TextEditingController();
   File? _image;
 
   @override
   void dispose() {
     productName.dispose();
+    productDescription.dispose();
     productPrice.dispose();
     productCostPrice.dispose();
     productCategory.dispose();
     productQuantity.dispose();
+    lowStockQuantity.dispose();
     super.dispose();
   }
 
@@ -104,7 +108,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   // var productBox = Hive.box<Product>('Product');
   // var categoryBox = Hive.box<ProductCategory>('Category');
-   startTime() async {
+  startTime() async {
     var _duration = const Duration(seconds: 2);
     return Timer(_duration, navigationDialog);
   }
@@ -154,10 +158,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (widget.toEdit) {
       productName.text = widget.product!.productName!;
       productPrice.text =
-          formatter.format(widget.product!.sellingPrice!.toString());
+          formatter.format(widget.product!.sellingPrice.toString());
       productCostPrice.text =
-          formatter2.format(widget.product!.costPrice!.toString());
-      productQuantity.text = widget.product!.productQuantity!.toString();
+          formatter2.format(widget.product!.costPrice.toString());
+      productQuantity.text = widget.product!.productQuantity.toString();
       imageString = (widget.product!.productImage ?? "").isEmpty
           ? ""
           : widget.product!.productImage!;
@@ -165,9 +169,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
           .categories
           .singleWhere(
               (element) => element.cid == widget.product!.productCategory!.cid);
-      isChecked = widget.product!.isLowStock ?? false;
+      isChecked = widget.product!.isLowStock;
     }
-   
 
     super.initState();
   }
@@ -196,7 +199,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
           children: [
             SingleChildScrollView(
                 child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20,),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -206,7 +211,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         (widget.toEdit)
                             ? "Edit Product Detail"
                             : "Let's add the products in your shop",
-                        style: theme.textTheme.headline1!.copyWith(color:theme.primaryColor)),
+                        style: theme.textTheme.headline1!
+                            .copyWith(color: theme.primaryColor)),
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -218,39 +224,36 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         style: theme.textTheme.bodyText1,
                         hintColor: Colors.grey,
                       )),
-                   Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: AmountTextField(
-                                prefixIcon:
-                                    Icon(Icons.money, color: Colors.grey),
-                                hintText: "Selling Price",
-                                borderColor: Colors.grey,
-                                controller: productPrice,
-                                style: theme.textTheme.bodyText1,
-                                hintColor: Colors.grey,
-                                inputFormatters: formatter,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: AmountTextField(
-                                prefixIcon:
-                                    Icon(Icons.money, color: Colors.grey),
-                                hintText: "Cost Price",
-                                borderColor: Colors.grey,
-                                controller: productCostPrice,
-                                style: theme.textTheme.bodyText1,
-                                hintColor: Colors.grey,
-                                inputFormatters: formatter2,
-                              ),
-                            ),
-                          ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: AmountTextField(
+                            prefixIcon: Icon(Icons.money, color: Colors.grey),
+                            hintText: "Selling Price",
+                            borderColor: Colors.grey,
+                            controller: productPrice,
+                            style: theme.textTheme.bodyText1,
+                            hintColor: Colors.grey,
+                            inputFormatters: formatter,
+                          ),
                         ),
-                      ),
-                    
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: AmountTextField(
+                            prefixIcon: Icon(Icons.money, color: Colors.grey),
+                            hintText: "Cost Price",
+                            borderColor: Colors.grey,
+                            controller: productCostPrice,
+                            style: theme.textTheme.bodyText1,
+                            hintColor: Colors.grey,
+                            inputFormatters: formatter2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Container(
@@ -292,20 +295,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                     ),
                   ),
-                  
-                   Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: CustomTextField(
-                            maxLines: 5,
-                            prefixIcon: Icon(Icons.edit, color: Colors.grey),
-                            hintText: "Product Description",
-                            borderColor: Colors.grey,
-                            //controller: productDescription,
-                            style: theme.textTheme.bodyText1,
-                            hintColor: Colors.grey,
-                          )),
-                           SizedBox(height: 20,),
-                   
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: CustomTextField(
+                        maxLines: 5,
+                        prefixIcon: Icon(Icons.edit, color: Colors.grey),
+                        hintText: "Product Description",
+                        borderColor: Colors.grey,
+                        controller: productDescription,
+                        style: theme.textTheme.bodyText1,
+                        hintColor: Colors.grey,
+                      )),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Align(
@@ -323,7 +326,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: imageFile != null
-                                      ?Colors.white:Colors.grey),
+                                      ? Colors.white
+                                      : Colors.grey),
                               child: imageFile != null
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
@@ -335,13 +339,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       ),
                                     )
                                   : (widget.toEdit)
-                                      ? (widget.product!.productImage ?? "").isEmpty
+                                      ? (widget.product!.productImage ?? "")
+                                              .isEmpty
                                           ? Container(
                                               height: height * 0.23,
                                               width: width * 0.4,
                                               decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(20.0),
+                                                      BorderRadius.circular(
+                                                          20.0),
                                                   color: Colors.grey,
                                                   boxShadow: [
                                                     const BoxShadow(
@@ -368,8 +374,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(20),
                                               child: Image.memory(
-                                                base64Decode(
-                                                    widget.product!.productImage!),
+                                                base64Decode(widget
+                                                    .product!.productImage!),
                                                 width: width * 0.45,
                                                 height: height * 0.25,
                                                 fit: BoxFit.cover,
@@ -391,185 +397,207 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                         ),
                             ),
                           ),
-                        SizedBox(width:width*0.05),
-                       Expanded(
-                         child: Column(children: [
-                          Padding(
-                                               padding: const EdgeInsets.symmetric(vertical: 10),
-                                               child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Quantity', style: theme.textTheme.bodyText1),
-                             SizedBox(height:height*0.02),
-                            CounterWidget(
-                                borderColor: Colors.grey,
-                                style: theme.textTheme.bodyText1,
-                                counterController: productQuantity)
-                          ],
-                                               )),
-                                               Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                          SizedBox(width: width * 0.05),
+                          Expanded(
+                            child: Column(
                               children: [
-                                Checkbox(                              
-                                  value: isChecked, 
-                                  activeColor: primaryColor,
-                                  onChanged: (val){
-                                  setState(() {
-                                     isChecked = val ?? false;
-                                  });
-                                }),
-                                //SizedBox(width:width*0.03),
-                                Text('Low Stock Alert', style: theme.textTheme.bodyText1),
-                                
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Quantity',
+                                            style: theme.textTheme.bodyText1),
+                                        SizedBox(height: height * 0.02),
+                                        CounterWidget(
+                                            borderColor: Colors.grey,
+                                            style: theme.textTheme.bodyText1,
+                                            counterController: productQuantity)
+                                      ],
+                                    )),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Checkbox(
+                                            value: isChecked,
+                                            activeColor: primaryColor,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                isChecked = val ?? false;
+                                              });
+                                            }),
+                                        //SizedBox(width:width*0.03),
+                                        Text('Low Stock Alert',
+                                            style: theme.textTheme.bodyText1),
+                                      ],
+                                    ),
+                                    Text(
+                                        'Check if you want to receive alerts when this stock is running out',
+                                        style: theme.textTheme.bodyText1!
+                                            .copyWith(color: Colors.grey)),
+                                  ],
+                                )
                               ],
                             ),
-                             Text('Check if you want to receive alerts when this stock is running out', style: theme.textTheme.bodyText1!.copyWith(color:Colors.grey)),
-                          ],
-                                               )
-                         ],),
-                       )
+                          )
                         ],
                       ),
                     ),
                   ),
-                  !isChecked?Container(): Row(
-                     children: [
-                       Text('Low Stock Quantity', style: theme.textTheme.bodyText1),
-                                 SizedBox(width:width*0.03),
-                                CounterWidget(
-                                    borderColor: Colors.grey,
-                                    style: theme.textTheme.bodyText1,
-                                    counterController: productQuantity),
-                     ],
-                   ),
-                  SizedBox(height:height*0.05),
+                  !isChecked
+                      ? Container()
+                      : Row(
+                          children: [
+                            Text('Low Stock Quantity',
+                                style: theme.textTheme.bodyText1),
+                            SizedBox(width: width * 0.03),
+                            CounterWidget(
+                                borderColor: Colors.grey,
+                                style: theme.textTheme.bodyText1,
+                                counterController: lowStockQuantity),
+                          ],
+                        ),
+                  SizedBox(height: height * 0.05),
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Button(
                       width: width,
                       color: theme.primaryColor,
                       buttonText: 'Done',
-                      onTap: ()  async {
-                          // log(formatter.getUnformattedValue().toString());
-                          // log(productPrice.text);
-                          if (widget.toEdit) {
+                      onTap: () async {
+                        // log(formatter.getUnformattedValue().toString());
+                        // log(productPrice.text);
+                        imageString = base64Encode(imageFile!);
+                        if (widget.toEdit) {
+                          Product product = Product(
+                            pid: widget.product!.pid,
+                            productName: productName.text,
+                            sellingPrice: double.tryParse(formatter
+                                    .getUnformattedValue()
+                                    .toString()) ??
+                                0,
+                            productDescription: productDescription.text,
+                            costPrice: double.tryParse(formatter2
+                                    .getUnformattedValue()
+                                    .toString()) ??
+                                0,
+                            productQuantity:
+                                int.tryParse(productQuantity.text) ?? 0,
+                            lowStockQuantity:
+                                int.tryParse(lowStockQuantity.text) ?? 0,
+                            productImage: imageString,
+                            isLowStock: isChecked,
+                            productCategory: ProductCategory(
+                                cid: widget.product!.productCategory!.cid,
+                                categoryName: widget
+                                    .product!.productCategory!.categoryName,
+                                categoryDescription: widget.product!
+                                    .productCategory!.categoryDescription),
+                          );
+
+                          Provider.of<GeneralProvider>(context, listen: false)
+                              .editProduct(product);
+                          // .inventory
+                          //   .singleWhere(
+                          //       (element) => element == widget.product)
+                          // ..quantity = product.quantity
+                          // ..sellingPrice = product.sellingPrice
+                          // ..itemcategory = product.itemcategory
+                          // ..costPrice = product.costPrice
+                          // ..imageb64 = product.imageb64;
+
+                        } else {
+                          if (!(Provider.of<GeneralProvider>(context,
+                                  listen: false)
+                              .inventory
+                              .any((element) =>
+                                  element.productName == productName.text))) {
                             Product product = Product(
-                              pid: widget.product!.pid,
-                              productName: productName.text,
-                              sellingPrice: double.tryParse(formatter
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              costPrice: double.tryParse(formatter2
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              productQuantity:
-                                  int.tryParse(productQuantity.text) ?? 0,
-                              productImage: imageString,
-                              isLowStock: isChecked,
-                              productCategory: ProductCategory(
-                                  cid: widget.product!.productCategory!.cid,
-                                  categoryName: widget
-                                      .product!.productCategory!.categoryName,
-                                  categoryDescription: widget.product!
-                                      .productCategory!.categoryDescription),
-                            );
-
-                            Provider.of<GeneralProvider>(context, listen: false)
-                                .editProduct(product);
-                            // .inventory
-                            //   .singleWhere(
-                            //       (element) => element == widget.product)
-                            // ..quantity = product.quantity
-                            // ..sellingPrice = product.sellingPrice
-                            // ..itemcategory = product.itemcategory
-                            // ..costPrice = product.costPrice
-                            // ..imageb64 = product.imageb64;
-
-                          } else {
-                            if (!(Provider.of<GeneralProvider>(context,
-                                    listen: false)
-                                .inventory
-                                .any((element) =>
-                                    element.productName == productName.text))) {
-                              Product product = Product(
-                                  pid: context
-                                          .read<GeneralProvider>()
-                                          .inventory
-                                          .isEmpty
-                                      ? 1
-                                      : context
-                                              .read<GeneralProvider>()
-                                              .inventory
-                                              .last
-                                              .pid +
-                                          1,
-                                  productName: productName.text,
-                                  sellingPrice: double.tryParse(formatter
-                                          .getUnformattedValue()
-                                          .toString()) ??
-                                      0,
-                                  costPrice: double.tryParse(formatter2
-                                          .getUnformattedValue()
-                                          .toString()) ??
-                                      0,
-                                  productCategory:
-                                      _selectedCategory /*  ??
+                                pid: context
+                                        .read<GeneralProvider>()
+                                        .inventory
+                                        .isEmpty
+                                    ? 1
+                                    : context
+                                            .read<GeneralProvider>()
+                                            .inventory
+                                            .last
+                                            .pid +
+                                        1,
+                                productName: productName.text,
+                                productDescription: productDescription.text,
+                                sellingPrice: double.tryParse(formatter
+                                        .getUnformattedValue()
+                                        .toString()) ??
+                                    0,
+                                costPrice: double.tryParse(formatter2
+                                        .getUnformattedValue()
+                                        .toString()) ??
+                                    0,
+                                productCategory:
+                                    _selectedCategory /*  ??
                                       ProductCategory(
                                           cid: 0,
                                           categoryName: 'Uncategorised',
                                           categoryDescription:
                                               'No Description') */
-                                  ,
-                                  isLowStock: isChecked,
-                                  productQuantity:
-                                      int.tryParse(productQuantity.text) ?? 0,
-                                  // sellingPrice:
-                                  //     double.tryParse(productPrice.text) ?? 0,
-                                  productImage: imageString);
+                                ,
+                                isLowStock: isChecked,
+                                productQuantity:
+                                    int.tryParse(productQuantity.text) ?? 0,
+                                lowStockQuantity:
+                                    int.tryParse(lowStockQuantity.text) ?? 0,
+                                // sellingPrice:
+                                //     double.tryParse(productPrice.text) ?? 0,
+                                productImage: imageString);
 
-                              Provider.of<GeneralProvider>(context,
-                                      listen: false)
-                                  .addProduct(product);
-                              // .inventory
-                              // .add(product);
+                            Provider.of<GeneralProvider>(context, listen: false)
+                                .addProduct(product);
+                            // .inventory
+                            // .add(product);
 
-                              // await productBox.add(product);
+                            // await productBox.add(product);
 
-                              // if (_selectedCategory?.categoryName.isNotEmpty ??
-                              //     false) {
-                              //   // Provider.of<GeneralProvider>(context,
-                              //   //         listen: false)
-                              //   //     .saveToCategory(_selectedCategory!);
+                            // if (_selectedCategory?.categoryName.isNotEmpty ??
+                            //     false) {
+                            //   // Provider.of<GeneralProvider>(context,
+                            //   //         listen: false)
+                            //   //     .saveToCategory(_selectedCategory!);
 
-                              //   // HiveFunctions()
-                              //   //     .saveToCategory(_selectedCategory!);
-                              // }
-                            } else {
-                              Notifier().toast(
-                                  context: context,
-                                  message: "ERROR PRODUCT ALREADY EXIST!",
-                                  color: Colors.red);
-                              return;
-                            }
+                            //   // HiveFunctions()
+                            //   //     .saveToCategory(_selectedCategory!);
+                            // }
+                          } else {
+                            Notifier().toast(
+                                context: context,
+                                message: "ERROR PRODUCT ALREADY EXIST!",
+                                color: Colors.red);
+                            return;
                           }
-                          successDialog();
-                          productCostPrice.clear();
-                          productName.clear();
-                          productPrice.clear();
-                          productQuantity.clear();
-                           startTime();
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) =>
-                          //             const AddProductSuccess()));
+                        }
+                        successDialog();
+                        productCostPrice.clear();
+                        productName.clear();
+                        productPrice.clear();
+                        productDescription.clear();
+                        productQuantity.clear();
+                        lowStockQuantity.clear();
+                        startTime();
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) =>
+                        //             const AddProductSuccess()));
 
-                          //Navigator.pop(context);
-                        }, ),
+                        //Navigator.pop(context);
+                      },
+                    ),
                   ),
                 ],
               ),

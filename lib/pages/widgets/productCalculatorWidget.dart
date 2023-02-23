@@ -34,8 +34,8 @@ class ItemDetail extends StatelessWidget {
                   ),
                 )
               : Container(
-                  // width: width * 0.45,
-                  // height: height * 0.25,
+                  width: width * 0.2,
+                  height: height * 0.15,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(height * 0.1),
                       image: DecorationImage(
@@ -46,8 +46,16 @@ class ItemDetail extends StatelessWidget {
         title: Text(item.productName!,
             style: theme.textTheme.bodyText2!
                 .copyWith(color: textColor ?? Colors.white,fontWeight: FontWeight.bold)),
-        subtitle: Text("GHS ${item.sellingPrice}",
+        subtitle: Text("GHS ${item.sellingPrice.toStringAsFixed(2)}",
             style: theme.textTheme.bodyText2!
-                .copyWith(fontSize: 15, color: primaryColor)));
+                .copyWith(fontSize: 15, color: primaryColor),
+                
+                ),
+                
+                trailing: Text("x ${item.cartQuantity}",
+            style: theme.textTheme.bodyText1!
+                .copyWith(fontSize: 15),
+                
+                ),);
   }
 }

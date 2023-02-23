@@ -3,14 +3,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class ProductCard extends StatelessWidget {
-  final String? productName, quantity, price;
+  final String? productName, price;
+  String? quantity;
   final String image64;
   final int? index;
   final Function()? onTap, onLongPress, onPressed;
-  const ProductCard(
+  ProductCard(
       {Key? key,
       this.productName,
       this.onTap,
@@ -18,7 +21,8 @@ class ProductCard extends StatelessWidget {
       this.quantity,
       this.price,
       required this.image64,
-      this.onLongPress, this.onPressed})
+      this.onLongPress,
+      this.onPressed})
       : super(key: key);
 
   @override
@@ -26,7 +30,17 @@ class ProductCard extends StatelessWidget {
     final theme = Theme.of(context);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    bool isLow = false;
     // File img = File(base64Decode(image64));
+    context.read<GeneralProvider>().inventory.forEach(
+      (element) {
+        if (int.tryParse(quantity!)! <= element.lowStockQuantity) {
+          isLow = true;
+        } else {
+          isLow = false;
+        }
+      },
+    );
     return GestureDetector(
       onLongPress: onLongPress,
       onTap: onTap,
@@ -49,8 +63,9 @@ class ProductCard extends StatelessWidget {
                       width: width,
                       decoration: BoxDecoration(
                         //borderRadius: BorderRadius.circular(20.0),
-                        color:
-                            index!.isEven && image64.isEmpty ? primaryColor : Colors.white,
+                        color: index!.isEven && image64.isEmpty
+                            ? primaryColor
+                            : Colors.white,
                       ),
                       child: image64.isEmpty
                           ? Center(
@@ -60,8 +75,7 @@ class ProductCard extends StatelessWidget {
                                     ? theme.textTheme.headline2!
                                         .copyWith(fontSize: 30)
                                     : theme.textTheme.headline1!.copyWith(
-                                        fontSize: 30,
-                                        color: primaryColor),
+                                        fontSize: 30, color: primaryColor),
                               ),
                             )
                           : Image.memory(
@@ -97,24 +111,31 @@ class ProductCard extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(child: Container(padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 8),
-          color: const Color.fromARGB(255, 255, 245, 160),
-          child: Text("Low Stock!",style:theme.textTheme.bodyText1!.copyWith(fontSize:10,color:Colors.red)),
-          )),
+          isLow?Positioned(
+              child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+            color: const Color.fromARGB(255, 255, 245, 160),
+            child: Text("Low Stock!",
+                style: theme.textTheme.bodyText1!
+                    .copyWith(fontSize: 10, color: Colors.red)),
+          )):Container(),
           Positioned(
-            right: 10,
-            top:10,
-
+              right: 10,
+              top: 10,
               child: CircleAvatar(
-            backgroundColor: index!.isOdd || image64.isNotEmpty ? primaryColor : Colors.white,
-            radius: 15,
-            child: IconButton(
-              icon: Icon(Icons.add,
-                  color: index!.isEven && image64.isEmpty ? primaryColor : Colors.white,
-                  size: 15),
-              onPressed: onPressed,
-            ),
-          ))
+                backgroundColor: index!.isOdd || image64.isNotEmpty
+                    ? primaryColor
+                    : Colors.white,
+                radius: 15,
+                child: IconButton(
+                  icon: Icon(Icons.add,
+                      color: index!.isEven && image64.isEmpty
+                          ? primaryColor
+                          : Colors.white,
+                      size: 15),
+                  onPressed: onPressed,
+                ),
+              ))
         ],
       ),
     );

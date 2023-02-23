@@ -55,7 +55,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
     totalCost = 0;
 
     context.watch<GeneralProvider>().cart.forEach((element) {
-      totalCost += element.sellingPrice! * (element.cartQuantity!);
+      totalCost += element.sellingPrice* (element.cartQuantity);
     });
 
     final theme = Theme.of(context);
@@ -395,7 +395,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       height: widget.height * 0.01,
                     ),
                     Text(
-                      'GHS ${widget.product.sellingPrice!.toStringAsFixed(2)}',
+                      'GHS ${widget.product.sellingPrice.toStringAsFixed(2)}',
                       style: widget.theme.textTheme.bodyText1!.copyWith(
                           fontSize: 17, color: widget.theme.primaryColor),
                     )

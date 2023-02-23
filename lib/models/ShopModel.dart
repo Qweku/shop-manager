@@ -198,6 +198,7 @@ class Product {
   double costPrice;
   String? productImage;
   int productQuantity;
+  int lowStockQuantity;
   String? productDescription;
   int cartQuantity;
   bool isLowStock;
@@ -214,6 +215,7 @@ class Product {
       this.productImage,
       this.productDescription,
       this.productQuantity = 0,
+      this.lowStockQuantity = 0,
       this.cartQuantity = 0,
       this.productCategory,
       this.isLowStock = false});
@@ -226,6 +228,7 @@ class Product {
         productImage: json["productImage"],
         productDescription: json["productDescription"],
         productQuantity: json["productQuantity"],
+        lowStockQuantity: json["lowStockQuantity"],
         cartQuantity: json["cartQuantity"],
         isLowStock: json["isLowStock"],
         productCategory: ProductCategory.fromJson(json["productCategory"]),
@@ -239,6 +242,7 @@ class Product {
         "productImage": productImage,
         "productDescription": productDescription,
         "productQuantity": productQuantity,
+        "lowStockQuantity": lowStockQuantity,
         "cartQuantity": cartQuantity,
         "isLowStock": isLowStock,
         "productCategory": productCategory?.toJson(),
