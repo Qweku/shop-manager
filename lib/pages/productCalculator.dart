@@ -51,11 +51,10 @@ class _ProductCalculatorState extends State<ProductCalculator> {
 
   @override
   Widget build(BuildContext context) {
-    
     totalCost = 0;
 
     context.watch<GeneralProvider>().cart.forEach((element) {
-      totalCost += element.sellingPrice* (element.cartQuantity);
+      totalCost += element.sellingPrice * (element.cartQuantity);
     });
 
     final theme = Theme.of(context);
@@ -141,7 +140,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                           Button(
                             onTap: () {
                               if (!isDone) {
-                                _bottomDrawSheet(context);
+                                _calculateBalance(context);
                               } else {
                                 Navigator.pushReplacement(
                                     context,
@@ -171,78 +170,110 @@ class _ProductCalculatorState extends State<ProductCalculator> {
     );
   }
 
-  void _bottomDrawSheet(context) {
-    final theme = Theme.of(context);
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    showModalBottomSheet(
-        backgroundColor: primaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
-        ),
+  _calculateBalance(context) {
+    var theme = Theme.of(context);
+
+    return showDialog<bool>(
         context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            padding: EdgeInsets.all(height * 0.02),
-            child: Column(
-              // spacing: 20,
-              children: <Widget>[
-                SizedBox(height: height * 0.02),
-                Padding(
-                  padding: EdgeInsets.only(
-                      bottom: height * 0.02, top: height * 0.04),
-                  child: Text("Enter Amount Received",
-                      style: theme.textTheme.headline2),
+        builder: (c) => StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                backgroundColor: primaryColor,
+                insetPadding: EdgeInsets.symmetric(horizontal: 20),
+                //contentPadding: EdgeInsets.zero,
+                //clipBehavior: Clip.antiAliasWithSaveLayer,
+                title: Text(
+                  "CALCULATE BALANCE",
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headline2,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height * 0.04,
+                content: SizedBox(
+                  width: width * 0.7,
+                  height: height * 0.4,
+                  child: Column(
+                    // spacing: 20,
+                    children: <Widget>[
+                      SizedBox(height: height * 0.02),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: height * 0.02, top: height * 0.04),
+                        child: Text("Enter Amount Received",
+                            style: theme.textTheme.headline2),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: height * 0.04,
+                        ),
+                        child: CustomTextField(
+                            controller: amountReceived,
+                            keyboard: TextInputType.number,
+                            onChanged: (text) {
+                              setState(() {
+                                double amt = double.parse(amountReceived.text);
+                                balance = amt - totalCost;
+                              });
+                            },
+                            hintText: 'Amount',
+                            hintColor: Colors.white,
+                            borderColor: Colors.white,
+                            prefixIcon: const Icon(Icons.add_box,
+                                color: Colors.white, size: 20),
+                            style: theme.textTheme.bodyText2),
+                      ),
+                      SizedBox(height: height * 0.03),
+                      Column(
+                        children: [
+                          Text('Change', style: theme.textTheme.bodyText2),
+                          SizedBox(height: height * 0.01),
+                          Text(
+                            "GHS ${balance.toStringAsFixed(2)}",
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.headline2,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: height * 0.045),
+                    ],
                   ),
-                  child: CustomTextField(
-                      controller: amountReceived,
-                      keyboard: TextInputType.number,
-                      onChanged: (text) {
-                        setState(() {
-                          double amt = double.parse(amountReceived.text);
-                          balance = amt - totalCost;
-                        });
-                      },
-                      hintText: 'Amount',
-                      hintColor: Colors.white,
-                      borderColor: Colors.white,
-                      prefixIcon: const Icon(Icons.add_box,
-                          color: Colors.white, size: 20),
-                      style: theme.textTheme.bodyText2),
                 ),
-                SizedBox(height: height * 0.03),
-                Column(
-                  children: [
-                    Text('Change', style: theme.textTheme.bodyText2),
-                    SizedBox(height: height * 0.01),
-                    Text(
-                      "GHS ${balance.toStringAsFixed(2)}",
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headline2,
-                    ),
-                  ],
-                ),
-                SizedBox(height: height * 0.045),
-                Button(
-                  color: theme.primaryColorLight,
-                  textColor: theme.primaryColor,
-                  width: width,
-                  buttonText: "Done",
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    isDone = true;
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          );
-        });
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Button(
+                          verticalPadding: 20,
+                          borderRadius: 10,
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          width: width * 0.2,
+                          color: primaryColor,
+                          buttonText: 'Cancel',
+                        ),
+                      ),
+                      Expanded(
+                        child: Button(
+                          verticalPadding: 20,
+                          borderRadius: 10,
+                          color: primaryColorLight,
+                          textColor: primaryColor,
+                          width: width,
+                          buttonText: "Done",
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+
+                            setState(() {
+                              isDone = true;
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            }));
   }
 }
 
@@ -411,8 +442,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () => Provider.of<GeneralProvider>(context, listen: false)
-                    .removeFromCart(widget.index),
+                onTap: () =>
+                    Provider.of<GeneralProvider>(context, listen: false)
+                        .removeFromCart(widget.index),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
@@ -440,8 +472,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   color: primaryColor,
                   product: widget.product,
                   counterController: widget.counterController,
-                  width: widget.width * 0.3
-                  ),
+                  width: widget.width * 0.3),
 
               // ItemCounter(
               //   counter: widget.counter,

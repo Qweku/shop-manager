@@ -6,7 +6,7 @@ class Button extends StatelessWidget {
   final Function()? onTap;
   final String? buttonText;
   final Color color, textColor;
-  final double? width;
+  final double? width, verticalPadding, borderRadius;
   final Color borderColor;
   final Color shadowColor;
   const Button({
@@ -16,7 +16,7 @@ class Button extends StatelessWidget {
     this.color = Colors.transparent,
     this.width,
     this.borderColor = Colors.transparent,
-    this.shadowColor = Colors.black45, this.textColor = Colors.white,
+    this.shadowColor = Colors.black45, this.textColor = Colors.white, this.verticalPadding, this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -25,11 +25,11 @@ class Button extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: width,
-        padding: EdgeInsets.symmetric(vertical: 15),
+        padding: EdgeInsets.symmetric(vertical:verticalPadding ?? 15),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border.all(color: borderColor),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 20)),
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: shadowColor,
