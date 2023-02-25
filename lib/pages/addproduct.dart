@@ -66,7 +66,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   ProductCategory? _selectedCategory;
   String imageString = '';
   List<ProductCategory> categoryList = [];
-  Uint8List? imageFile;
+  Uint8List imageFile = Uint8List(0);
   //String imagePath;
   final picker = ImagePicker();
 
@@ -325,10 +325,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               height: height * 0.25,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: imageFile != null
+                                  color: imageFile.isNotEmpty
                                       ? Colors.white
                                       : Colors.grey),
-                              child: imageFile != null
+                              child: imageFile .isNotEmpty
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.memory(
