@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/notificationButton.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 
@@ -11,6 +12,7 @@ import 'package:shop_manager/pages/Inventory/InventorySearchList.dart';
 import 'package:shop_manager/pages/productCalculator.dart';
 
 import 'package:shop_manager/pages/search.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 import '../widgets/clipPath.dart';
 
@@ -54,7 +56,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           top: false,
           child: Column(
             children: [
-              ClipPath(
+             Responsive.isMobile()? ClipPath(
                 clipper: BottomClipper(),
                 child: Container(
                   width: width,
@@ -75,7 +77,52 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     },
                   ),
                 ),
+              ): Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Inventory",
+                    textAlign: TextAlign.left,
+                    style: headline1.copyWith(fontSize: 20),
+                  ),
+                  SizedBox(
+                    width:width*0.4,
+                    child: CustomTextField(
+                      borderColor:  Colors.grey,
+                      style: bodyText1,
+                      suffixIcon: GestureDetector(
+                          child: const Icon(Icons.search, color: Colors.grey)),
+                      hintText: "Search for product",
+                      hintColor: Colors.grey,
+                      onChanged:(value) {
+                                setState(() {
+                                  query = value;
+                                });
+                              },
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const NotificationIconButton(quantity: 1),
+                      SizedBox(
+                        width: width * 0.01,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.account_circle_outlined,
+                          size: 35,
+                          color: primaryColor,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+                          ),
               ),
+            SizedBox(height: height * 0.03),
               Expanded(
                 child: AnimatedSwitcher(
                     duration: Duration(microseconds: 100),

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shop_manager/pages/Inventory/inventory.dart';
+import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
+import 'package:shop_manager/pages/addproduct.dart';
+import 'package:shop_manager/pages/low_stock_list.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class SideMenu extends StatefulWidget {
@@ -14,22 +18,22 @@ class _SideMenuState extends State<SideMenu> {
   List<Map<String, dynamic>> sideMenu = [
     {'menu': 'Dashboard', 'icon': Icons.dashboard_customize},
     {'menu': 'Category', 'icon': Icons.category},
-    {'menu': 'Add Product', 'icon': Icons.shopping_bag},
-    {'menu': 'Account', 'icon': Icons.receipt_long},
+    {'menu': 'Low Stock Items', 'icon': Icons.arrow_circle_down_outlined},
+    {'menu': 'Sales', 'icon': Icons.receipt_long},
     {'menu': 'Inventory', 'icon': Icons.inventory},
   ];
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.symmetric(vertical:height * 0.05),
+      padding: EdgeInsets.symmetric(vertical: height * 0.05),
       height: height,
       width: width * 0.17,
       color: Colors.white,
       child: Column(
         children: [
           Padding(
-           padding: EdgeInsets.all(width * 0.02),
+            padding: EdgeInsets.all(width * 0.02),
             child: Container(
                 padding: EdgeInsets.all(width * 0.01),
                 decoration:
@@ -40,7 +44,9 @@ class _SideMenuState extends State<SideMenu> {
                     color: theme.primaryColor,
                   ),
                   SizedBox(width: 10),
-                  Text('ShopMate',textAlign: TextAlign.center, style: theme.textTheme.bodyText1)
+                  Text('ShopMate',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyText1)
                 ])),
           ),
           Divider(
@@ -55,37 +61,39 @@ class _SideMenuState extends State<SideMenu> {
                     onTap: () {
                       setState(() {
                         indxBttn = index;
-                        // widget.indx!(indxBttn);
+                        widget.indx!(indxBttn);
                       });
                     },
                     child: Padding(
-                      padding: EdgeInsets.only(top: height * 0.02,left: width*0.02),
+                      padding: EdgeInsets.only(
+                          top: height * 0.02, left: width * 0.02),
                       child: AnimatedContainer(
                         padding: EdgeInsets.all(width * 0.01),
                         //width: width * 0.08,
                         duration: const Duration(milliseconds: 600),
                         decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                bottomLeft: Radius.circular(20)),
-                            ),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              bottomLeft: Radius.circular(20)),
+                        ),
                         child: Row(
                           children: [
                             Icon(sideMenu[index]['icon'],
                                 //size: 35,
                                 color: indxBttn == index
-                                ? theme.primaryColor
-                                :Colors.grey),
+                                    ? theme.primaryColor
+                                    : Colors.grey),
                             const SizedBox(
                               width: 20,
                             ),
-                            Text(
-                              sideMenu[index]['menu'],
-                              style: theme.textTheme.bodyText1!.copyWith(
-                                fontSize: 17,color:indxBttn == index
-                                ? theme.primaryColor
-                                :Colors.grey
-                                
+                            Expanded(
+                              child: Text(
+                                sideMenu[index]['menu'],
+                                style: theme.textTheme.bodyText1!.copyWith(
+                                    fontSize: 17,
+                                    color: indxBttn == index
+                                        ? theme.primaryColor
+                                        : Colors.grey),
                               ),
                             )
                           ],
@@ -98,3 +106,12 @@ class _SideMenuState extends State<SideMenu> {
     );
   }
 }
+
+List<Widget> sideMenuItems = [
+  TabletHomeScreen(),
+  Container(),
+  LowStockList(),
+  Container(),
+  InventoryScreen(),
+  AddProductScreen()
+];

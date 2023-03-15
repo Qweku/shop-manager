@@ -16,6 +16,7 @@ class SimpleBarChart extends StatelessWidget {
         barGroups: barGroups,
         alignment: BarChartAlignment.spaceAround,
         maxY: 20,
+        gridData: FlGridData(show: false)
       ),
     );
   }
@@ -246,7 +247,7 @@ class ShopBarChartState extends State<ShopBarChart> {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
-      color: primaryColor,
+      color: Responsive.isMobile()?primaryColor:Colors.white,
       child: Container(
         padding: const EdgeInsets.all(10),
         height:  Responsive.isMobile()?height * 0.27:height * 0.3 ,

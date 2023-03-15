@@ -8,6 +8,8 @@ import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
 
+import '../models/NotificationModel.dart';
+
 class SummaryScreen extends StatefulWidget {
   final double amountReceived, change, totalCost;
   const SummaryScreen(
@@ -171,6 +173,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
                           // print("${context}");
                           context.read<GeneralProvider>().cart.clear();
+                          
+                          
                         },
                         buttonText: 'Done',
                         color: primaryColor,

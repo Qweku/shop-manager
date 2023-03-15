@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/productView.dart';
@@ -67,8 +68,8 @@ class _InventorySearchListState extends State<InventorySearchList> {
                               physics: const BouncingScrollPhysics(),
                               padding: EdgeInsets.only(top: height * 0.02),
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
+                                   SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: Responsive.isMobile()?3:6,
                                       childAspectRatio: 2 / 3.5),
                               itemCount: productItems.length,
                               itemBuilder: (context, index) {

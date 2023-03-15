@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shop_manager/models/AuthService.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/services.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
@@ -19,9 +20,6 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -33,16 +31,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 CircleAvatar(
-                  backgroundColor: theme.primaryColor,
+                  backgroundColor: primaryColor,
                   radius: 30,
-                  child: Icon(Icons.shopify,
-                      color: theme.primaryColorLight, size: 30),
+                  child:
+                      Icon(Icons.shopify, color: primaryColorLight, size: 30),
                 ),
                 SizedBox(width: width * 0.02),
                 Text(
                   'ShopMate',
-                  style: theme.textTheme.headline2!
-                      .copyWith(color: theme.primaryColor),
+                  style: headline2.copyWith(color: primaryColor),
                 ),
               ]),
             ),
@@ -66,15 +63,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       ),
     );
   }
-   _backButton(context) {
-    var theme = Theme.of(context);
+
+  _backButton(context) {
+   
     return showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               content: SizedBox(
-                height: height * 0.1,
+                height: height * 0.13,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -85,7 +83,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     Text(
                       "Do you really want to logout?",
-                      style: theme.textTheme.bodyText1,
+                      style: bodyText1,
                     ),
                   ],
                 ),
@@ -93,10 +91,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               actions: [
                 TextButton(
                     onPressed: () async {
-                      
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => Authentication()));
-                     
+                      ApplicationState().signOut();
+                      Navigator.pop(context);
                     },
                     child: const Text("Yes")),
                 TextButton(
@@ -105,7 +101,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ],
             ));
   }
-
 }
 
 class DrawerItem extends StatelessWidget {
@@ -133,5 +128,4 @@ class DrawerItem extends StatelessWidget {
         ),
         onTap: onTap);
   }
-
- }
+}

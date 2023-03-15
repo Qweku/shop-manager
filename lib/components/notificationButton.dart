@@ -19,7 +19,7 @@ class NotificationIconButton extends StatelessWidget {
         IconButton(
             onPressed: onTap,
             icon: Icon(Icons.notifications_outlined,
-                color: primaryColorLight, size: Responsive.isMobile() ? 30 : 35)),
+                color: Responsive.isMobile()?primaryColorLight:primaryColor, size: Responsive.isMobile() ? 30 : 35)),
         Positioned(
             top: height * 0.005,
             left: Responsive.isMobile() ? width * 0.03 : width * 0.01,
@@ -32,7 +32,7 @@ class NotificationIconButton extends StatelessWidget {
                         shape: BoxShape.circle),
                     child: Text(
                       '${quantity < 10 ? quantity : '9+'}',
-                      style: theme.textTheme.bodyText2!.copyWith(fontSize: 9),
+                      style: bodyText2.copyWith(fontSize: 9),
                     ),
                   ))
       ],

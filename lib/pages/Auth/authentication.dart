@@ -29,7 +29,7 @@ class _AuthenticationState extends State<Authentication> {
     return WillPopScope(
       onWillPop: () => _backButton(),
       child: Scaffold(
-        //resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         backgroundColor: theme.primaryColor,
         body: Stack(
           children: [
@@ -59,11 +59,11 @@ class _AuthenticationState extends State<Authentication> {
                       CircleAvatar(
                         backgroundColor: theme.primaryColorLight,
                         radius: width * 0.12,
-                        child:
-                            Icon(Icons.shopify, color: theme.primaryColor, size: 30),
+                        backgroundImage: AssetImage("assets/app_icon.png"),
+                      
                       ),
                       SizedBox(height:height*0.01),
-                      Text('ShopMate',style: theme.textTheme.headline2,),
+                      Text('Smart Shop Mate',style: theme.textTheme.headline2,),
                       SizedBox(height: height * 0.05),
                       AnimatedSwitcher(duration: const Duration(milliseconds: 700),
                       child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),

@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
-
-
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +10,12 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
+import 'package:shop_manager/main.dart';
+import 'package:shop_manager/models/AuthService.dart';
+import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/models/UserModel.dart';
 import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
@@ -34,20 +37,23 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isNot = false;
   double num = 0.4;
   IconData visibility = Icons.visibility_off;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
-  void _loginError(
+  void loginError(
     Exception e,
   ) {
     showDialog<void>(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(
-              "LOGIN ERROR",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
+            title: Icon(Icons.cancel,color:Color.fromARGB(255, 216, 30, 17),size:50),
+            
+            // Text(
+            //   "LOGIN ERROR",textAlign: TextAlign.center,
+            //   style: TextStyle(fontWeight: FontWeight.bold,color:Color.fromARGB(255, 233, 22, 7), fontSize: 18),
+            // ),
             content: Text(
-                "An error happened while trying to login: ${(e as dynamic).message}"),
+                "${(e as dynamic).message}"),
             actions: [
               TextButton(
                   onPressed: (() => Navigator.of(context).pop()),
@@ -70,16 +76,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-    final theme = Theme.of(context);
+    final authService = Provider.of<AuthService>(context);
     return AnimatedContainer(
         padding: EdgeInsets.only(bottom: height * 0.03),
         duration: const Duration(milliseconds: 700),
         // height: height * 0.5,
         width: width * 0.9,
         decoration: BoxDecoration(
-            color: primaryColorLight,
-            borderRadius: BorderRadius.circular(20)),
+            color: primaryColorLight, borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: EdgeInsets.only(
               top: height * 0.03, right: height * 0.03, left: height * 0.03),
@@ -88,19 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
             Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Text("Welcome back",
-                    style: theme.textTheme.headline2!
-                        .copyWith(color: primaryColor))),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: height * 0.02),
-              child: CustomTextField(
-                borderColor: Colors.grey,
-                hintText: "Shop Name",
-                //hintColor: theme.primaryColor,
-                controller: shopController,
-                style: theme.textTheme.bodyText1,
-                prefixIcon: Icon(Icons.shopify, color: primaryColor),
-              ),
-            ),
+                    style: headline2.copyWith(color: primaryColor))),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(vertical: height * 0.02),
+            //   child: CustomTextField(
+            //     borderColor: Colors.grey,
+            //     hintText: "Shop Name",
+            //     //hintColor: theme.primaryColor,
+            //     controller: shopController,
+            //     style: theme.textTheme.bodyText1,
+            //     prefixIcon: Icon(Icons.shopify, color: primaryColor),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: height * 0.02),
               child: CustomTextField(
@@ -108,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: "Username or email",
                 // hintColor: theme.primaryColor,
                 controller: _emailController,
-                style: theme.textTheme.bodyText1,
+                style: bodyText1,
                 prefixIcon: Icon(Icons.person, color: primaryColor),
               ),
             ),
@@ -118,8 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 maxLines: 1,
                 obscure: obsure,
                 borderColor: Colors.grey,
-                style: theme.textTheme.bodyText1,
-                prefixIcon: Icon(Icons.lock, color:primaryColor),
+                style: bodyText1,
+                prefixIcon: Icon(Icons.lock, color: primaryColor),
                 controller: _passwordController,
                 suffixIcon: GestureDetector(
                   onTap: () {
@@ -135,8 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     // alignment: Alignment(1.0,50.0),
                     padding: const EdgeInsets.only(right: 10),
-                    child:
-                        Icon(visibility, size: 25, color: primaryColor),
+                    child: Icon(visibility, size: 25, color: primaryColor),
                   ),
                 ),
                 hintText: "Password",
@@ -152,21 +154,38 @@ class _LoginScreenState extends State<LoginScreen> {
                   // textColor: theme.primaryColorLight,
                   buttonText: 'Login',
                   onTap: () async {
-                    // if (shopController.text.isEmpty  ) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(
-                    //         backgroundColor:
-                    //             const Color.fromARGB(255, 255, 17, 1),
-                    //         content: Text('Shop Name is Empty!',
-                    //             textAlign: TextAlign.center,
-                    //             style: theme.textTheme.bodyText2),
-                    //         duration: const Duration(milliseconds: 1500),
-                    //         behavior: SnackBarBehavior.floating,
-                    //         shape: const StadiumBorder()),
-                    //   );
+                    if (_emailController.text.isEmpty ||
+                        _emailController.text.length < 4) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 17, 1),
+                            content: Text('Invalid email',
+                                textAlign: TextAlign.center, style: bodyText2),
+                            duration: const Duration(milliseconds: 1500),
+                            behavior: SnackBarBehavior.floating,
+                            shape: const StadiumBorder()),
+                      );
 
-                    //   return;
-                    // }
+                      return;
+                    }
+                    if (_passwordController.text.isEmpty ||
+                        _passwordController.text.length < 4) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 17, 1),
+                            content: Text(
+                                'Password must be at least 4 characters',
+                                textAlign: TextAlign.center,
+                                style: bodyText2),
+                            duration: const Duration(milliseconds: 1500),
+                            behavior: SnackBarBehavior.floating,
+                            shape: const StadiumBorder()),
+                      );
+
+                      return;
+                    }
 
                     // try {
                     var data = await storage.getItem(shopController.text.isEmpty
@@ -184,6 +203,47 @@ class _LoginScreenState extends State<LoginScreen> {
                           .shop = shopProductsFromJson(data);
                     }
 
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) => Center(
+                                child: CircularProgressIndicator(
+                              color: primaryColorLight,
+                            )));
+
+                   
+
+                    await authService.signInWithEmailAndPassword(
+                        _emailController.text, _passwordController.text).then((user){ 
+                             
+                        navigatorKey.currentState!.pop((route) => route);
+
+                        }).catchError((e){
+                          navigatorKey.currentState!.pop((route) => route);
+                          loginError(e);
+                        });
+
+                    // await ApplicationState()
+                    //     .signInWithEmailAndPassword(
+                    //         _emailController.text.trim(),
+                    //         _passwordController.text.trim(),
+                    //         (e) => loginError(e))
+                    //     .onError((error, stackTrace) =>
+                    //         Navigator.pushReplacement(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //                 builder: (context) => Responsive.isMobile()
+                    //                     ? MyHomeScreen()
+                    //                     : TabletDashboard())));
+                    // navigatorKey.currentState!.pop((route) => route);
+
+                    // Navigator.pushReplacement(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => Responsive.isMobile()
+                    //             ? MyHomeScreen()
+                    //             : TabletDashboard()));
+
                     // log('1');
                     // log(shopController.text.isEmpty.toString());
                     // log("2");
@@ -195,22 +255,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     //       ShopProducts(id: 0, shopname: 'demo', products: []);
                     //   // log("HEERREE");
                     // }
-
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Responsive.isMobile()
-                                ? MyHomeScreen()
-                                : TabletDashboard()));
-                 
                   },
                 )),
             Row(children: [
-              Text("Don't have an account? ", style: theme.textTheme.bodyText1),
+              Text("Don't have an account? ", style: bodyText1),
               TextButton(
                   child: Text("Register",
-                      style: theme.textTheme.bodyText2!
-                          .copyWith(color: primaryColor)),
+                      style: bodyText2.copyWith(color: primaryColor)),
                   onPressed: () => widget.toggleScreen!())
             ]),
           ]),

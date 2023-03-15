@@ -187,7 +187,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         // iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           (widget.toEdit) ? "Edit Product" : "Add Product",
-          style: theme.textTheme.headline2,
+          style: headline2,
         ),
         centerTitle: true,
         elevation: 0,
@@ -332,7 +332,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.memory(
-                                        imageFile!,
+                                        imageFile,
                                         width: width * 0.45,
                                         height: height * 0.25,
                                         fit: BoxFit.cover,
@@ -473,7 +473,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       onTap: () async {
                         // log(formatter.getUnformattedValue().toString());
                         // log(productPrice.text);
-                        imageString = base64Encode(imageFile!);
+                        imageString = base64Encode(imageFile);
                         if (widget.toEdit) {
                           Product product = Product(
                             pid: widget.product!.pid,

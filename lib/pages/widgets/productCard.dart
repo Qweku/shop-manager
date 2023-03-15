@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
@@ -59,7 +60,7 @@ class ProductCard extends StatelessWidget {
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10)),
                   child: Container(
-                      height: height * 0.15,
+                      height: Responsive.isMobile()?height * 0.15:height * 0.25,
                       width: width,
                       decoration: BoxDecoration(
                         //borderRadius: BorderRadius.circular(20.0),

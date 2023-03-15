@@ -2,13 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
+import 'package:shop_manager/models/AuthService.dart';
+import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
+
+import '../../main.dart';
 
 class SignUp extends StatefulWidget {
   final Function? toggleScreen;
@@ -22,11 +27,11 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-    LocalStorage storage = LocalStorage('shop_mate');
+  LocalStorage storage = LocalStorage('shop_mate');
 
   bool obsure = true;
   IconData visibility = Icons.visibility_off;
-  
+
   int count = 0;
   void _loginError(
     Exception e,
@@ -60,6 +65,7 @@ class _SignUpState extends State<SignUp> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     var theme = Theme.of(context);
+    final authService = Provider.of<AuthService>(context);
     List<Widget> signUpList = [
       SignUpNameEmail(
           height: height,
@@ -121,8 +127,9 @@ class _SignUpState extends State<SignUp> {
                         top: height * 0.04, bottom: height * 0.01),
                     child: Button(
                       onTap: () async {
-                        if (count == 0 && (shopController.text.isEmpty ||
-                            shopController.text.length < 4)) {
+                        if (count == 0 &&
+                            (shopController.text.isEmpty ||
+                                shopController.text.length < 4)) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 backgroundColor:
@@ -132,15 +139,14 @@ class _SignUpState extends State<SignUp> {
                                     style: theme.textTheme.bodyText2),
                                 duration: const Duration(milliseconds: 1500),
                                 behavior: SnackBarBehavior.floating,
-                                shape: const StadiumBorder()
-                                
-                                ),
+                                shape: const StadiumBorder()),
                           );
 
                           return;
                         }
-                        if (count == 0 && (_emailController.text.isEmpty ||
-                            _emailController.text.length < 4)) {
+                        if (count == 0 &&
+                            (_emailController.text.isEmpty ||
+                                _emailController.text.length < 4)) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 backgroundColor:
@@ -155,8 +161,9 @@ class _SignUpState extends State<SignUp> {
 
                           return;
                         }
-                        if (count==1 && (_passwordController.text.isEmpty ||
-                            _passwordController.text.length < 4)) {
+                        if (count == 1 &&
+                            (_passwordController.text.isEmpty ||
+                                _passwordController.text.length < 4)) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 backgroundColor:
@@ -172,8 +179,9 @@ class _SignUpState extends State<SignUp> {
 
                           return;
                         }
-                        if (count==1 && (_passwordController.text !=
-                            _confirmPasswordController.text)) {
+                        if (count == 1 &&
+                            (_passwordController.text !=
+                                _confirmPasswordController.text)) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 backgroundColor:
@@ -188,39 +196,55 @@ class _SignUpState extends State<SignUp> {
 
                           return;
                         }
+                        if (count < signUpList.length - 1) {
+                          setState(() {
+                            count++;
+                          });
+                        }
 
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (context) => Center(
-                                    child: CircularProgressIndicator(
-                                  color: theme.primaryColorLight,
-                                )));
+                        if (count == 1) {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => Center(
+                                      child: CircularProgressIndicator(
+                                    color: theme.primaryColorLight,
+                                  )));
 
-                        ShopProducts shop = ShopProducts(
-                            id: 0, shopname: shopController.text, products: []);
+                          ShopProducts shop = ShopProducts(
+                              id: 0,
+                              shopname: shopController.text,
+                              products: []);
 
-                       storage.setItem(
-                            shopController.text, shopProductsToJson(shop));
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Responsive.isMobile()
-                                    ? MyHomeScreen()
-                                    : TabletDashboard()),
-                            (route) => false);
+                          storage.setItem(
+                              shopController.text, shopProductsToJson(shop));
 
-                        // await ApplicationState()
-                        //     .registerAccount(
-                        //         _emailController.text.trim(),
-                        //         _emailController.text.trim(),
-                        //         _passwordController.text.trim(),
-                        //         (e) => _loginError(e))
-                        //     .onError((error, stackTrace) => null);
-                        // navigatorKey.currentState!.pop((route) => route);
+                          await authService.createUserWithEmailAndPassword(
+                              shopController.text,
+                              _emailController.text,
+                              _passwordController.text);
+
+                          // await ApplicationState()
+                          //     .registerAccount(
+                          //         _emailController.text.trim(),
+                          //         shopController.text.trim(),
+                          //         _passwordController.text.trim(),
+                          //         (e) => _loginError(e))
+                          //     .onError((error, stackTrace) =>
+                          //         Navigator.pushAndRemoveUntil(
+                          //             context,
+                          //             MaterialPageRoute(
+                          //                 builder: (context) =>
+                          //                     Responsive.isMobile()
+                          //                         ? MyHomeScreen()
+                          //                         : TabletDashboard()),
+                          //             (route) => false));
+                          navigatorKey.currentState!.pop((route) => route);
+                        }
                       },
                       color: theme.primaryColor,
-                      buttonText:  count == signUpList.length -1 ? "Signup" : "Next",
+                      buttonText:
+                          count == signUpList.length - 1 ? "Signup" : "Next",
                       width: width,
                     )),
                 Row(children: [
@@ -262,29 +286,27 @@ class SignUpNameEmail extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: height * 0.02),
           child: CustomTextField(
             controller: _nameController,
-            borderColor: theme.primaryColor,
+            borderColor: Colors.grey,
             hintText: "Name of shop",
-            hintColor: theme.primaryColor,
-            style:
-                theme.textTheme.bodyText2!.copyWith(color: theme.primaryColor),
+            hintColor: Colors.grey,
+            style: bodyText1,
             prefixIcon: Icon(Icons.shopify, color: theme.primaryColor),
           ),
         ),
         Padding(
             padding: EdgeInsets.symmetric(vertical: height * 0.02),
             child: CustomPhoneTextField(
-              borderColor: primaryColor,
-              textStyle: theme.textTheme.bodyText1,
+              borderColor: Colors.grey,
+              textStyle: bodyText1,
             )),
         Padding(
           padding: EdgeInsets.symmetric(vertical: height * 0.02),
           child: CustomTextField(
             controller: _emailController,
-            borderColor: theme.primaryColor,
+            borderColor: Colors.grey,
             hintText: "Email",
-            hintColor: theme.primaryColor,
-            style:
-                theme.textTheme.bodyText2!.copyWith(color: theme.primaryColor),
+            hintColor: Colors.grey,
+            style: bodyText1,
             prefixIcon: Icon(Icons.person, color: theme.primaryColor),
           ),
         ),
@@ -323,9 +345,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
             controller: widget._passwordController,
             maxLines: 1,
             obscure: obscure,
-            borderColor: theme.primaryColor,
-            style:
-                theme.textTheme.bodyText2!.copyWith(color: theme.primaryColor),
+            borderColor: Colors.grey,
+            style: bodyText1,
             prefixIcon: Icon(Icons.lock, color: theme.primaryColor),
             suffixIcon: GestureDetector(
               onTap: () {
@@ -345,7 +366,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
               ),
             ),
             hintText: "Password",
-            hintColor: theme.primaryColor,
+            hintColor: Colors.grey,
           ),
         ),
         Padding(
@@ -354,9 +375,8 @@ class _SignUpPasswordState extends State<SignUpPassword> {
             controller: widget._confirmPasswordController,
             maxLines: 1,
             obscure: obscure,
-            borderColor: theme.primaryColor,
-            style:
-                theme.textTheme.bodyText2!.copyWith(color: theme.primaryColor),
+            borderColor: Colors.grey,
+            style: bodyText1,
             prefixIcon: Icon(Icons.lock, color: theme.primaryColor),
             suffixIcon: GestureDetector(
               onTap: () {
@@ -376,7 +396,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
               ),
             ),
             hintText: "Confirm Password",
-            hintColor: theme.primaryColor,
+            hintColor: Colors.grey,
           ),
         ),
       ],

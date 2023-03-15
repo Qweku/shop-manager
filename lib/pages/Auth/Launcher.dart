@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 // import 'package:hive/hive.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/wrapper.dart';
 
 class Launcher extends StatefulWidget {
   const Launcher({Key? key}) : super(key: key);
+   static const String routeName = '/';
 
   @override
   _LauncherState createState() => _LauncherState();
@@ -47,7 +49,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
   }
 
   void navigationPage() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Responsive.isMobile()?Wrapper():const TabletAuth()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>Wrapper()));
   }
 
   @override
@@ -80,24 +82,23 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                     child: CircleAvatar(
                       backgroundColor: theme.primaryColorLight,
                       radius: Responsive.isMobile()?width * 0.12:width*0.05,
-                      child: Icon(Icons.shopify,
-                          color: theme.primaryColor, size: 35),
+                      backgroundImage:  AssetImage("assets/app_icon.png"),
                     ),
                   ),
                   SizedBox(height: height * 0.01),
                   FadeTransition(
                       opacity: _animation2,
                       child: Text(
-                        'ShopMate',
-                        style: theme.textTheme.headline2,
+                        'Smart Shop Mate',
+                        style: headline2,
                       )),
                 ],
               ),
             ),
             Container(
               alignment: Alignment(0, 0.9),
-              child: Text('@ c r e a t e d b y Q w e k u & Y - F l i c k r',
-                  style: TextStyle(color: Colors.white, fontSize: 12)),
+              // child: Text('@ c r e a t e d b y Q w e k u & Y - F l i c k r',
+              //     style: TextStyle(color: Colors.white, fontSize: 12)),
             )
           ],
         ));

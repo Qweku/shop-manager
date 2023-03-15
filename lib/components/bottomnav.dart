@@ -16,7 +16,7 @@ class BottomNav extends StatelessWidget {
             //backgroundColor: theme.primaryColor,
             extras: {"label": "catgories"}),
         FluidNavBarIcon(
-            icon: Icons.shopping_bag,
+            icon: Icons.arrow_circle_down_outlined,
             selectedForegroundColor: Colors.white,
             //backgroundColor: theme.primaryColor,
             extras: {"label": "add product"}),

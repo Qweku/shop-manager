@@ -11,14 +11,19 @@ import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/NotificationModel.dart';
+import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/low_stock_list.dart';
+import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
+import 'package:shop_manager/pages/notifications/notifications.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
+import 'package:intl/intl.dart';
 
 import 'addproduct.dart';
 import 'Categories/category.dart';
@@ -33,12 +38,33 @@ class MyHomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget? _content;
   LocalStore localStore = LocalStore();
+  DateFormat dateformat = DateFormat.yMMMd();
+  DateFormat timeformat = DateFormat.Hm();
+  int count = 0;
   @override
   void initState() {
     // var productBox = Hive.box<Product>('Product');
     // var categoryBox = Hive.box<ProductCategory>('Category');
     // HiveFunctions().reArrangeCategory();
     // log('5');
+    context.read<GeneralProvider>().inventory.forEach(
+      (element) {
+        NotificationModel notiModel = NotificationModel(
+            date: dateformat.format(DateTime.now()),
+            time: timeformat.format(DateTime.now()),
+            title: "Low Stock",
+            body:
+                ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
+        if (element.productQuantity <= element.lowStockQuantity) {
+          Provider.of<NotificationProvider>(context, listen: false)
+              .addNotification(notiModel);
+          notify();
+          count = 1;
+        } else {
+          return null;
+        }
+      },
+    );
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Set<String> name = {};
@@ -70,8 +96,13 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryName: "Uncategorised",
               categoryDescription: 'No Description'));
     }
-    _content = const Dashboard();
+    _content = Dashboard(notiCount: count,);
     super.initState();
+  }
+
+  void notify() async {
+    await notificationPlugin.showNotification(
+        "Low Stock", "Some products are running low on stock");
   }
 
   @override
@@ -103,10 +134,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           _content = const CategoryScreen();
           break;
         case 1:
-          _content = const AddProductScreen();
+          _content = const LowStockList();
           break;
         case 2:
-          _content = const Dashboard();
+          _content = Dashboard(notiCount: count,);
           break;
         case 3:
           _content = const Accounts();
@@ -125,7 +156,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   _backButton(context) {
-    var theme = Theme.of(context);
+   
     return showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
@@ -143,7 +174,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                     ),
                     Text(
                       "Do you really want to exit?",
-                      style: theme.textTheme.bodyText1,
+                      style: bodyText1,
                     ),
                   ],
                 ),
@@ -169,7 +200,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 }
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  int notiCount;
+  Dashboard({Key? key, required this.notiCount}) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -184,10 +216,31 @@ class _DashboardState extends State<Dashboard> {
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return Scaffold(
+     floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (builder) => AddProductScreen()));
+        },
+        backgroundColor: Colors.black,
+        child: Icon(Icons.add, color: Colors.white),
+      ),
         appBar: AppBar(
           elevation: 0,
           backgroundColor: theme.primaryColor,
-          actions: [const NotificationIconButton(quantity: 1)],
+          actions: [
+            NotificationIconButton(
+              quantity: widget.notiCount,
+              onTap: () {
+                if (widget.notiCount > 0) {
+                  widget.notiCount = 0;
+                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationScreen()));
+              },
+            )
+          ],
         ),
         drawer: const DrawerWidget(),
         backgroundColor: theme.primaryColorLight,

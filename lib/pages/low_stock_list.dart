@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shop_manager/components/notificationButton.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCard.dart';
@@ -11,7 +13,7 @@ class LowStockList extends StatelessWidget {
     var theme = Theme.of(context);
     return Scaffold(
       body: Column(children: [
-        ClipPath(
+        Responsive.isMobile()?ClipPath(
           clipper: BottomClipper(),
           child: Container(
             padding: EdgeInsets.only(
@@ -26,24 +28,64 @@ class LowStockList extends StatelessWidget {
               theme: theme,
             ),
           ),
+        ):Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Low Stock Items",
+                    textAlign: TextAlign.left,
+                    style: headline1.copyWith(fontSize: 20),
+                  ),
+                
+                  Row(
+                    children: [
+                      const NotificationIconButton(quantity: 1),
+                      SizedBox(
+                        width: width * 0.01,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.account_circle_outlined,
+                          size: 35,
+                          color: primaryColor,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
         ),
         Expanded(
-          child: GridView.count(
-            physics: const BouncingScrollPhysics(),
-            crossAxisCount: 3,
-            childAspectRatio: 2 / 3.5,
-            children: List.generate(
-                3,
-                (index) => ProductCard(
-                  index: index,
-                      image64: "",
-                      price: "GHS20.0",
-                      productName: "Ideal Milk",
-                      quantity: "3",
-                    )),
-          ),
+          child: LowStockGridList(),
         )
       ]),
+    );
+  }
+}
+
+class LowStockGridList extends StatelessWidget {
+  const LowStockGridList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      physics: const BouncingScrollPhysics(),
+      crossAxisCount: Responsive.isMobile()?3:6,
+      childAspectRatio: 2 / 3.5,
+      children: List.generate(
+          10,
+          (index) => ProductCard(
+            index: index,
+                image64: "",
+                price: "GHS20.0",
+                productName: "Ideal Milk",
+                quantity: "3",
+              )),
     );
   }
 }
