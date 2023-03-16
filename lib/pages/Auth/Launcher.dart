@@ -89,7 +89,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                   FadeTransition(
                       opacity: _animation2,
                       child: Text(
-                        'Smart Shop Mate',
+                        'Shop Mate',
                         style: headline2,
                       )),
                 ],

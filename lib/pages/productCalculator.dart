@@ -155,8 +155,8 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                               }
                             },
                             buttonText: isDone ? 'Done' : 'Proceed',
-                            color: primaryColorLight,
-                            textColor: primaryColor,
+                            color: actionColor,
+                            
                             width: width * 0.4,
                           ),
                         ],
@@ -171,20 +171,20 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   }
 
   _calculateBalance(context) {
-    var theme = Theme.of(context);
+    
 
     return showDialog<bool>(
         context: context,
         builder: (c) => StatefulBuilder(builder: (context, setState) {
               return AlertDialog(
-                backgroundColor: primaryColor,
+                backgroundColor: primaryColorLight,
                 insetPadding: EdgeInsets.symmetric(horizontal: 20),
                 //contentPadding: EdgeInsets.zero,
                 //clipBehavior: Clip.antiAliasWithSaveLayer,
                 title: Text(
                   "CALCULATE BALANCE",
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headline2,
+                  style: headline1,
                 ),
                 content: SizedBox(
                   width: width * 0.7,
@@ -197,7 +197,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                         padding: EdgeInsets.only(
                             bottom: height * 0.02, top: height * 0.04),
                         child: Text("Enter Amount Received",
-                            style: theme.textTheme.headline2),
+                            style: headline1.copyWith(color:Colors.grey)),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -213,21 +213,21 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                               });
                             },
                             hintText: 'Amount',
-                            hintColor: Colors.white,
-                            borderColor: Colors.white,
+                           
+                            borderColor: Colors.grey,
                             prefixIcon: const Icon(Icons.add_box,
-                                color: Colors.white, size: 20),
-                            style: theme.textTheme.bodyText2),
+                                color: Colors.grey, size: 20),
+                            style: bodyText1),
                       ),
                       SizedBox(height: height * 0.03),
                       Column(
                         children: [
-                          Text('Change', style: theme.textTheme.bodyText2),
+                          Text('Change', style: bodyText1),
                           SizedBox(height: height * 0.01),
                           Text(
                             "GHS ${balance.toStringAsFixed(2)}",
                             textAlign: TextAlign.center,
-                            style: theme.textTheme.headline2,
+                            style: headline1,
                           ),
                         ],
                       ),
@@ -247,16 +247,18 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                             Navigator.pop(context);
                           },
                           width: width * 0.2,
-                          color: primaryColor,
+                          textColor: Colors.grey,
+                          color: Colors.white,
                           buttonText: 'Cancel',
                         ),
                       ),
+                      const SizedBox(width:10),
                       Expanded(
                         child: Button(
                           verticalPadding: 20,
                           borderRadius: 10,
-                          color: primaryColorLight,
-                          textColor: primaryColor,
+                          color: actionColor,
+                         
                           width: width,
                           buttonText: "Done",
                           onTap: () {

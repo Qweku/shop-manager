@@ -1,5 +1,6 @@
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class BottomNav extends StatelessWidget {
   final onChange;
@@ -7,38 +8,38 @@ class BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+   
     return FluidNavBar(
       icons: [
         FluidNavBarIcon(
             icon: Icons.category,
-            selectedForegroundColor: Colors.white,
+            selectedForegroundColor: actionColor,
             //backgroundColor: theme.primaryColor,
             extras: {"label": "catgories"}),
         FluidNavBarIcon(
             icon: Icons.arrow_circle_down_outlined,
-            selectedForegroundColor: Colors.white,
+            selectedForegroundColor: actionColor,
             //backgroundColor: theme.primaryColor,
             extras: {"label": "add product"}),
         FluidNavBarIcon(
             icon: Icons.dashboard_customize,
-            selectedForegroundColor: Colors.white,
+            selectedForegroundColor: actionColor,
            // backgroundColor: theme.primaryColor,
             extras: {"label": "dashboard"}),
         FluidNavBarIcon(
             icon:Icons.receipt_long,
-             selectedForegroundColor: Colors.white,
+             selectedForegroundColor: actionColor,
             extras: {"label": "accounts"}),
           FluidNavBarIcon(
             icon:Icons.inventory,
-             selectedForegroundColor: Colors.white,
+             selectedForegroundColor: actionColor,
             extras: {"label": "inventory"}),
       ],
       onChange: onChange,
       style: FluidNavBarStyle(
-          iconBackgroundColor: theme.primaryColor,
-          iconUnselectedForegroundColor: Colors.white,
-          barBackgroundColor: theme.primaryColor),
+          iconBackgroundColor: primaryColorLight,
+          iconUnselectedForegroundColor: primaryColorDark,
+          barBackgroundColor: primaryColorLight),
       scaleFactor: 1.5,
       defaultIndex: 2,
       itemBuilder: (icon, item) => Semantics(

@@ -238,9 +238,9 @@ class _ProductViewState extends State<ProductView> {
                         buttonText: 'Cart',
                         color: (context.watch<GeneralProvider>().cart.contains(widget.product))
                             ? Colors.grey
-                            : theme.primaryColorLight,
+                            : actionColor,
                         width: width * 0.2,
-                        textColor: theme.primaryColor,
+                        
                       )
                     ]),
                   ),

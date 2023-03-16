@@ -41,17 +41,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final theme = Theme.of(context);
     return Scaffold(
         backgroundColor: Colors.white,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: theme.primaryColor,
-          onPressed: () {
-            setState(() {
-              isList = !isList;
-            });
-          },
-          child: isList
-              ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
-              : Icon(Icons.list, color: theme.primaryColorLight),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   backgroundColor: theme.primaryColor,
+        //   onPressed: () {
+        //     setState(() {
+        //       isList = !isList;
+        //     });
+        //   },
+        //   child: isList
+        //       ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
+        //       : Icon(Icons.list, color: theme.primaryColorLight),
+        // ),
         body: SafeArea(
           top: false,
           child: Column(
@@ -105,18 +105,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Row(
                     children: [
-                      const NotificationIconButton(quantity: 1),
-                      SizedBox(
-                        width: width * 0.01,
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.account_circle_outlined,
-                          size: 35,
-                          color: primaryColor,
-                        ),
-                      ),
+                    
+                       CartIconButton(
+                color: primaryColor,
+                quantity: context.watch<GeneralProvider>().cart.length,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => ProductCalculator()));
+                })
                     ],
                   )
                 ],

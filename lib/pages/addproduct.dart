@@ -9,7 +9,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/notifiers.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
@@ -68,20 +70,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
   List<ProductCategory> categoryList = [];
   Uint8List imageFile = Uint8List(0);
   //String imagePath;
+  bool isLoading = false;
   final picker = ImagePicker();
 
   int categoryIndex = 0;
   getRemoveImage(String imgPath) async {
     imageFile = await ApiClient().removeBgApi(imgPath);
+    isLoading = false;
     setState(() {});
   }
 
   Future _imgFromCamera() async {
     try {
+      // imageFile = Uint8List(0);
       final image =
           await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
       // final toBytes = await
       setState(() {
+        isLoading = true;
         _image = File(image!.path);
         getRemoveImage(image.path);
 
@@ -92,13 +98,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   _imgFromGallery() async {
     try {
+      // imageFile = Uint8List(0);
       final image =
           await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
       setState(() {
+        isLoading = true;
         _image = File(image!.path);
         getRemoveImage(image.path);
         imageString = base64Encode(File(image.path).readAsBytesSync());
       });
+      //isLoading = false;
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -154,7 +163,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   void initState() {
     categoryList = List.from(
         Provider.of<GeneralProvider>(context, listen: false).categories);
-    _selectedCategory = categoryList.first;
+    _selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
     if (widget.toEdit) {
       productName.text = widget.product!.productName!;
       productPrice.text =
@@ -187,11 +196,32 @@ class _AddProductScreenState extends State<AddProductScreen> {
         // iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           (widget.toEdit) ? "Edit Product" : "Add Product",
-          style: headline2,
+          style: Responsive.isTablet() ? headline1 : headline2,
         ),
-        centerTitle: true,
+        centerTitle: Responsive.isTablet() ? false : true,
         elevation: 0,
-        backgroundColor: primaryColor,
+        backgroundColor:
+            Responsive.isTablet() ? primaryColorLight : primaryColor,
+        actions: [
+          Responsive.isTablet()
+              ? Row(
+                  children: [
+                    const NotificationIconButton(quantity: 1),
+                    SizedBox(
+                      width: width * 0.01,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.account_circle_outlined,
+                        size: 35,
+                        color: primaryColor,
+                      ),
+                    ),
+                  ],
+                )
+              : Container()
+        ],
       ),
       body: SizedBox(
         height: height,
@@ -211,8 +241,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         (widget.toEdit)
                             ? "Edit Product Detail"
                             : "Let's add the products in your shop",
-                        style: theme.textTheme.headline1!
-                            .copyWith(color: theme.primaryColor)),
+                        style: headline1.copyWith(color: theme.primaryColor)),
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -221,7 +250,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         hintText: "Product name",
                         borderColor: Colors.grey,
                         controller: productName,
-                        style: theme.textTheme.bodyText1,
+                        style: bodyText1,
                         hintColor: Colors.grey,
                       )),
                   Padding(
@@ -234,7 +263,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             hintText: "Selling Price",
                             borderColor: Colors.grey,
                             controller: productPrice,
-                            style: theme.textTheme.bodyText1,
+                            style: bodyText1,
                             hintColor: Colors.grey,
                             inputFormatters: formatter,
                           ),
@@ -246,7 +275,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             hintText: "Cost Price",
                             borderColor: Colors.grey,
                             controller: productCostPrice,
-                            style: theme.textTheme.bodyText1,
+                            style: bodyText1,
                             hintColor: Colors.grey,
                             inputFormatters: formatter2,
                           ),
@@ -264,7 +293,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           borderRadius: BorderRadius.circular(20)),
                       child: DropdownButtonFormField(
                         //dropdownColor: Colors.black,
-                        style: theme.textTheme.bodyText1,
+                        style: bodyText1,
                         decoration: InputDecoration(
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
@@ -286,8 +315,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           return DropdownMenuItem(
                             child: Text(
                               location.categoryName!,
-                              style: theme.textTheme
-                                  .bodyText1, /* ,style: TextStyle(color: Colors.white), */
+                              style:
+                                  bodyText1, /* ,style: TextStyle(color: Colors.white), */
                             ),
                             value: location,
                           );
@@ -303,7 +332,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         hintText: "Product Description",
                         borderColor: Colors.grey,
                         controller: productDescription,
-                        style: theme.textTheme.bodyText1,
+                        style: bodyText1,
                         hintColor: Colors.grey,
                       )),
                   SizedBox(
@@ -318,7 +347,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              _attachImage(context);
+                             _attachImage(context);
+                              
                             },
                             child: Container(
                               width: width * 0.45,
@@ -328,7 +358,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   color: imageFile.isNotEmpty
                                       ? Colors.white
                                       : Colors.grey),
-                              child: imageFile .isNotEmpty
+                              child: imageFile.isNotEmpty
                                   ? ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.memory(
@@ -381,20 +411,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                 fit: BoxFit.cover,
                                               ),
                                             )
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                            //color: Colors.grey[200],
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          width: width * 0.45,
-                                          height: height * 0.25,
-                                          child: Icon(
-                                            Icons.camera_alt,
-                                            color: theme.primaryColorLight,
-                                            size: 30,
-                                          ),
-                                        ),
+                                      : isLoading
+                                          ? Center(
+                                              child: CircularProgressIndicator(
+                                              color: actionColor,
+                                            ))
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                //color: Colors.grey[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              width: width * 0.45,
+                                              height: height * 0.25,
+                                              child: Icon(
+                                                Icons.camera_alt,
+                                                color: theme.primaryColorLight,
+                                                size: 30,
+                                              ),
+                                            ),
                             ),
                           ),
                           SizedBox(width: width * 0.05),
@@ -454,12 +489,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ? Container()
                       : Row(
                           children: [
-                            Text('Low Stock Quantity',
-                                style: theme.textTheme.bodyText1),
+                            Text('Low Stock Quantity', style: bodyText1),
                             SizedBox(width: width * 0.03),
                             CounterWidget(
                                 borderColor: Colors.grey,
-                                style: theme.textTheme.bodyText1,
+                                style: bodyText1,
                                 counterController: lowStockQuantity),
                           ],
                         ),
@@ -468,7 +502,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     padding: const EdgeInsets.all(20),
                     child: Button(
                       width: width,
-                      color: theme.primaryColor,
+                      color: actionColor,
                       buttonText: 'Done',
                       onTap: () async {
                         // log(formatter.getUnformattedValue().toString());
@@ -511,7 +545,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           // ..itemcategory = product.itemcategory
                           // ..costPrice = product.costPrice
                           // ..imageb64 = product.imageb64;
-
                         } else {
                           if (!(Provider.of<GeneralProvider>(context,
                                   listen: false)
@@ -588,6 +621,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         productDescription.clear();
                         productQuantity.clear();
                         lowStockQuantity.clear();
+                        imageFile = Uint8List(0);
                         startTime();
                         // Navigator.pushReplacement(
                         //     context,
@@ -643,8 +677,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        imageFile = Uint8List(0);
                         _imgFromGallery();
+
                         Navigator.pop(context);
+                        
                       },
                       child: Column(
                         children: [
@@ -655,14 +692,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 color: theme.primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Upload', style: theme.textTheme.bodyText2)
+                          Text('Upload', style: bodyText2)
                         ],
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
+                        imageFile = Uint8List(0);
                         _imgFromCamera();
+
                         Navigator.pop(context);
+                       
                       },
                       child: Column(
                         children: [

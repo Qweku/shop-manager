@@ -63,7 +63,7 @@ class _AuthenticationState extends State<Authentication> {
                       
                       ),
                       SizedBox(height:height*0.01),
-                      Text('Smart Shop Mate',style: theme.textTheme.headline2,),
+                      Text('Shop Mate',style: theme.textTheme.headline2,),
                       SizedBox(height: height * 0.05),
                       AnimatedSwitcher(duration: const Duration(milliseconds: 700),
                       child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),

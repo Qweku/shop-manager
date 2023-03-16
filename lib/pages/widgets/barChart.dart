@@ -51,7 +51,7 @@ class SimpleBarChart extends StatelessWidget {
             showTitles: true,
             getTitlesWidget: (double value, TitleMeta meta) {
               var style = TextStyle(
-                color: Responsive.isMobile()?Colors.white:Color.fromARGB(255, 92, 92, 92),
+                color: Color.fromARGB(255, 92, 92, 92),
                 fontWeight: FontWeight.bold,
                 fontSize: Responsive.isMobile()?12:14,
               );
@@ -98,7 +98,7 @@ class SimpleBarChart extends StatelessWidget {
             showTitles: true,
             getTitlesWidget: (double value, TitleMeta meta) {
               var style = TextStyle(
-                color: Responsive.isMobile()?Colors.white:Color.fromARGB(255, 92, 92, 92),
+                color: Color.fromARGB(255, 92, 92, 92),
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               );
@@ -156,7 +156,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 11,
-              color:  Responsive.isMobile()?Colors.white:primaryColor,
+              color:  Responsive.isMobile()?actionColor:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -168,7 +168,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 10,
-              color:  Responsive.isMobile()?Colors.white:primaryColor,
+              color:  Responsive.isMobile()?actionColor:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -180,7 +180,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 14,
-              color:  Responsive.isMobile()?Colors.white:primaryColor,
+              color:  Responsive.isMobile()?actionColor:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -192,7 +192,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 15,
-              color:  Responsive.isMobile()?Colors.white:primaryColor,
+              color:  Responsive.isMobile()?actionColor:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -204,7 +204,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 13,
-              color:  Responsive.isMobile()?Colors.white:primaryColor,
+              color:  Responsive.isMobile()?actionColor:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -216,7 +216,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 10,
-              color: Responsive.isMobile()?Colors.white:primaryColor,
+              color: Responsive.isMobile()?actionColor:primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -245,9 +245,9 @@ class ShopBarChartState extends State<ShopBarChart> {
   Widget build(BuildContext context) {
     var theme=Theme.of(context);
     return Card(
-      elevation: 5,
+      elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
-      color: Responsive.isMobile()?primaryColor:Colors.white,
+      color: Colors.white,
       child: Container(
         padding: const EdgeInsets.all(10),
         height:  Responsive.isMobile()?height * 0.27:height * 0.3 ,

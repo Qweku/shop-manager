@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/NotificationProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/addProductSuccess.dart';
+import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
@@ -173,7 +176,34 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
                           // print("${context}");
                           context.read<GeneralProvider>().cart.clear();
-                          
+                          context.read<GeneralProvider>().inventory.forEach(
+      (element) {
+        Product productModel = Product(
+            pid: element.pid,
+            productCategory: element.productCategory,
+            productDescription: element.productDescription,
+            productName: element.productName,
+            productImage: element.productName,
+            productQuantity: element.productQuantity);
+        NotificationModel notiModel = NotificationModel(
+            date: dateformat.format(DateTime.now()),
+            time: timeformat.format(DateTime.now()),
+            title: "Low Stock",
+            body:
+                ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
+        if (element.productQuantity <= element.lowStockQuantity) {
+          Provider.of<NotificationProvider>(context, listen: false)
+              .addNotification(notiModel);
+          notify();
+         context.read<NotificationProvider>().notiCount = 1;
+          Provider.of<GeneralProvider>(context, listen: false)
+              .addLowStock(productModel);
+        } else {
+          return null;
+        }
+      },
+    );
+   
                           
                         },
                         buttonText: 'Done',
@@ -187,32 +217,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
             ),
           ]),
 
-          // Positioned(
-          //     bottom: 0,
-          //     right: 0,
-          //     left: 0,
-          //     child: Container(
-          //       color:Colors.white,
-          //       padding: EdgeInsets.all(height * 0.03),
-          //       child: Button(
-          //         onTap: () {
-          //           Navigator.pushReplacement(
-          //               context,
-          //               MaterialPageRoute(
-          //                   builder: (context) => const AddProductSuccess(
-          //                         tag: 'order',
-          //                       )));
-
-          //           // print("${context}");
-          //           context.read<GeneralProvider>().cartList.clear();
-          //         },
-          //         buttonText: 'Done',
-          //         color: primaryColor,
-          //         width: width,
-          //       ),
-          //     ))
+       
         ],
       ),
     );
+  }
+  void notify() async {
+    await notificationPlugin.showNotification(
+        "Low Stock", "Some products are running low on stock");
   }
 }

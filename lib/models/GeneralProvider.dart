@@ -11,8 +11,10 @@ class GeneralProvider extends ChangeNotifier {
   ShopProducts _shop = ShopProducts(id: 0, shopname: 'demo', products: []);
   ProductCategory _category = ProductCategory(cid: -1);
   Product _product = Product(pid: -1);
+ 
   List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
+  List<Product> _lowStocks = [];
   List<Product> _cart = [];
   double _subTotal = 0;
   double get subTotal => _subTotal;
@@ -22,6 +24,7 @@ class GeneralProvider extends ChangeNotifier {
   Product get product => _product;
   ProductCategory get category => _category;
   List<Product> get inventory => _inventory;
+  List<Product> get lowStocks => _lowStocks;
 
   List<Product> get cart => _cart;
   List<ProductCategory> get categories => _categories;
@@ -32,6 +35,7 @@ class GeneralProvider extends ChangeNotifier {
     _query = query;
     notifyListeners();
   }
+
 
   set shop(ShopProducts currentShop) {
     _shop = currentShop;
@@ -160,11 +164,23 @@ class GeneralProvider extends ChangeNotifier {
     for (Product item in _cart) {
       if (item.pid == product.pid) {
         total =
-            total + ((item.sellingPrice ?? 0) * (item.productQuantity ?? 0));
+            total + ((item.sellingPrice) * (item.productQuantity ));
         item.cartQuantity = product.cartQuantity;
       }
     }
     _subTotal = total;
+    notifyListeners();
+  }
+
+  void addLowStock(Product product) {
+   
+        _lowStocks.add(product);
+    
+    notifyListeners();
+  }
+
+  void removeLowStock(int index) {
+    _lowStocks.removeAt(index);
     notifyListeners();
   }
 

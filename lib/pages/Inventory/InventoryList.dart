@@ -9,6 +9,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/productView.dart';
 import 'package:shop_manager/pages/widgets/categoryCard.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCard.dart';
 
 class InventoryList extends StatefulWidget {
@@ -51,7 +52,7 @@ class _InventoryListState extends State<InventoryList> {
             ? Center(
                 child: Text(
                   'No Products',
-                  style: theme.textTheme.headline1!
+                  style: headline1
                       .copyWith(fontSize: 25, color: Colors.blueGrey),
                 ),
               )

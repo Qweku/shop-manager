@@ -28,26 +28,13 @@ class _SideMenuState extends State<SideMenu> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: height * 0.05),
       height: height,
-      width: width * 0.17,
+      width: width * 0.14,
       color: Colors.white,
       child: Column(
         children: [
           Padding(
             padding: EdgeInsets.all(width * 0.02),
-            child: Container(
-                padding: EdgeInsets.all(width * 0.01),
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Row(children: [
-                  Icon(
-                    Icons.shop_2,
-                    color: theme.primaryColor,
-                  ),
-                  SizedBox(width: 10),
-                  Text('ShopMate',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyText1)
-                ])),
+            child: Image.asset("assets/app_icon.png",height: height*0.12,),
           ),
           Divider(
             color: Colors.grey,
@@ -66,7 +53,7 @@ class _SideMenuState extends State<SideMenu> {
                     },
                     child: Padding(
                       padding: EdgeInsets.only(
-                          top: height * 0.02, left: width * 0.02),
+                          top: height * 0.02, ),
                       child: AnimatedContainer(
                         padding: EdgeInsets.all(width * 0.01),
                         //width: width * 0.08,
@@ -84,7 +71,7 @@ class _SideMenuState extends State<SideMenu> {
                                     ? theme.primaryColor
                                     : Colors.grey),
                             const SizedBox(
-                              width: 20,
+                              width: 10,
                             ),
                             Expanded(
                               child: Text(

@@ -33,8 +33,8 @@ class Button extends StatelessWidget {
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: shadowColor,
-              offset: Offset(1, 3),
-              blurRadius: 5,
+              offset: Offset(1, 2),
+              blurRadius: 2,
             )
           ],
           color: color,

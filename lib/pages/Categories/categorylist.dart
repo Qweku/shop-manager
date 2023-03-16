@@ -5,6 +5,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Inventory/productList.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 import '../addproduct.dart';
 import '../widgets/clipPath.dart';
@@ -277,17 +278,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           CircleAvatar(
                             radius: height * 0.04,
                             backgroundColor: theme.primaryColorLight,
-                            child: Icon(Icons.edit, color: theme.primaryColor),
+                            child: Icon(Icons.edit, color: primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Edit', style: theme.textTheme.bodyText2)
+                          Text('Edit', style: bodyText2)
                         ],
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
                         Provider.of<GeneralProvider>(context, listen: false)
-                            .removeFromCategory(product);
+                            .deleteProduct(product);
+
                         Navigator.pop(context);
                       },
                       child: Column(
@@ -299,7 +301,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 Icon(Icons.delete, color: theme.primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Remove', style: theme.textTheme.bodyText2)
+                          Text('Remove', style: bodyText2)
                         ],
                       ),
                     ),

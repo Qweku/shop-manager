@@ -1,12 +1,27 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/notificationButton.dart';
+import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/responsive.dart';
+import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/models/api_client.dart';
 import 'package:shop_manager/pages/TabletScreens/widgets.dart/sideMenu.dart';
 import 'package:shop_manager/pages/addproduct.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
+import 'package:shop_manager/pages/widgets/counter.dart';
 import 'package:shop_manager/pages/widgets/itemGraph.dart';
 
 class TabletDashboard extends StatefulWidget {
@@ -18,14 +33,131 @@ class TabletDashboard extends StatefulWidget {
 
 class _TabletDashboardState extends State<TabletDashboard> {
   int count = 0;
+  final CurrencyTextInputFormatter formatter = CurrencyTextInputFormatter(
+      turnOffGrouping: true,
+      decimalDigits: 2,
+      // locale: 'usa',
+      symbol: 'GHS ');
+  final CurrencyTextInputFormatter formatter2 = CurrencyTextInputFormatter(
+      turnOffGrouping: true,
+      decimalDigits: 2,
+      // locale: 'usa',
+      symbol: 'GHS ');
+
+  final productName = TextEditingController();
+  final productDescription = TextEditingController();
+  final productPrice = TextEditingController();
+  final productCostPrice = TextEditingController();
+  final productCategory = TextEditingController();
+  final productQuantity = TextEditingController();
+  final lowStockQuantity = TextEditingController();
+  File? _image;
+
+ 
+
+  // late Box shopBox;
+  ProductCategory? _selectedCategory;
+  String imageString = '';
+  List<ProductCategory> categoryList = [];
+  Uint8List imageFile = Uint8List(0);
+  //String imagePath;
+  final picker = ImagePicker();
+
+  int categoryIndex = 0;
+  getRemoveImage(String imgPath) async {
+    imageFile = await ApiClient().removeBgApi(imgPath);
+    setState(() {});
+  }
+
+  Future _imgFromCamera() async {
+    try {
+      final image =
+          await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+      // final toBytes = await
+      setState(() {
+        _image = File(image!.path);
+        getRemoveImage(image.path);
+
+        imageString = base64Encode(File(image.path).readAsBytesSync());
+      });
+    } catch (e) {}
+  }
+
+  _imgFromGallery() async {
+    try {
+      final image =
+          await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+      setState(() {
+        _image = File(image!.path);
+        getRemoveImage(image.path);
+        imageString = base64Encode(File(image.path).readAsBytesSync());
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  bool isChecked = false;
+
+  // var productBox = Hive.box<Product>('Product');
+  // var categoryBox = Hive.box<ProductCategory>('Category');
+  startTime() async {
+    var _duration = const Duration(seconds: 2);
+    return Timer(_duration, navigationDialog);
+  }
+
+  void navigationDialog() {
+    Navigator.pop(context);
+  }
+
+  void successDialog() {
+    var theme = Theme.of(context);
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => AlertDialog(
+              content: Container(
+                width: width * 0.4,
+                height: height * 0.25,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/confetti-gif-2.gif"),
+                        fit: BoxFit.cover)),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Color.fromARGB(255, 0, 184, 6),
+                        child: const Icon(Icons.check,
+                            color: Colors.white, size: 50),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('Product added successfully',
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodyText1)
+                    ]),
+              ),
+            ));
+  }
+
+  @override
+  void initState() {
+    categoryList = List.from(
+        Provider.of<GeneralProvider>(context, listen: false).categories);
+    _selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (builder) => AddProductScreen()));
-        },
+      resizeToAvoidBottomInset: false,
+      floatingActionButton:count != 0? Container(): FloatingActionButton(
+        onPressed: () => _addProduct(context),
         backgroundColor: primaryColor,
         child: Icon(Icons.add, color: Colors.white),
       ),
@@ -50,6 +182,423 @@ class _TabletDashboardState extends State<TabletDashboard> {
         ),
       ),
     );
+  }
+
+  _addProduct(context) {
+    return showDialog<bool>(
+        context: context,
+        builder: (c) => StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                //contentPadding: EdgeInsets.zero,
+                //clipBehavior: Clip.antiAliasWithSaveLayer,
+                title: const Text("Add Products"),
+                content: SizedBox(
+                  width: width * 0.6,
+                  height: height * 0.8,
+                  child: SingleChildScrollView(
+                      child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30, bottom: 20),
+                          child: Text("Let's add the products in your shop",
+                              style: headline1.copyWith(color: primaryColor)),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: CustomTextField(
+                              prefixIcon:
+                                  Icon(Icons.add_box, color: Colors.grey),
+                              hintText: "Product name",
+                              borderColor: Colors.grey,
+                              controller: productName,
+                              style: bodyText1,
+                              hintColor: Colors.grey,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: AmountTextField(
+                                  prefixIcon:
+                                      Icon(Icons.money, color: Colors.grey),
+                                  hintText: "Selling Price",
+                                  borderColor: Colors.grey,
+                                  controller: productPrice,
+                                  style: bodyText1,
+                                  hintColor: Colors.grey,
+                                  inputFormatters: formatter,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: AmountTextField(
+                                  prefixIcon:
+                                      Icon(Icons.money, color: Colors.grey),
+                                  hintText: "Cost Price",
+                                  borderColor: Colors.grey,
+                                  controller: productCostPrice,
+                                  style: bodyText1,
+                                  hintColor: Colors.grey,
+                                  inputFormatters: formatter2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: DropdownButtonFormField(
+                              //dropdownColor: Colors.black,
+                              style: bodyText1,
+                              decoration: InputDecoration(
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none,
+                                  enabled: false,
+                                  fillColor: Colors.transparent,
+                                  filled: true),
+                              hint: Text(
+                                'Select Category',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              value: _selectedCategory,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  _selectedCategory =
+                                      newValue as ProductCategory;
+                                  categoryIndex =
+                                      categoryList.indexOf(newValue);
+                                });
+                              },
+                              items: categoryList.map((location) {
+                                return DropdownMenuItem(
+                                  child: Text(
+                                    location.categoryName!,
+                                    style:
+                                        bodyText1, /* ,style: TextStyle(color: Colors.white), */
+                                  ),
+                                  value: location,
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: CustomTextField(
+                              maxLines: 5,
+                              prefixIcon: Icon(Icons.edit, color: Colors.grey),
+                              hintText: "Product Description",
+                              borderColor: Colors.grey,
+                              controller: productDescription,
+                              style: bodyText1,
+                              hintColor: Colors.grey,
+                            )),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Align(
+                            alignment: Alignment(0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        //_attachImage(context);
+                                      },
+                                      child: Container(
+                                        width: width * 0.2,
+                                        height: height * 0.3,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: imageFile.isNotEmpty
+                                                ? Colors.white
+                                                : Colors.grey),
+                                        child: imageFile.isNotEmpty
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                child: Image.memory(
+                                                  imageFile,
+                                                  width: width * 0.2,
+                                                  height: height * 0.3,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            : Container(
+                                                decoration: BoxDecoration(
+                                                  //color: Colors.grey[200],
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                width: width * 0.2,
+                                                height: height * 0.3,
+                                                child: Icon(
+                                                  Icons.image,
+                                                  color: primaryColorLight,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 7),
+                                    //imageFile.isEmpty?Container():
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        CircleAvatar(
+                                            backgroundColor: Colors.grey,
+                                            child: IconButton(
+                                                onPressed: () =>
+                                                    _imgFromCamera(),
+                                                icon: Icon(Icons.camera_alt,
+                                                    color: Colors.white))),
+                                        const SizedBox(width: 20),
+                                        CircleAvatar(
+                                            backgroundColor: Colors.grey,
+                                            child: IconButton(
+                                                onPressed: () =>
+                                                    _imgFromGallery(),
+                                                icon: Icon(
+                                                    Icons.drive_folder_upload,
+                                                    color: Colors.white))),
+                                        const SizedBox(width: 20),
+                                        CircleAvatar(
+                                            backgroundColor: imageFile.isEmpty
+                                                ? Colors.grey
+                                                : Colors.red,
+                                            child: IconButton(
+                                                onPressed: () {},
+                                                icon: Icon(Icons.delete_outline,
+                                                    color: Colors.white))),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                SizedBox(width: width * 0.05),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text('Quantity',
+                                                  style: bodyText1),
+                                              SizedBox(height: height * 0.02),
+                                              CounterWidget(
+                                                  borderColor: Colors.grey,
+                                                  style: bodyText1,
+                                                  counterController:
+                                                      productQuantity)
+                                            ],
+                                          )),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Checkbox(
+                                                  value: isChecked,
+                                                  activeColor: primaryColor,
+                                                  onChanged: (val) {
+                                                    setState(() {
+                                                      isChecked = val ?? false;
+                                                    });
+                                                  }),
+                                              //SizedBox(width:width*0.03),
+                                              Text('Low Stock Alert',
+                                                  style: bodyText1),
+                                            ],
+                                          ),
+                                          Text(
+                                              'Check if you want to receive alerts when this stock is running out',
+                                              style: bodyText1.copyWith(
+                                                  color: Colors.grey)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        !isChecked
+                            ? Container()
+                            : Row(
+                                children: [
+                                  Text('Low Stock Quantity', style: bodyText1),
+                                  SizedBox(width: width * 0.03),
+                                  CounterWidget(
+                                      borderColor: Colors.grey,
+                                      style: bodyText1,
+                                      counterController: lowStockQuantity),
+                                ],
+                              ),
+                        SizedBox(height: height * 0.05),
+                      ],
+                    ),
+                  )),
+                ),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Button(
+                          verticalPadding: 20,
+                          borderRadius: 10,
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          width: width * 0.2,
+                          color: Colors.white,
+                          buttonText: 'Cancel',
+                          textColor: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Button(
+                          verticalPadding: 20,
+                          borderRadius: 10,
+                          width: width * 0.2,
+                          color: primaryColor,
+                          buttonText: 'Done',
+                          onTap: () async {
+                            // log(formatter.getUnformattedValue().toString());
+                            // log(productPrice.text);
+                            imageString = base64Encode(imageFile);
+
+                            if (!(Provider.of<GeneralProvider>(context,
+                                    listen: false)
+                                .inventory
+                                .any((element) =>
+                                    element.productName == productName.text))) {
+                              Product product = Product(
+                                  pid: context
+                                          .read<GeneralProvider>()
+                                          .inventory
+                                          .isEmpty
+                                      ? 1
+                                      : context
+                                              .read<GeneralProvider>()
+                                              .inventory
+                                              .last
+                                              .pid +
+                                          1,
+                                  productName: productName.text,
+                                  productDescription: productDescription.text,
+                                  sellingPrice: double.tryParse(formatter
+                                          .getUnformattedValue()
+                                          .toString()) ??
+                                      0,
+                                  costPrice: double.tryParse(formatter2
+                                          .getUnformattedValue()
+                                          .toString()) ??
+                                      0,
+                                  productCategory:
+                                      _selectedCategory /*  ??
+                                      ProductCategory(
+                                          cid: 0,
+                                          categoryName: 'Uncategorised',
+                                          categoryDescription:
+                                              'No Description') */
+                                  ,
+                                  isLowStock: isChecked,
+                                  productQuantity:
+                                      int.tryParse(productQuantity.text) ?? 0,
+                                  lowStockQuantity:
+                                      int.tryParse(lowStockQuantity.text) ?? 0,
+                                  // sellingPrice:
+                                  //     double.tryParse(productPrice.text) ?? 0,
+                                  productImage: imageString);
+
+                              Provider.of<GeneralProvider>(context,
+                                      listen: false)
+                                  .addProduct(product);
+                              // .inventory
+                              // .add(product);
+
+                              // await productBox.add(product);
+
+                              // if (_selectedCategory?.categoryName.isNotEmpty ??
+                              //     false) {
+                              //   // Provider.of<GeneralProvider>(context,
+                              //   //         listen: false)
+                              //   //     .saveToCategory(_selectedCategory!);
+
+                              //   // HiveFunctions()
+                              //   //     .saveToCategory(_selectedCategory!);
+                              // }
+                            } else {
+                              Notifier().toast(
+                                  context: context,
+                                  message: "ERROR PRODUCT ALREADY EXIST!",
+                                  color: Colors.red);
+                              return;
+                            }
+
+                            successDialog();
+                            productCostPrice.clear();
+                            productName.clear();
+                            productPrice.clear();
+                            productDescription.clear();
+                            productQuantity.clear();
+                            lowStockQuantity.clear();
+                            startTime();
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             const AddProductSuccess()));
+
+                            //Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            }));
+  }
+   @override
+  void dispose() {
+    productName.dispose();
+    productDescription.dispose();
+    productPrice.dispose();
+    productCostPrice.dispose();
+    productCategory.dispose();
+    productQuantity.dispose();
+    lowStockQuantity.dispose();
+    super.dispose();
   }
 }
 
@@ -102,6 +651,7 @@ class TabletHomeScreen extends StatelessWidget {
                       children: List.generate(
                         statusList.length,
                         (index) => ItemStatus(
+                          textColor: primaryColorLight,
                           status: statusList[index]['status'],
                           label: statusList[index]['label'],
                           icon: statusList[index]['icon'],

@@ -47,24 +47,35 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     // var categoryBox = Hive.box<ProductCategory>('Category');
     // HiveFunctions().reArrangeCategory();
     // log('5');
-    context.read<GeneralProvider>().inventory.forEach(
-      (element) {
-        NotificationModel notiModel = NotificationModel(
-            date: dateformat.format(DateTime.now()),
-            time: timeformat.format(DateTime.now()),
-            title: "Low Stock",
-            body:
-                ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
-        if (element.productQuantity <= element.lowStockQuantity) {
-          Provider.of<NotificationProvider>(context, listen: false)
-              .addNotification(notiModel);
-          notify();
-          count = 1;
-        } else {
-          return null;
-        }
-      },
-    );
+    // context.read<GeneralProvider>().inventory.forEach(
+    //   (element) {
+    //     Product productModel = Product(
+    //         pid: pid,
+    //         productCategory: element.productCategory,
+    //         productDescription: element.productDescription,
+    //         productName: element.productName,
+    //         productImage: element.productName,
+    //         productQuantity: element.productQuantity);
+    //     NotificationModel notiModel = NotificationModel(
+    //         date: dateformat.format(DateTime.now()),
+    //         time: timeformat.format(DateTime.now()),
+    //         title: "Low Stock",
+    //         body:
+    //             ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
+    //     if (element.productQuantity <= element.lowStockQuantity) {
+    //       Provider.of<NotificationProvider>(context, listen: false)
+    //           .addNotification(notiModel);
+    //       notify();
+    //       count = 1;
+    //       Provider.of<GeneralProvider>(context, listen: false)
+    //           .addLowStock(productModel);
+    //     } else {
+    //       return null;
+    //     }
+    //   },
+    // );
+    
+    
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Set<String> name = {};
@@ -96,21 +107,24 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryName: "Uncategorised",
               categoryDescription: 'No Description'));
     }
-    _content = Dashboard(notiCount: count,);
+    _content = Dashboard(
+      notiCount: count,
+    );
     super.initState();
   }
 
-  void notify() async {
-    await notificationPlugin.showNotification(
-        "Low Stock", "Some products are running low on stock");
-  }
+  // void notify() async {
+  //   await notificationPlugin.showNotification(
+  //       "Low Stock", "Some products are running low on stock");
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+   
     return WillPopScope(
       onWillPop: () => _backButton(context),
       child: Scaffold(
+          backgroundColor: primaryColorLight,
           // appBar: AppBar(
           //   elevation: 0,
           //   backgroundColor: theme.primaryColor,
@@ -122,7 +136,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           //   ],
           // ),
           // drawer: const DrawerWidget(),
-          bottomNavigationBar: BottomNav(onChange: _handleNavigationChange),
+          bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                          color: Color.fromARGB(255, 247, 247, 247)))),
+              child: BottomNav(onChange: _handleNavigationChange)),
           body: _content),
     );
   }
@@ -137,7 +156,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           _content = const LowStockList();
           break;
         case 2:
-          _content = Dashboard(notiCount: count,);
+          _content = Dashboard(
+            notiCount: count,
+          );
           break;
         case 3:
           _content = const Accounts();
@@ -156,7 +177,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   _backButton(context) {
-   
     return showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
@@ -216,34 +236,39 @@ class _DashboardState extends State<Dashboard> {
     double width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     return Scaffold(
-     floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (builder) => AddProductScreen()));
-        },
-        backgroundColor: Colors.black,
-        child: Icon(Icons.add, color: Colors.white),
-      ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (builder) => AddProductScreen()));
+          },
+          backgroundColor: actionColor,
+          child: Icon(Icons.add, color: Colors.white),
+        ),
         appBar: AppBar(
           elevation: 0,
           backgroundColor: theme.primaryColor,
           actions: [
             NotificationIconButton(
-              quantity: widget.notiCount,
+              quantity: context.watch<NotificationProvider>().notiCount,
               onTap: () {
-                if (widget.notiCount > 0) {
-                  widget.notiCount = 0;
-                }
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationScreen()));
+                if (context.read<NotificationProvider>().notiCount > 0) {
+                    context.read<NotificationProvider>().notiCount = 0;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationScreen()));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationScreen()));
+                  }
               },
             )
           ],
         ),
         drawer: const DrawerWidget(),
-        backgroundColor: theme.primaryColorLight,
+        backgroundColor: primaryColorLight,
         body: Stack(
           children: [
             Positioned(
@@ -264,27 +289,22 @@ class _DashboardState extends State<Dashboard> {
               width: width,
               color: Colors.transparent,
               child: Padding(
-                padding: EdgeInsets.only(
-                    top: height * 0.01,
-                    right: width * 0.05,
-                    left: width * 0.05),
+                padding:
+                    EdgeInsets.only(right: width * 0.05, left: width * 0.05),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                        // height: height * 0.23,
                         child: Column(
                       children: [
-                        Text('Total Earnings',
-                            style: theme.textTheme.bodyText2),
+                        Text('Total Earnings', style: bodyText2),
                         const SizedBox(
                           height: 8,
                         ),
                         Text(
                           'GHS 20945.90',
-                          style:
-                              theme.textTheme.headline2!.copyWith(fontSize: 25),
+                          style: headline2.copyWith(fontSize: 25),
                         ),
                         const SizedBox(
                           height: 10,
@@ -339,19 +359,12 @@ class _DashboardState extends State<Dashboard> {
                         children: List.generate(
                           statusList.length,
                           (index) => ItemStatus(
-                            onTap: () {
-                              if (index == 2) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LowStockList()));
-                              }
-                            },
                             status: statusList[index]['status'],
                             label: statusList[index]['label'],
                             icon: statusList[index]['icon'],
-                            menuColor: theme.primaryColor,
-                            iconColor: theme.primaryColorLight,
+                            menuColor: Color.fromARGB(255, 247, 247, 247),
+                            iconColor: actionColor,
+                            textColor: primaryColorDark,
                           ),
                         )),
                   ],
@@ -365,7 +378,7 @@ class _DashboardState extends State<Dashboard> {
 
 class ItemStatus extends StatelessWidget {
   final Function()? onTap;
-  final Color menuColor, iconColor;
+  final Color menuColor, iconColor, textColor;
   final String label, status;
   final IconData icon;
   const ItemStatus({
@@ -376,6 +389,7 @@ class ItemStatus extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.status,
+    required this.textColor,
   }) : super(key: key);
 
   @override
@@ -395,7 +409,7 @@ class ItemStatus extends StatelessWidget {
             children: [
               Text(
                 status,
-                style: theme.textTheme.headline1!.copyWith(color: iconColor),
+                style: theme.textTheme.headline1!.copyWith(color: textColor),
               ),
               const SizedBox(
                 height: 10,
@@ -410,7 +424,7 @@ class ItemStatus extends StatelessWidget {
                   ),
                   Text(label,
                       style: theme.textTheme.bodyText1!
-                          .copyWith(color: iconColor)),
+                          .copyWith(color: textColor)),
                 ],
               ),
             ],
