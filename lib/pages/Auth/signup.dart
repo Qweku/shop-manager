@@ -64,12 +64,12 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    var theme = Theme.of(context);
+   
     final authService = Provider.of<AuthService>(context);
     List<Widget> signUpList = [
       SignUpNameEmail(
           height: height,
-          theme: theme,
+          
           emailController: _emailController,
           nameController: shopController),
       SignUpPassword(
@@ -83,8 +83,7 @@ class _SignUpState extends State<SignUp> {
         //height: height * 0.6,
         width: width * 0.9,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: theme.primaryColorLight),
+            borderRadius: BorderRadius.circular(20), color: primaryColorLight),
         child: Padding(
           padding: EdgeInsets.only(
               left: height * 0.03, right: height * 0.03, top: height * 0.03),
@@ -113,8 +112,7 @@ class _SignUpState extends State<SignUp> {
                           : Container(),
                       Text(
                         "Create an account",
-                        style: theme.textTheme.headline1!
-                            .copyWith(color: theme.primaryColor),
+                        style: headline1.copyWith(color: primaryColor),
                       ),
                     ],
                   ),
@@ -136,7 +134,7 @@ class _SignUpState extends State<SignUp> {
                                     const Color.fromARGB(255, 255, 17, 1),
                                 content: Text('Shop Name is Empty!',
                                     textAlign: TextAlign.center,
-                                    style: theme.textTheme.bodyText2),
+                                    style: bodyText2),
                                 duration: const Duration(milliseconds: 1500),
                                 behavior: SnackBarBehavior.floating,
                                 shape: const StadiumBorder()),
@@ -153,7 +151,7 @@ class _SignUpState extends State<SignUp> {
                                     const Color.fromARGB(255, 255, 17, 1),
                                 content: Text('Invalid email',
                                     textAlign: TextAlign.center,
-                                    style: theme.textTheme.bodyText2),
+                                    style: bodyText2),
                                 duration: const Duration(milliseconds: 1500),
                                 behavior: SnackBarBehavior.floating,
                                 shape: const StadiumBorder()),
@@ -171,7 +169,7 @@ class _SignUpState extends State<SignUp> {
                                 content: Text(
                                     'Password must be at least 4 characters',
                                     textAlign: TextAlign.center,
-                                    style: theme.textTheme.bodyText2),
+                                    style: bodyText2),
                                 duration: const Duration(milliseconds: 1500),
                                 behavior: SnackBarBehavior.floating,
                                 shape: const StadiumBorder()),
@@ -188,7 +186,7 @@ class _SignUpState extends State<SignUp> {
                                     const Color.fromARGB(255, 255, 17, 1),
                                 content: Text("Password does not match",
                                     textAlign: TextAlign.center,
-                                    style: theme.textTheme.bodyText2),
+                                    style: bodyText2),
                                 duration: const Duration(milliseconds: 1500),
                                 behavior: SnackBarBehavior.floating,
                                 shape: const StadiumBorder()),
@@ -208,7 +206,7 @@ class _SignUpState extends State<SignUp> {
                               barrierDismissible: false,
                               builder: (context) => Center(
                                       child: CircularProgressIndicator(
-                                    color: theme.primaryColorLight,
+                                    color: primaryColorLight,
                                   )));
 
                           ShopProducts shop = ShopProducts(
@@ -242,18 +240,16 @@ class _SignUpState extends State<SignUp> {
                           navigatorKey.currentState!.pop((route) => route);
                         }
                       },
-                      color: theme.primaryColor,
+                      color: primaryColor,
                       buttonText:
                           count == signUpList.length - 1 ? "Signup" : "Next",
                       width: width,
                     )),
                 Row(children: [
-                  Text("Already have an account? ",
-                      style: theme.textTheme.bodyText1),
+                  Text("Already have an account? ", style: bodyText1),
                   TextButton(
                       child: Text("Login",
-                          style: theme.textTheme.bodyText2!
-                              .copyWith(color: theme.primaryColor)),
+                          style: bodyText2.copyWith(color: primaryColor)),
                       onPressed: () => widget.toggleScreen!())
                 ]),
               ],
@@ -268,7 +264,7 @@ class SignUpNameEmail extends StatelessWidget {
     Key? key,
     required this.height,
     required TextEditingController emailController,
-    required this.theme,
+    
     required TextEditingController nameController,
   })  : _emailController = emailController,
         _nameController = nameController,
@@ -276,7 +272,7 @@ class SignUpNameEmail extends StatelessWidget {
 
   final double height;
   final TextEditingController _emailController, _nameController;
-  final ThemeData theme;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -290,7 +286,7 @@ class SignUpNameEmail extends StatelessWidget {
             hintText: "Name of shop",
             hintColor: Colors.grey,
             style: bodyText1,
-            prefixIcon: Icon(Icons.shopify, color: theme.primaryColor),
+            prefixIcon: Icon(Icons.shopify, color: primaryColor),
           ),
         ),
         Padding(
@@ -307,7 +303,7 @@ class SignUpNameEmail extends StatelessWidget {
             hintText: "Email",
             hintColor: Colors.grey,
             style: bodyText1,
-            prefixIcon: Icon(Icons.person, color: theme.primaryColor),
+            prefixIcon: Icon(Icons.person, color: primaryColor),
           ),
         ),
       ],
@@ -332,11 +328,12 @@ class SignUpPassword extends StatefulWidget {
 
 class _SignUpPasswordState extends State<SignUpPassword> {
   bool obscure = true;
+  bool isMatch = false;
   IconData visibility = Icons.visibility_off;
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+   
     return Column(
       children: [
         Padding(
@@ -347,7 +344,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
             obscure: obscure,
             borderColor: Colors.grey,
             style: bodyText1,
-            prefixIcon: Icon(Icons.lock, color: theme.primaryColor),
+            prefixIcon: Icon(Icons.lock, color: primaryColor),
             suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {
@@ -362,7 +359,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
               child: Container(
                 // alignment: Alignment(1.0,50.0),
                 padding: const EdgeInsets.only(right: 10),
-                child: Icon(visibility, size: 25, color: theme.primaryColor),
+                child: Icon(visibility, size: 25, color: primaryColor),
               ),
             ),
             hintText: "Password",
@@ -377,24 +374,17 @@ class _SignUpPasswordState extends State<SignUpPassword> {
             obscure: obscure,
             borderColor: Colors.grey,
             style: bodyText1,
-            prefixIcon: Icon(Icons.lock, color: theme.primaryColor),
-            suffixIcon: GestureDetector(
-              onTap: () {
+            onChanged: (text) {
+              if (text == widget._passwordController.text) {
                 setState(() {
-                  obscure = !obscure;
-                  if (!obscure) {
-                    visibility = Icons.visibility;
-                  } else {
-                    visibility = Icons.visibility_off;
-                  }
+                  isMatch = !isMatch;
                 });
-              },
-              child: Container(
-                // alignment: Alignment(1.0,50.0),
-                padding: const EdgeInsets.only(right: 10),
-                child: Icon(visibility, size: 25, color: theme.primaryColor),
-              ),
-            ),
+              }
+            },
+            prefixIcon: Icon(Icons.lock, color: primaryColor),
+            suffixIcon: isMatch
+                ? Icon(Icons.check_circle, color: Colors.green)
+                : Icon(Icons.cancel, color: Colors.red),
             hintText: "Confirm Password",
             hintColor: Colors.grey,
           ),

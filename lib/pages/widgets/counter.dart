@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -30,7 +31,6 @@ class _CounterWidgetState extends State<CounterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Row(
@@ -39,8 +39,8 @@ class _CounterWidgetState extends State<CounterWidget> {
           padding: EdgeInsets.all(height * 0.01),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                  color: widget.borderColor ?? theme.primaryColorLight)),
+              border:
+                  Border.all(color: widget.borderColor ?? primaryColorLight)),
           child: GestureDetector(
               onTap: () {
                 counter = int.parse(widget.counterController.text.isEmpty
@@ -54,8 +54,7 @@ class _CounterWidgetState extends State<CounterWidget> {
                 widget.counterController.text = counter.toString();
               },
               child: Icon(Icons.remove,
-                  size: 15,
-                  color: widget.borderColor ?? theme.primaryColorLight)),
+                  size: 15, color: widget.borderColor ?? primaryColorLight)),
         ),
         SizedBox(
           width: width * 0.15,
@@ -64,8 +63,8 @@ class _CounterWidgetState extends State<CounterWidget> {
             keyboard: const TextInputType.numberWithOptions(
                 signed: false, decimal: false),
             controller: widget.counterController,
-            hintColor: widget.borderColor ?? theme.primaryColorLight,
-            style: widget.style ?? theme.textTheme.bodyText2,
+            hintColor: widget.borderColor ?? primaryColorLight,
+            style: widget.style ?? bodyText2,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             maxLines: 1,
             maxLength: 3,
@@ -82,15 +81,15 @@ class _CounterWidgetState extends State<CounterWidget> {
                   : widget.counterController.text);
             },
             //hintText: '1',
-            //borderColor: theme.primaryColorLight
+            //borderColor: primaryColorLight
           ),
         ),
         Container(
           padding: EdgeInsets.all(height * 0.01),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                  color: widget.borderColor ?? theme.primaryColorLight)),
+              border:
+                  Border.all(color: widget.borderColor ?? primaryColorLight)),
           child: GestureDetector(
               onTap: () {
                 counter = int.parse(widget.counterController.text.isEmpty
@@ -102,8 +101,7 @@ class _CounterWidgetState extends State<CounterWidget> {
                 widget.counterController.text = counter.toString();
               },
               child: Icon(Icons.add,
-                  size: 15,
-                  color: widget.borderColor ?? theme.primaryColorLight)),
+                  size: 15, color: widget.borderColor ?? primaryColorLight)),
         ),
       ],
     );
@@ -142,8 +140,6 @@ class _ItemCounterState extends State<ItemCounter> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Row(
       children: [
         IconButton(
@@ -151,7 +147,7 @@ class _ItemCounterState extends State<ItemCounter> {
               size: 30, color: counter < 1 ? Colors.grey : widget.color),
           onPressed: () {
             FocusScope.of(context).unfocus();
-             
+
             if (counter > 0) {
               setState(() {
                 counter--;
@@ -174,7 +170,7 @@ class _ItemCounterState extends State<ItemCounter> {
           },
         ),
         SizedBox(
-          width: width * 0.15,
+          width: Responsive.isMobile() ? width * 0.15 : width * 0.04,
           child: CustomTextField(
             textAlign: TextAlign.center,
             readOnly: true,
@@ -182,9 +178,8 @@ class _ItemCounterState extends State<ItemCounter> {
                 signed: false, decimal: false),
             // controller: widget.counterController,
 
-            hintColor: widget.color ?? theme.primaryColorLight,
-            style: widget.style ??
-                theme.textTheme.bodyText2!.copyWith(color: widget.color),
+            hintColor: widget.color ?? primaryColorLight,
+            style: widget.style ?? bodyText2.copyWith(color: widget.color),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             maxLines: 1,
             maxLength: 3,
@@ -209,7 +204,9 @@ class _ItemCounterState extends State<ItemCounter> {
         IconButton(
           icon: Icon(Icons.add_circle_outline,
               size: 30,
-              color: counter >widget.product.productQuantity //widget.product!.productQuantity!
+              color: counter >
+                      widget.product
+                          .productQuantity //widget.product!.productQuantity!
                   ? Colors.grey
                   : widget.color),
           onPressed: () {

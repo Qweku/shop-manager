@@ -23,33 +23,27 @@ class _AuthenticationState extends State<Authentication> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () => _backButton(),
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         body: Stack(
           children: [
             Positioned(
-              top:-height*0.15,
-              right:-width*0.5,
-              child: CircleAvatar(
-              radius:width*0.6,
-              backgroundColor:Colors.black.withOpacity(0.4)
-            )),
-             Positioned(
-              bottom:-height*0.1,
-              left:-width*0.1,
-              child: CircleAvatar(
-              radius:width*0.4,
-              backgroundColor:Colors.black.withOpacity(0.4)
-            )),
+                top: -height * 0.15,
+                right: -width * 0.5,
+                child: CircleAvatar(
+                    radius: width * 0.6,
+                    backgroundColor: Colors.black.withOpacity(0.4))),
+            Positioned(
+                bottom: -height * 0.1,
+                left: -width * 0.1,
+                child: CircleAvatar(
+                    radius: width * 0.4,
+                    backgroundColor: Colors.black.withOpacity(0.4))),
             Container(
-              alignment: const Alignment(0,0),
-              
+              alignment: const Alignment(0, 0),
               width: width,
               child: SingleChildScrollView(
                 child: Column(
@@ -57,18 +51,26 @@ class _AuthenticationState extends State<Authentication> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CircleAvatar(
-                        backgroundColor: theme.primaryColorLight,
+                        backgroundColor: primaryColorLight,
                         radius: width * 0.12,
                         backgroundImage: AssetImage("assets/app_icon.png"),
-                      
                       ),
-                      SizedBox(height:height*0.01),
-                      Text('Shop Mate',style: theme.textTheme.headline2,),
+                      SizedBox(height: height * 0.01),
+                      Text(
+                        'Shop Mate',
+                        style: headline2,
+                      ),
                       SizedBox(height: height * 0.05),
-                      AnimatedSwitcher(duration: const Duration(milliseconds: 700),
-                      child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 700),
+                        child: isToggle
+                            ? SignUp(
+                                toggleScreen: toggleScreen,
+                              )
+                            : LoginScreen(
+                                toggleScreen: toggleScreen,
+                              ),
                       )
-                      
                     ]),
               ),
             ),
@@ -104,7 +106,6 @@ class _AuthenticationState extends State<Authentication> {
   }
 }
 
-
 class TabletAuth extends StatefulWidget {
   const TabletAuth({Key? key}) : super(key: key);
 
@@ -119,64 +120,77 @@ class _TabletAuthState extends State<TabletAuth> {
       isToggle = !isToggle;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    var theme=Theme.of(context);
+   
     return WillPopScope(
       onWillPop: () => _backButton(),
       child: Scaffold(
         //resizeToAvoidBottomInset: false,
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         body: Stack(
           children: [
             Positioned(
-              top:-height*0.15,
-              right:-width*0.5,
-              child: CircleAvatar(
-              radius:width*0.6,
-              backgroundColor:Colors.black.withOpacity(0.4)
-            )),
-             Positioned(
-              bottom:-height*0.1,
-              left:-width*0.1,
-              child: CircleAvatar(
-              radius:width*0.1,
-              backgroundColor:Colors.black.withOpacity(0.4)
-            )),
+                top: -height * 0.15,
+                right: -width * 0.5,
+                child: CircleAvatar(
+                    radius: width * 0.6,
+                    backgroundColor: Colors.black.withOpacity(0.4))),
+            Positioned(
+                bottom: -height * 0.1,
+                left: -width * 0.1,
+                child: CircleAvatar(
+                    radius: width * 0.1,
+                    backgroundColor: Colors.black.withOpacity(0.4))),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 Container(
-                  alignment: const Alignment(0,0),
-                  
-                  width: width*0.35,
+                  alignment: const Alignment(0, 0),
+                  width: width * 0.35,
                   child: SingleChildScrollView(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(isToggle?'Welcome,':'Hi, ',style: theme.textTheme.headline2,),
+                          Text(
+                            isToggle ? 'Welcome,' : 'Hi, ',
+                            style: headline2,
+                          ),
                           SizedBox(height: height * 0.01),
-                          Text(isToggle?'Sign up to get started':"We've missed you, login to continue",style: theme.textTheme.bodyText2,),
+                          Text(
+                            isToggle
+                                ? 'Sign up to get started'
+                                : "We've missed you, login to continue",
+                            style: bodyText2,
+                          ),
                           SizedBox(height: height * 0.05),
-                          AnimatedSwitcher(duration: const Duration(milliseconds: 700),
-                          child: isToggle ?  SignUp(toggleScreen: toggleScreen,) :  LoginScreen(toggleScreen: toggleScreen,),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 700),
+                            child: isToggle
+                                ? SignUp(
+                                    toggleScreen: toggleScreen,
+                                  )
+                                : LoginScreen(
+                                    toggleScreen: toggleScreen,
+                                  ),
                           )
-                          
                         ]),
                   ),
                 ),
-                Image.asset('assets/shop-3d.png',)
+                Image.asset(
+                  'assets/shop-3d.png',
+                )
               ],
             ),
           ],
         ),
       ),
     );
- 
   }
-   _backButton() {
+
+  _backButton() {
     return showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
@@ -200,5 +214,4 @@ class _TabletAuthState extends State<TabletAuth> {
               ],
             ));
   }
-
 }

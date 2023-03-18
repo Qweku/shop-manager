@@ -24,7 +24,7 @@ class _SideMenuState extends State<SideMenu> {
   ];
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+  
     return Container(
       padding: EdgeInsets.symmetric(vertical: height * 0.05),
       height: height,
@@ -34,7 +34,10 @@ class _SideMenuState extends State<SideMenu> {
         children: [
           Padding(
             padding: EdgeInsets.all(width * 0.02),
-            child: Image.asset("assets/app_icon.png",height: height*0.12,),
+            child: Image.asset(
+              "assets/app_icon.png",
+              height: height * 0.12,
+            ),
           ),
           Divider(
             color: Colors.grey,
@@ -53,7 +56,8 @@ class _SideMenuState extends State<SideMenu> {
                     },
                     child: Padding(
                       padding: EdgeInsets.only(
-                          top: height * 0.02, ),
+                        top: height * 0.02,
+                      ),
                       child: AnimatedContainer(
                         padding: EdgeInsets.all(width * 0.01),
                         //width: width * 0.08,
@@ -68,7 +72,7 @@ class _SideMenuState extends State<SideMenu> {
                             Icon(sideMenu[index]['icon'],
                                 //size: 35,
                                 color: indxBttn == index
-                                    ? theme.primaryColor
+                                    ? primaryColor
                                     : Colors.grey),
                             const SizedBox(
                               width: 10,
@@ -76,10 +80,10 @@ class _SideMenuState extends State<SideMenu> {
                             Expanded(
                               child: Text(
                                 sideMenu[index]['menu'],
-                                style: theme.textTheme.bodyText1!.copyWith(
+                                style: bodyText1.copyWith(
                                     fontSize: 17,
                                     color: indxBttn == index
-                                        ? theme.primaryColor
+                                        ? primaryColor
                                         : Colors.grey),
                               ),
                             )

@@ -11,14 +11,12 @@ import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
-import 'package:shop_manager/models/NotificationModel.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/Accounts.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/low_stock_list.dart';
-import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
@@ -74,8 +72,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     //     }
     //   },
     // );
-    
-    
+
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Set<String> name = {};
@@ -120,19 +117,18 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
     return WillPopScope(
       onWillPop: () => _backButton(context),
       child: Scaffold(
           backgroundColor: primaryColorLight,
           // appBar: AppBar(
           //   elevation: 0,
-          //   backgroundColor: theme.primaryColor,
+          //   backgroundColor: primaryColor,
           //   actions: [
           //     IconButton(
           //         onPressed: () {},
           //         icon: Icon(Icons.notifications_active,
-          //             color: theme.primaryColorLight))
+          //             color: primaryColorLight))
           //   ],
           // ),
           // drawer: const DrawerWidget(),
@@ -234,7 +230,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
+
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -246,23 +242,23 @@ class _DashboardState extends State<Dashboard> {
         ),
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: theme.primaryColor,
+          backgroundColor: primaryColor,
           actions: [
             NotificationIconButton(
               quantity: context.watch<NotificationProvider>().notiCount,
               onTap: () {
                 if (context.read<NotificationProvider>().notiCount > 0) {
-                    context.read<NotificationProvider>().notiCount = 0;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationScreen()));
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationScreen()));
-                  }
+                  context.read<NotificationProvider>().notiCount = 0;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationScreen()));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationScreen()));
+                }
               },
             )
           ],
@@ -278,7 +274,7 @@ class _DashboardState extends State<Dashboard> {
               child: Container(
                 height: height * 0.3,
                 decoration: BoxDecoration(
-                    color: theme.primaryColor,
+                    color: primaryColor,
                     borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10))),
@@ -335,11 +331,10 @@ class _DashboardState extends State<Dashboard> {
                                         child: Text(
                                           period[index],
                                           textAlign: TextAlign.center,
-                                          style: theme.textTheme.bodyText2!
-                                              .copyWith(
-                                                  color: tap == index
-                                                      ? theme.primaryColor
-                                                      : Colors.white),
+                                          style: bodyText2.copyWith(
+                                              color: tap == index
+                                                  ? primaryColor
+                                                  : Colors.white),
                                         ),
                                       ),
                                     ),
@@ -394,7 +389,7 @@ class ItemStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+  
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -409,7 +404,7 @@ class ItemStatus extends StatelessWidget {
             children: [
               Text(
                 status,
-                style: theme.textTheme.headline1!.copyWith(color: textColor),
+                style: headline1.copyWith(color: textColor),
               ),
               const SizedBox(
                 height: 10,
@@ -422,9 +417,7 @@ class ItemStatus extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  Text(label,
-                      style: theme.textTheme.bodyText1!
-                          .copyWith(color: textColor)),
+                  Text(label, style: bodyText1.copyWith(color: textColor)),
                 ],
               ),
             ],

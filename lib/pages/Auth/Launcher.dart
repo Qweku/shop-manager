@@ -11,7 +11,7 @@ import 'package:shop_manager/pages/wrapper.dart';
 
 class Launcher extends StatefulWidget {
   const Launcher({Key? key}) : super(key: key);
-   static const String routeName = '/';
+  static const String routeName = '/';
 
   @override
   _LauncherState createState() => _LauncherState();
@@ -22,11 +22,9 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
   late Animation<double> _animation;
   late Animation<double> _animation2;
 
- 
-
   @override
   void initState() {
-     super.initState();
+    super.initState();
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: 3),
@@ -49,16 +47,17 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
   }
 
   void navigationPage() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>Wrapper()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => Wrapper()));
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
+
     return Scaffold(
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         body: Stack(
           children: [
             Positioned(
@@ -80,9 +79,10 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
                   ScaleTransition(
                     scale: _animation,
                     child: CircleAvatar(
-                      backgroundColor: theme.primaryColorLight,
-                      radius: Responsive.isMobile()?width * 0.12:width*0.05,
-                      backgroundImage:  AssetImage("assets/app_icon.png"),
+                      backgroundColor: primaryColorLight,
+                      radius:
+                          Responsive.isMobile() ? width * 0.12 : width * 0.05,
+                      backgroundImage: AssetImage("assets/app_icon.png"),
                     ),
                   ),
                   SizedBox(height: height * 0.01),

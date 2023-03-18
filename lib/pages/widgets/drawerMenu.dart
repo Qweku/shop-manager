@@ -65,7 +65,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }
 
   _backButton(context) {
-   
     return showDialog<bool>(
         context: context,
         builder: (c) => AlertDialog(
@@ -116,14 +115,13 @@ class DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return ListTile(
-        leading: Icon(icon, color: theme.primaryColor),
+        leading: Icon(icon, color: primaryColor),
         title: Text(text,
-            style: theme.textTheme.bodyText1!.copyWith(fontSize: 14)),
+            style: bodyText1.copyWith(fontSize: 14)),
         trailing: Icon(
           Icons.arrow_forward_ios,
-          color: theme.primaryColor,
+          color: primaryColor,
           size: 15,
         ),
         onTap: onTap);

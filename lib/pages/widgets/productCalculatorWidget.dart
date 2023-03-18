@@ -8,13 +8,13 @@ import 'package:shop_manager/pages/widgets/constants.dart';
 class ItemDetail extends StatelessWidget {
   const ItemDetail({
     Key? key,
-    required this.theme,
+    
     required this.item,
     this.backgroundColor,
     this.textColor,
   }) : super(key: key);
 
-  final ThemeData theme;
+  
   final Product item;
   final Color? backgroundColor, textColor;
 
@@ -24,13 +24,13 @@ class ItemDetail extends StatelessWidget {
     return ListTile(
         leading: CircleAvatar(
           radius: height * 0.03,
-          backgroundColor: backgroundColor ?? theme.primaryColorLight,
+          backgroundColor: backgroundColor ?? primaryColorLight,
           child: (item.productImage ?? "").isEmpty
               ? Center(
                   child: Text(
                     item.productName!.substring(0, 2).toUpperCase(),
-                    style: theme.textTheme.headline1!
-                        .copyWith(fontSize: 20, color: textColor??theme.primaryColor),
+                    style:headline1
+                        .copyWith(fontSize: 20, color: textColor??primaryColor),
                   ),
                 )
               : Container(
@@ -44,16 +44,16 @@ class ItemDetail extends StatelessWidget {
                 ),
         ),
         title: Text(item.productName!,
-            style: theme.textTheme.bodyText2!
+            style: bodyText2
                 .copyWith(color: textColor ?? Colors.white,fontWeight: FontWeight.bold)),
         subtitle: Text("GHS ${item.sellingPrice.toStringAsFixed(2)}",
-            style: theme.textTheme.bodyText2!
+            style: bodyText2
                 .copyWith(fontSize: 15, color: primaryColor),
                 
                 ),
                 
                 trailing: Text("x ${item.cartQuantity}",
-            style: theme.textTheme.bodyText1!
+            style: bodyText1
                 .copyWith(fontSize: 15),
                 
                 ),);

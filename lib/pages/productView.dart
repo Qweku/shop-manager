@@ -27,14 +27,15 @@ class _ProductViewState extends State<ProductView> {
   late var productImage;
   @override
   void initState() {
-    _counterController.text = Provider.of<GeneralProvider>(context, listen: false)
-        .cart
-        .firstWhere(
-          (element) => element == widget.product,
-          orElse: () => Product(cartQuantity: 1, pid: widget.product.pid),
-        )
-        .cartQuantity
-        .toString();
+    _counterController.text =
+        Provider.of<GeneralProvider>(context, listen: false)
+            .cart
+            .firstWhere(
+              (element) => element == widget.product,
+              orElse: () => Product(cartQuantity: 1, pid: widget.product.pid),
+            )
+            .cartQuantity
+            .toString();
     // Provider.of<ShopProvider>(context,listen:false)
     // _counterController.text = widget.product.cartQuantity.toString();
     widget.product.cartQuantity = counter;
@@ -44,7 +45,6 @@ class _ProductViewState extends State<ProductView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -57,15 +57,14 @@ class _ProductViewState extends State<ProductView> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (builder) =>const ProductCalculator(
-                             
-                            )));
+                        builder: (builder) => const ProductCalculator()));
               })
         ],
-        backgroundColor: primaryColorLight,//const Color.fromARGB(255, 221, 221, 221),
+        backgroundColor:
+            primaryColorLight, //const Color.fromARGB(255, 221, 221, 221),
         elevation: 0,
       ),
-      //backgroundColor: theme.primaryColor,
+      //backgroundColor: primaryColor,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
           child: SizedBox(
@@ -79,22 +78,22 @@ class _ProductViewState extends State<ProductView> {
                   width: width,
                   //color:Color.fromARGB(255, 221, 221, 221),
                   height: height * 0.5,
-                  decoration:  BoxDecoration(
+                  decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                           colors: [
-                            primaryColorLight,
-                            primaryColorLight,
+                        primaryColorLight,
+                        primaryColorLight,
                         // Color.fromARGB(255, 221, 221, 221),
                         // Color.fromARGB(255, 221, 221, 221),
                         Colors.white
                       ])),
                   child: Center(
                     child: ProductAvatar(
-                        image: productImage,
-                        product: widget.product,
-                        theme: theme),
+                      image: productImage,
+                      product: widget.product,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -108,7 +107,7 @@ class _ProductViewState extends State<ProductView> {
                             Expanded(
                               flex: 2,
                               child: Text(widget.product.productName!,
-                                  style: theme.textTheme.headline1!.copyWith(
+                                  style: headline1.copyWith(
                                       fontSize: 25,
                                       color: const Color.fromARGB(
                                           255, 32, 32, 32))),
@@ -118,8 +117,8 @@ class _ProductViewState extends State<ProductView> {
                               child: Text(
                                   'GHS ${widget.product.sellingPrice.toStringAsFixed(2)}',
                                   textAlign: TextAlign.end,
-                                  style: theme.textTheme.headline1!
-                                      .copyWith(color: primaryColor)),
+                                  style:
+                                      headline1.copyWith(color: primaryColor)),
                             ),
                           ],
                         ),
@@ -130,11 +129,10 @@ class _ProductViewState extends State<ProductView> {
                         child: Row(
                           //crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Total Stock:',
-                                style: theme.textTheme.bodyText1),
+                            Text('Total Stock:', style: bodyText1),
                             SizedBox(width: width * 0.03),
                             Text("${widget.product.productQuantity}",
-                                style: theme.textTheme.bodyText1!.copyWith(
+                                style: bodyText1.copyWith(
                                     color: Colors.grey,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14)),
@@ -155,14 +153,12 @@ class _ProductViewState extends State<ProductView> {
                           children: [
                             Text(
                               'Description',
-                              style: theme.textTheme.bodyText1!
-                                  .copyWith(fontSize: 15),
+                              style: bodyText1.copyWith(fontSize: 15),
                             ),
                             const SizedBox(height: 10),
                             Text(
                               "Description of the product goes here but there's no description currently!",
-                              style: theme.textTheme.bodyText1!
-                                  .copyWith(color: Colors.grey),
+                              style: bodyText1.copyWith(color: Colors.grey),
                             )
                           ],
                         ),
@@ -180,7 +176,7 @@ class _ProductViewState extends State<ProductView> {
                     child: Row(children: [
                       Text(
                         "GHS ${(widget.product.sellingPrice) * counter}0",
-                        style: theme.textTheme.headline2!.copyWith(fontSize:16),
+                        style: headline2.copyWith(fontSize: 16),
                       ),
                       const SizedBox(width: 20),
                       Expanded(
@@ -206,8 +202,8 @@ class _ProductViewState extends State<ProductView> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
                               "$counter",
-                              style: theme.textTheme.headline2!
-                                  .copyWith(fontSize: 16, color: Colors.white),
+                              style: headline2.copyWith(
+                                  fontSize: 16, color: Colors.white),
                             ),
                           ),
                           IconButton(
@@ -215,7 +211,6 @@ class _ProductViewState extends State<ProductView> {
                                 if (counter < widget.product.productQuantity) {
                                   setState(() {
                                     counter++;
-                                   
                                   });
                                 }
                                 widget.product.cartQuantity = counter;
@@ -223,31 +218,36 @@ class _ProductViewState extends State<ProductView> {
                               icon: Icon(Icons.add_circle_outline,
                                   size: 30,
                                   color:
-                                      counter == widget.product.productQuantity? Colors.grey
+                                      counter == widget.product.productQuantity
+                                          ? Colors.grey
                                           : Colors.white))
                         ],
                       )),
                       const SizedBox(width: 20),
                       Button(
                         onTap: (() {
-                          if (!(context.read<GeneralProvider>().cart.contains(widget.product))) {
+                          if (!(context
+                              .read<GeneralProvider>()
+                              .cart
+                              .contains(widget.product))) {
                             Provider.of<GeneralProvider>(context, listen: false)
                                 .addToCart(widget.product);
                           }
                         }),
                         buttonText: 'Cart',
-                        color: (context.watch<GeneralProvider>().cart.contains(widget.product))
+                        color: (context
+                                .watch<GeneralProvider>()
+                                .cart
+                                .contains(widget.product))
                             ? Colors.grey
                             : actionColor,
                         width: width * 0.2,
-                        
                       )
                     ]),
                   ),
                 )
               ],
             ),
-            
           ],
         ),
       )),
@@ -266,12 +266,10 @@ class ProductAvatar extends StatelessWidget {
     Key? key,
     required this.image,
     required this.product,
-    required this.theme,
   }) : super(key: key);
 
   final image;
   final Product product;
-  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -285,8 +283,7 @@ class ProductAvatar extends StatelessWidget {
             ? Center(
                 child: Text(
                   product.productName!.substring(0, 2).toUpperCase(),
-                  style: theme.textTheme.headline1!
-                      .copyWith(fontSize: 50, color: primaryColor),
+                  style: headline1.copyWith(fontSize: 50, color: primaryColor),
                 ),
               )
             : Container(
@@ -333,7 +330,7 @@ class ProductAvatar extends StatelessWidget {
 //   Widget build(BuildContext context) {
 //     double height = MediaQuery.of(context).size.height;
 //     double width = MediaQuery.of(context).size.width;
-//     final theme = Theme.of(context);
+//     
 //     return Scaffold(
 //       appBar: AppBar(
 //         //title: Text(product.productName!.toUpperCase()),
@@ -351,10 +348,10 @@ class ProductAvatar extends StatelessWidget {
 //                 )),
 //           )
 //         ],
-//         backgroundColor: theme.primaryColor,
+//         backgroundColor: primaryColor,
 //         elevation: 0,
 //       ),
-//       //backgroundColor: theme.primaryColor,
+//       //backgroundColor: primaryColor,
 //       resizeToAvoidBottomInset: true,
 //       body: SafeArea(
 //           child: SingleChildScrollView(
@@ -366,31 +363,31 @@ class ProductAvatar extends StatelessWidget {
 //                   clipper: BottomLineClipper(),
 //                   child: Container(
 //                     width: width,
-//                     color: theme.primaryColor,
+//                     color: primaryColor,
 //                     height: height * 0.2,
 //                   ),
 //                 ),
 //                 SizedBox(height: height * 0.12),
 //                 Text(
 //                   widget.product.productName!,
-//                   style: theme.textTheme.headline1!
-//                       .copyWith(fontSize: 30, color: theme.primaryColor),
+//                   style:headline1!
+//                       .copyWith(fontSize: 30, color: primaryColor),
 //                 ),
 //                 SizedBox(height: height * 0.01),
 //                 Text('GHS ${widget.product.sellingPrice}',
-//                     style: theme.textTheme.headline1),
+//                     style:headline1),
 //                 Padding(
 //                   padding: EdgeInsets.all(height * 0.02),
 //                   child: Column(
 //                     //crossAxisAlignment: CrossAxisAlignment.start,
 //                     children: [
 //                       Text('Max Quantity',
-//                           style: theme.textTheme.bodyText1!
+//                           style:bodyText1!
 //                               .copyWith(fontSize: 12)),
 //                       SizedBox(height: height * 0.01),
 //                       Text("${widget.product.quantity!}",
-//                           style: theme.textTheme.headline1!
-//                               .copyWith(color: theme.primaryColor)),
+//                           style:headline1!
+//                               .copyWith(color: primaryColor)),
 //                     ],
 //                   ),
 //                 ),
@@ -399,16 +396,16 @@ class ProductAvatar extends StatelessWidget {
 //                   borderRadius: BorderRadius.circular(10),
 //                   child: Container(
 //                       padding: EdgeInsets.all(height * 0.02),
-//                       decoration: BoxDecoration(color: theme.primaryColor),
+//                       decoration: BoxDecoration(color: primaryColor),
 //                       child: Column(
 //                         children: [
-//                           Text('Total', style: theme.textTheme.bodyText2),
+//                           Text('Total', style:bodyText2),
 //                           SizedBox(
 //                             height: height * 0.01,
 //                           ),
 //                           Text(
 //                             "GHS ${widget.product.sellingPrice! * counter}",
-//                             style: theme.textTheme.headline2,
+//                             style:headline2,
 //                           ),
 //                         ],
 //                       )),
@@ -427,7 +424,7 @@ class ProductAvatar extends StatelessWidget {
 //                           decoration: BoxDecoration(
 //                               borderRadius: BorderRadius.circular(10),
 //                               color: (counter > 1)
-//                                   ? theme.primaryColor
+//                                   ? primaryColor
 //                                   : Colors.blueGrey),
 //                           child: GestureDetector(
 //                               onTap: () {
@@ -442,7 +439,7 @@ class ProductAvatar extends StatelessWidget {
 //                                 _counterController.text = counter.toString();
 //                               },
 //                               child: Icon(Icons.remove,
-//                                   size: 20, color: theme.primaryColorLight)),
+//                                   size: 20, color: primaryColorLight)),
 //                         ),
 //                         Expanded(
 //                           flex: 3,
@@ -452,9 +449,9 @@ class ProductAvatar extends StatelessWidget {
 //                               textAlign: TextAlign.center,
 //                               keyboard: TextInputType.number,
 //                               controller: _counterController,
-//                               hintColor: theme.primaryColor,
-//                               style: theme.textTheme.headline2!
-//                                   .copyWith(color: theme.primaryColor),
+//                               hintColor: primaryColor,
+//                               style:headline2!
+//                                   .copyWith(color: primaryColor),
 //                               onChanged: (text) {
 //                                 counter =
 //                                     int.tryParse(_counterController.text)!;
@@ -467,7 +464,7 @@ class ProductAvatar extends StatelessWidget {
 //                                 }
 //                               },
 //                               //hintText: '1',
-//                               //borderColor: theme.primaryColorLight
+//                               //borderColor: primaryColorLight
 //                             ),
 //                           ),
 //                         ),
@@ -476,7 +473,7 @@ class ProductAvatar extends StatelessWidget {
 //                           decoration: BoxDecoration(
 //                               borderRadius: BorderRadius.circular(10),
 //                               color: (counter < widget.product.quantity!)
-//                                   ? theme.primaryColor
+//                                   ? primaryColor
 //                                   : Colors.blueGrey),
 //                           child: GestureDetector(
 //                               onTap: () {
@@ -491,7 +488,7 @@ class ProductAvatar extends StatelessWidget {
 //                                 _counterController.text = counter.toString();
 //                               },
 //                               child: Icon(Icons.add,
-//                                   size: 20, color: theme.primaryColorLight)),
+//                                   size: 20, color: primaryColorLight)),
 //                         ),
 //                       ],
 //                     )),
@@ -513,7 +510,7 @@ class ProductAvatar extends StatelessWidget {
 //                           .cart
 //                           .contains(widget.product))
 //                       ? Colors.blueGrey
-//                       : theme.primaryColor,
+//                       : primaryColor,
 //                   width: width * 0.7,
 //                 )
 //               ],
@@ -566,14 +563,14 @@ class ProductAvatar extends StatelessWidget {
 //         decoration: BoxDecoration(
 //             borderRadius: BorderRadius.circular(height * 0.1),
 //             color: (product.imageb64 ?? "").isEmpty
-//                 ? theme.primaryColor
-//                 : theme.primaryColorLight,
-//             border: Border.all(color: theme.primaryColorLight, width: 3)),
+//                 ? primaryColor
+//                 : primaryColorLight,
+//             border: Border.all(color: primaryColorLight, width: 3)),
 //         child: (product.imageb64 ?? "").isEmpty
 //             ? Center(
 //                 child: Text(
 //                   product.productName!.substring(0, 2).toUpperCase(),
-//                   style: theme.textTheme.headline1!
+//                   style:headline1!
 //                       .copyWith(fontSize: 70, color: Colors.white),
 //                 ),
 //               )

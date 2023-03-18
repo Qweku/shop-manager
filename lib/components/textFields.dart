@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class DateTextField extends StatelessWidget {
   final String? hintText;
@@ -32,7 +33,7 @@ class DateTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     //final fromDate = TextEditingController();
     final dateformat = DateFormat("yyyy-MM-dd");
-    //final theme = Theme.of(context);
+    //
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 0,
@@ -92,7 +93,7 @@ class TimeTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeformat = DateFormat("HH:mm");
-    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Container(
@@ -110,12 +111,12 @@ class TimeTextField extends StatelessWidget {
             ),
           ),
           child: DateTimeField(
-            style: theme.textTheme.bodyText1,
+            style: bodyText1,
             decoration: InputDecoration(
               hintText: "Time",
               prefixIcon: Icon(Icons.watch, color: Colors.black),
               border: InputBorder.none,
-              hintStyle: theme.textTheme.bodyText1,
+              hintStyle: bodyText1,
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
               errorBorder: InputBorder.none,

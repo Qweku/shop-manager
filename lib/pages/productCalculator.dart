@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -57,7 +58,6 @@ class _ProductCalculatorState extends State<ProductCalculator> {
       totalCost += element.sellingPrice * (element.cartQuantity);
     });
 
-    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -70,22 +70,26 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ClipPath(
-                    clipper: BottomClipper(),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          right: height * 0.02,
-                          left: height * 0.02,
-                          top: height * 0.05,
-                          bottom: height * 0.07),
-                      color: primaryColor,
-                      child: HeaderSection(
-                        height: height,
-                        width: width,
-                        theme: theme,
-                      ),
-                    ),
-                  ),
+                  Responsive.isTablet()
+                      ? Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Text("Basket", style: headline1),
+                        )
+                      : ClipPath(
+                          clipper: BottomClipper(),
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                right: height * 0.02,
+                                left: height * 0.02,
+                                top: height * 0.05,
+                                bottom: height * 0.07),
+                            color: primaryColor,
+                            child: HeaderSection(
+                              height: height,
+                              width: width,
+                            ),
+                          ),
+                        ),
                   Expanded(
                     child: ListView.builder(
                       // shrinkWrap: true,
@@ -101,7 +105,6 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                             counterController: counterController[index],
                             height: height,
                             width: width,
-                            theme: theme,
                           )),
                     ),
                   ),
@@ -127,13 +130,12 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Total Amount',
-                                  style: theme.textTheme.bodyText2),
+                              Text('Total Amount', style: bodyText2),
                               SizedBox(height: height * 0.01),
                               Text(
                                 "GHS ${totalCost.toStringAsFixed(2)} ",
                                 textAlign: TextAlign.center,
-                                style: theme.textTheme.headline2,
+                                style: headline2,
                               ),
                             ],
                           ),
@@ -156,8 +158,9 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                             },
                             buttonText: isDone ? 'Done' : 'Proceed',
                             color: actionColor,
-                            
-                            width: width * 0.4,
+                            width: Responsive.isMobile()
+                                ? width * 0.4
+                                : width * 0.1,
                           ),
                         ],
                       ),
@@ -171,8 +174,6 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   }
 
   _calculateBalance(context) {
-    
-
     return showDialog<bool>(
         context: context,
         builder: (c) => StatefulBuilder(builder: (context, setState) {
@@ -187,7 +188,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   style: headline1,
                 ),
                 content: SizedBox(
-                  width: width * 0.7,
+                  width: width * 0.4,
                   height: height * 0.4,
                   child: Column(
                     // spacing: 20,
@@ -197,7 +198,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                         padding: EdgeInsets.only(
                             bottom: height * 0.02, top: height * 0.04),
                         child: Text("Enter Amount Received",
-                            style: headline1.copyWith(color:Colors.grey)),
+                            style: headline1.copyWith(color: Colors.grey)),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -213,7 +214,6 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                               });
                             },
                             hintText: 'Amount',
-                           
                             borderColor: Colors.grey,
                             prefixIcon: const Icon(Icons.add_box,
                                 color: Colors.grey, size: 20),
@@ -252,14 +252,13 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                           buttonText: 'Cancel',
                         ),
                       ),
-                      const SizedBox(width:10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Button(
                           verticalPadding: 20,
                           borderRadius: 10,
                           color: actionColor,
-                         
-                          width: width,
+                          width: width * 0.2,
                           buttonText: "Done",
                           onTap: () {
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -284,14 +283,14 @@ class HeaderSection extends StatelessWidget {
     Key? key,
     required this.height,
     //required this.widget,
-    required this.theme,
+
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
   //final ProductListScreen widget;
-  final ThemeData theme;
+
   final double width;
   final Function()? onPressed;
 
@@ -311,12 +310,12 @@ class HeaderSection extends StatelessWidget {
             Text(
               "Basket",
               textAlign: TextAlign.left,
-              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+              style: headline2.copyWith(fontSize: 30),
             ),
             SizedBox(
                 width: width * 0.1,
                 child: Divider(
-                  color: theme.primaryColorLight,
+                  color: primaryColorLight,
                   thickness: 5,
                 )),
           ],
@@ -324,10 +323,10 @@ class HeaderSection extends StatelessWidget {
         // Container(
         //   decoration: BoxDecoration(
         //       borderRadius: BorderRadius.circular(10),
-        //       color: theme.primaryColorLight),
+        //       color: primaryColorLight),
         //   child: IconButton(
         //       onPressed: onPressed,
-        //       icon: Icon(Icons.add, color: theme.primaryColor)),
+        //       icon: Icon(Icons.add, color: primaryColor)),
         // )
       ],
     );
@@ -339,7 +338,6 @@ class CartItemWidget extends StatefulWidget {
       {Key? key,
       required this.width,
       required this.height,
-      required this.theme,
       required this.counterController,
       required this.product,
       this.isAllowed = false,
@@ -349,7 +347,7 @@ class CartItemWidget extends StatefulWidget {
   final double width;
   final int index;
   final double height;
-  final ThemeData theme;
+
   final TextEditingController counterController;
   final Product product;
   final bool isAllowed;
@@ -388,7 +386,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   child: Container(
                     //padding: EdgeInsets.only(top: width * 0.05),
                     height: widget.height * 0.15,
-                    width: widget.width * 0.3,
+                    width: Responsive.isMobile()
+                        ? widget.width * 0.3
+                        : widget.width * 0.1,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
@@ -410,16 +410,14 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   children: [
                     Text(
                       widget.product.productName ?? 'N/A',
-                      style: widget.theme.textTheme.headline1!
-                          .copyWith(fontSize: 17),
+                      style: headline1.copyWith(fontSize: 17),
                     ),
                     SizedBox(
                       height: widget.height * 0.002,
                     ),
                     Text(
                       widget.product.productDescription ?? 'N/A',
-                      style: widget.theme.textTheme.bodyText1!
-                          .copyWith(color: Colors.grey),
+                      style: bodyText1.copyWith(color: Colors.grey),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
@@ -429,8 +427,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                     ),
                     Text(
                       'GHS ${widget.product.sellingPrice.toStringAsFixed(2)}',
-                      style: widget.theme.textTheme.bodyText1!.copyWith(
-                          fontSize: 17, color: widget.theme.primaryColor),
+                      style:
+                          bodyText1.copyWith(fontSize: 17, color: primaryColor),
                     )
                   ],
                 ),
@@ -461,7 +459,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                               color: Color.fromARGB(255, 255, 102, 102)),
                           Text(
                             'REMOVE',
-                            style: widget.theme.textTheme.bodyText1!.copyWith(
+                            style: bodyText1.copyWith(
                                 fontSize: 15,
                                 color:
                                     const Color.fromARGB(255, 255, 102, 102)),
@@ -474,7 +472,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   color: primaryColor,
                   product: widget.product,
                   counterController: widget.counterController,
-                  width: widget.width * 0.3),
+                  width: Responsive.isMobile()
+                      ? widget.width * 0.3
+                      : widget.width * 0.1),
 
               // ItemCounter(
               //   counter: widget.counter,
@@ -526,14 +526,14 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //       totalCost += element.sellingPrice! * element.cartQuantity!;
 //     });
 
-//     final theme = Theme.of(context);
+//     
 //     return Scaffold(
 //       resizeToAvoidBottomInset: false,
 //       // backgroundColor: ShopColors.secondaryColor,
 //       appBar: AppBar(
 //         title: Text(
 //           "Basket",
-//           style: theme.textTheme.headline1,
+//           style:headline1,
 //         ),
 //         backgroundColor: Colors.white,
 //         iconTheme: const IconThemeData(color: Colors.black),
@@ -558,7 +558,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //                   //         left: height * 0.02,
 //                   //         top: height * 0.13,
 //                   //         bottom: height * 0.07),
-//                   //     color: theme.primaryColorLight,
+//                   //     color: primaryColorLight,
 //                   //     width: width,
 //                   //   ),
 //                   // ),
@@ -626,7 +626,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //                         topLeft: Radius.circular(20),
 //                         topRight: Radius.circular(20)),
 //                     child: Container(
-//                       color: theme.primaryColor,
+//                       color: primaryColor,
 //                       padding: EdgeInsets.all(height * 0.03),
 //                       child: Row(
 //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -635,12 +635,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //                             crossAxisAlignment: CrossAxisAlignment.start,
 //                             children: [
 //                               Text('Total Amount',
-//                                   style: theme.textTheme.bodyText2),
+//                                   style:bodyText2),
 //                               SizedBox(height: height * 0.01),
 //                               Text(
 //                                 "GHS $totalCost ",
 //                                 textAlign: TextAlign.center,
-//                                 style: theme.textTheme.headline2,
+//                                 style:headline2,
 //                               ),
 //                             ],
 //                           ),
@@ -657,8 +657,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //                               }
 //                             },
 //                             buttonText: isDone ? 'Done' : 'Proceed',
-//                             color: theme.primaryColorLight,
-//                             textColor: theme.primaryColor,
+//                             color: primaryColorLight,
+//                             textColor: primaryColor,
 //                             width: width * 0.4,
 //                           ),
 //                         ],
@@ -673,11 +673,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //   }
 
 //   void _bottomDrawSheet(context) {
-//     final theme = Theme.of(context);
+//     
 //     double height = MediaQuery.of(context).size.height;
 //     double width = MediaQuery.of(context).size.width;
 //     showModalBottomSheet(
-//         backgroundColor: theme.primaryColor,
+//         backgroundColor: primaryColor,
 //         shape: const RoundedRectangleBorder(
 //           borderRadius: BorderRadius.only(
 //               topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
@@ -694,7 +694,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //                   padding: EdgeInsets.only(
 //                       bottom: height * 0.02, top: height * 0.04),
 //                   child: Text("Enter Amount Received",
-//                       style: theme.textTheme.headline2),
+//                       style:headline2),
 //                 ),
 //                 Padding(
 //                   padding: EdgeInsets.only(
@@ -714,24 +714,24 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 //                       borderColor: Colors.white,
 //                       prefixIcon: const Icon(Icons.add_box,
 //                           color: Colors.white, size: 20),
-//                       style: theme.textTheme.bodyText2),
+//                       style:bodyText2),
 //                 ),
 //                 SizedBox(height: height * 0.03),
 //                 Column(
 //                   children: [
-//                     Text('Change', style: theme.textTheme.bodyText2),
+//                     Text('Change', style:bodyText2),
 //                     SizedBox(height: height * 0.01),
 //                     Text(
 //                       "GHS $balance",
 //                       textAlign: TextAlign.center,
-//                       style: theme.textTheme.headline2,
+//                       style:headline2,
 //                     ),
 //                   ],
 //                 ),
 //                 SizedBox(height: height * 0.045),
 //                 Button(
-//                   color: theme.primaryColorLight,
-//                   textColor: theme.primaryColor,
+//                   color: primaryColorLight,
+//                   textColor: primaryColor,
 //                   width: width,
 //                   buttonText: "Done",
 //                   onTap: () {

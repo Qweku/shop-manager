@@ -12,14 +12,15 @@ class NotificationIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
         IconButton(
             onPressed: onTap,
             icon: Icon(Icons.notifications_outlined,
-                color: Responsive.isMobile()?primaryColorLight:primaryColor, size: Responsive.isMobile() ? 30 : 35)),
+                color: Responsive.isMobile() ? primaryColorLight : primaryColor,
+                size: Responsive.isMobile() ? 30 : 35)),
         Positioned(
             top: height * 0.005,
             left: Responsive.isMobile() ? width * 0.03 : width * 0.01,
@@ -44,14 +45,15 @@ class CartIconButton extends StatelessWidget {
   final int quantity;
   final Color? color;
   final Function()? onTap;
-  const CartIconButton({Key? key, required this.quantity, this.onTap, this.color})
+  const CartIconButton(
+      {Key? key, required this.quantity, this.onTap, this.color})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -72,7 +74,7 @@ class CartIconButton extends StatelessWidget {
                         shape: BoxShape.circle),
                     child: Text(
                       '${quantity < 10 ? quantity : '9+'}',
-                      style: theme.textTheme.bodyText2!.copyWith(fontSize: 9),
+                      style: bodyText2.copyWith(fontSize: 9),
                     ),
                   ))
       ],

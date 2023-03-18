@@ -38,89 +38,79 @@ class _InventoryScreenState extends State<InventoryScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    final theme = Theme.of(context);
     return Scaffold(
         backgroundColor: Colors.white,
         // floatingActionButton: FloatingActionButton(
-        //   backgroundColor: theme.primaryColor,
+        //   backgroundColor: primaryColor,
         //   onPressed: () {
         //     setState(() {
         //       isList = !isList;
         //     });
         //   },
         //   child: isList
-        //       ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
-        //       : Icon(Icons.list, color: theme.primaryColorLight),
+        //       ? Icon(Icons.dashboard_customize, color: primaryColorLight)
+        //       : Icon(Icons.list, color: primaryColorLight),
         // ),
         body: SafeArea(
           top: false,
           child: Column(
             children: [
-             Responsive.isMobile()? ClipPath(
-                clipper: BottomClipper(),
-                child: Container(
-                  width: width,
-                  padding: EdgeInsets.only(
-                      right: height * 0.02,
-                      left: height * 0.02,
-                      top: height * 0.05,
-                      bottom: height * 0.07),
-                  color: theme.primaryColor,
-                  child: HeaderSection(
-                    height: height,
-                    theme: theme,
-                    width: width,
-                    onChanged: (value) {
-                      setState(() {
-                        query = value;
-                      });
-                    },
-                  ),
-                ),
-              ): Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Inventory",
-                    textAlign: TextAlign.left,
-                    style: headline1.copyWith(fontSize: 20),
-                  ),
-                  SizedBox(
-                    width:width*0.4,
-                    child: CustomTextField(
-                      borderColor:  Colors.grey,
-                      style: bodyText1,
-                      suffixIcon: GestureDetector(
-                          child: const Icon(Icons.search, color: Colors.grey)),
-                      hintText: "Search for product",
-                      hintColor: Colors.grey,
-                      onChanged:(value) {
+              Responsive.isMobile()
+                  ? ClipPath(
+                      clipper: BottomClipper(),
+                      child: Container(
+                        width: width,
+                        padding: EdgeInsets.only(
+                            right: height * 0.02,
+                            left: height * 0.02,
+                            top: height * 0.05,
+                            bottom: height * 0.07),
+                        color: primaryColor,
+                        child: HeaderSection(
+                          height: height,
+                          width: width,
+                          onChanged: (value) {
+                            setState(() {
+                              query = value;
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Inventory",
+                            textAlign: TextAlign.left,
+                            style: headline1.copyWith(fontSize: 20),
+                          ),
+                          SizedBox(
+                            width: width * 0.4,
+                            child: CustomTextField(
+                              borderColor: Colors.grey,
+                              style: bodyText1,
+                              suffixIcon: GestureDetector(
+                                  child: const Icon(Icons.search,
+                                      color: Colors.grey)),
+                              hintText: "Search for product",
+                              hintColor: Colors.grey,
+                              onChanged: (value) {
                                 setState(() {
                                   query = value;
                                 });
                               },
-                    ),
-                  ),
-                  Row(
-                    children: [
-                    
-                       CartIconButton(
-                color: primaryColor,
-                quantity: context.watch<GeneralProvider>().cart.length,
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => ProductCalculator()));
-                })
-                    ],
-                  )
-                ],
+                            ),
                           ),
-              ),
-            SizedBox(height: height * 0.03),
+                          Row(
+                            children: [],
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(height: height * 0.03),
               Expanded(
                 child: AnimatedSwitcher(
                     duration: Duration(microseconds: 100),
@@ -141,14 +131,14 @@ class HeaderSection extends StatelessWidget {
     Key? key,
     required this.height,
     //required this.widget,
-    required this.theme,
+
     required this.width,
     this.onChanged,
   }) : super(key: key);
 
   final double height;
   //final ProductListScreen widget;
-  final ThemeData theme;
+
   final double width;
   final ValueChanged<String>? onChanged;
 
@@ -165,12 +155,12 @@ class HeaderSection extends StatelessWidget {
                 Text(
                   "Inventory",
                   textAlign: TextAlign.left,
-                  style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+                  style: headline2.copyWith(fontSize: 30),
                 ),
                 SizedBox(
                     width: width * 0.1,
                     child: Divider(
-                      color: theme.primaryColorLight,
+                      color: primaryColorLight,
                       thickness: 5,
                     )),
               ],
@@ -190,7 +180,7 @@ class HeaderSection extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: width * 0.07, vertical: 20),
           child: CustomTextField(
             borderColor: const Color.fromARGB(255, 255, 255, 255),
-            style: theme.textTheme.bodyText2,
+            style: bodyText2,
             suffixIcon: GestureDetector(
                 child: const Icon(Icons.search, color: Colors.white)),
             hintText: "Search for product",

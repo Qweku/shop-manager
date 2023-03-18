@@ -10,14 +10,13 @@ class SimpleBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BarChart(
       BarChartData(
-        barTouchData: barTouchData,
-        titlesData: titlesData,
-        borderData: borderData,
-        barGroups: barGroups,
-        alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
-        gridData: FlGridData(show: false)
-      ),
+          barTouchData: barTouchData,
+          titlesData: titlesData,
+          borderData: borderData,
+          barGroups: barGroups,
+          alignment: BarChartAlignment.spaceAround,
+          maxY: 20,
+          gridData: FlGridData(show: false)),
     );
   }
 
@@ -53,33 +52,33 @@ class SimpleBarChart extends StatelessWidget {
               var style = TextStyle(
                 color: Color.fromARGB(255, 92, 92, 92),
                 fontWeight: FontWeight.bold,
-                fontSize: Responsive.isMobile()?12:14,
+                fontSize: Responsive.isMobile() ? 12 : 14,
               );
               Widget text;
               switch (value.toInt()) {
                 case 0:
-                  text =  Text('Mon', style: style);
+                  text = Text('Mon', style: style);
                   break;
                 case 1:
-                  text =  Text('Tue', style: style);
+                  text = Text('Tue', style: style);
                   break;
                 case 2:
-                  text =  Text('Wed', style: style);
+                  text = Text('Wed', style: style);
                   break;
                 case 3:
-                  text =  Text('Thu', style: style);
+                  text = Text('Thu', style: style);
                   break;
                 case 4:
-                  text =  Text('Fri', style: style);
+                  text = Text('Fri', style: style);
                   break;
                 case 5:
-                  text =  Text('Sat', style: style);
+                  text = Text('Sat', style: style);
                   break;
                 // case 6:
                 //   text = const Text('', style: style);
                 //   break;
                 default:
-                  text =  Text('', style: style);
+                  text = Text('', style: style);
                   break;
               }
               return Padding(
@@ -105,28 +104,28 @@ class SimpleBarChart extends StatelessWidget {
               Widget text;
               switch (value.toInt()) {
                 case 0:
-                  text =  Text('230', style: style);
+                  text = Text('230', style: style);
                   break;
                 case 1:
-                  text =  Text('520', style: style);
+                  text = Text('520', style: style);
                   break;
                 case 2:
-                  text =  Text('780', style: style);
+                  text = Text('780', style: style);
                   break;
                 case 3:
-                  text =  Text('800', style: style);
+                  text = Text('800', style: style);
                   break;
                 case 4:
-                  text =  Text('750', style: style);
+                  text = Text('750', style: style);
                   break;
                 case 5:
-                  text =  Text('520', style: style);
+                  text = Text('520', style: style);
                   break;
                 // case 6:
                 //   text = const Text('', style: style);
                 //   break;
                 default:
-                  text =  Text('', style: style);
+                  text = Text('', style: style);
                   break;
               }
               return Padding(
@@ -156,7 +155,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 11,
-              color:  Responsive.isMobile()?actionColor:primaryColor,
+              color: Responsive.isMobile() ? actionColor : primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -168,7 +167,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 10,
-              color:  Responsive.isMobile()?actionColor:primaryColor,
+              color: Responsive.isMobile() ? actionColor : primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -180,7 +179,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 14,
-              color:  Responsive.isMobile()?actionColor:primaryColor,
+              color: Responsive.isMobile() ? actionColor : primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -192,7 +191,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 15,
-              color:  Responsive.isMobile()?actionColor:primaryColor,
+              color: Responsive.isMobile() ? actionColor : primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -204,7 +203,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 13,
-              color:  Responsive.isMobile()?actionColor:primaryColor,
+              color: Responsive.isMobile() ? actionColor : primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -216,7 +215,7 @@ class SimpleBarChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               width: 15,
               toY: 10,
-              color: Responsive.isMobile()?actionColor:primaryColor,
+              color: Responsive.isMobile() ? actionColor : primaryColor,
             )
           ],
           showingTooltipIndicators: [0],
@@ -243,17 +242,19 @@ class ShopBarChart extends StatefulWidget {
 class ShopBarChartState extends State<ShopBarChart> {
   @override
   Widget build(BuildContext context) {
-    var theme=Theme.of(context);
+   
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       color: Colors.white,
       child: Container(
         padding: const EdgeInsets.all(10),
-        height:  Responsive.isMobile()?height * 0.27:height * 0.3 ,
-        width:  width ,
+        height: Responsive.isMobile() ? height * 0.27 : height * 0.3,
+        width: width,
         // decoration: BoxDecoration(
-        //     color: Responsive.isMobile()?theme.primaryColor:Colors.white,
+        //     color: Responsive.isMobile()?primaryColor:Colors.white,
         //     borderRadius: BorderRadius.circular(20),
         //     boxShadow: const [
         //       BoxShadow(
@@ -261,16 +262,20 @@ class ShopBarChartState extends State<ShopBarChart> {
         //           color: Color.fromARGB(255, 231, 231, 238),
         //           blurRadius: 2,
         //           spreadRadius: 1),
-             
+
         //     ]),
         child: Column(
           children: [
-            Text('Total Sales',style: theme.textTheme.headline1!.copyWith(color:Responsive.isMobile()?Colors.white:Colors.black),),
-            SizedBox(height:height*0.01),
+            Text(
+              'Total Sales',
+              style: headline1.copyWith(
+                  color: Responsive.isMobile() ? Colors.white : Colors.black),
+            ),
+            SizedBox(height: height * 0.01),
             SizedBox(
-              height:  Responsive.isMobile()?height * 0.2:height*0.3 ,
-        width:  width ,
-              child: const SimpleBarChart()),
+                height: Responsive.isMobile() ? height * 0.2 : height * 0.3,
+                width: width,
+                child: const SimpleBarChart()),
           ],
         ),
       ),

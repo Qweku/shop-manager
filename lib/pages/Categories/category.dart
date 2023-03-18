@@ -10,6 +10,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Categories/categorylist.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 import '../widgets/categoryCard.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    final theme = Theme.of(context);
+
     double width = MediaQuery.of(context).size.width;
     var categories = context.watch<GeneralProvider>().categories;
     return Scaffold(
@@ -56,11 +57,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     left: height * 0.02,
                     top: height * 0.13,
                     bottom: height * 0.07),
-                color: theme.primaryColor,
+                color: primaryColor,
                 child: HeaderSection(
                   height: height,
                   width: width,
-                  theme: theme,
+                
                   onPressed: () {
                     _dialog(context);
                   },
@@ -72,7 +73,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     heightFactor: height * 0.015,
                     child: Text(
                       'No Categories',
-                      style: theme.textTheme.headline1!
+                      style: headline1
                           .copyWith(fontSize: 25, color: Colors.blueGrey),
                     ),
                   )
@@ -124,10 +125,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _bottomEditDrawSheet(context, ProductCategory category) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     showModalBottomSheet(
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20.0),
@@ -153,11 +153,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: theme.primaryColorLight,
-                            child: Icon(Icons.edit, color: theme.primaryColor),
+                            backgroundColor: primaryColorLight,
+                            child: Icon(Icons.edit, color: primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Edit', style: theme.textTheme.bodyText2)
+                          Text('Edit', style: bodyText2)
                         ],
                       ),
                     ),
@@ -174,12 +174,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: theme.primaryColorLight,
-                            child:
-                                Icon(Icons.delete, color: theme.primaryColor),
+                            backgroundColor: primaryColorLight,
+                            child: Icon(Icons.delete, color: primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Delete', style: theme.textTheme.bodyText2)
+                          Text('Delete', style: bodyText2)
                         ],
                       ),
                     ),
@@ -194,12 +193,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   void _bottomDrawSheet(context,
       {ProductCategory? productCategory, bool edit = false}) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
         isScrollControlled: true,
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20.0),
@@ -218,9 +216,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   padding: EdgeInsets.only(
                       bottom: height * 0.02, top: height * 0.04),
                   child: !edit
-                      ? Text("Add new category",
-                          style: theme.textTheme.headline2)
-                      : Text("Edit Category", style: theme.textTheme.headline2),
+                      ? Text("Add new category", style: headline2)
+                      : Text("Edit Category", style: headline2),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -233,12 +230,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       borderColor: Colors.white,
                       prefixIcon:
                           Icon(Icons.add_box, color: Colors.white, size: 20),
-                      style: theme.textTheme.bodyText2),
+                      style: bodyText2),
                 ),
                 SizedBox(height: height * 0.1),
                 Button(
-                  color: theme.primaryColorLight,
-                  textColor: theme.primaryColor,
+                  color: primaryColorLight,
+                  textColor: primaryColor,
                   width: width,
                   buttonText: "Done",
                   onTap: () async {
@@ -281,7 +278,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _dialog(context, {ProductCategory? productCategory, bool edit = false}) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     showDialog(
@@ -292,14 +288,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
             categoryDescription.text = productCategory.categoryDescription!;
           }
           return AlertDialog(
-            backgroundColor: theme.primaryColor,
+            backgroundColor: primaryColor,
             title: !edit
                 ? Text("Add new category",
-                    style: theme.textTheme.headline2!
-                        .copyWith(color: Colors.white))
+                    style: headline2.copyWith(color: Colors.white))
                 : Text("Edit Category",
-                    style: theme.textTheme.headline2!
-                        .copyWith(color: Colors.white)),
+                    style: headline2.copyWith(color: Colors.white)),
             content: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -311,7 +305,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     borderColor: Colors.white,
                     prefixIcon:
                         Icon(Icons.add_box, color: Colors.white, size: 20),
-                    style: theme.textTheme.bodyText2),
+                    style: bodyText2),
                 CustomTextField(
                     controller: categoryDescription,
                     hintText: edit
@@ -322,7 +316,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     maxLines: 5,
                     // prefixIcon:
                     //     Icon(Icons.add_box, color: Colors.white, size: 20),
-                    style: theme.textTheme.bodyText2),
+                    style: bodyText2),
               ],
             ),
             actionsAlignment: MainAxisAlignment.spaceBetween,
@@ -393,15 +387,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   child: Text(
                     "Save",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15, color: theme.primaryColor),
+                    style: TextStyle(fontSize: 15, color: primaryColor),
                   )),
               TextButton(
                   onPressed: (() => Navigator.pop(context)),
                   child: Text(
                     "Cancel",
                     textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontSize: 15, color: theme.primaryColorLight),
+                    style: TextStyle(fontSize: 15, color: primaryColorLight),
                   )),
             ],
           );
@@ -414,14 +407,14 @@ class HeaderSection extends StatelessWidget {
     Key? key,
     required this.height,
     //required this.widget,
-    required this.theme,
+   
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
   //final ProductListScreen widget;
-  final ThemeData theme;
+ 
   final double width;
   final Function()? onPressed;
 
@@ -436,12 +429,12 @@ class HeaderSection extends StatelessWidget {
             Text(
               "Categories",
               textAlign: TextAlign.left,
-              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+              style: headline2.copyWith(fontSize: 30),
             ),
             SizedBox(
                 width: width * 0.1,
                 child: Divider(
-                  color: theme.primaryColorLight,
+                  color: primaryColorLight,
                   thickness: 5,
                 )),
           ],
@@ -449,10 +442,9 @@ class HeaderSection extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: theme.primaryColorLight),
+              color: primaryColorLight),
           child: IconButton(
-              onPressed: onPressed,
-              icon: Icon(Icons.add, color: theme.primaryColor)),
+              onPressed: onPressed, icon: Icon(Icons.add, color: primaryColor)),
         )
       ],
     );

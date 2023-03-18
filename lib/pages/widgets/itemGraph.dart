@@ -4,18 +4,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/responsive.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class ItemGraph extends StatefulWidget {
- 
-  const ItemGraph({Key? key, })
-      : super(key: key);
+  const ItemGraph({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _ItemGraphState createState() => _ItemGraphState();
 }
 
 class _ItemGraphState extends State<ItemGraph> {
- List<Color> gradientColors = [
+  List<Color> gradientColors = [
     Color.fromARGB(255, 4, 0, 224),
     Color.fromARGB(255, 0, 102, 255),
     Color.fromARGB(255, 255, 153, 0),
@@ -25,18 +26,14 @@ class _ItemGraphState extends State<ItemGraph> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text('Total Earnings',
-            style: theme.textTheme.bodyText1!.copyWith(color:Colors.grey)),
-          SizedBox(height: height * 0.01),
-        Text('GHS 20945.90',
-            style: theme.textTheme.headline1),
+        Text('Total Earnings', style: bodyText1.copyWith(color: Colors.grey)),
+        SizedBox(height: height * 0.01),
+        Text('GHS 20945.90', style: headline1),
         SizedBox(height: height * 0.02),
-         
-       
         Stack(
           children: <Widget>[
             AspectRatio(
@@ -69,35 +66,37 @@ class _ItemGraphState extends State<ItemGraph> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     var style = TextStyle(
-      color: Responsive.isMobile()?Color.fromARGB(255, 255, 255, 255):Color.fromARGB(255, 92, 92, 92),
+      color: Responsive.isMobile()
+          ? Color.fromARGB(255, 255, 255, 255)
+          : Color.fromARGB(255, 92, 92, 92),
       fontWeight: FontWeight.bold,
-      fontSize: Responsive.isTablet()?14:12,
+      fontSize: Responsive.isTablet() ? 14 : 12,
     );
     Widget text;
     switch (value.toInt()) {
       case 1:
-        text =  Text('Sun', style: style);
+        text = Text('Sun', style: style);
         break;
       case 2:
-        text =  Text('Mon', style: style);
+        text = Text('Mon', style: style);
         break;
       case 3:
-        text =  Text('Tue', style: style);
+        text = Text('Tue', style: style);
         break;
       case 4:
-        text =  Text('Wed', style: style);
+        text = Text('Wed', style: style);
         break;
       case 5:
-        text =  Text('Thur', style: style);
+        text = Text('Thur', style: style);
         break;
       case 6:
-        text =  Text('Fri', style: style);
+        text = Text('Fri', style: style);
         break;
       case 7:
-        text =  Text('Sat', style: style);
+        text = Text('Sat', style: style);
         break;
       default:
-        text =  Text('', style: style);
+        text = Text('', style: style);
         break;
     }
 
@@ -110,9 +109,11 @@ class _ItemGraphState extends State<ItemGraph> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     var style = TextStyle(
-      color: Responsive.isMobile()?Color.fromARGB(255, 255, 255, 255):Color.fromARGB(255, 92, 92, 92),
+      color: Responsive.isMobile()
+          ? Color.fromARGB(255, 255, 255, 255)
+          : Color.fromARGB(255, 92, 92, 92),
       fontWeight: FontWeight.bold,
-      fontSize: Responsive.isTablet()?14:12,
+      fontSize: Responsive.isTablet() ? 14 : 12,
     );
     String text;
     switch (value.toInt()) {
@@ -144,17 +145,15 @@ class _ItemGraphState extends State<ItemGraph> {
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: Color.fromARGB(255, 46, 46, 46),
-            strokeWidth: 0.5,
-            dashArray: [2,5]
-          );
+              color: Color.fromARGB(255, 46, 46, 46),
+              strokeWidth: 0.5,
+              dashArray: [2, 5]);
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Color.fromARGB(255, 46, 46, 46),
-            strokeWidth: 1,
-             dashArray: [2,5]
-          );
+              color: Color.fromARGB(255, 46, 46, 46),
+              strokeWidth: 1,
+              dashArray: [2, 5]);
         },
       ),
       titlesData: FlTitlesData(
@@ -227,6 +226,4 @@ class _ItemGraphState extends State<ItemGraph> {
       ],
     );
   }
-
-
 }

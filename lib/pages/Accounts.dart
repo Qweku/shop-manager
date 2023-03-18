@@ -18,7 +18,7 @@ class _AccountsState extends State<Accounts> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    final theme = Theme.of(context);
+
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
@@ -33,14 +33,15 @@ class _AccountsState extends State<Accounts> {
                     left: height * 0.02,
                     top: widget.tag == 'dashboard' ? 0 : height * 0.13,
                     bottom: height * 0.07),
-                color: theme.primaryColor,
+                color: primaryColor,
                 child: HeaderSection(
                   title: 'Account History',
                   height: height,
                   width: width,
-                  theme: theme,
+                 
                   trailing: IconButton(
-                    icon: const Icon(Icons.search, size: 40, color: Colors.white),
+                    icon:
+                        const Icon(Icons.search, size: 40, color: Colors.white),
                     onPressed: () {
                       _searchAccount(context);
                     },
@@ -62,43 +63,40 @@ class _AccountsState extends State<Accounts> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Grand Total',
-                          style: theme.textTheme.headline1!
-                              .copyWith(fontSize: 17)),
+                          style: headline1.copyWith(fontSize: 17)),
                       SizedBox(height: height * 0.01),
                       Text('GHS2000.00',
-                          style: theme.textTheme.headline1!
-                              .copyWith(color: theme.primaryColor)),
+                          style: headline1.copyWith(color: primaryColor)),
                     ]),
               ),
             ),
             SizedBox(height: height * 0.02),
             Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: height * 0.01,
-                                  horizontal: width * 0.05),
-                              color: Color.fromARGB(255, 197, 196, 196),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: Text('Items',
-                                          style: theme.textTheme.bodyText1!.copyWith(
-                                              fontWeight: FontWeight.bold))),
-                                  Expanded(
-                                      child: Text('Date',
-                                          style: theme.textTheme.bodyText1!.copyWith(
-                                              fontWeight: FontWeight.bold))),
-                                  Expanded(
-                                      child: Text('Quantity',
-                                          style: theme.textTheme.bodyText1!.copyWith(
-                                              fontWeight: FontWeight.bold))),
-                                  Expanded(
-                                      child: Text('Amount',
-                                          textAlign: TextAlign.right,
-                                          style: theme.textTheme.bodyText1!.copyWith(
-                                              fontWeight: FontWeight.bold))),
-                                ],
-                              ),
-                            ),
+              padding: EdgeInsets.symmetric(
+                  vertical: height * 0.01, horizontal: width * 0.05),
+              color: Color.fromARGB(255, 197, 196, 196),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Text('Items',
+                          style: bodyText1
+                              .copyWith(fontWeight: FontWeight.bold))),
+                  Expanded(
+                      child: Text('Date',
+                          style: bodyText1
+                              .copyWith(fontWeight: FontWeight.bold))),
+                  Expanded(
+                      child: Text('Quantity',
+                          style: bodyText1
+                              .copyWith(fontWeight: FontWeight.bold))),
+                  Expanded(
+                      child: Text('Amount',
+                          textAlign: TextAlign.right,
+                          style: bodyText1
+                              .copyWith(fontWeight: FontWeight.bold))),
+                ],
+              ),
+            ),
             SizedBox(height: height * 0.03),
             Expanded(
               child: ListView.builder(
@@ -110,10 +108,11 @@ class _AccountsState extends State<Accounts> {
                       padding: EdgeInsets.symmetric(
                           horizontal: width * 0.05, vertical: height * 0.01),
                       child: const SummaryListItem(
-                        item:'Ideal Milk',
+                        item: 'Ideal Milk',
                         amount: "8.00",
                         quantity: "3",
-                        date: '04/01/2023',),
+                        date: '04/01/2023',
+                      ),
                     );
                   }),
             )
@@ -124,16 +123,14 @@ class _AccountsState extends State<Accounts> {
   }
 
   void _searchAccount(context) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
         isScrollControlled: true,
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.0),
-              topRight: Radius.circular(20.0)),
+              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
         ),
         context: context,
         builder: (BuildContext bc) {
@@ -147,8 +144,7 @@ class _AccountsState extends State<Accounts> {
                 Padding(
                   padding: EdgeInsets.only(
                       bottom: height * 0.02, top: height * 0.04),
-                  child: Text("Search Account History",
-                      style: theme.textTheme.headline2),
+                  child: Text("Search Account History", style: headline2),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -161,7 +157,7 @@ class _AccountsState extends State<Accounts> {
                       borderColor: Colors.white,
                       prefixIcon: const Icon(Icons.calendar_today,
                           color: Colors.white, size: 20),
-                      style: theme.textTheme.bodyText2),
+                      style: bodyText2),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -174,12 +170,12 @@ class _AccountsState extends State<Accounts> {
                       borderColor: Colors.white,
                       prefixIcon: const Icon(Icons.calendar_today,
                           color: Colors.white, size: 20),
-                      style: theme.textTheme.bodyText2),
+                      style: bodyText2),
                 ),
                 SizedBox(height: height * 0.1),
                 Button(
-                  color: theme.primaryColorLight,
-                  textColor: theme.primaryColor,
+                  color: primaryColorLight,
+                  textColor: primaryColor,
                   width: width,
                   buttonText: "Done",
                   onTap: () {
@@ -194,8 +190,6 @@ class _AccountsState extends State<Accounts> {
   }
 }
 
-
-
 class SummaryListItem extends StatelessWidget {
   final String item, amount, date, quantity;
 
@@ -209,21 +203,24 @@ class SummaryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme=Theme.of(context);
+    
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          Expanded(child: Text(item.toTitleCase(), style: theme.textTheme.bodyText1,overflow: TextOverflow.ellipsis,)),
-          Expanded(child: Text(date, style: theme.textTheme.bodyText1)),
-          Expanded(
-              child: Text(quantity,
-                  textAlign: TextAlign.center, style: theme.textTheme.bodyText1)),
           Expanded(
               child: Text(
-                  "GHS $amount",
-                  textAlign: TextAlign.right,
-                  style: theme.textTheme.bodyText1)),
+            item.toTitleCase(),
+            style: bodyText1,
+            overflow: TextOverflow.ellipsis,
+          )),
+          Expanded(child: Text(date, style: bodyText1)),
+          Expanded(
+              child: Text(quantity,
+                  textAlign: TextAlign.center, style: bodyText1)),
+          Expanded(
+              child: Text("GHS $amount",
+                  textAlign: TextAlign.right, style: bodyText1)),
         ],
       ),
     );

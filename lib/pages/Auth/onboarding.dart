@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/wrapper.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -28,7 +29,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     "Organize all your products into categories for easy accessibility",
     "Get timely accounts of all your sales at your convenience",
   ];
-  
 
   @override
   void initState() {
@@ -54,28 +54,28 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
+
     return SafeArea(
       child: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(color: theme.primaryColorLight),
+        decoration: BoxDecoration(color: primaryColorLight),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             SizedBox(height: height * 0.1),
             Text('SHOP MANAGER',
-                style: theme.textTheme.headline2!
-                    .copyWith(color: theme.primaryColor,fontWeight: FontWeight.bold,fontSize: 25)),
+                style: headline2.copyWith(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25)),
             SizedBox(height: height * 0.05),
             Expanded(
               //flex: 3,
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 800),
-                child: 
-                SplashPage(
-                    icon: icons[currentPage],
-                    text: splashContent[currentPage]),
+                child: SplashPage(
+                    icon: icons[currentPage], text: splashContent[currentPage]),
               ),
             ),
 
@@ -90,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                           width: width*0.3,
+                          width: width * 0.3,
                           child: TextButton(
                             onPressed: () {
                               setState(() {
@@ -98,12 +98,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                               });
                             },
                             child: Text('Skip',
-                                style: theme.textTheme.bodyText2!
-                                    .copyWith(color: theme.primaryColor)),
+                                style:
+                                    bodyText2.copyWith(color: primaryColor)),
                           ),
                         ),
                         SizedBox(
-                          width: width*0.3,
+                          width: width * 0.3,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: List.generate(splashContent.length,
@@ -112,22 +112,22 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         ),
                         currentPage < splashContent.length - 1
                             ? SizedBox(
-                               width: width*0.3,
-                              child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (currentPage <
-                                          splashContent.length - 1) {
-                                        currentPage++;
-                                      }
-                                    });
-                                  },
-                                  child: Icon(Icons.arrow_forward,
-                                      size: 30, color: theme.primaryColor)),
-                            )
+                                width: width * 0.3,
+                                child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (currentPage <
+                                            splashContent.length - 1) {
+                                          currentPage++;
+                                        }
+                                      });
+                                    },
+                                    child: Icon(Icons.arrow_forward,
+                                        size: 30, color: primaryColor)),
+                              )
                             : SizedBox(
-                               width: width*0.3,
-                              child: TextButton(
+                                width: width * 0.3,
+                                child: TextButton(
                                   onPressed: () {
                                     Navigator.push(
                                         context,
@@ -136,10 +136,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                                 const Wrapper()));
                                   },
                                   child: Text('Get Started',
-                                      style: theme.textTheme.bodyText2!
-                                          .copyWith(color: theme.primaryColor)),
+                                      style: bodyText2
+                                          .copyWith(color: primaryColor)),
                                 ),
-                            ),
+                              ),
                       ],
                     ),
                   ),
@@ -155,7 +155,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   GestureDetector buildDot({int? index}) {
-    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -169,7 +168,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           width: currentPage == index ? 20 : 6,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: currentPage == index ? theme.primaryColor : Colors.grey,
+            color: currentPage == index ? primaryColor : Colors.grey,
           )),
     );
   }
@@ -188,19 +187,19 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    final theme = Theme.of(context);
+
     return Column(
       children: [
         SizedBox(height: height * 0.1),
-        Icon(icon, size: height * 0.2, color: theme.primaryColor),
+        Icon(icon, size: height * 0.2, color: primaryColor),
         SizedBox(height: height * 0.15),
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(
             text!,
             textAlign: TextAlign.center,
-            style: theme.textTheme.headline2!.copyWith(
-                color: theme.primaryColor,
+            style: headline2.copyWith(
+                color: primaryColor,
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w300),
           ),

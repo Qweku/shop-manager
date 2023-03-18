@@ -31,7 +31,6 @@ class _AddProductSuccessState extends State<AddProductSuccess> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SizedBox(
@@ -47,7 +46,7 @@ class _AddProductSuccessState extends State<AddProductSuccess> {
             children: [
               CircleAvatar(
                 radius: 50,
-                backgroundColor: theme.primaryColor,
+                backgroundColor: primaryColor,
                 child: const Icon(Icons.check, color: Colors.white, size: 50),
               ),
               SizedBox(height: height * 0.05),
@@ -58,8 +57,8 @@ class _AddProductSuccessState extends State<AddProductSuccess> {
                         ? "Order processed successfully"
                         : 'Product added successfully',
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.headline1!
-                        .copyWith(color: theme.primaryColor),
+                    style:headline1
+                        .copyWith(color: primaryColor),
                   ))
             ],
           ),

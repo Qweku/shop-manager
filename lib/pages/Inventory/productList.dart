@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 import 'package:shop_manager/pages/widgets/productCard.dart';
 
@@ -36,19 +37,18 @@ class _InventoryProductListState extends State<InventoryProductList> {
     double width = MediaQuery.of(context).size.width;
     var categories = context.watch<GeneralProvider>();
 
-    final theme = Theme.of(context);
     return Scaffold(
         backgroundColor: Colors.white,
         // floatingActionButton: FloatingActionButton(
-        //   backgroundColor: theme.primaryColor,
+        //   backgroundColor: primaryColor,
         //   onPressed: () {
         //     setState(() {
         //       isList = !isList;
         //     });
         //   },
         //   child: isList
-        //       ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
-        //       : Icon(Icons.list, color: theme.primaryColorLight),
+        //       ? Icon(Icons.dashboard_customize, color: primaryColorLight)
+        //       : Icon(Icons.list, color: primaryColorLight),
         // ),
         body: SafeArea(
             top: false,
@@ -81,7 +81,7 @@ class _InventoryProductListState extends State<InventoryProductList> {
 
                         flexibleSpace: FlexibleSpaceBar(
                           // title:
-                          //     Text('Inventory', style: theme.textTheme.headline2),
+                          //     Text('Inventory', style:headline2),
                           background: Stack(
                             clipBehavior: Clip.none,
                             children: [
@@ -94,10 +94,10 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                       left: height * 0.02,
                                       top: height * 0.1,
                                       bottom: 0),
-                                  color: theme.primaryColor,
+                                  color: primaryColor,
                                   child: HeaderSection(
                                     height: height,
-                                    theme: theme,
+                                   
                                     width: width,
                                     onPressed: () {
                                       // showSearch(
@@ -112,7 +112,7 @@ class _InventoryProductListState extends State<InventoryProductList> {
                             ],
                           ),
                         ),
-                        // backgroundColor: theme.primaryColor,
+                        // backgroundColor: primaryColor,
                         backgroundColor: Colors.transparent,
                       ),
                       replacementSliver: SliverToBoxAdapter(
@@ -185,10 +185,10 @@ class _InventoryProductListState extends State<InventoryProductList> {
                           ),
                           // Padding(
                           //   padding: EdgeInsets.symmetric(horizontal: 16,vertical: 20),
-                          //   child: Text('Done',style: theme.appBarTheme.titleTextStyle,),
+                          //   child: Text('Done',style: appBartitleTextStyle,),
                           // ),
                         ],
-                        backgroundColor: theme.primaryColor,
+                        backgroundColor: primaryColor,
                       )),
                     ),
                   ];
@@ -203,7 +203,7 @@ class _InventoryProductListState extends State<InventoryProductList> {
                         ? Center(
                             child: Text(
                               'No Uncategorised Products',
-                              style: theme.textTheme.headline1!.copyWith(
+                              style: headline1.copyWith(
                                   fontSize: 25, color: Colors.blueGrey),
                             ),
                           )
@@ -303,13 +303,13 @@ class HeaderSection extends StatelessWidget {
   const HeaderSection({
     Key? key,
     required this.height,
-    required this.theme,
+    
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
-  final ThemeData theme;
+  
   final double width;
   final Function()? onPressed;
 
@@ -324,12 +324,12 @@ class HeaderSection extends StatelessWidget {
             Text(
               "Inventory",
               textAlign: TextAlign.left,
-              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+              style: headline2.copyWith(fontSize: 30),
             ),
             SizedBox(
                 width: width * 0.1,
                 child: Divider(
-                  color: theme.primaryColorLight,
+                  color: primaryColorLight,
                   thickness: 5,
                 )),
           ],

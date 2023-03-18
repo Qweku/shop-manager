@@ -33,7 +33,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    final theme = Theme.of(context);
+
     double width = MediaQuery.of(context).size.width;
     // Provider.of<GeneralProvider>(context, listen: false)
     //     .categories
@@ -42,15 +42,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
     // });
     return Scaffold(
       // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: theme.primaryColor,
+      //   backgroundColor: primaryColor,
       //   onPressed: () {
       //     setState(() {
       //       isList = !isList;
       //     });
       //   },
       //   child: isList
-      //       ? Icon(Icons.dashboard_customize, color: theme.primaryColorLight)
-      //       : Icon(Icons.list, color: theme.primaryColorLight),
+      //       ? Icon(Icons.dashboard_customize, color: primaryColorLight)
+      //       : Icon(Icons.list, color: primaryColorLight),
       // ),
       body: SafeArea(
         top: false,
@@ -67,11 +67,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           left: height * 0.02,
                           top: height * 0.13,
                           bottom: height * 0.07),
-                      color: theme.primaryColor,
+                      color: primaryColor,
                       child: HeaderSection(
                         height: height,
                         widget: widget,
-                        theme: theme,
+                       
                         width: width,
                         onPressed: () {
                           Navigator.push(
@@ -99,7 +99,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             ? Center(
                                 child: Text(
                                   'No Products',
-                                  style: theme.textTheme.headline1!.copyWith(
+                                  style: headline1.copyWith(
                                       fontSize: 25, color: Colors.blueGrey),
                                 ),
                               )
@@ -131,12 +131,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             itemBuilder: (context, index) {
                                               return Padding(
                                                 padding: EdgeInsets.only(
-                                                    top: index.isEven
-                                                        ? height * 0.02
-                                                        : 0,
-                                                    bottom: index.isOdd
-                                                        ? height * 0.02
-                                                        : 0),
+                                                    top: 0, bottom: 0),
                                                 child: ProductCard(
                                                   onTap: () {
                                                     _bottomDrawSheet(
@@ -240,10 +235,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   void _bottomDrawSheet(BuildContext context, Product product) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     showModalBottomSheet(
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20.0),
@@ -277,7 +271,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: theme.primaryColorLight,
+                            backgroundColor: primaryColorLight,
                             child: Icon(Icons.edit, color: primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
@@ -296,9 +290,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: theme.primaryColorLight,
-                            child:
-                                Icon(Icons.delete, color: theme.primaryColor),
+                            backgroundColor: primaryColorLight,
+                            child: Icon(Icons.delete, color: primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
                           Text('Remove', style: bodyText2)
@@ -320,14 +313,14 @@ class HeaderSection extends StatelessWidget {
     Key? key,
     required this.height,
     required this.widget,
-    required this.theme,
+    
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
   final ProductListScreen widget;
-  final ThemeData theme;
+  
   final double width;
   final Function()? onPressed;
 
@@ -340,16 +333,16 @@ class HeaderSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(context.read<GeneralProvider>().category.categoryName!,
-                textAlign: TextAlign.left, style: theme.textTheme.headline2),
+                textAlign: TextAlign.left, style: headline2),
             Text(
               "Product List",
               textAlign: TextAlign.left,
-              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+              style: headline2.copyWith(fontSize: 30),
             ),
             SizedBox(
                 width: width * 0.1,
                 child: Divider(
-                  color: theme.primaryColorLight,
+                  color: primaryColorLight,
                   thickness: 5,
                 )),
           ],
@@ -359,10 +352,10 @@ class HeaderSection extends StatelessWidget {
             : Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: theme.primaryColorLight),
+                    color: primaryColorLight),
                 child: IconButton(
                     onPressed: onPressed,
-                    icon: Icon(Icons.add, color: theme.primaryColor)),
+                    icon: Icon(Icons.add, color: primaryColor)),
               )
       ],
     );

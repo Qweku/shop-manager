@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 class CategoryCard extends StatelessWidget {
   final String? categoryName;
@@ -18,12 +19,11 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     // Color background = index == 0
     //     ? Colors.blueGrey
     //     : index!.isEven
-    //         ? theme.primaryColor
+    //         ? primaryColor
     //         : Colors.white;
     return GestureDetector(
       onTap: onTap,
@@ -33,7 +33,7 @@ class CategoryCard extends StatelessWidget {
           padding: EdgeInsets.all(height * 0.02),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              color: !selected! ? theme.primaryColor : Colors.white,
+              color: !selected! ? primaryColor : Colors.white,
               // ignore: prefer_const_literals_to_create_immutables
               boxShadow: [
                 const BoxShadow(
@@ -50,22 +50,20 @@ class CategoryCard extends StatelessWidget {
                 style:
                     // index!.isEven
                     !selected!
-                        ? theme.textTheme.headline2!
-                            .copyWith(fontSize: largeFont!)
-                        : theme.textTheme.headline1!.copyWith(
-                            fontSize: largeFont!, color: theme.primaryColor),
+                        ? headline2.copyWith(fontSize: largeFont!)
+                        : headline1.copyWith(
+                            fontSize: largeFont!, color: primaryColor),
               ),
               SizedBox(height: height * 0.01),
               Text(
                 categoryName!,
-                overflow: TextOverflow.ellipsis ,
+                overflow: TextOverflow.ellipsis,
                 style:
                     // index!.isEven
                     !selected!
-                        ? theme.textTheme.headline2!
-                            .copyWith(fontSize: smallFont!)
-                        : theme.textTheme.headline1!.copyWith(
-                            fontSize: smallFont!, color: theme.primaryColor),
+                        ? headline2.copyWith(fontSize: smallFont!)
+                        : headline1.copyWith(
+                            fontSize: smallFont!, color: primaryColor),
               ),
             ],
           ),

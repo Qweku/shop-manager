@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +53,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final productQuantity = TextEditingController();
   final lowStockQuantity = TextEditingController();
   File? _image;
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? shopName;
 
   @override
   void dispose() {
@@ -126,8 +131,40 @@ class _AddProductScreenState extends State<AddProductScreen> {
     Navigator.pop(context);
   }
 
+  Future addProducts(
+      int id,
+      String productName,
+      String productDescription,
+      String image,
+      double sellingPrice,
+      double costPrice,
+      int productQuantity,
+      int lowStockQuantity,
+      bool isLowStock) async {
+         final docRef = fireStore.collection(shopName ?? "").doc();
+    await fireStore.collection(shopName ?? "").add({
+      'product id': id,
+      'product name': productName,
+      'product description': productDescription,
+      'product image': image,
+      'selling price': sellingPrice,
+      'cost price': costPrice,
+      'product quantity': productQuantity,
+      'low stock quantity': lowStockQuantity,
+      'low stock': isLowStock,
+      'docId':docRef
+    });
+  }
+
+  Future updateProducts() async {
+    // DocumentReference docRef = fireStore.collection(shopName).id;
+    await fireStore
+        .collection(shopName ?? "")
+        .doc()
+        .update({"product name": ""});
+  }
+
   void successDialog() {
-    var theme = Theme.of(context);
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -152,20 +189,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         height: 10,
                       ),
                       Text('Product added successfully',
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyText1)
+                          textAlign: TextAlign.center, style: bodyText1)
                     ]),
               ),
             ));
   }
 
+  Future getShopName() async {
+    shopName = auth.currentUser!.displayName;
+  }
+
   @override
   void initState() {
+    getShopName();
     categoryList = List.from(
         Provider.of<GeneralProvider>(context, listen: false).categories);
     _selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
     if (widget.toEdit) {
       productName.text = widget.product!.productName!;
+      productDescription.text = widget.product!.productDescription!;
+      lowStockQuantity.text = widget.product!.lowStockQuantity.toString();
       productPrice.text =
           formatter.format(widget.product!.sellingPrice.toString());
       productCostPrice.text =
@@ -188,7 +231,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final theme = Theme.of(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: primaryColorLight,
@@ -241,7 +284,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         (widget.toEdit)
                             ? "Edit Product Detail"
                             : "Let's add the products in your shop",
-                        style: headline1.copyWith(color: theme.primaryColor)),
+                        style: headline1.copyWith(color: primaryColor)),
                   ),
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -347,8 +390,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                             _attachImage(context);
-                              
+                              _attachImage(context);
                             },
                             child: Container(
                               width: width * 0.45,
@@ -378,7 +420,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           20.0),
-                                                  color: Colors.grey,
+                                                  color: Colors.white,
                                                   boxShadow: [
                                                     const BoxShadow(
                                                         offset: Offset(2, 2),
@@ -392,12 +434,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                                   widget.product!.productName!
                                                       .substring(0, 2)
                                                       .toUpperCase(),
-                                                  style: theme
-                                                      .textTheme.headline2!
-                                                      .copyWith(
-                                                          fontSize: 70,
-                                                          color: theme
-                                                              .primaryColorLight),
+                                                  style: headline2.copyWith(
+                                                      fontSize: 70,
+                                                      color: primaryColorLight),
                                                 ),
                                               ))
                                           : ClipRRect(
@@ -414,7 +453,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       : isLoading
                                           ? Center(
                                               child: CircularProgressIndicator(
-                                              color: actionColor,
+                                              color: primaryColorLight,
                                             ))
                                           : Container(
                                               decoration: BoxDecoration(
@@ -426,7 +465,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                               height: height * 0.25,
                                               child: Icon(
                                                 Icons.camera_alt,
-                                                color: theme.primaryColorLight,
+                                                color: primaryColorLight,
                                                 size: 30,
                                               ),
                                             ),
@@ -443,12 +482,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text('Quantity',
-                                            style: theme.textTheme.bodyText1),
+                                        Text('Quantity', style: bodyText1),
                                         SizedBox(height: height * 0.02),
                                         CounterWidget(
                                             borderColor: Colors.grey,
-                                            style: theme.textTheme.bodyText1,
+                                            style: bodyText1,
                                             counterController: productQuantity)
                                       ],
                                     )),
@@ -461,7 +499,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       children: [
                                         Checkbox(
                                             value: isChecked,
-                                            activeColor: primaryColor,
+                                            activeColor: actionColor,
                                             onChanged: (val) {
                                               setState(() {
                                                 isChecked = val ?? false;
@@ -469,13 +507,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             }),
                                         //SizedBox(width:width*0.03),
                                         Text('Low Stock Alert',
-                                            style: theme.textTheme.bodyText1),
+                                            style: bodyText1),
                                       ],
                                     ),
                                     Text(
                                         'Check if you want to receive alerts when this stock is running out',
-                                        style: theme.textTheme.bodyText1!
-                                            .copyWith(color: Colors.grey)),
+                                        style: bodyText1.copyWith(
+                                            color: Colors.grey)),
                                   ],
                                 )
                               ],
@@ -592,20 +630,33 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                             Provider.of<GeneralProvider>(context, listen: false)
                                 .addProduct(product);
-                            // .inventory
-                            // .add(product);
 
-                            // await productBox.add(product);
-
-                            // if (_selectedCategory?.categoryName.isNotEmpty ??
-                            //     false) {
-                            //   // Provider.of<GeneralProvider>(context,
-                            //   //         listen: false)
-                            //   //     .saveToCategory(_selectedCategory!);
-
-                            //   // HiveFunctions()
-                            //   //     .saveToCategory(_selectedCategory!);
-                            // }
+                            addProducts(
+                                context
+                                        .read<GeneralProvider>()
+                                        .inventory
+                                        .isEmpty
+                                    ? 1
+                                    : context
+                                            .read<GeneralProvider>()
+                                            .inventory
+                                            .last
+                                            .pid +
+                                        1,
+                                productName.text,
+                                productDescription.text,
+                                imageString,
+                                double.tryParse(formatter
+                                        .getUnformattedValue()
+                                        .toString()) ??
+                                    0,
+                                double.tryParse(formatter2
+                                        .getUnformattedValue()
+                                        .toString()) ??
+                                    0,
+                                int.tryParse(productQuantity.text) ?? 0,
+                                int.tryParse(lowStockQuantity.text) ?? 0,
+                                isChecked);
                           } else {
                             Notifier().toast(
                                 context: context,
@@ -641,7 +692,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             //   right: 0,
             //   left: 0,
             //   child: Container(
-            //     color: theme.primaryColorLight,
+            //     color: primaryColorLight,
             //     child: Padding(
             //       padding: const EdgeInsets.all(20),
             //       child: _submitButton(),
@@ -655,10 +706,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   void _attachImage(context) {
-    final theme = Theme.of(context);
     double height = MediaQuery.of(context).size.height;
     showModalBottomSheet(
-        backgroundColor: theme.primaryColor,
+        backgroundColor: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20.0),
@@ -681,15 +731,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         _imgFromGallery();
 
                         Navigator.pop(context);
-                        
                       },
                       child: Column(
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: theme.primaryColorLight,
+                            backgroundColor: primaryColorLight,
                             child: Icon(Icons.cloud_upload_outlined,
-                                color: theme.primaryColor),
+                                color: primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
                           Text('Upload', style: bodyText2)
@@ -702,18 +751,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         _imgFromCamera();
 
                         Navigator.pop(context);
-                       
                       },
                       child: Column(
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: theme.primaryColorLight,
-                            child: Icon(Icons.camera_alt,
-                                color: theme.primaryColor),
+                            backgroundColor: primaryColorLight,
+                            child: Icon(Icons.camera_alt, color: primaryColor),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Take Photo', style: theme.textTheme.bodyText2)
+                          Text('Take Photo', style: bodyText2)
                         ],
                       ),
                     ),

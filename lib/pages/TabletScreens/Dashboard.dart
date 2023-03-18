@@ -19,6 +19,7 @@ import 'package:shop_manager/models/api_client.dart';
 import 'package:shop_manager/pages/TabletScreens/widgets.dart/sideMenu.dart';
 import 'package:shop_manager/pages/addproduct.dart';
 import 'package:shop_manager/pages/dashboard.dart';
+import 'package:shop_manager/pages/productCalculator.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/counter.dart';
@@ -53,19 +54,19 @@ class _TabletDashboardState extends State<TabletDashboard> {
   final lowStockQuantity = TextEditingController();
   File? _image;
 
- 
-
   // late Box shopBox;
   ProductCategory? _selectedCategory;
   String imageString = '';
   List<ProductCategory> categoryList = [];
   Uint8List imageFile = Uint8List(0);
   //String imagePath;
+  bool isLoading = false;
   final picker = ImagePicker();
 
   int categoryIndex = 0;
   getRemoveImage(String imgPath) async {
     imageFile = await ApiClient().removeBgApi(imgPath);
+    bool isLoading = false;
     setState(() {});
   }
 
@@ -75,6 +76,7 @@ class _TabletDashboardState extends State<TabletDashboard> {
           await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
       // final toBytes = await
       setState(() {
+        isLoading = true;
         _image = File(image!.path);
         getRemoveImage(image.path);
 
@@ -88,6 +90,7 @@ class _TabletDashboardState extends State<TabletDashboard> {
       final image =
           await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
       setState(() {
+        isLoading = true;
         _image = File(image!.path);
         getRemoveImage(image.path);
         imageString = base64Encode(File(image.path).readAsBytesSync());
@@ -111,7 +114,7 @@ class _TabletDashboardState extends State<TabletDashboard> {
   }
 
   void successDialog() {
-    var theme = Theme.of(context);
+   
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -136,8 +139,7 @@ class _TabletDashboardState extends State<TabletDashboard> {
                         height: 10,
                       ),
                       Text('Product added successfully',
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyText1)
+                          textAlign: TextAlign.center, style: bodyText1)
                     ]),
               ),
             ));
@@ -156,12 +158,14 @@ class _TabletDashboardState extends State<TabletDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButton:count != 0? Container(): FloatingActionButton(
-        onPressed: () => _addProduct(context),
-        backgroundColor: primaryColor,
-        child: Icon(Icons.add, color: Colors.white),
-      ),
-      // backgroundColor: theme.primaryColor,
+      floatingActionButton: count != 0
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => _addProduct(context),
+              backgroundColor: primaryColor,
+              child: Icon(Icons.add, color: Colors.white),
+            ),
+      // backgroundColor: primaryColor,
       body: SafeArea(
         child: Row(
           children: [
@@ -174,10 +178,18 @@ class _TabletDashboardState extends State<TabletDashboard> {
             ),
             //SizedBox(width: width*0.05,),
             Expanded(
+              flex: count == 4 ? 2 : 1,
               child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 600),
                   child: sideMenuItems[count]),
-            )
+            ),
+            count == 4
+                ? Expanded(
+                    child: Container(
+                        height: height,
+                        color: Color.fromARGB(255, 243, 243, 243),
+                        child: ProductCalculator()))
+                : Container()
           ],
         ),
       ),
@@ -343,20 +355,27 @@ class _TabletDashboardState extends State<TabletDashboard> {
                                                   fit: BoxFit.cover,
                                                 ),
                                               )
-                                            : Container(
-                                                decoration: BoxDecoration(
-                                                  //color: Colors.grey[200],
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                ),
-                                                width: width * 0.2,
-                                                height: height * 0.3,
-                                                child: Icon(
-                                                  Icons.image,
-                                                  color: primaryColorLight,
-                                                  size: 30,
-                                                ),
-                                              ),
+                                            : isLoading
+                                                ? Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                    color: primaryColorLight,
+                                                  ))
+                                                : Container(
+                                                    decoration: BoxDecoration(
+                                                      //color: Colors.grey[200],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                    width: width * 0.2,
+                                                    height: height * 0.3,
+                                                    child: Icon(
+                                                      Icons.image,
+                                                      color: primaryColorLight,
+                                                      size: 30,
+                                                    ),
+                                                  ),
                                       ),
                                     ),
                                     const SizedBox(height: 7),
@@ -368,16 +387,20 @@ class _TabletDashboardState extends State<TabletDashboard> {
                                         CircleAvatar(
                                             backgroundColor: Colors.grey,
                                             child: IconButton(
-                                                onPressed: () =>
-                                                    _imgFromCamera(),
+                                                onPressed: () {
+                                                  imageFile = Uint8List(0);
+                                                  _imgFromCamera();
+                                                },
                                                 icon: Icon(Icons.camera_alt,
                                                     color: Colors.white))),
                                         const SizedBox(width: 20),
                                         CircleAvatar(
                                             backgroundColor: Colors.grey,
                                             child: IconButton(
-                                                onPressed: () =>
-                                                    _imgFromGallery(),
+                                                onPressed: () {
+                                                  imageFile = Uint8List(0);
+                                                  _imgFromGallery();
+                                                },
                                                 icon: Icon(
                                                     Icons.drive_folder_upload,
                                                     color: Colors.white))),
@@ -387,7 +410,11 @@ class _TabletDashboardState extends State<TabletDashboard> {
                                                 ? Colors.grey
                                                 : Colors.red,
                                             child: IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  if (imageFile.isNotEmpty) {
+                                                    imageFile = Uint8List(0);
+                                                  }
+                                                },
                                                 icon: Icon(Icons.delete_outline,
                                                     color: Colors.white))),
                                       ],
@@ -572,6 +599,7 @@ class _TabletDashboardState extends State<TabletDashboard> {
                             productDescription.clear();
                             productQuantity.clear();
                             lowStockQuantity.clear();
+                            imageFile = Uint8List(0);
                             startTime();
                             // Navigator.pushReplacement(
                             //     context,
@@ -589,7 +617,8 @@ class _TabletDashboardState extends State<TabletDashboard> {
               );
             }));
   }
-   @override
+
+  @override
   void dispose() {
     productName.dispose();
     productDescription.dispose();

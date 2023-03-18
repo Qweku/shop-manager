@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 import '../models/ShopModel.dart';
 
@@ -42,7 +43,7 @@ class Search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     List<Product> productItems = [];
 
-     productItems = List.from(Provider.of<GeneralProvider>(context,
+    productItems = List.from(Provider.of<GeneralProvider>(context,
             listen: false)
         .inventory
         .where((element) =>
@@ -89,12 +90,11 @@ class _ItemSearchBarState extends State<ItemSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return CustomTextField(
       hintText: 'Search Item',
-      prefixIcon: Icon(Icons.search, color: theme.primaryColor),
+      prefixIcon: Icon(Icons.search, color: primaryColor),
       color: Color.fromARGB(255, 247, 247, 247),
-      style: theme.textTheme.bodyText1,
+      style: bodyText1,
       onChanged: (searchValue) {
         widget.valueCallback(searchValue);
       },

@@ -8,16 +8,12 @@ import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/components/button.dart';
-import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/main.dart';
 import 'package:shop_manager/models/AuthService.dart';
-import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
-import 'package:shop_manager/models/UserModel.dart';
-import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
-import 'package:shop_manager/pages/dashboard.dart';
+import 'package:shop_manager/pages/Auth/forgotten_password.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 
@@ -46,14 +42,14 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Icon(Icons.cancel,color:Color.fromARGB(255, 216, 30, 17),size:50),
-            
+            title: Icon(Icons.cancel,
+                color: Color.fromARGB(255, 216, 30, 17), size: 50),
+
             // Text(
             //   "LOGIN ERROR",textAlign: TextAlign.center,
             //   style: TextStyle(fontWeight: FontWeight.bold,color:Color.fromARGB(255, 233, 22, 7), fontSize: 18),
             // ),
-            content: Text(
-                "${(e as dynamic).message}"),
+            content: Text("${(e as dynamic).message}"),
             actions: [
               TextButton(
                   onPressed: (() => Navigator.of(context).pop()),
@@ -98,9 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
             //   child: CustomTextField(
             //     borderColor: Colors.grey,
             //     hintText: "Shop Name",
-            //     //hintColor: theme.primaryColor,
+            //     //hintColor: primaryColor,
             //     controller: shopController,
-            //     style: theme.textTheme.bodyText1,
+            //     style:bodyText1,
             //     prefixIcon: Icon(Icons.shopify, color: primaryColor),
             //   ),
             // ),
@@ -109,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: CustomTextField(
                 borderColor: Colors.grey,
                 hintText: "Username or email",
-                // hintColor: theme.primaryColor,
+                // hintColor: primaryColor,
                 controller: _emailController,
                 style: bodyText1,
                 prefixIcon: Icon(Icons.person, color: primaryColor),
@@ -142,8 +138,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 hintText: "Password",
-                // hintColor: theme.primaryColor,
+                // hintColor: primaryColor,
               ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgottenPassword()));
+                  },
+                  child: Text('Forgotten Password',
+                      style: bodyText1.copyWith(color: actionColor))),
             ),
             Padding(
                 padding:
@@ -151,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Button(
                   width: width,
                   color: primaryColor,
-                  // textColor: theme.primaryColorLight,
+                  // textColor: primaryColorLight,
                   buttonText: 'Login',
                   onTap: () async {
                     if (_emailController.text.isEmpty ||
@@ -211,17 +219,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: primaryColorLight,
                             )));
 
-                   
-
-                    await authService.signInWithEmailAndPassword(
-                        _emailController.text, _passwordController.text).then((user){ 
-                             
-                        navigatorKey.currentState!.pop((route) => route);
-
-                        }).catchError((e){
-                          navigatorKey.currentState!.pop((route) => route);
-                          loginError(e);
-                        });
+                    await authService
+                        .signInWithEmailAndPassword(
+                            _emailController.text, _passwordController.text)
+                        .then((user) {
+                      navigatorKey.currentState!.pop((route) => route);
+                    }).catchError((e) {
+                      navigatorKey.currentState!.pop((route) => route);
+                      loginError(e);
+                    });
 
                     // await ApplicationState()
                     //     .signInWithEmailAndPassword(

@@ -32,7 +32,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    final theme = Theme.of(context);
+
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -52,7 +52,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   title: 'Summary',
                   height: height,
                   width: width,
-                  theme: theme,
+                 
                 ),
               ),
             ),
@@ -64,34 +64,34 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     children: [
                       Text(
                         "Your order summary!",
-                        style: theme.textTheme.headline1,
+                        style: headline1,
                       ),
                       SizedBox(height: height * 0.03),
                       Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Order #: ',
-                                style: theme.textTheme.bodyText1!
+                                style:bodyText1
                                     .copyWith(fontWeight: FontWeight.bold)),
-                            Text('0001', style: theme.textTheme.bodyText1),
+                            Text('0001', style: bodyText1),
                           ]),
                       Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Status: ',
-                                style: theme.textTheme.bodyText1!
+                                style: bodyText1
                                     .copyWith(fontWeight: FontWeight.bold)),
-                            Text('Paid', style: theme.textTheme.bodyText1),
+                            Text('Paid', style: bodyText1),
                           ]),
                       Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Date: ',
-                                style: theme.textTheme.bodyText1!
+                                style: bodyText1
                                     .copyWith(fontWeight: FontWeight.bold)),
                             Text(
                               dateformat.format(DateTime.now()),
-                              style: theme.textTheme.bodyText1,
+                              style: bodyText1,
                             ),
                           ]),
                       SizedBox(height: height * 0.03),
@@ -103,7 +103,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               context.watch<GeneralProvider>().cart.length,
                           itemBuilder: (context, index) {
                             return ItemDetail(
-                                theme: theme,
+                               
                                 backgroundColor:
                                     const Color.fromARGB(255, 233, 233, 233),
                                 textColor:
@@ -122,11 +122,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         children: [
                           Text(
                             'Total',
-                            style: theme.textTheme.headline1,
+                            style: headline1,
                           ),
                           Text(
                             "GHS ${widget.totalCost.toStringAsFixed(2)} ",
-                            style: theme.textTheme.headline1,
+                            style: headline1,
                           )
                         ],
                       ),
@@ -136,12 +136,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         children: [
                           Text(
                             'Amount Received',
-                            style: theme.textTheme.bodyText1!
+                            style: bodyText1
                                 .copyWith(fontSize: 15),
                           ),
                           Text(
                             "GHS ${widget.amountReceived.toStringAsFixed(2)}",
-                            style: theme.textTheme.bodyText1!
+                            style:bodyText1
                                 .copyWith(fontSize: 15),
                           )
                         ],
@@ -155,11 +155,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         children: [
                           Text(
                             'Change',
-                            style: theme.textTheme.headline1,
+                            style: headline1,
                           ),
                           Text(
                             "GHS ${widget.change.toStringAsFixed(2)}",
-                            style: theme.textTheme.headline1,
+                            style: headline1,
                           )
                         ],
                       ),
@@ -177,34 +177,37 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           // print("${context}");
                           context.read<GeneralProvider>().cart.clear();
                           context.read<GeneralProvider>().inventory.forEach(
-      (element) {
-        Product productModel = Product(
-            pid: element.pid,
-            productCategory: element.productCategory,
-            productDescription: element.productDescription,
-            productName: element.productName,
-            productImage: element.productName,
-            productQuantity: element.productQuantity);
-        NotificationModel notiModel = NotificationModel(
-            date: dateformat.format(DateTime.now()),
-            time: timeformat.format(DateTime.now()),
-            title: "Low Stock",
-            body:
-                ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
-        if (element.productQuantity <= element.lowStockQuantity) {
-          Provider.of<NotificationProvider>(context, listen: false)
-              .addNotification(notiModel);
-          notify();
-         context.read<NotificationProvider>().notiCount = 1;
-          Provider.of<GeneralProvider>(context, listen: false)
-              .addLowStock(productModel);
-        } else {
-          return null;
-        }
-      },
-    );
-   
-                          
+                            (element) {
+                              Product productModel = Product(
+                                  pid: element.pid,
+                                  productCategory: element.productCategory,
+                                  productDescription:
+                                      element.productDescription,
+                                  productName: element.productName,
+                                  productImage: element.productName,
+                                  productQuantity: element.productQuantity);
+                              NotificationModel notiModel = NotificationModel(
+                                  date: dateformat.format(DateTime.now()),
+                                  time: timeformat.format(DateTime.now()),
+                                  title: "Low Stock",
+                                  body:
+                                      ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
+                              if (element.productQuantity <=
+                                  element.lowStockQuantity) {
+                                Provider.of<NotificationProvider>(context,
+                                        listen: false)
+                                    .addNotification(notiModel);
+                                notify();
+                                context.read<NotificationProvider>().notiCount =
+                                    1;
+                                Provider.of<GeneralProvider>(context,
+                                        listen: false)
+                                    .addLowStock(productModel);
+                              } else {
+                                return null;
+                              }
+                            },
+                          );
                         },
                         buttonText: 'Done',
                         color: primaryColor,
@@ -216,12 +219,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
               ),
             ),
           ]),
-
-       
         ],
       ),
     );
   }
+
   void notify() async {
     await notificationPlugin.showNotification(
         "Low Stock", "Some products are running low on stock");

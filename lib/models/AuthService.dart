@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shop_manager/models/UserModel.dart';
 
@@ -22,15 +24,23 @@ class AuthService {
     return _userFromFirebase(credential.user);
   }
 
-  Future<UserModel?> createUserWithEmailAndPassword(String displayName,
-      String email, String password) async {
+  Future<UserModel?> createUserWithEmailAndPassword(
+      String displayName, String email, String password) async {
     final credential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
-        await credential.user!.updateDisplayName(displayName);
+    await credential.user!.updateDisplayName(displayName);
     return _userFromFirebase(credential.user);
   }
 
   Future<void> signOut() async {
     return await _auth.signOut();
+  }
+
+   Future<void> forgottenPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

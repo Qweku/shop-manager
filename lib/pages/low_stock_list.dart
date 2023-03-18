@@ -12,7 +12,7 @@ class LowStockList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+   
     return Scaffold(
       body: Column(children: [
         Responsive.isMobile()
@@ -28,7 +28,7 @@ class LowStockList extends StatelessWidget {
                   child: HeaderSection(
                     height: height,
                     width: width,
-                    theme: theme,
+                   
                   ),
                 ),
               )
@@ -91,8 +91,7 @@ class LowStockGridList extends StatelessWidget {
                 context.watch<GeneralProvider>().lowStocks.length,
                 (index) => ProductCard(
                       index: index,
-                      image64: 
-                          "",
+                      image64: "",
                       price:
                           "${context.read<GeneralProvider>().lowStocks[index].sellingPrice}",
                       productName: context
@@ -112,14 +111,14 @@ class HeaderSection extends StatelessWidget {
     Key? key,
     required this.height,
     //required this.widget,
-    required this.theme,
+   
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
   //final ProductListScreen widget;
-  final ThemeData theme;
+ 
   final double width;
   final Function()? onPressed;
 
@@ -139,12 +138,12 @@ class HeaderSection extends StatelessWidget {
             Text(
               "Low Stock Basket",
               textAlign: TextAlign.left,
-              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+              style: headline2.copyWith(fontSize: 30),
             ),
             SizedBox(
                 width: width * 0.1,
                 child: Divider(
-                  color: theme.primaryColorLight,
+                  color: primaryColorLight,
                   thickness: 5,
                 )),
           ],
@@ -152,10 +151,10 @@ class HeaderSection extends StatelessWidget {
         // Container(
         //   decoration: BoxDecoration(
         //       borderRadius: BorderRadius.circular(10),
-        //       color: theme.primaryColorLight),
+        //       color: primaryColorLight),
         //   child: IconButton(
         //       onPressed: onPressed,
-        //       icon: Icon(Icons.add, color: theme.primaryColor)),
+        //       icon: Icon(Icons.add, color: primaryColor)),
         // )
       ],
     );

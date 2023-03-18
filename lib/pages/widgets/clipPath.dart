@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
 
 /// Diagonal clipper with rounded borders
 class RoundedPathClipper extends CustomClipper<Path> {
@@ -61,14 +62,14 @@ class HeaderSection extends StatelessWidget {
     Key? key,
     required this.height,
      this.trailing = const SizedBox(),
-    required this.theme,
+    
     required this.width,
     required this.title,
   }) : super(key: key);
 
   final double height;
   final Widget trailing;
-  final ThemeData theme;
+  
   final String title;
   final double width;
   
@@ -84,12 +85,12 @@ class HeaderSection extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.left,
-              style: theme.textTheme.headline2!.copyWith(fontSize: 30),
+              style: headline2.copyWith(fontSize: 30),
             ),
             SizedBox(
                 width: width * 0.1,
                 child: Divider(
-                  color: theme.primaryColorLight,
+                  color: primaryColorLight,
                   thickness: 5,
                 )),
           ],
