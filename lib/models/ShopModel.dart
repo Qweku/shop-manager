@@ -170,11 +170,13 @@ class ShopProducts {
   int id;
   String? shopname;
   List<Product> products;
+  List<SalesModel> sales;
 
   ShopProducts({
     required this.id,
     this.shopname = 'demo',
     required this.products,
+    required this.sales,
   });
 
   factory ShopProducts.fromJson(Map<String, dynamic> json) => ShopProducts(
@@ -182,12 +184,15 @@ class ShopProducts {
         shopname: json["shopname"],
         products: List<Product>.from(
             json["products"].map((x) => Product.fromJson(x))),
+        sales: List<SalesModel>.from(
+            json["sales"].map((x) => SalesModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "shopname": shopname,
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
+        "sales": List<dynamic>.from(sales.map((x) => x.toJson())),
       };
 }
 
@@ -271,5 +276,30 @@ class ProductCategory {
         "cid": cid,
         "category_name": categoryName,
         "category_description": categoryDescription,
+      };
+}
+
+class SalesModel {
+  SalesModel({
+    this.accId,
+    this.date,
+    required this.products,
+  });
+
+  int? accId;
+  String? date;
+  List<Product> products;
+
+  factory SalesModel.fromJson(Map<String, dynamic> json) => SalesModel(
+        accId: json["accId"],
+        date: json["date"],
+        products: List<Product>.from(
+            json["products"].map((x) => Product.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "accId": accId,
+        "date": date,
+        "products": List<dynamic>.from(products.map((x) => x.toJson())),
       };
 }

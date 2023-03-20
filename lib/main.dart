@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shop_manager/components/responsive.dart';
+import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/pages/Auth/Launcher.dart';
@@ -52,6 +53,7 @@ main() async {
     Provider<AuthService>(create: (_)=>AuthService(),),
     ChangeNotifierProvider(create: (_) => GeneralProvider()),
     ChangeNotifierProvider(create: (_) => NotificationProvider()),
+     ChangeNotifierProvider(create: (_) => SalesProvider()),
     ChangeNotifierProvider(create: (_) => ApplicationState()),
   ], child:  MyApp(initialRoute: initialRoute,)));
 }

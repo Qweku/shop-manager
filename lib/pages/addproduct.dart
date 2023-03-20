@@ -141,7 +141,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       int productQuantity,
       int lowStockQuantity,
       bool isLowStock) async {
-         final docRef = fireStore.collection(shopName ?? "").doc();
+       
     await fireStore.collection(shopName ?? "").add({
       'product id': id,
       'product name': productName,
@@ -152,16 +152,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
       'product quantity': productQuantity,
       'low stock quantity': lowStockQuantity,
       'low stock': isLowStock,
-      'docId':docRef
+     
     });
   }
 
   Future updateProducts() async {
     // DocumentReference docRef = fireStore.collection(shopName).id;
-    await fireStore
-        .collection(shopName ?? "")
-        .doc()
-        .update({"product name": ""});
+    // await fireStore
+    //     .collection(shopName ?? "").where(field)
+        
   }
 
   void successDialog() {

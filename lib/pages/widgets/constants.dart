@@ -15,8 +15,9 @@ List<Map<String, dynamic>> statusList = [
   {'status': '132', 'label': 'Total Stock', 'icon': Icons.inventory},
 ];
 
- DateFormat dateformat = DateFormat.yMMMd();
-  DateFormat timeformat = DateFormat.Hm();
+DateFormat dateformat = DateFormat.yMMMd();
+DateFormat salesDateFormat = DateFormat.yMd();
+DateFormat timeformat = DateFormat.Hm();
 
 Color primaryColor = const Color(0xFF0D47A1);
 Color primaryColorLight = Colors.white;

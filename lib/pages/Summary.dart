@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/models/AccountProvider.dart';
+
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -27,14 +29,10 @@ class SummaryScreen extends StatefulWidget {
 }
 
 class _SummaryScreenState extends State<SummaryScreen> {
-  DateFormat dateformat = DateFormat.yMMMd();
+  bool isCredit = false;
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -52,7 +50,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   title: 'Summary',
                   height: height,
                   width: width,
-                 
                 ),
               ),
             ),
@@ -71,24 +68,24 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Order #: ',
-                                style:bodyText1
-                                    .copyWith(fontWeight: FontWeight.bold)),
+                                style: bodyText1.copyWith(
+                                    fontWeight: FontWeight.bold)),
                             Text('0001', style: bodyText1),
                           ]),
                       Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Status: ',
-                                style: bodyText1
-                                    .copyWith(fontWeight: FontWeight.bold)),
+                                style: bodyText1.copyWith(
+                                    fontWeight: FontWeight.bold)),
                             Text('Paid', style: bodyText1),
                           ]),
                       Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Date: ',
-                                style: bodyText1
-                                    .copyWith(fontWeight: FontWeight.bold)),
+                                style: bodyText1.copyWith(
+                                    fontWeight: FontWeight.bold)),
                             Text(
                               dateformat.format(DateTime.now()),
                               style: bodyText1,
@@ -103,7 +100,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               context.watch<GeneralProvider>().cart.length,
                           itemBuilder: (context, index) {
                             return ItemDetail(
-                               
                                 backgroundColor:
                                     const Color.fromARGB(255, 233, 233, 233),
                                 textColor:
@@ -136,13 +132,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         children: [
                           Text(
                             'Amount Received',
-                            style: bodyText1
-                                .copyWith(fontSize: 15),
+                            style: bodyText1.copyWith(fontSize: 15),
                           ),
                           Text(
                             "GHS ${widget.amountReceived.toStringAsFixed(2)}",
-                            style:bodyText1
-                                .copyWith(fontSize: 15),
+                            style: bodyText1.copyWith(fontSize: 15),
                           )
                         ],
                       ),
@@ -167,15 +161,22 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       Button(
                         onTap: () {
                           context.read<GeneralProvider>().processCart();
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AddProductSuccess(
-                                        tag: 'order',
-                                      )));
 
-                          // print("${context}");
-                          context.read<GeneralProvider>().cart.clear();
+                          SalesModel salesModel = SalesModel(
+                            products: context.read<GeneralProvider>().cart,
+                            accId:
+                                context.read<SalesProvider>().salesList.length +
+                                    1,
+                            date: salesDateFormat.format(DateTime.now()),
+                          );
+                          if (!isCredit) {
+                            Provider.of<SalesProvider>(context, listen: false)
+                                .addSales(salesModel);
+                          }else{
+                            Provider.of<SalesProvider>(context, listen: false)
+                                .addCredit(salesModel);
+                          }
+
                           context.read<GeneralProvider>().inventory.forEach(
                             (element) {
                               Product productModel = Product(
@@ -193,7 +194,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   body:
                                       ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
                               if (element.productQuantity <=
-                                  element.lowStockQuantity) {
+                                      element.lowStockQuantity &&
+                                  !(Provider.of<GeneralProvider>(context,
+                                          listen: false)
+                                      .lowStocks
+                                      .contains(element))) {
                                 Provider.of<NotificationProvider>(context,
                                         listen: false)
                                     .addNotification(notiModel);
@@ -208,6 +213,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               }
                             },
                           );
+                          //context.read<GeneralProvider>().cart.clear();
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddProductSuccess(
+                                        tag: 'order',
+                                      )));
                         },
                         buttonText: 'Done',
                         color: primaryColor,

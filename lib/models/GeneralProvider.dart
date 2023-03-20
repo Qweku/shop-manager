@@ -8,7 +8,7 @@ import 'package:shop_manager/models/localStore.dart';
 LocalStore storage = LocalStore();
 
 class GeneralProvider extends ChangeNotifier {
-  ShopProducts _shop = ShopProducts(id: 0, shopname: 'demo', products: []);
+  ShopProducts _shop = ShopProducts(id: 0, shopname: 'demo', products: [], sales: []);
   ProductCategory _category = ProductCategory(cid: -1);
   Product _product = Product(pid: -1);
  
@@ -179,8 +179,8 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeLowStock(int index) {
-    _lowStocks.removeAt(index);
+  void removeLowStock(Product product) {
+    _lowStocks.remove(product);
     notifyListeners();
   }
 

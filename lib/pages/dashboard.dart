@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
+import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -41,6 +42,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   int count = 0;
   @override
   void initState() {
+     log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
     // var productBox = Hive.box<Product>('Product');
     // var categoryBox = Hive.box<ProductCategory>('Category');
     // HiveFunctions().reArrangeCategory();
@@ -94,6 +96,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         .categories
         .length
         .toString());
+       
 
     if (Provider.of<GeneralProvider>(context, listen: false)
         .categories
@@ -104,6 +107,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryName: "Uncategorised",
               categoryDescription: 'No Description'));
     }
+
     _content = Dashboard(
       notiCount: count,
     );

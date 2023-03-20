@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
@@ -17,6 +19,7 @@ class _AddProductSuccessState extends State<AddProductSuccess> {
   void initState() {
     super.initState();
     startTime();
+     context.read<GeneralProvider>().cart.clear();
   }
 
   startTime() async {

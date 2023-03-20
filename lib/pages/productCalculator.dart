@@ -188,7 +188,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   style: headline1,
                 ),
                 content: SizedBox(
-                  width: width * 0.4,
+                  width: Responsive.isTablet()? width * 0.4:width*0.8,
                   height: height * 0.4,
                   child: Column(
                     // spacing: 20,

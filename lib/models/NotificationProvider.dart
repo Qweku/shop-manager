@@ -16,5 +16,6 @@ class NotificationProvider extends ChangeNotifier {
 
   void addNotification(NotificationModel notificationModel) {
     _notiList.add(notificationModel);
+     notifyListeners();
   }
 }
