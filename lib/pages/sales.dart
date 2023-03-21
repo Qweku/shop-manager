@@ -178,11 +178,13 @@ class _SalesScreenState extends State<SalesScreen> {
             Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.zero,
-                itemCount: /* context.watch<SalesProvider>().salesList.length */
-                    5,
+                itemCount: context.watch<SalesProvider>().salesList.length,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) =>
-                    SalesListSection(width: width),
+                    SalesListSection(
+                  width: width,
+                  sales: context.watch<SalesProvider>().salesList[index],
+                ),
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(
                     height: 10,
@@ -268,9 +270,11 @@ class SalesListSection extends StatelessWidget {
   const SalesListSection({
     Key? key,
     required this.width,
+    required this.sales,
   }) : super(key: key);
 
   final double width;
+  final SalesModel sales;
 
   @override
   Widget build(BuildContext context) {
@@ -287,9 +291,9 @@ class SalesListSection extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Order Number: #001",
+                  Text("Order Number: #${sales.accId}",
                       style: bodyText1.copyWith(color: primaryColorDark)),
-                  Text("Date: 21/03/2023",
+                  Text("Date: ${sales.date}",
                       style: bodyText1.copyWith(color: primaryColorDark))
                 ],
               ),
@@ -298,17 +302,17 @@ class SalesListSection extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
-                itemCount: 3,
+                itemCount: sales.products.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: width * 0.05,
                     ),
                     child: SummaryListItem(
-                      item: "Ideal Milk",
-                      amount: "10.00",
-                      quantity: "2",
-                      date: "21/03/2023",
+                      item: sales.products[index].productName!,
+                      amount: "GHS ${sales.products[index].sellingPrice}",
+                      quantity: sales.products[index].cartQuantity.toString(),
+                      date: sales.date!,
                     ),
                   );
                 }),
