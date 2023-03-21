@@ -185,7 +185,7 @@ class ShopProducts {
         products: List<Product>.from(
             json["products"].map((x) => Product.fromJson(x))),
         sales: List<SalesModel>.from(
-            json["sales"].map((x) => SalesModel.fromJson(x))),
+            (json["sales"] ?? []).map((x) => SalesModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -212,18 +212,43 @@ class Product {
       categoryName: 'Uncategorised',
       categoryDescription: 'No Description');
 
-  Product(
-      {required this.pid,
-      this.productName,
-      this.sellingPrice = 0.0,
-      this.costPrice = 0.0,
-      this.productImage,
-      this.productDescription,
-      this.productQuantity = 0,
-      this.lowStockQuantity = 0,
-      this.cartQuantity = 0,
-      this.productCategory,
-      this.isLowStock = false});
+  Product({
+    required this.pid,
+    this.productName,
+    this.sellingPrice = 0.0,
+    this.costPrice = 0.0,
+    this.productImage,
+    this.productDescription,
+    this.productQuantity = 0,
+    this.lowStockQuantity = 0,
+    this.cartQuantity = 0,
+    this.productCategory,
+    this.isLowStock = false,
+  });
+
+  Product copyWith(
+          {int? pid,
+          String? productName,
+          double? sellingPrice,
+          double? costPrice,
+          String? productImage,
+          int? productQuantity,
+          int? lowStockQuantity,
+          String? productDescription,
+          int? cartQuantity,
+          bool? isLowStock}) =>
+      Product(
+          pid: pid ?? this.pid,
+          productName: productName ?? this.productName,
+          sellingPrice: sellingPrice ?? this.sellingPrice,
+          costPrice: costPrice ?? this.costPrice,
+          productImage: productImage ?? this.productImage,
+          productDescription: productDescription ?? this.productDescription,
+          productQuantity: productQuantity ?? this.productQuantity,
+          lowStockQuantity: lowStockQuantity ?? this.lowStockQuantity,
+          cartQuantity: cartQuantity ?? this.cartQuantity,
+          productCategory: productCategory ?? this.productCategory,
+          isLowStock: isLowStock ?? this.isLowStock);
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         pid: json["pid"],
@@ -233,9 +258,9 @@ class Product {
         productImage: json["productImage"],
         productDescription: json["productDescription"],
         productQuantity: json["productQuantity"],
-        lowStockQuantity: json["lowStockQuantity"],
-        cartQuantity: json["cartQuantity"],
-        isLowStock: json["isLowStock"],
+        lowStockQuantity: json["lowStockQuantity"] ?? 0,
+        cartQuantity: json["cartQuantity"] ?? 0,
+        isLowStock: json["isLowStock"] ?? false,
         productCategory: ProductCategory.fromJson(json["productCategory"]),
       );
 
@@ -283,12 +308,25 @@ class SalesModel {
   SalesModel({
     this.accId,
     this.date,
+    this.isOnCredit = false,
     required this.products,
   });
-
   int? accId;
   String? date;
+  bool isOnCredit;
+
   List<Product> products;
+
+  SalesModel copyWith({
+    int? accId,
+    String? date,
+    List<Product>? products,
+  }) =>
+      SalesModel(
+        accId: accId ?? this.accId,
+        date: date ?? this.date,
+        products: products ?? this.products,
+      );
 
   factory SalesModel.fromJson(Map<String, dynamic> json) => SalesModel(
         accId: json["accId"],

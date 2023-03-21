@@ -161,9 +161,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       Button(
                         onTap: () {
                           context.read<GeneralProvider>().processCart();
-
                           SalesModel salesModel = SalesModel(
-                            products: context.read<GeneralProvider>().cart,
+                            products:
+                                List.from(context.read<GeneralProvider>().cart),
                             accId:
                                 context.read<SalesProvider>().salesList.length +
                                     1,
@@ -172,10 +172,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           if (!isCredit) {
                             Provider.of<SalesProvider>(context, listen: false)
                                 .addSales(salesModel);
-                          }else{
+                          } else {
                             Provider.of<SalesProvider>(context, listen: false)
                                 .addCredit(salesModel);
                           }
+                          
 
                           context.read<GeneralProvider>().inventory.forEach(
                             (element) {

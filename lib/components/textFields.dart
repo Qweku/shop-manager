@@ -248,7 +248,7 @@ class CustomPhoneTextField extends StatefulWidget {
       this.textStyle,
       this.controller,
       this.hint,
-      this.getValidation})
+   required   this.getValidation})
       : super(key: key);
 
   @override

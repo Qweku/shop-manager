@@ -237,8 +237,8 @@ class _ProductViewState extends State<ProductView> {
                         buttonText: 'Cart',
                         color: (context
                                 .watch<GeneralProvider>()
-                                .cart
-                                .contains(widget.product))
+                                .cart.any((element) => element.pid == widget.product.pid)
+                                )
                             ? Colors.grey
                             : actionColor,
                         width: width * 0.2,

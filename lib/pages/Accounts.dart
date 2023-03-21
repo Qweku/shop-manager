@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +23,12 @@ class _AccountsState extends State<Accounts> {
   final toDate = TextEditingController();
   @override
   void initState() {
-    print("Total Sales Items");
-    log(Provider.of<SalesProvider>(context, listen: false).salesList.length);
+    log("Total Sales Items: " +
+        Provider.of<SalesProvider>(context, listen: false)
+            .salesList
+            .length
+            .toString());
+    Provider.of<SalesProvider>(context, listen: false).salesList;
     super.initState();
   }
 

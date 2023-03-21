@@ -8,10 +8,11 @@ import 'package:shop_manager/models/localStore.dart';
 LocalStore storage = LocalStore();
 
 class GeneralProvider extends ChangeNotifier {
-  ShopProducts _shop = ShopProducts(id: 0, shopname: 'demo', products: [], sales: []);
+  ShopProducts _shop =
+      ShopProducts(id: 0, shopname: 'demo', products: [], sales: []);
   ProductCategory _category = ProductCategory(cid: -1);
   Product _product = Product(pid: -1);
- 
+
   List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
   List<Product> _lowStocks = [];
@@ -35,7 +36,6 @@ class GeneralProvider extends ChangeNotifier {
     _query = query;
     notifyListeners();
   }
-
 
   set shop(ShopProducts currentShop) {
     _shop = currentShop;
@@ -91,7 +91,8 @@ class GeneralProvider extends ChangeNotifier {
     if (product.cartQuantity < 1) {
       product.cartQuantity = 1;
     }
-    cart.add(product);
+    Product cartProduct = product.copyWith();
+    cart.add(cartProduct);
     notifyListeners();
   }
 
@@ -135,9 +136,9 @@ class GeneralProvider extends ChangeNotifier {
 
   void processCart() {
     for (var cartItem in cart) {
-      _inventory
-          .singleWhere((element) => element.pid == cartItem.pid)
-          .productQuantity -= cartItem.cartQuantity;
+      _inventory.singleWhere((element) => element.pid == cartItem.pid)
+        ..productQuantity -= cartItem.cartQuantity
+        ..cartQuantity = 0;
     }
     saveToShop(_inventory);
     notifyListeners();
@@ -163,8 +164,7 @@ class GeneralProvider extends ChangeNotifier {
     double total = 0;
     for (Product item in _cart) {
       if (item.pid == product.pid) {
-        total =
-            total + ((item.sellingPrice) * (item.productQuantity ));
+        total = total + ((item.sellingPrice) * (item.productQuantity));
         item.cartQuantity = product.cartQuantity;
       }
     }
@@ -173,9 +173,8 @@ class GeneralProvider extends ChangeNotifier {
   }
 
   void addLowStock(Product product) {
-   
-        _lowStocks.add(product);
-    
+    _lowStocks.add(product);
+
     notifyListeners();
   }
 
