@@ -176,13 +176,37 @@ class _SalesScreenState extends State<SalesScreen> {
             ),
             SizedBox(height: height * 0.02),
             Expanded(
-              child: ListView(
+              child: ListView.separated(
                 padding: EdgeInsets.zero,
-                 physics: const BouncingScrollPhysics(),
-                  children: List.generate(
-                4,
-                (index) => SalesListSection(width: width),
-              )),
+                shrinkWrap: true,
+                itemCount: /* context.watch<SalesProvider>().salesList.length */
+                    5,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) => Container(
+                  height: height,
+                  color: Colors.amber.shade100,
+                  child: Column(
+                      children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    'Order Number: #${index /* context.watch<SalesProvider>().salesList[index].accId */}'),
+                                Text(
+                                    'Order Date: ${00 - 00 - 0000 /* context.watch<SalesProvider>().salesList[index].date */}')
+                              ],
+                            )
+                          ] +
+                          List.generate(
+                            1,
+                            (index) =>
+                                Expanded(child: SalesListSection(width: width)),
+                          )),
+                ),
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(height: height * 0.05,);
+                },
+              ),
             ),
           ],
         ),
