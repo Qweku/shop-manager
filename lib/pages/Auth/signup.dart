@@ -294,7 +294,8 @@ class SignUpNameEmail extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: height * 0.02),
             child: CustomPhoneTextField(
               borderColor: Colors.grey,
-              textStyle: bodyText1,
+              textStyle: bodyText1, getValidation: (bool _validation) {  },
+
             )),
         Padding(
           padding: EdgeInsets.symmetric(vertical: height * 0.02),

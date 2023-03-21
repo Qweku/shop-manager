@@ -232,7 +232,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: primaryColorLight,
       appBar: AppBar(
         // iconTheme: IconThemeData(color: Colors.black),
