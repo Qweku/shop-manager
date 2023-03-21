@@ -12,6 +12,7 @@ import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
+import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -631,13 +632,34 @@ class _TabletDashboardState extends State<TabletDashboard> {
   }
 }
 
-class TabletHomeScreen extends StatelessWidget {
+class TabletHomeScreen extends StatefulWidget {
   const TabletHomeScreen({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<TabletHomeScreen> createState() => _TabletHomeScreenState();
+}
+
+class _TabletHomeScreenState extends State<TabletHomeScreen> {
+  double totalSales = 0.0;
+  double totalProfit = 0.0;
+  @override
   Widget build(BuildContext context) {
+    totalSales = 0.0;
+    totalProfit = 0.0;
+    context.watch<SalesProvider>().salesList.forEach((element) {
+      element.products.forEach((item) {
+        totalSales += item.sellingPrice * item.cartQuantity;
+        totalProfit += (item.sellingPrice - item.costPrice) * item.cartQuantity;
+      });
+    });
+List<Map<String, dynamic>> statusList = [
+  {'status': 'GHS ${totalSales.toStringAsFixed(2)}', 'label': 'Total Sales', 'icon': Icons.monetization_on},
+  {'status': 'GHS 1.2K', 'label': 'Total Expenses', 'icon': Icons.auto_graph},
+  {'status': '${context.watch<GeneralProvider>().lowStocks.length}', 'label': 'Low Stock', 'icon': Icons.arrow_circle_down},
+  {'status': '${context.watch<GeneralProvider>().inventory.length}', 'label': 'Total Stock', 'icon': Icons.inventory},
+];
     return Padding(
       padding: EdgeInsets.all(width * 0.02),
       child: Column(

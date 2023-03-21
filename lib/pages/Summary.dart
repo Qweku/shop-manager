@@ -169,14 +169,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                     1,
                             date: salesDateFormat.format(DateTime.now()),
                           );
-                          if (!isCredit) {
-                            Provider.of<SalesProvider>(context, listen: false)
-                                .addSales(salesModel);
-                          } else {
-                            Provider.of<SalesProvider>(context, listen: false)
-                                .addCredit(salesModel);
-                          }
-                          
+
+                          Provider.of<SalesProvider>(context, listen: false)
+                              .addSales(salesModel);
 
                           context.read<GeneralProvider>().inventory.forEach(
                             (element) {

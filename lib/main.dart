@@ -53,7 +53,7 @@ main() async {
     Provider<AuthService>(create: (_)=>AuthService(),),
     ChangeNotifierProvider(create: (_) => GeneralProvider()),
     ChangeNotifierProvider(create: (_) => NotificationProvider()),
-     ChangeNotifierProvider(create: (_) => SalesProvider()),
+    ChangeNotifierProvider(create: (_) => SalesProvider()),
     ChangeNotifierProvider(create: (_) => ApplicationState()),
   ], child:  MyApp(initialRoute: initialRoute,)));
 }

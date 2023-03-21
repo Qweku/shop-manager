@@ -124,7 +124,7 @@ class _LowStockGridListState extends State<LowStockGridList> {
     return context.watch<GeneralProvider>().lowStocks.isEmpty
         ? Center(
             child: Text(
-              'No Products',
+              'No Low Stock Products',
               style: headline1.copyWith(fontSize: 25, color: Colors.blueGrey),
             ),
           )

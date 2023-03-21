@@ -36,6 +36,7 @@ class _InventoryListState extends State<InventoryList> {
     var categories = context.watch<GeneralProvider>();
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // SizedBox(height: height * 0.03),
 

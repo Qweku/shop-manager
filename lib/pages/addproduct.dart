@@ -539,7 +539,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     padding: const EdgeInsets.all(20),
                     child: Button(
                       width: width,
-                      color: actionColor,
+                      color: primaryColor,
                       buttonText: 'Done',
                       onTap: () async {
                         // log(formatter.getUnformattedValue().toString());

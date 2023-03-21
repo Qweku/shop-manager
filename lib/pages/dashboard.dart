@@ -15,7 +15,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
-import 'package:shop_manager/pages/Accounts.dart';
+import 'package:shop_manager/pages/sales.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/low_stock_list.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
@@ -42,7 +42,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   int count = 0;
   @override
   void initState() {
-     log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
+    log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
     // var productBox = Hive.box<Product>('Product');
     // var categoryBox = Hive.box<ProductCategory>('Category');
     // HiveFunctions().reArrangeCategory();
@@ -96,7 +96,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         .categories
         .length
         .toString());
-       
 
     if (Provider.of<GeneralProvider>(context, listen: false)
         .categories
@@ -108,9 +107,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryDescription: 'No Description'));
     }
 
-    _content = const Dashboard(
-     
-    );
+    _content = const Dashboard();
     super.initState();
   }
 
@@ -156,12 +153,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           _content = const LowStockList();
           break;
         case 2:
-          _content = const Dashboard(
-           
-          );
+          _content = const Dashboard();
           break;
         case 3:
-          _content = const Accounts();
+          _content = const SalesScreen();
           break;
         case 4:
           _content = const InventoryScreen();
@@ -220,8 +215,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 }
 
 class Dashboard extends StatefulWidget {
-  
-  const Dashboard({Key? key, }) : super(key: key);
+  const Dashboard({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -230,18 +226,31 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   List<String> period = ['1D', '1W', '1M', '1Y'];
   int tap = 0;
+  double totalSales = 0.0;
+  double totalProfit = 0.0;
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
+    totalSales = 0.0;
+    totalProfit = 0.0;
+    context.watch<SalesProvider>().salesList.forEach((element) {
+      element.products.forEach((item) {
+        totalSales += item.sellingPrice * item.cartQuantity;
+        totalProfit += (item.sellingPrice - item.costPrice) * item.cartQuantity;
+      });
+    });
+List<Map<String, dynamic>> statusList = [
+  {'status': 'GHS ${totalSales.toStringAsFixed(2)}', 'label': 'Total Sales', 'icon': Icons.monetization_on},
+  {'status': 'GHS 1.2K', 'label': 'Total Expenses', 'icon': Icons.auto_graph},
+  {'status': '${context.watch<GeneralProvider>().lowStocks.length}', 'label': 'Low Stock', 'icon': Icons.arrow_circle_down},
+  {'status': '${context.watch<GeneralProvider>().inventory.length}', 'label': 'Total Stock', 'icon': Icons.inventory},
+];
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (builder) => AddProductScreen()));
           },
-          backgroundColor: actionColor,
+          backgroundColor: primaryColor,
           child: Icon(Icons.add, color: Colors.white),
         ),
         appBar: AppBar(
@@ -303,7 +312,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         Text(
-                          'GHS 20945.90',
+                          'GHS ${totalProfit.toStringAsFixed(2)}',
                           style: headline2.copyWith(fontSize: 25),
                         ),
                         const SizedBox(
@@ -393,7 +402,6 @@ class ItemStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     return GestureDetector(
       onTap: onTap,
       child: Container(

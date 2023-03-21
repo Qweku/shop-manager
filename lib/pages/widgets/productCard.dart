@@ -64,7 +64,7 @@ class ProductCard extends StatelessWidget {
                       width: width,
                       decoration: BoxDecoration(
                         //borderRadius: BorderRadius.circular(20.0),
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 247, 247, 247),
                       ),
                       child: image64.isEmpty
                           ? Center(
