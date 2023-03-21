@@ -5,12 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shop_manager/components/responsive.dart';
+
 import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/pages/Auth/Launcher.dart';
-import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shop_manager/theme.dart';
@@ -88,18 +87,7 @@ class _MyAppState extends State<MyApp> {
         primaryColorLight: Colors.white,
         primaryColorDark: const Color.fromARGB(255, 22, 22, 22),
         fontFamily: "Montserrat",
-        textTheme: TextTheme(
-            headline1: TextStyle(
-                fontSize: Responsive.isMobile() ? 20 : 25,
-                color: const Color.fromARGB(255, 22, 22, 22)),
-            headline2: TextStyle(
-                fontSize: Responsive.isMobile() ? 20 : 25, color: Colors.white),
-            bodyText1: TextStyle(
-                fontSize: Responsive.isMobile() ? 12 : 18,
-                color: const Color.fromARGB(255, 22, 22, 22)),
-            bodyText2: TextStyle(
-                fontSize: Responsive.isMobile() ? 12 : 18,
-                color: const Color.fromARGB(255, 255, 255, 255))),
+        
         primarySwatch: Colors.blue,
       ),
       initialRoute: widget.initialRoute,

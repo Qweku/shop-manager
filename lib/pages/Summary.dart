@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:shop_manager/components/button.dart';
@@ -30,6 +31,7 @@ class SummaryScreen extends StatefulWidget {
 
 class _SummaryScreenState extends State<SummaryScreen> {
   bool isCredit = false;
+  LocalStorage storage = LocalStorage('notification');
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +161,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       ),
                       SizedBox(height: height * 0.05),
                       Button(
-                        onTap: () {
+                        onTap: () async {
                           context.read<GeneralProvider>().processCart();
                           SalesModel salesModel = SalesModel(
                             products:
@@ -198,6 +200,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 Provider.of<NotificationProvider>(context,
                                         listen: false)
                                     .addNotification(notiModel);
+
                                 notify();
                                 context.read<NotificationProvider>().notiCount =
                                     1;
@@ -235,5 +238,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
   void notify() async {
     await notificationPlugin.showNotification(
         "Low Stock", "Some products are running low on stock");
+    await storage.setItem(
+        'notification',
+        notificationModelToJson(
+            Provider.of<NotificationProvider>(context, listen: false)
+                .notiList));
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Notifier {
@@ -6,7 +5,7 @@ class Notifier {
       {required BuildContext context,
       required String message,
       required Color color,
-      int duration: 2}) {
+      int duration = 2}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           backgroundColor: color,

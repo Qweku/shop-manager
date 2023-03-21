@@ -16,12 +16,10 @@ class _CustomPainter extends BoxPainter {
   _CustomPainter(
     this.decoration,
     VoidCallback onChanged,
-  )   : assert(decoration != null),
-        super(onChanged);
+  )   : super(onChanged);
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    assert(configuration != null);
     assert(configuration.size != null);
     double indicatorHeight = 45.0;
 

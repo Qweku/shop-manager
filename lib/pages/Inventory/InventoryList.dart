@@ -176,7 +176,7 @@ class _InventoryListState extends State<InventoryList> {
   void _bottomDrawSheet(BuildContext context, Product product) {
     double height = MediaQuery.of(context).size.height;
     showModalBottomSheet(
-        backgroundColor: primaryColor,
+        backgroundColor: primaryColorLight,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20.0),
@@ -210,11 +210,11 @@ class _InventoryListState extends State<InventoryList> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: primaryColorLight,
-                            child: Icon(Icons.edit, color: primaryColor),
+                            backgroundColor: primaryColor,
+                            child: Icon(Icons.edit, color: primaryColorLight),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Edit', style: bodyText2)
+                          Text('Edit', style: bodyText1)
                         ],
                       ),
                     ),
@@ -229,11 +229,11 @@ class _InventoryListState extends State<InventoryList> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: primaryColorLight,
-                            child: Icon(Icons.delete, color: primaryColor),
+                            backgroundColor: primaryColor,
+                            child: Icon(Icons.delete, color: primaryColorLight),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Remove', style: bodyText2)
+                          Text('Remove', style: bodyText1)
                         ],
                       ),
                     ),

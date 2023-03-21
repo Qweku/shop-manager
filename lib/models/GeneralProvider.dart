@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:shop_manager/models/SharedPreferences.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
 
@@ -9,7 +8,7 @@ LocalStore storage = LocalStore();
 
 class GeneralProvider extends ChangeNotifier {
   ShopProducts _shop =
-      ShopProducts(id: 0, shopname: 'demo', products: [], sales: []);
+      ShopProducts(id: 0, shopname: 'demo', products: [], sales: [], expenses: []);
   ProductCategory _category = ProductCategory(cid: -1);
   Product _product = Product(pid: -1);
 

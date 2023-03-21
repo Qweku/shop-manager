@@ -213,7 +213,8 @@ class _SignUpState extends State<SignUp> {
                               id: 0,
                               shopname: shopController.text,
                               products: [],
-                              sales: []);
+                              sales: [],
+                              expenses: []);
 
                           storage.setItem(
                               shopController.text, shopProductsToJson(shop));

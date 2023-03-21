@@ -174,9 +174,15 @@ class _SalesScreenState extends State<SalesScreen> {
                     thickness: 5,
                   )),
             ),
-            SizedBox(height: height * 0.03),
+            SizedBox(height: height * 0.02),
             Expanded(
-              child: SalesListSection(width: width),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                 physics: const BouncingScrollPhysics(),
+                  children: List.generate(
+                4,
+                (index) => SalesListSection(width: width),
+              )),
             ),
           ],
         ),
@@ -262,40 +268,24 @@ class SalesListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return context.watch<SalesProvider>().salesList.isEmpty
-        ? Center(
-            child: Text(
-              'No Records Yet',
-              style: headline1.copyWith(
-                  fontSize: 25, color: Color.fromARGB(255, 133, 133, 133)),
+    return ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: width * 0.05,
             ),
-          )
-        : ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemCount: context.watch<SalesProvider>().salesList.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.05,
-                ),
-                child: SummaryListItem(
-                  item: context
-                          .read<SalesProvider>()
-                          .salesList[index]
-                          .products[index]
-                          .productName ??
-                      "",
-                  amount:
-                      "${context.read<SalesProvider>().salesList[index].products[index].sellingPrice}",
-                  quantity:
-                      "${context.read<SalesProvider>().salesList[index].products[index].cartQuantity}",
-                  date:
-                      context.read<SalesProvider>().salesList[index].date ?? "",
-                ),
-              );
-            });
+            child: SummaryListItem(
+              item: "Ideal Milk",
+              amount: "10.00",
+              quantity: "2",
+              date: "21/03/2023",
+            ),
+          );
+        });
   }
 }
 
@@ -320,7 +310,7 @@ class SummaryListItem extends StatelessWidget {
             backgroundColor: primaryColor,
             radius: 17,
             child: Text(
-              "I",
+              item.substring(0, 1),
               style: bodyText2,
             ),
           ),

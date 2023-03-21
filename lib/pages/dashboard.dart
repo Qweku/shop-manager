@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 // import 'package:hive_flutter/adapters.dart';
 import 'package:shop_manager/components/bottomnav.dart';
@@ -15,6 +16,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
+import 'package:shop_manager/pages/expenses.dart';
 import 'package:shop_manager/pages/sales.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/low_stock_list.dart';
@@ -24,6 +26,7 @@ import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
 import 'package:intl/intl.dart';
 
+import '../models/NotificationModel.dart';
 import 'addproduct.dart';
 import 'Categories/category.dart';
 
@@ -37,11 +40,20 @@ class MyHomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget? _content;
   LocalStore localStore = LocalStore();
+  LocalStorage storage = LocalStorage('notification');
   DateFormat dateformat = DateFormat.yMMMd();
   DateFormat timeformat = DateFormat.Hm();
   int count = 0;
+  void bootUp() async {
+    if (await storage.ready) {
+      Provider.of<NotificationProvider>(context, listen: false).notiList =
+          notificationModelFromJson(storage.getItem('notifList') ?? '[]');
+    }
+  }
+
   @override
   void initState() {
+    bootUp();
     log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
     // var productBox = Hive.box<Product>('Product');
     // var categoryBox = Hive.box<ProductCategory>('Category');
@@ -147,19 +159,19 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     setState(() {
       switch (index) {
         case 0:
-          _content = const CategoryScreen();
+          _content = const InventoryScreen();
           break;
         case 1:
-          _content = const LowStockList();
+          _content = const SalesScreen();
           break;
         case 2:
           _content = const Dashboard();
           break;
         case 3:
-          _content = const SalesScreen();
+          _content = const LowStockList();
           break;
         case 4:
-          _content = const InventoryScreen();
+          _content = const ExpenseScreen();
           break;
       }
       _content = AnimatedSwitcher(
@@ -228,22 +240,45 @@ class _DashboardState extends State<Dashboard> {
   int tap = 0;
   double totalSales = 0.0;
   double totalProfit = 0.0;
+  double totalExpenses = 0.0;
+
   @override
   Widget build(BuildContext context) {
     totalSales = 0.0;
     totalProfit = 0.0;
+    totalExpenses = 0.0;
     context.watch<SalesProvider>().salesList.forEach((element) {
       element.products.forEach((item) {
         totalSales += item.sellingPrice * item.cartQuantity;
         totalProfit += (item.sellingPrice - item.costPrice) * item.cartQuantity;
       });
     });
-List<Map<String, dynamic>> statusList = [
-  {'status': 'GHS ${totalSales.toStringAsFixed(2)}', 'label': 'Total Sales', 'icon': Icons.monetization_on},
-  {'status': 'GHS 1.2K', 'label': 'Total Expenses', 'icon': Icons.auto_graph},
-  {'status': '${context.watch<GeneralProvider>().lowStocks.length}', 'label': 'Low Stock', 'icon': Icons.arrow_circle_down},
-  {'status': '${context.watch<GeneralProvider>().inventory.length}', 'label': 'Total Stock', 'icon': Icons.inventory},
-];
+
+    context.watch<SalesProvider>().expenseList.forEach((element) {
+      totalExpenses += element.price;
+    });
+    List<Map<String, dynamic>> statusList = [
+      {
+        'status': 'GHS ${totalSales.toStringAsFixed(2)}',
+        'label': 'Total Sales',
+        'icon': Icons.monetization_on
+      },
+      {
+        'status': 'GHS ${totalExpenses.toStringAsFixed(2)}',
+        'label': 'Total Expenses',
+        'icon': Icons.auto_graph
+      },
+      {
+        'status': '${context.watch<GeneralProvider>().lowStocks.length}',
+        'label': 'Low Stock',
+        'icon': Icons.arrow_circle_down
+      },
+      {
+        'status': '${context.watch<GeneralProvider>().inventory.length}',
+        'label': 'Total Stock',
+        'icon': Icons.inventory
+      },
+    ];
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -307,7 +342,7 @@ List<Map<String, dynamic>> statusList = [
                     SizedBox(
                         child: Column(
                       children: [
-                        Text('Total Earnings', style: bodyText2),
+                        Text('Total Profit', style: bodyText2),
                         const SizedBox(
                           height: 8,
                         ),

@@ -204,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       log('empty');
                       Provider.of<GeneralProvider>(context, listen: false)
                               .shop =
-                          ShopProducts(id: 0, shopname: 'demo', products: [], sales:[]);
+                          ShopProducts(id: 0, shopname: 'demo', products: [], sales:[], expenses: []);
                     } else {
                       log('not empty');
                       Provider.of<GeneralProvider>(context, listen: false)

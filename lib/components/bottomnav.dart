@@ -11,28 +11,28 @@ class BottomNav extends StatelessWidget {
     return FluidNavBar(
       icons: [
         FluidNavBarIcon(
-            icon: Icons.category,
+            icon:Icons.storefront ,
             selectedForegroundColor: actionColor,
             //backgroundColor: primaryColor,
-            extras: {"label": "catgories"}),
+            extras: {"label": "inventory"}),
         FluidNavBarIcon(
-            icon: Icons.arrow_circle_down_outlined,
+            icon: Icons.receipt_long,
             selectedForegroundColor: actionColor,
             //backgroundColor: primaryColor,
-            extras: {"label": "add product"}),
+            extras: {"label": "sales"}),
         FluidNavBarIcon(
             icon: Icons.dashboard_customize,
             selectedForegroundColor: actionColor,
             // backgroundColor: primaryColor,
             extras: {"label": "dashboard"}),
         FluidNavBarIcon(
-            icon: Icons.receipt_long,
+            icon: Icons.arrow_circle_down_outlined,
             selectedForegroundColor: actionColor,
-            extras: {"label": "accounts"}),
+            extras: {"label": "low stock"}),
         FluidNavBarIcon(
-            icon: Icons.inventory,
+            icon: Icons.auto_graph,
             selectedForegroundColor: actionColor,
-            extras: {"label": "inventory"}),
+            extras: {"label": "expenses"}),
       ],
       onChange: onChange,
       style: FluidNavBarStyle(
