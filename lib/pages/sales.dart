@@ -178,33 +178,15 @@ class _SalesScreenState extends State<SalesScreen> {
             Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.zero,
-                shrinkWrap: true,
                 itemCount: /* context.watch<SalesProvider>().salesList.length */
                     5,
                 physics: const BouncingScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) => Container(
-                  height: height,
-                  color: Colors.amber.shade100,
-                  child: Column(
-                      children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                    'Order Number: #${index /* context.watch<SalesProvider>().salesList[index].accId */}'),
-                                Text(
-                                    'Order Date: ${00 - 00 - 0000 /* context.watch<SalesProvider>().salesList[index].date */}')
-                              ],
-                            )
-                          ] +
-                          List.generate(
-                            1,
-                            (index) =>
-                                Expanded(child: SalesListSection(width: width)),
-                          )),
-                ),
+                itemBuilder: (BuildContext context, int index) =>
+                    SalesListSection(width: width),
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: height * 0.05,);
+                  return SizedBox(
+                    height: 10,
+                  );
                 },
               ),
             ),
@@ -292,24 +274,48 @@ class SalesListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: width * 0.05,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Color.fromARGB(255, 247, 247, 247),
+            borderRadius: BorderRadius.circular(15)),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Order Number: #001",
+                      style: bodyText1.copyWith(color: primaryColorDark)),
+                  Text("Date: 21/03/2023",
+                      style: bodyText1.copyWith(color: primaryColorDark))
+                ],
+              ),
             ),
-            child: SummaryListItem(
-              item: "Ideal Milk",
-              amount: "10.00",
-              quantity: "2",
-              date: "21/03/2023",
-            ),
-          );
-        });
+            ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.05,
+                    ),
+                    child: SummaryListItem(
+                      item: "Ideal Milk",
+                      amount: "10.00",
+                      quantity: "2",
+                      date: "21/03/2023",
+                    ),
+                  );
+                }),
+          ],
+        ),
+      ),
+    );
   }
 }
 
