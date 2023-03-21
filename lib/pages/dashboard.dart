@@ -108,8 +108,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryDescription: 'No Description'));
     }
 
-    _content = Dashboard(
-      notiCount: count,
+    _content = const Dashboard(
+     
     );
     super.initState();
   }
@@ -156,8 +156,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           _content = const LowStockList();
           break;
         case 2:
-          _content = Dashboard(
-            notiCount: count,
+          _content = const Dashboard(
+           
           );
           break;
         case 3:
@@ -220,8 +220,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 }
 
 class Dashboard extends StatefulWidget {
-  int notiCount;
-  Dashboard({Key? key, required this.notiCount}) : super(key: key);
+  
+  const Dashboard({Key? key, }) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
