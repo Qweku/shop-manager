@@ -28,7 +28,7 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     return StreamBuilder<UserModel?>(
-        stream: authService.user,//FirebaseAuth.instance.authStateChanges(),
+        stream: authService.user, //FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             UserModel? user = snapshot.data;
@@ -41,7 +41,11 @@ class _WrapperState extends State<Wrapper> {
             // usersReference
             //     .doc(user.uid)
             //     .set({"lastLoggedIn": currentTime}, SetOptions(merge: true));
-            return Responsive.isMobile() ? VerifyEmailScreen() : TabletDashboard();
+            return Responsive.isMobile()
+                ? VerifyEmailScreen(
+                    
+                  )
+                : TabletDashboard();
           } else {
             return Scaffold(
               body: Center(

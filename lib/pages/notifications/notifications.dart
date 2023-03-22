@@ -26,8 +26,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     //         curve: Curves.easeInOut);
     //   });
     // }
-    notificationPlugin.setListenerForLowerVersions(onNotificationLower);
-    notificationPlugin.setOnNotificationClick(onNotificationClick);
+    // notificationPlugin.setListenerForLowerVersions(onNotificationLower);
+    // notificationPlugin.setOnNotificationClick(onNotificationClick);
   }
 
   @override
@@ -143,10 +143,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  onNotificationLower(ReceivedNotification receivedNotification) {}
-  onNotificationClick(String payload) {
-    // Navigator.push(context, MaterialPageRoute(builder: (context) {
-    //   return NotificationScreen();
-    // }));
-  }
+  // onNotificationLower(ReceivedNotification receivedNotification) {}
+  // onNotificationClick(String payload) {
+  //   // Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //   //   return NotificationScreen();
+  //   // }));
+  // }
 }

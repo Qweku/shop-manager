@@ -49,7 +49,7 @@ dependencies:
   datetime_picker_formfield:  
   fl_chart:  
   localstorage: 
-  flutter_local_notifications: ^13.0.0
+  # flutter_local_notifications:
   rxdart: ^0.27.7
 
 dev_dependencies:

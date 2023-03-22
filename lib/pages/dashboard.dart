@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:localstorage/localstorage.dart';
@@ -40,21 +41,46 @@ class MyHomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget? _content;
   LocalStore localStore = LocalStore();
-  LocalStorage storage = LocalStorage('notification');
-  DateFormat dateformat = DateFormat.yMMMd();
-  DateFormat timeformat = DateFormat.Hm();
+  LocalStorage storage = LocalStorage('shop_mate');
+
+  FirebaseAuth auth = FirebaseAuth.instance;
   int count = 0;
-  void bootUp() async {
-    if (await storage.ready) {
-      Provider.of<NotificationProvider>(context, listen: false).notiList =
-          notificationModelFromJson(storage.getItem('notifList') ?? '[]');
+  String? shopName;
+  Future getShopProducts() async {
+    shopName = auth.currentUser!.displayName;
+    var data = await storage.getItem(shopName!.isEmpty ? 'demo' : shopName!);
+
+    if (data == null) {
+      log('empty');
+      Provider.of<GeneralProvider>(context, listen: false).shop = ShopProducts(
+          id: 0, shopname: 'demo', products: [], sales: [], expenses: []);
+    } else {
+      log('not empty');
+      Provider.of<GeneralProvider>(context, listen: false).shop =
+          shopProductsFromJson(data);
     }
   }
 
+  // void bootUp() async {
+  //   shopName = auth.currentUser!.displayName;
+  //   if (await storage.ready) {
+  //     Provider.of<NotificationProvider>(context, listen: false).notiList =
+  //         notificationModelFromJson(storage.getItem('notification') ?? '[]');
+  //     Provider.of<GeneralProvider>(context, listen: false).shop =
+  //         shopProductsFromJson(storage.getItem(shopName!) ?? '[]');
+  //   }
+  // }
+
   @override
   void initState() {
-    bootUp();
+    // bootUp();
+    // getShopProducts();
+    // Provider.of<GeneralProvider>(context, listen: false).inventory =
+    //     Provider.of<GeneralProvider>(context, listen: false).shop.products;
+
     log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
+    log("${Provider.of<GeneralProvider>(context, listen: false).shop.shopname}");
+    // log(shopName!);
     // var productBox = Hive.box<Product>('Product');
     // var categoryBox = Hive.box<ProductCategory>('Category');
     // HiveFunctions().reArrangeCategory();
@@ -87,8 +113,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     //   },
     // );
 
-    Provider.of<GeneralProvider>(context, listen: false).inventory =
-        Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Set<String> name = {};
 
     Provider.of<GeneralProvider>(context, listen: false).categories =
@@ -119,8 +143,15 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryDescription: 'No Description'));
     }
 
-    _content = const Dashboard();
+    delayScreen();
     super.initState();
+  }
+
+  void delayScreen() async {
+    await Future.delayed(const Duration(milliseconds: 300), () {
+      _content = const Dashboard();
+      setState(() {});
+    });
   }
 
   // void notify() async {
@@ -241,6 +272,16 @@ class _DashboardState extends State<Dashboard> {
   double totalSales = 0.0;
   double totalProfit = 0.0;
   double totalExpenses = 0.0;
+  @override
+  void initState() {
+    Provider.of<GeneralProvider>(context, listen: false).inventory =
+        Provider.of<GeneralProvider>(context, listen: false).shop.products;
+    Provider.of<SalesProvider>(context, listen: false).expenseList =
+        Provider.of<GeneralProvider>(context, listen: false).shop.expenses;
+    Provider.of<SalesProvider>(context, listen: false).salesList =
+        Provider.of<GeneralProvider>(context, listen: false).shop.sales;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

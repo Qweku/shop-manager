@@ -164,7 +164,7 @@ class _InventoryListState extends State<InventoryList> {
                                       .productQuantity
                                       .toString(),
                               price:
-                                  "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toString()}",
+                                  "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toStringAsFixed(2) : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toStringAsFixed(2)}",
                             ),
                           );
                         })),

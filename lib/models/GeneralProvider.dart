@@ -123,7 +123,7 @@ class GeneralProvider extends ChangeNotifier {
       return true;
     });
     notifyListeners();
-    saveToShop(_inventory);
+    //saveToShop(_inventory);
     return true;
   }
 
@@ -139,14 +139,14 @@ class GeneralProvider extends ChangeNotifier {
         ..productQuantity -= cartItem.cartQuantity
         ..cartQuantity = 0;
     }
-    saveToShop(_inventory);
+    //saveToShop(_inventory);
     notifyListeners();
   }
 
   void removeFromCategory(Product product) {
     _inventory.singleWhere((element) => element == product).productCategory =
         ProductCategory(cid: 0);
-    saveToShop(_inventory);
+    //saveToShop(_inventory);
     notifyListeners();
   }
 
@@ -185,13 +185,13 @@ class GeneralProvider extends ChangeNotifier {
   void deleteProduct(Product product) {
     _inventory.remove(product);
     notifyListeners();
-    saveToShop(_inventory);
+    //saveToShop(_inventory);
   }
 
   void addProduct(Product product) {
     _inventory.add(product);
     notifyListeners();
-    saveToShop(_inventory);
+   // saveToShop(_inventory);
   }
 
   void editProduct(Product product) {
@@ -203,7 +203,7 @@ class GeneralProvider extends ChangeNotifier {
       ..sellingPrice = product.sellingPrice
       ..costPrice = product.costPrice;
     notifyListeners();
-    saveToShop(_inventory);
+    //saveToShop(_inventory);
   }
 
 //   var productBox = Hive.box<Product>('Product');

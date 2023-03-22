@@ -272,6 +272,7 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
       ),
       child: Center(
         child: InternationalPhoneNumberInput(
+          spaceBetweenSelectorAndTextField: 5,
           autoFocus: false,
           textStyle: widget.textStyle,
           // inputDecoration: InputDecoration(contentPadding: EdgeInsets.all(5)),
@@ -294,7 +295,7 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
           textFieldController: widget.controller,
           formatInput: true,
           inputDecoration: InputDecoration(
-              border: InputBorder.none, contentPadding: EdgeInsets.all(20)),
+              border: InputBorder.none, contentPadding: EdgeInsets.symmetric(vertical:20)),
           isEnabled: true,
           hintText: widget.hint,
           // keyboardType:

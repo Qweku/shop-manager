@@ -42,7 +42,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
   }
 
   startTime() async {
-    var _duration = Duration(seconds: 4);
+    var _duration = Duration(seconds: 3);
     return Timer(_duration, navigationPage);
   }
 

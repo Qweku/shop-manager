@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
@@ -18,8 +18,8 @@ import 'package:provider/provider.dart';
 import 'models/AuthService.dart';
 import 'models/GeneralProvider.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,14 +33,14 @@ main() async {
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
 
-   NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
-          Platform.isLinux
-      ? null
-      : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  //  NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
+  //         Platform.isLinux
+  //     ? null
+  //     : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   String initialRoute = Launcher.routeName;
-  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-    initialRoute = NotificationScreen.routeName;
-  }
+  // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+  //   initialRoute = NotificationScreen.routeName;
+  // }
 
   // await Hive.initFlutter();
   // Hive.registerAdapter(ProductAdapter());

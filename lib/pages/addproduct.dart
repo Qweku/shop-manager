@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/components/button.dart';
@@ -19,7 +20,6 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/api_client.dart';
-import 'package:shop_manager/pages/addProductSuccess.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/counter.dart';
 
@@ -56,6 +56,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
   String? shopName;
+  LocalStorage storage = LocalStorage('shop_mate');
 
   @override
   void dispose() {
@@ -141,7 +142,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
       int productQuantity,
       int lowStockQuantity,
       bool isLowStock) async {
-       
     await fireStore.collection(shopName ?? "").add({
       'product id': id,
       'product name': productName,
@@ -152,7 +152,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
       'product quantity': productQuantity,
       'low stock quantity': lowStockQuantity,
       'low stock': isLowStock,
-     
     });
   }
 
@@ -160,7 +159,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     // DocumentReference docRef = fireStore.collection(shopName).id;
     // await fireStore
     //     .collection(shopName ?? "").where(field)
-        
   }
 
   void successDialog() {
@@ -325,47 +323,49 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: DropdownButtonFormField(
-                        //dropdownColor: Colors.black,
-                        style: bodyText1,
-                        decoration: InputDecoration(
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            enabled: false,
-                            fillColor: Colors.transparent,
-                            filled: true),
-                        hint: Text(
-                          'Select Category',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        value: _selectedCategory,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedCategory = newValue as ProductCategory;
-                            categoryIndex = categoryList.indexOf(newValue);
-                          });
-                        },
-                        items: categoryList.map((location) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              location.categoryName!,
-                              style:
-                                  bodyText1, /* ,style: TextStyle(color: Colors.white), */
-                            ),
-                            value: location,
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
+
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 10),
+                  //   child: Container(
+                  //     width: MediaQuery.of(context).size.width,
+                  //     height: 50,
+                  //     decoration: BoxDecoration(
+                  //         border: Border.all(color: Colors.grey, width: 1),
+                  //         borderRadius: BorderRadius.circular(20)),
+                  //     child: DropdownButtonFormField(
+                  //       //dropdownColor: Colors.black,
+                  //       style: bodyText1,
+                  //       decoration: InputDecoration(
+                  //           hintStyle: TextStyle(color: Colors.grey),
+                  //           border: InputBorder.none,
+                  //           enabled: false,
+                  //           fillColor: Colors.transparent,
+                  //           filled: true),
+                  //       hint: Text(
+                  //         'Select Category',
+                  //         style: TextStyle(color: Colors.grey),
+                  //       ),
+                  //       value: _selectedCategory,
+                  //       onChanged: (newValue) {
+                  //         setState(() {
+                  //           _selectedCategory = newValue as ProductCategory;
+                  //           categoryIndex = categoryList.indexOf(newValue);
+                  //         });
+                  //       },
+                  //       items: categoryList.map((location) {
+                  //         return DropdownMenuItem(
+                  //           child: Text(
+                  //             location.categoryName!,
+                  //             style:
+                  //                 bodyText1, /* ,style: TextStyle(color: Colors.white), */
+                  //           ),
+                  //           value: location,
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ),
+                  // ),
+                 
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: CustomTextField(
@@ -583,6 +583,30 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           // ..costPrice = product.costPrice
                           // ..imageb64 = product.imageb64;
                         } else {
+                          if (productName.text.isEmpty &&
+                              double.tryParse(formatter
+                                      .getUnformattedValue()
+                                      .toString()) ==
+                                  0 &&
+                              double.tryParse(formatter2
+                                      .getUnformattedValue()
+                                      .toString()) ==
+                                  0 &&
+                              productQuantity.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 255, 17, 1),
+                                  content: Text('Field Required',
+                                      textAlign: TextAlign.center,
+                                      style: bodyText2),
+                                  duration: const Duration(milliseconds: 1500),
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: const StadiumBorder()),
+                            );
+
+                            return;
+                          }
                           if (!(Provider.of<GeneralProvider>(context,
                                   listen: false)
                               .inventory
@@ -629,6 +653,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                             Provider.of<GeneralProvider>(context, listen: false)
                                 .addProduct(product);
+                            Provider.of<GeneralProvider>(context, listen: false)
+                                .shop
+                                .products = Provider.of<GeneralProvider>(
+                                    context,
+                                    listen: false)
+                                .inventory;
+
+                            await storage.setItem(
+                                shopName!,
+                                shopProductsToJson(Provider.of<GeneralProvider>(
+                                        context,
+                                        listen: false)
+                                    .shop));
 
                             addProducts(
                                 context

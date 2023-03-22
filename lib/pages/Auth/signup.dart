@@ -200,7 +200,7 @@ class _SignUpState extends State<SignUp> {
                           });
                         }
 
-                        if (count == 1) {
+                        if (count == signUpList.length - 1 && _passwordController.text.isNotEmpty ) {
                           showDialog(
                               context: context,
                               barrierDismissible: false,

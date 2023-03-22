@@ -101,7 +101,7 @@ class _InventorySearchListState extends State<InventorySearchList> {
                                     .productQuantity
                                     .toString(),
                                 price:
-                                    "GHS ${productItems[index].sellingPrice.toString()}",
+                                    "GHS ${productItems[index].sellingPrice.toStringAsFixed(2)}",
                               ),
                             );
                           })),

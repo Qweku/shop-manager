@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
@@ -23,7 +26,16 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   TextEditingController price = TextEditingController();
   double totalExpense = 0.0;
   bool error = false;
-  
+  LocalStorage storage = LocalStorage('shop_mate');
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? shopName;
+
+  // @override
+  // void initState() {
+  //   Provider.of<SalesProvider>(context, listen: false).expenseList =
+  //       Provider.of<GeneralProvider>(context, listen: false).shop.expenses;
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -208,6 +220,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   }
 
   _addExpense() {
+    shopName = auth.currentUser!.displayName;
     return showDialog<bool>(
         barrierDismissible: false,
         context: context,
@@ -304,7 +317,19 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                         } else {
                           Provider.of<SalesProvider>(context, listen: false)
                               .addExpenses(expenseModel);
-                              
+                          Provider.of<GeneralProvider>(context, listen: false)
+                                  .shop
+                                  .expenses =
+                              Provider.of<SalesProvider>(context, listen: false)
+                                  .expenseList;
+
+                          await storage.setItem(
+                              shopName!,
+                              shopProductsToJson(Provider.of<GeneralProvider>(
+                                      context,
+                                      listen: false)
+                                  .shop));
+
                           Navigator.pop(context);
                         }
                       },
@@ -380,7 +405,7 @@ class ExpenseListItem extends StatelessWidget {
             backgroundColor: primaryColor,
             radius: 17,
             child: Text(
-              item.substring(0,1),
+              item.substring(0, 1),
               style: bodyText2,
             ),
           ),

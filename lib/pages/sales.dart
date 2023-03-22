@@ -7,6 +7,7 @@ import 'package:shop_manager/components/custom_indicator.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
@@ -31,7 +32,8 @@ class _SalesScreenState extends State<SalesScreen> {
             .salesList
             .length
             .toString());
-    Provider.of<SalesProvider>(context, listen: false).salesList;
+    // Provider.of<SalesProvider>(context, listen: false).salesList =
+    //     Provider.of<GeneralProvider>(context, listen: false).shop.sales;
     super.initState();
   }
 
@@ -176,21 +178,30 @@ class _SalesScreenState extends State<SalesScreen> {
             ),
             SizedBox(height: height * 0.02),
             Expanded(
-              child: ListView.separated(
-                padding: EdgeInsets.zero,
-                itemCount: context.watch<SalesProvider>().salesList.length,
-                physics: const BouncingScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) =>
-                    SalesListSection(
-                  width: width,
-                  sales: context.watch<SalesProvider>().salesList[index],
-                ),
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: 10,
-                  );
-                },
-              ),
+              child: context.watch<SalesProvider>().salesList.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No Records Yet',
+                        style: headline1.copyWith(
+                            fontSize: 25, color: Colors.blueGrey),
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: EdgeInsets.zero,
+                      itemCount:
+                          context.watch<SalesProvider>().salesList.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) =>
+                          SalesListSection(
+                        width: width,
+                        sales: context.watch<SalesProvider>().salesList[index],
+                      ),
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          height: 10,
+                        );
+                      },
+                    ),
             ),
           ],
         ),
@@ -199,8 +210,6 @@ class _SalesScreenState extends State<SalesScreen> {
   }
 
   void _searchAccount(context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     showModalBottomSheet(
         isScrollControlled: true,
         backgroundColor: primaryColor,
@@ -310,7 +319,8 @@ class SalesListSection extends StatelessWidget {
                     ),
                     child: SummaryListItem(
                       item: sales.products[index].productName!,
-                      amount: "GHS ${sales.products[index].sellingPrice}",
+                      amount:
+                          "GHS ${sales.products[index].sellingPrice.toStringAsFixed(2)}",
                       quantity: sales.products[index].cartQuantity.toString(),
                       date: sales.date!,
                     ),

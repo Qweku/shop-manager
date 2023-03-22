@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
@@ -31,10 +32,14 @@ class SummaryScreen extends StatefulWidget {
 
 class _SummaryScreenState extends State<SummaryScreen> {
   bool isCredit = false;
-  LocalStorage storage = LocalStorage('notification');
+  LocalStorage storage = LocalStorage('shop_mate');
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? shopName;
+
 
   @override
   Widget build(BuildContext context) {
+     shopName = auth.currentUser!.displayName;
     return Scaffold(
       body: Stack(
         children: [
@@ -175,6 +180,20 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           Provider.of<SalesProvider>(context, listen: false)
                               .addSales(salesModel);
 
+                           Provider.of<GeneralProvider>(context, listen: false)
+                                .shop
+                                .sales = Provider.of<SalesProvider>(
+                                    context,
+                                    listen: false)
+                                .salesList;
+
+                            await storage.setItem(
+                                shopName!,
+                                shopProductsToJson(Provider.of<GeneralProvider>(
+                                        context,
+                                        listen: false)
+                                    .shop));
+
                           context.read<GeneralProvider>().inventory.forEach(
                             (element) {
                               Product productModel = Product(
@@ -184,6 +203,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       element.productDescription,
                                   productName: element.productName,
                                   productImage: element.productName,
+                                  sellingPrice: element.sellingPrice,
+                                  costPrice: element.costPrice,
+                                  isLowStock: element.isLowStock,
+                                  lowStockQuantity: element.lowStockQuantity,
                                   productQuantity: element.productQuantity);
                               NotificationModel notiModel = NotificationModel(
                                   date: dateformat.format(DateTime.now()),
@@ -236,8 +259,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
   }
 
   void notify() async {
-    await notificationPlugin.showNotification(
-        "Low Stock", "Some products are running low on stock");
+    // await notificationPlugin.showNotification(
+    //     "Low Stock", "Some products are running low on stock");
     await storage.setItem(
         'notification',
         notificationModelToJson(

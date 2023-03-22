@@ -59,6 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
+  @override
+  void initState() {
+    log("${Provider.of<GeneralProvider>(context, listen: false).shop.shopname}");
+    super.initState();
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController shopController = TextEditingController();
@@ -73,6 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    bool checkName = false;
+
     return AnimatedContainer(
         padding: EdgeInsets.only(bottom: height * 0.03),
         duration: const Duration(milliseconds: 700),
@@ -96,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //     hintText: "Shop Name",
             //     //hintColor: primaryColor,
             //     controller: shopController,
-            //     style:bodyText1,
+            //     style: bodyText1,
             //     prefixIcon: Icon(Icons.shopify, color: primaryColor),
             //   ),
             // ),
@@ -162,6 +170,44 @@ class _LoginScreenState extends State<LoginScreen> {
                   // textColor: primaryColorLight,
                   buttonText: 'Login',
                   onTap: () async {
+                  // await authService.user.forEach((element) {
+                  //     if (shopController.text.isNotEmpty ||
+                  //         shopController.text == element?.displayName) {
+                  //       checkName = true;
+                  //       log("${element?.displayName}");
+                  //     } else {
+                  //       ScaffoldMessenger.of(context).showSnackBar(
+                  //         SnackBar(
+                  //             backgroundColor:
+                  //                 const Color.fromARGB(255, 255, 17, 1),
+                  //             content: Text("Shop name doesn't match",
+                  //                 textAlign: TextAlign.center,
+                  //                 style: bodyText2),
+                  //             duration: const Duration(milliseconds: 1500),
+                  //             behavior: SnackBarBehavior.floating,
+                  //             shape: const StadiumBorder()),
+                  //       );
+                  //       log("No Match");
+                  //       return;
+                  //     }
+                  //   });
+
+                    
+
+                    // if (shopController.text.isEmpty || !checkName) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //         backgroundColor:
+                    //             const Color.fromARGB(255, 255, 17, 1),
+                    //         content: Text("Shop name doesn't match",
+                    //             textAlign: TextAlign.center, style: bodyText2),
+                    //         duration: const Duration(milliseconds: 1500),
+                    //         behavior: SnackBarBehavior.floating,
+                    //         shape: const StadiumBorder()),
+                    //   );
+
+                    //   return;
+                    // }
                     if (_emailController.text.isEmpty ||
                         _emailController.text.length < 4) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -196,20 +242,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
 
                     // try {
-                    var data = await storage.getItem(shopController.text.isEmpty
-                        ? 'demo'
-                        : shopController.text);
+                    // var data = await storage.getItem(shopController.text.isEmpty
+                    //     ? 'demo'
+                    //     : shopController.text);
 
-                    if (data == null) {
-                      log('empty');
-                      Provider.of<GeneralProvider>(context, listen: false)
-                              .shop =
-                          ShopProducts(id: 0, shopname: 'demo', products: [], sales:[], expenses: []);
-                    } else {
-                      log('not empty');
-                      Provider.of<GeneralProvider>(context, listen: false)
-                          .shop = shopProductsFromJson(data);
-                    }
+                    // if (data == null) {
+                    //   log('empty');
+                    //   Provider.of<GeneralProvider>(context, listen: false)
+                    //           .shop =
+                    //       ShopProducts(
+                    //           id: 0,
+                    //           shopname: 'demo',
+                    //           products: [],
+                    //           sales: [],
+                    //           expenses: []);
+                    // } else {
+                    //   log('not empty');
+                    //   Provider.of<GeneralProvider>(context, listen: false)
+                    //       .shop = shopProductsFromJson(data);
+                    // }
 
                     showDialog(
                         context: context,
@@ -228,39 +279,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       navigatorKey.currentState!.pop((route) => route);
                       loginError(e);
                     });
-
-                    // await ApplicationState()
-                    //     .signInWithEmailAndPassword(
-                    //         _emailController.text.trim(),
-                    //         _passwordController.text.trim(),
-                    //         (e) => loginError(e))
-                    //     .onError((error, stackTrace) =>
-                    //         Navigator.pushReplacement(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //                 builder: (context) => Responsive.isMobile()
-                    //                     ? MyHomeScreen()
-                    //                     : TabletDashboard())));
-                    // navigatorKey.currentState!.pop((route) => route);
-
-                    // Navigator.pushReplacement(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => Responsive.isMobile()
-                    //             ? MyHomeScreen()
-                    //             : TabletDashboard()));
-
-                    // log('1');
-                    // log(shopController.text.isEmpty.toString());
-                    // log("2");
-                    // Provider.of<GeneralProvider>(context, listen: false).shop =
-                    //     shopProductsFromJson();
-                    // } on Exception catch (e) {
-                    //   Provider.of<GeneralProvider>(context, listen: false)
-                    //           .shop =
-                    //       ShopProducts(id: 0, shopname: 'demo', products: []);
-                    //   // log("HEERREE");
-                    // }
+                    authService.user.forEach((element) {
+                      if (shopController.text == element?.displayName) {
+                        log("${element?.displayName}");
+                      } else {
+                        log("No Match");
+                      }
+                    });
                   },
                 )),
             Row(children: [

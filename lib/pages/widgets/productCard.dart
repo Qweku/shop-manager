@@ -80,28 +80,31 @@ class ProductCard extends StatelessWidget {
                             )),
                 ),
                 // SizedBox(height: height * 0.01),
-                Column(
-                  children: [
-                    Text(
-                      productName!,
-                      overflow: TextOverflow.ellipsis,
-                      style: bodyText1.copyWith(
-                        fontSize: 14,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    children: [
+                      Text(
+                        productName!,
+                        overflow: TextOverflow.ellipsis,
+                        style: bodyText1.copyWith(
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      "$quantity left",
-                      style:
-                          bodyText1.copyWith(fontSize: 12, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      "$price",
-                      style:
-                          bodyText1.copyWith(fontSize: 15, color: primaryColor),
-                    ),
-                  ],
+                      const SizedBox(height: 5),
+                      Text(
+                        "$quantity left",
+                        style:
+                            bodyText1.copyWith(fontSize: 12, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        "$price",
+                        style:
+                            bodyText1.copyWith(fontSize: 15, color: primaryColor),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: height * 0.01),
               ],
