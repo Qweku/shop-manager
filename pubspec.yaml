@@ -42,8 +42,8 @@ dependencies:
   firebase_core: 
   firebase_auth: 
   cloud_firestore: 
-  firebase_storage: ^11.0.16
-  firebase_database:
+  # firebase_storage: ^11.0.16
+  # firebase_database:
   fluid_bottom_nav_bar:
   intl_phone_number_input:  
   datetime_picker_formfield:  

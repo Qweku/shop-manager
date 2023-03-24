@@ -294,9 +294,10 @@ class _LowStockGridListState extends State<LowStockGridList> {
                           Provider.of<GeneralProvider>(context, listen: false)
                               .editProduct(product);
 
-                            setState(() {
-                              // isDone = true;
-                            });
+                            Provider.of<GeneralProvider>(context, listen: false)
+                              .removeLowStock(product);
+
+                            
                             Navigator.pop(context);
                           },
                         ),

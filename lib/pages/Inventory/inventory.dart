@@ -11,7 +11,6 @@ import 'package:shop_manager/pages/Inventory/InventoryList.dart';
 import 'package:shop_manager/pages/Inventory/InventorySearchList.dart';
 import 'package:shop_manager/pages/productCalculator.dart';
 
-import 'package:shop_manager/pages/search.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 import '../widgets/clipPath.dart';

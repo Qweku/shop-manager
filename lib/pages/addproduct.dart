@@ -365,7 +365,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   //     ),
                   //   ),
                   // ),
-                 
+
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: CustomTextField(
@@ -574,6 +574,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
                           Provider.of<GeneralProvider>(context, listen: false)
                               .editProduct(product);
+                          Provider.of<GeneralProvider>(context, listen: false)
+                              .lowStocks
+                              .forEach((element) {
+                            if (element.productName == productName.text) {
+                              Provider.of<GeneralProvider>(context,
+                                      listen: false)
+                                  .removeLowStock(product);
+                            }
+                          });
+
                           // .inventory
                           //   .singleWhere(
                           //       (element) => element == widget.product)
@@ -744,7 +754,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   void _attachImage(context) {
     double height = MediaQuery.of(context).size.height;
     showModalBottomSheet(
-        backgroundColor: primaryColor,
+        backgroundColor: primaryColorLight,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20.0),
@@ -772,12 +782,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: primaryColorLight,
+                            backgroundColor: primaryColor,
                             child: Icon(Icons.cloud_upload_outlined,
-                                color: primaryColor),
+                                color: primaryColorLight),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Upload', style: bodyText2)
+                          Text('Upload', style: bodyText1)
                         ],
                       ),
                     ),
@@ -792,8 +802,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         children: [
                           CircleAvatar(
                             radius: height * 0.04,
-                            backgroundColor: primaryColorLight,
-                            child: Icon(Icons.camera_alt, color: primaryColor),
+                            backgroundColor: primaryColor,
+                            child: Icon(Icons.camera_alt,
+                                color: primaryColorLight),
                           ),
                           SizedBox(height: height * 0.01),
                           Text('Take Photo', style: bodyText2)
