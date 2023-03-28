@@ -172,6 +172,7 @@ class ShopProducts {
   List<Product> products;
   List<SalesModel> sales;
   List<ExpenseModel> expenses;
+  List<Product> lowStocks;
 
   ShopProducts({
     required this.id,
@@ -179,6 +180,7 @@ class ShopProducts {
     required this.products,
     required this.sales,
     required this.expenses,
+    required this.lowStocks,
   });
 
   factory ShopProducts.fromJson(Map<String, dynamic> json) => ShopProducts(
@@ -190,6 +192,9 @@ class ShopProducts {
             (json["sales"] ?? []).map((x) => SalesModel.fromJson(x))),
         expenses: List<ExpenseModel>.from(
             (json["expenses"] ?? []).map((x) => ExpenseModel.fromJson(x))),
+           lowStocks: List<Product>.from(
+            (json["lowStocks"] ?? []).map((x) => Product.fromJson(x))),
+            
       );
 
   Map<String, dynamic> toJson() => {
@@ -198,6 +203,8 @@ class ShopProducts {
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
         "sales": List<dynamic>.from(sales.map((x) => x.toJson())),
         "expenses": List<dynamic>.from(expenses.map((x) => x.toJson())),
+        "lowStocks": List<dynamic>.from(lowStocks.map((x) => x.toJson())),
+        
       };
 }
 
@@ -355,7 +362,7 @@ class ExpenseModel {
 
   ExpenseModel({
     this.id = 0,
-    required this.itemName, 
+    required this.itemName,
     this.date,
     this.price = 0.0,
   });
@@ -363,13 +370,13 @@ class ExpenseModel {
   factory ExpenseModel.fromJson(Map<String, dynamic> json) => ExpenseModel(
         id: json["id"],
         itemName: json["item_name"],
-        date: json["date"], 
+        date: json["date"],
         price: json["price"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "item_name": itemName, 
+        "item_name": itemName,
         "date": date,
         "price": price,
       };

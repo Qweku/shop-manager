@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +25,7 @@ import 'package:shop_manager/pages/low_stock_list.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
 import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
+import 'package:shop_manager/pages/widgets/dashboard_card.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
 import 'package:intl/intl.dart';
 
@@ -53,7 +55,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     if (data == null) {
       log('empty');
       Provider.of<GeneralProvider>(context, listen: false).shop = ShopProducts(
-          id: 0, shopname: 'demo', products: [], sales: [], expenses: []);
+          id: 0,
+          shopname: 'demo',
+          products: [],
+          sales: [],
+          expenses: [],
+          lowStocks: []);
     } else {
       log('not empty');
       Provider.of<GeneralProvider>(context, listen: false).shop =
@@ -272,14 +279,19 @@ class _DashboardState extends State<Dashboard> {
   double totalSales = 0.0;
   double totalProfit = 0.0;
   double totalExpenses = 0.0;
+  LocalStorage storage = LocalStorage('shop_mate');
   @override
   void initState() {
     Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Provider.of<SalesProvider>(context, listen: false).expenseList =
         Provider.of<GeneralProvider>(context, listen: false).shop.expenses;
+    Provider.of<GeneralProvider>(context, listen: false).lowStocks =
+        Provider.of<GeneralProvider>(context, listen: false).shop.lowStocks;
     Provider.of<SalesProvider>(context, listen: false).salesList =
         Provider.of<GeneralProvider>(context, listen: false).shop.sales;
+    Provider.of<NotificationProvider>(context, listen: false).notiList =
+        notificationModelFromJson(storage.getItem('notification') ?? '[]');
     super.initState();
   }
 
@@ -378,60 +390,25 @@ class _DashboardState extends State<Dashboard> {
                     EdgeInsets.only(right: width * 0.05, left: width * 0.05),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Total Profit', style: bodyText2),
+                        Text('Welcome,', style: headline2),
                         const SizedBox(
-                          height: 8,
+                          height: 7,
                         ),
                         Text(
-                          'GHS ${totalProfit.toStringAsFixed(2)}',
-                          style: headline2.copyWith(fontSize: 25),
+                          'Admin',
+                          style: headline2.copyWith(fontSize:40,color:actionColor),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                              period.length,
-                              (index) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          tap = index;
-                                        });
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        width: width * 0.15,
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.white),
-                                          color: tap == index
-                                              ? Colors.white
-                                              : Colors.transparent,
-                                        ),
-                                        child: Text(
-                                          period[index],
-                                          textAlign: TextAlign.center,
-                                          style: bodyText2.copyWith(
-                                              color: tap == index
-                                                  ? primaryColor
-                                                  : Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  )),
-                        )
-                      ],
+                        
+                          ],
                     )),
-                    const ShopBarChart(),
+                    DashboardCard(totalProfit: totalProfit),
+                    //const ShopBarChart(),
                     GridView.count(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -513,3 +490,4 @@ class ItemStatus extends StatelessWidget {
     );
   }
 }
+

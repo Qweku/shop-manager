@@ -27,19 +27,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           SizedBox(
             height: height * 0.3,
             child: DrawerHeader(
-              decoration: BoxDecoration(),
+              decoration: BoxDecoration(
+                color: primaryColor
+              ),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 CircleAvatar(
-                  backgroundColor: primaryColor,
+                  // backgroundColor: primaryColor,
                   radius: 30,
-                  child:
-                      Icon(Icons.shopify, color: primaryColorLight, size: 30),
+                 backgroundImage: AssetImage("assets/app_icon.png"),
                 ),
                 SizedBox(width: width * 0.02),
                 Text(
                   'ShopMate',
-                  style: headline2.copyWith(color: primaryColor),
+                  style: headline2,
                 ),
               ]),
             ),

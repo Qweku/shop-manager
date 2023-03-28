@@ -32,9 +32,11 @@ class _ProductCalculatorState extends State<ProductCalculator> {
 
   @override
   void initState() {
-    context.read<GeneralProvider>().cart.forEach((element) {
-      counterController.add(TextEditingController());
-    });
+    if (Responsive.isMobile()) {
+  context.read<GeneralProvider>().cart.forEach((element) {
+    counterController.add(TextEditingController());
+  });
+}
     //  context.read<GeneralProvider>().cartList.forEach((element) {
     //    counter.add(element.cartQuantity!);
     //   });

@@ -9,6 +9,7 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 
 import 'package:shop_manager/pages/Inventory/InventoryList.dart';
 import 'package:shop_manager/pages/Inventory/InventorySearchList.dart';
+import 'package:shop_manager/pages/addproduct.dart';
 import 'package:shop_manager/pages/productCalculator.dart';
 
 import 'package:shop_manager/pages/widgets/constants.dart';
@@ -39,6 +40,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
     return Scaffold(
         backgroundColor: Colors.white,
+         floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (builder) => AddProductScreen()));
+          },
+          backgroundColor: primaryColor,
+          child: Icon(Icons.add, color: Colors.white),
+        ),
         // floatingActionButton: FloatingActionButton(
         //   backgroundColor: primaryColor,
         //   onPressed: () {

@@ -42,7 +42,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         log('empty');
         Provider.of<GeneralProvider>(context, listen: false).shop =
             ShopProducts(
-                id: 0, shopname: 'demo', products: [], sales: [], expenses: []);
+                id: 0, shopname: 'demo', products: [], sales: [], expenses: [],lowStocks: []);
       } else {
         log('not empty');
         Provider.of<GeneralProvider>(context, listen: false).shop =

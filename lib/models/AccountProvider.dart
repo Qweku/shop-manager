@@ -11,12 +11,12 @@ class SalesProvider extends ChangeNotifier {
 
   set salesList(List<SalesModel> salesList) {
     _salesList = salesList;
-    notifyListeners();
+    // notifyListeners();
   }
 
   set expenseList(List<ExpenseModel> expenseList) {
     _expenseList = expenseList;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void addSales(SalesModel salesModel) {

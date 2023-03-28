@@ -6,6 +6,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/notificationButton.dart';
@@ -15,6 +16,8 @@ import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/NotificationModel.dart';
+import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/api_client.dart';
 import 'package:shop_manager/pages/TabletScreens/widgets.dart/sideMenu.dart';
@@ -63,6 +66,7 @@ class _TabletDashboardState extends State<TabletDashboard> {
   //String imagePath;
   bool isLoading = false;
   final picker = ImagePicker();
+  LocalStorage storage = LocalStorage('shop_mate');
 
   int categoryIndex = 0;
   getRemoveImage(String imgPath) async {
@@ -151,6 +155,16 @@ class _TabletDashboardState extends State<TabletDashboard> {
     categoryList = List.from(
         Provider.of<GeneralProvider>(context, listen: false).categories);
     _selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
+     Provider.of<GeneralProvider>(context, listen: false).inventory =
+        Provider.of<GeneralProvider>(context, listen: false).shop.products;
+    Provider.of<SalesProvider>(context, listen: false).expenseList =
+        Provider.of<GeneralProvider>(context, listen: false).shop.expenses;
+    Provider.of<GeneralProvider>(context, listen: false).lowStocks =
+        Provider.of<GeneralProvider>(context, listen: false).shop.lowStocks;
+    Provider.of<SalesProvider>(context, listen: false).salesList =
+        Provider.of<GeneralProvider>(context, listen: false).shop.sales;
+    Provider.of<NotificationProvider>(context, listen: false).notiList =
+        notificationModelFromJson(storage.getItem('notification') ?? '[]');
 
     super.initState();
   }

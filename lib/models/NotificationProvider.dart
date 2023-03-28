@@ -10,12 +10,12 @@ class NotificationProvider extends ChangeNotifier {
 
   set notiList(List<NotificationModel> notiList) {
     _notiList = notiList;
-    notifyListeners();
+    // notifyListeners();
   }
 
    set notiCount(int notiCount) {
     _notiCount = notiCount;
-    notifyListeners();
+    // notifyListeners();
   }
 
 

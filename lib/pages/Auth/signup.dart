@@ -214,7 +214,9 @@ class _SignUpState extends State<SignUp> {
                               shopname: shopController.text,
                               products: [],
                               sales: [],
-                              expenses: []);
+                              expenses: [],
+                              lowStocks: []
+                              );
 
                           storage.setItem(
                               shopController.text, shopProductsToJson(shop));

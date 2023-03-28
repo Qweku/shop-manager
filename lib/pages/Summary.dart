@@ -36,10 +36,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   String? shopName;
 
-
   @override
   Widget build(BuildContext context) {
-     shopName = auth.currentUser!.displayName;
+    shopName = auth.currentUser!.displayName;
     return Scaffold(
       body: Stack(
         children: [
@@ -180,19 +179,18 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           Provider.of<SalesProvider>(context, listen: false)
                               .addSales(salesModel);
 
-                           Provider.of<GeneralProvider>(context, listen: false)
-                                .shop
-                                .sales = Provider.of<SalesProvider>(
-                                    context,
-                                    listen: false)
-                                .salesList;
+                          Provider.of<GeneralProvider>(context, listen: false)
+                                  .shop
+                                  .sales =
+                              Provider.of<SalesProvider>(context, listen: false)
+                                  .salesList;
 
-                            await storage.setItem(
-                                shopName!,
-                                shopProductsToJson(Provider.of<GeneralProvider>(
-                                        context,
-                                        listen: false)
-                                    .shop));
+                          await storage.setItem(
+                              shopName!,
+                              shopProductsToJson(Provider.of<GeneralProvider>(
+                                      context,
+                                      listen: false)
+                                  .shop));
 
                           context.read<GeneralProvider>().inventory.forEach(
                             (element) {
@@ -224,12 +222,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                         listen: false)
                                     .addNotification(notiModel);
 
-                                notify();
                                 context.read<NotificationProvider>().notiCount =
                                     1;
-                                Provider.of<GeneralProvider>(context,
-                                        listen: false)
-                                    .addLowStock(productModel);
+
+                                notify(productModel);
                               } else {
                                 return null;
                               }
@@ -258,13 +254,21 @@ class _SummaryScreenState extends State<SummaryScreen> {
     );
   }
 
-  void notify() async {
-    // await notificationPlugin.showNotification(
-    //     "Low Stock", "Some products are running low on stock");
+  void notify(Product productModel) async {
+    await notificationPlugin.showNotification(
+        "Low Stock", "Some products are running low on stock");
     await storage.setItem(
         'notification',
         notificationModelToJson(
             Provider.of<NotificationProvider>(context, listen: false)
                 .notiList));
+    Provider.of<GeneralProvider>(context, listen: false)
+        .addLowStock(productModel);
+    Provider.of<GeneralProvider>(context, listen: false).shop.lowStocks =
+        Provider.of<GeneralProvider>(context, listen: false).lowStocks;
+    await storage.setItem(
+        'lowStocks',
+        shopProductsToJson(
+            Provider.of<GeneralProvider>(context, listen: false).shop));
   }
 }

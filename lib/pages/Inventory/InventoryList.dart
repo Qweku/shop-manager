@@ -100,6 +100,7 @@ class _InventoryListState extends State<InventoryList> {
                                     .read<GeneralProvider>()
                                     .cart
                                     .contains(categories.inventory[index]))) {
+                                      
                                   Provider.of<GeneralProvider>(context,
                                           listen: false)
                                       .addToCart(
