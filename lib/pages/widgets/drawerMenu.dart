@@ -1,13 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shop_manager/models/AuthService.dart';
+import 'package:mime/mime.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
-import 'package:shop_manager/models/services.dart';
-import 'package:shop_manager/pages/Auth/authentication.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -27,15 +29,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           SizedBox(
             height: height * 0.3,
             child: DrawerHeader(
-              decoration: BoxDecoration(
-                color: primaryColor
-              ),
+              decoration: BoxDecoration(color: primaryColor),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 CircleAvatar(
                   // backgroundColor: primaryColor,
                   radius: 30,
-                 backgroundImage: AssetImage("assets/app_icon.png"),
+                  backgroundImage: AssetImage("assets/app_icon.png"),
                 ),
                 SizedBox(width: width * 0.02),
                 Text(
@@ -56,6 +56,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             icon: Icons.settings,
           ),
           DrawerItem(
+            onTap: () async {
+              await downloadAttachment(context).then((value) {
+                log((value as File).path);
+              });
+            },
+            text: 'Export Data',
+            icon: Icons.download,
+          ),
+          DrawerItem(
             onTap: () => _backButton(context),
             text: 'Logout',
             icon: Icons.logout,
@@ -63,6 +72,30 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         ],
       ),
     );
+  }
+
+  Future<File> downloadAttachment(
+    BuildContext context,
+  ) async {
+    try {
+      String dir = '';
+
+      if (Platform.isAndroid) {
+        dir = (await getExternalStorageDirectory())?.path ?? '';
+      } else {
+        dir = (await getDownloadsDirectory())?.path ?? '';
+      }
+
+      File file = File(
+          "$dir/SHOPMATE_${context.read<GeneralProvider>().shop.shopname ?? 'demo'}_${DateTime.now().millisecondsSinceEpoch}.json");
+      // log(file.path);
+      file.writeAsString(
+          context.read<GeneralProvider>().shop.toJson().toString());
+      return file;
+    } on Exception catch (e) {
+      return File('');
+      // log(e.toString());
+    }
   }
 
   _backButton(context) {
@@ -118,8 +151,7 @@ class DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         leading: Icon(icon, color: primaryColor),
-        title: Text(text,
-            style: bodyText1.copyWith(fontSize: 14)),
+        title: Text(text, style: bodyText1.copyWith(fontSize: 14)),
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: primaryColor,

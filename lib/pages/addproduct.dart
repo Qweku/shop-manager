@@ -265,487 +265,473 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       body: SizedBox(
         height: height,
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
             horizontal: 20,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 30, bottom: 20),
-                child: Text(
-                    (widget.toEdit)
-                        ? "Edit Product Detail"
-                        : "Let's add the products in your shop",
-                    style: headline1.copyWith(color: primaryColor)),
-              ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: CustomTextField(
-                    prefixIcon: Icon(Icons.add_box, color: Colors.grey),
-                    hintText: "Product name",
-                    borderColor: Colors.grey,
-                    controller: productName,
-                    style: bodyText1,
-                    hintColor: Colors.grey,
-                  )),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: AmountTextField(
-                        prefixIcon: Icon(Icons.money, color: Colors.grey),
-                        hintText: "Selling Price",
-                        borderColor: Colors.grey,
-                        controller: productPrice,
-                        style: bodyText1,
-                        hintColor: Colors.grey,
-                        inputFormatters: formatter,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: AmountTextField(
-                        prefixIcon: Icon(Icons.money, color: Colors.grey),
-                        hintText: "Cost Price",
-                        borderColor: Colors.grey,
-                        controller: productCostPrice,
-                        style: bodyText1,
-                        hintColor: Colors.grey,
-                        inputFormatters: formatter2,
-                      ),
-                    ),
-                  ],
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 30, bottom: 20),
+                  child: Text(
+                      (widget.toEdit)
+                          ? "Edit Product Detail"
+                          : "Let's add the products in your shop",
+                      style: headline1.copyWith(color: primaryColor)),
                 ),
-              ),
-
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 10),
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     height: 50,
-              //     decoration: BoxDecoration(
-              //         border: Border.all(color: Colors.grey, width: 1),
-              //         borderRadius: BorderRadius.circular(20)),
-              //     child: DropdownButtonFormField(
-              //       //dropdownColor: Colors.black,
-              //       style: bodyText1,
-              //       decoration: InputDecoration(
-              //           hintStyle: TextStyle(color: Colors.grey),
-              //           border: InputBorder.none,
-              //           enabled: false,
-              //           fillColor: Colors.transparent,
-              //           filled: true),
-              //       hint: Text(
-              //         'Select Category',
-              //         style: TextStyle(color: Colors.grey),
-              //       ),
-              //       value: _selectedCategory,
-              //       onChanged: (newValue) {
-              //         setState(() {
-              //           _selectedCategory = newValue as ProductCategory;
-              //           categoryIndex = categoryList.indexOf(newValue);
-              //         });
-              //       },
-              //       items: categoryList.map((location) {
-              //         return DropdownMenuItem(
-              //           child: Text(
-              //             location.categoryName!,
-              //             style:
-              //                 bodyText1, /* ,style: TextStyle(color: Colors.white), */
-              //           ),
-              //           value: location,
-              //         );
-              //       }).toList(),
-              //     ),
-              //   ),
-              // ),
-
-              Padding(
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: CustomTextField(
+                      prefixIcon: Icon(Icons.add_box, color: Colors.grey),
+                      hintText: "Product name",
+                      borderColor: Colors.grey,
+                      controller: productName,
+                      style: bodyText1,
+                      hintColor: Colors.grey,
+                    )),
+                Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: CustomTextField(
-                    maxLines: 5,
-                    prefixIcon: Icon(Icons.edit, color: Colors.grey),
-                    hintText: "Product Description",
-                    borderColor: Colors.grey,
-                    controller: productDescription,
-                    style: bodyText1,
-                    hintColor: Colors.grey,
-                  )),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Align(
-                  alignment: Alignment(0, 0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          _attachImage(context);
-                        },
-                        child: Container(
-                          width: width * 0.45,
-                          height: height * 0.25,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: imageFile.isNotEmpty
-                                  ? Colors.white
-                                  : Colors.grey),
-                          child: imageFile.isNotEmpty
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.memory(
-                                    imageFile,
-                                    width: width * 0.45,
-                                    height: height * 0.25,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : (widget.toEdit)
-                                  ? (widget.product!.productImage ?? "")
-                                          .isEmpty
-                                      ? Container(
-                                          height: height * 0.23,
-                                          width: width * 0.4,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      20.0),
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                const BoxShadow(
-                                                    offset: Offset(2, 2),
-                                                    color: Color.fromARGB(
-                                                        31, 0, 0, 0),
-                                                    blurRadius: 2,
-                                                    spreadRadius: 1)
-                                              ]),
-                                          child: Center(
-                                            child: Text(
-                                              widget.product!.productName!
-                                                  .substring(0, 2)
-                                                  .toUpperCase(),
-                                              style: headline2.copyWith(
-                                                  fontSize: 70,
-                                                  color: primaryColorLight),
-                                            ),
-                                          ))
-                                      : ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: Image.memory(
-                                            base64Decode(widget
-                                                .product!.productImage!),
-                                            width: width * 0.45,
-                                            height: height * 0.25,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                  : isLoading
-                                      ? Center(
-                                          child: CircularProgressIndicator(
-                                          color: primaryColorLight,
-                                        ))
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                            //color: Colors.grey[200],
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          width: width * 0.45,
-                                          height: height * 0.25,
-                                          child: Icon(
-                                            Icons.camera_alt,
-                                            color: primaryColorLight,
-                                            size: 30,
-                                          ),
-                                        ),
+                      Expanded(
+                        child: AmountTextField(
+                          prefixIcon: Icon(Icons.money, color: Colors.grey),
+                          hintText: "Selling Price",
+                          borderColor: Colors.grey,
+                          controller: productPrice,
+                          style: bodyText1,
+                          hintColor: Colors.grey,
+                          inputFormatters: formatter,
                         ),
                       ),
-                      SizedBox(width: width * 0.05),
+                      SizedBox(width: 10),
                       Expanded(
-                        child: Column(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Quantity', style: bodyText1),
-                                    SizedBox(height: height * 0.02),
-                                    CounterWidget(
-                                        borderColor: Colors.grey,
-                                        style: bodyText1,
-                                        counterController: productQuantity)
-                                  ],
-                                )),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                  children: [
-                                    Checkbox(
-                                        value: isChecked,
-                                        activeColor: actionColor,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            isChecked = val ?? false;
-                                          });
-                                        }),
-                                    //SizedBox(width:width*0.03),
-                                    Text('Low Stock Alert',
-                                        style: bodyText1),
-                                  ],
-                                ),
-                                Text(
-                                    'Check if you want to receive alerts when this stock is running out',
-                                    style: bodyText1.copyWith(
-                                        color: Colors.grey)),
-                              ],
-                            )
-                          ],
+                        child: AmountTextField(
+                          prefixIcon: Icon(Icons.money, color: Colors.grey),
+                          hintText: "Cost Price",
+                          borderColor: Colors.grey,
+                          controller: productCostPrice,
+                          style: bodyText1,
+                          hintColor: Colors.grey,
+                          inputFormatters: formatter2,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
-              ),
-              !isChecked
-                  ? Container()
-                  : Row(
+          
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 10),
+                //   child: Container(
+                //     width: MediaQuery.of(context).size.width,
+                //     height: 50,
+                //     decoration: BoxDecoration(
+                //         border: Border.all(color: Colors.grey, width: 1),
+                //         borderRadius: BorderRadius.circular(20)),
+                //     child: DropdownButtonFormField(
+                //       //dropdownColor: Colors.black,
+                //       style: bodyText1,
+                //       decoration: InputDecoration(
+                //           hintStyle: TextStyle(color: Colors.grey),
+                //           border: InputBorder.none,
+                //           enabled: false,
+                //           fillColor: Colors.transparent,
+                //           filled: true),
+                //       hint: Text(
+                //         'Select Category',
+                //         style: TextStyle(color: Colors.grey),
+                //       ),
+                //       value: _selectedCategory,
+                //       onChanged: (newValue) {
+                //         setState(() {
+                //           _selectedCategory = newValue as ProductCategory;
+                //           categoryIndex = categoryList.indexOf(newValue);
+                //         });
+                //       },
+                //       items: categoryList.map((location) {
+                //         return DropdownMenuItem(
+                //           child: Text(
+                //             location.categoryName!,
+                //             style:
+                //                 bodyText1, /* ,style: TextStyle(color: Colors.white), */
+                //           ),
+                //           value: location,
+                //         );
+                //       }).toList(),
+                //     ),
+                //   ),
+                // ),
+          
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: CustomTextField(
+                      maxLines: 5,
+                      prefixIcon: Icon(Icons.edit, color: Colors.grey),
+                      hintText: "Product Description",
+                      borderColor: Colors.grey,
+                      controller: productDescription,
+                      style: bodyText1,
+                      hintColor: Colors.grey,
+                    )),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Align(
+                    alignment: Alignment(0, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Low Stock Quantity', style: bodyText1),
-                        SizedBox(width: width * 0.03),
-                        CounterWidget(
-                            borderColor: Colors.grey,
-                            style: bodyText1,
-                            counterController: lowStockQuantity),
+                        GestureDetector(
+                          onTap: () {
+                            _attachImage(context);
+                          },
+                          child: Container(
+                            width: width * 0.45,
+                            height: height * 0.25,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: imageFile.isNotEmpty
+                                    ? Colors.white
+                                    : Colors.grey),
+                            child: imageFile.isNotEmpty
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.memory(
+                                      imageFile,
+                                      width: width * 0.45,
+                                      height: height * 0.25,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : (widget.toEdit)
+                                    ? (widget.product!.productImage ?? "")
+                                            .isEmpty
+                                        ? Container(
+                                            height: height * 0.23,
+                                            width: width * 0.4,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.0),
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  const BoxShadow(
+                                                      offset: Offset(2, 2),
+                                                      color: Color.fromARGB(
+                                                          31, 0, 0, 0),
+                                                      blurRadius: 2,
+                                                      spreadRadius: 1)
+                                                ]),
+                                            child: Center(
+                                              child: Text(
+                                                widget.product!.productName!
+                                                    .substring(0, 2)
+                                                    .toUpperCase(),
+                                                style: headline2.copyWith(
+                                                    fontSize: 70,
+                                                    color: primaryColorLight),
+                                              ),
+                                            ))
+                                        : ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            child: Image.memory(
+                                              base64Decode(widget
+                                                  .product!.productImage!),
+                                              width: width * 0.45,
+                                              height: height * 0.25,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )
+                                    : isLoading
+                                        ? Center(
+                                            child: CircularProgressIndicator(
+                                            color: primaryColorLight,
+                                          ))
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            width: width * 0.45,
+                                            height: height * 0.25,
+                                            child: Icon(
+                                              Icons.camera_alt,
+                                              color: primaryColorLight,
+                                              size: 30,
+                                            ),
+                                          ),
+                          ),
+                        ),
+                        SizedBox(width: width * 0.05),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Quantity', style: bodyText1),
+                                      SizedBox(height: height * 0.02),
+                                      CounterWidget(
+                                          borderColor: Colors.grey,
+                                          style: bodyText1,
+                                          counterController: productQuantity)
+                                    ],
+                                  )),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                    children: [
+                                      Checkbox(
+                                          value: isChecked,
+                                          activeColor: actionColor,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              isChecked = val ?? false;
+                                            });
+                                          }),
+                                      //SizedBox(width:width*0.03),
+                                      Text('Low Stock Alert',
+                                          style: bodyText1),
+                                    ],
+                                  ),
+                                  Text(
+                                      'Check if you want to receive alerts when this stock is running out',
+                                      style: bodyText1.copyWith(
+                                          color: Colors.grey)),
+                                ],
+                              )
+                            ],
+                          ),
+                        )
                       ],
                     ),
-              SizedBox(height: height * 0.05),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Button(
-                  width: width,
-                  color: primaryColor,
-                  buttonText: 'Done',
-                  onTap: () async {
-                    // log(formatter.getUnformattedValue().toString());
-                    // log(productPrice.text);
-                    imageString = base64Encode(imageFile);
-                    if (widget.toEdit) {
-                      Product product = Product(
-                        pid: widget.product!.pid,
-                        productName: productName.text,
-                        sellingPrice: double.tryParse(formatter
-                                .getUnformattedValue()
-                                .toString()) ??
-                            0,
-                        productDescription: productDescription.text,
-                        costPrice: double.tryParse(formatter2
-                                .getUnformattedValue()
-                                .toString()) ??
-                            0,
-                        productQuantity:
-                            int.tryParse(productQuantity.text) ?? 0,
-                        lowStockQuantity:
-                            int.tryParse(lowStockQuantity.text) ?? 0,
-                        productImage: imageString,
-                        isLowStock: isChecked,
-                        productCategory: ProductCategory(
-                            cid: widget.product!.productCategory!.cid,
-                            categoryName: widget
-                                .product!.productCategory!.categoryName,
-                            categoryDescription: widget.product!
-                                .productCategory!.categoryDescription),
-                      );
-
-                      Provider.of<GeneralProvider>(context, listen: false)
-                          .editProduct(product);
-                      Provider.of<GeneralProvider>(context, listen: false)
-                          .lowStocks
-                          .forEach((element) {
-                        if (element.productName == productName.text) {
-                          Provider.of<GeneralProvider>(context,
-                                  listen: false)
-                              .removeLowStock(product);
-                        }
-                      });
-
-                      // .inventory
-                      //   .singleWhere(
-                      //       (element) => element == widget.product)
-                      // ..quantity = product.quantity
-                      // ..sellingPrice = product.sellingPrice
-                      // ..itemcategory = product.itemcategory
-                      // ..costPrice = product.costPrice
-                      // ..imageb64 = product.imageb64;
-                    } else {
-                      if (productName.text.isEmpty &&
-                          double.tryParse(formatter
-                                  .getUnformattedValue()
-                                  .toString()) ==
-                              0 &&
-                          double.tryParse(formatter2
-                                  .getUnformattedValue()
-                                  .toString()) ==
-                              0 &&
-                          productQuantity.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 255, 17, 1),
-                              content: Text('Field Required',
-                                  textAlign: TextAlign.center,
-                                  style: bodyText2),
-                              duration: const Duration(milliseconds: 1500),
-                              behavior: SnackBarBehavior.floating,
-                              shape: const StadiumBorder()),
-                        );
-
-                        return;
-                      }
-                      if (!(Provider.of<GeneralProvider>(context,
-                              listen: false)
-                          .inventory
-                          .any((element) =>
-                              element.productName == productName.text))) {
+                  ),
+                ),
+                !isChecked
+                    ? Container()
+                    : Row(
+                        children: [
+                          Text('Low Stock Quantity', style: bodyText1),
+                          SizedBox(width: width * 0.03),
+                          CounterWidget(
+                              borderColor: Colors.grey,
+                              style: bodyText1,
+                              counterController: lowStockQuantity),
+                        ],
+                      ),
+                SizedBox(height: height * 0.05),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Button(
+                    width: width,
+                    color: primaryColor,
+                    buttonText: 'Done',
+                    onTap: () async {
+                      // log(formatter.getUnformattedValue().toString());
+                      // log(productPrice.text);
+                      imageString = base64Encode(imageFile);
+                      if (widget.toEdit) {
                         Product product = Product(
-                            pid: context
-                                    .read<GeneralProvider>()
-                                    .inventory
-                                    .isEmpty
-                                ? 1
-                                : context
-                                        .read<GeneralProvider>()
-                                        .inventory
-                                        .last
-                                        .pid +
-                                    1,
-                            productName: productName.text,
-                            productDescription: productDescription.text,
-                            sellingPrice: double.tryParse(formatter
-                                    .getUnformattedValue()
-                                    .toString()) ??
-                                0,
-                            costPrice: double.tryParse(formatter2
-                                    .getUnformattedValue()
-                                    .toString()) ??
-                                0,
-                            productCategory:
-                                _selectedCategory /*  ??
-                                  ProductCategory(
-                                      cid: 0,
-                                      categoryName: 'Uncategorised',
-                                      categoryDescription:
-                                          'No Description') */
-                            ,
-                            isLowStock: isChecked,
-                            productQuantity:
-                                int.tryParse(productQuantity.text) ?? 0,
-                            lowStockQuantity:
-                                int.tryParse(lowStockQuantity.text) ?? 0,
-                            // sellingPrice:
-                            //     double.tryParse(productPrice.text) ?? 0,
-                            productImage: imageString);
-
+                          pid: widget.product!.pid,
+                          productName: productName.text,
+                          sellingPrice: double.tryParse(formatter
+                                  .getUnformattedValue()
+                                  .toString()) ??
+                              0,
+                          productDescription: productDescription.text,
+                          costPrice: double.tryParse(formatter2
+                                  .getUnformattedValue()
+                                  .toString()) ??
+                              0,
+                          productQuantity:
+                              int.tryParse(productQuantity.text) ?? 0,
+                          lowStockQuantity:
+                              int.tryParse(lowStockQuantity.text) ?? 0,
+                          productImage: imageString,
+                          isLowStock: isChecked,
+                          productCategory: ProductCategory(
+                              cid: widget.product!.productCategory!.cid,
+                              categoryName: widget
+                                  .product!.productCategory!.categoryName,
+                              categoryDescription: widget.product!
+                                  .productCategory!.categoryDescription),
+                        );
+          
                         Provider.of<GeneralProvider>(context, listen: false)
-                            .addProduct(product);
+                            .editProduct(product);
                         Provider.of<GeneralProvider>(context, listen: false)
-                            .shop
-                            .products = Provider.of<GeneralProvider>(
-                                context,
-                                listen: false)
-                            .inventory;
-
-                        await storage.setItem(
-                            shopName!,
-                            shopProductsToJson(Provider.of<GeneralProvider>(
-                                    context,
+                            .lowStocks
+                            .forEach((element) {
+                          if (element.productName == productName.text) {
+                            Provider.of<GeneralProvider>(context,
                                     listen: false)
-                                .shop));
-
-                        addProducts(
-                            context
-                                    .read<GeneralProvider>()
-                                    .inventory
-                                    .isEmpty
-                                ? 1
-                                : context
-                                        .read<GeneralProvider>()
-                                        .inventory
-                                        .last
-                                        .pid +
-                                    1,
-                            productName.text,
-                            productDescription.text,
-                            imageString,
+                                .removeLowStock(product);
+                          }
+                        });
+          
+                        // .inventory
+                        //   .singleWhere(
+                        //       (element) => element == widget.product)
+                        // ..quantity = product.quantity
+                        // ..sellingPrice = product.sellingPrice
+                        // ..itemcategory = product.itemcategory
+                        // ..costPrice = product.costPrice
+                        // ..imageb64 = product.imageb64;
+                      } else {
+                        if (productName.text.isEmpty &&
                             double.tryParse(formatter
                                     .getUnformattedValue()
-                                    .toString()) ??
-                                0,
+                                    .toString()) ==
+                                0 &&
                             double.tryParse(formatter2
                                     .getUnformattedValue()
-                                    .toString()) ??
-                                0,
-                            int.tryParse(productQuantity.text) ?? 0,
-                            int.tryParse(lowStockQuantity.text) ?? 0,
-                            isChecked);
-                      } else {
-                        Notifier().toast(
-                            context: context,
-                            message: "ERROR PRODUCT ALREADY EXIST!",
-                            color: Colors.red);
-                        return;
+                                    .toString()) ==
+                                0 &&
+                            productQuantity.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 255, 17, 1),
+                                content: Text('Field Required',
+                                    textAlign: TextAlign.center,
+                                    style: bodyText2),
+                                duration: const Duration(milliseconds: 1500),
+                                behavior: SnackBarBehavior.floating,
+                                shape: const StadiumBorder()),
+                          );
+          
+                          return;
+                        }
+                        if (!(Provider.of<GeneralProvider>(context,
+                                listen: false)
+                            .inventory
+                            .any((element) =>
+                                element.productName == productName.text))) {
+                          Product product = Product(
+                              pid: context
+                                      .read<GeneralProvider>()
+                                      .inventory
+                                      .isEmpty
+                                  ? 1
+                                  : context
+                                          .read<GeneralProvider>()
+                                          .inventory
+                                          .last
+                                          .pid +
+                                      1,
+                              productName: productName.text,
+                              productDescription: productDescription.text,
+                              sellingPrice: double.tryParse(formatter
+                                      .getUnformattedValue()
+                                      .toString()) ??
+                                  0,
+                              costPrice: double.tryParse(formatter2
+                                      .getUnformattedValue()
+                                      .toString()) ??
+                                  0,
+                              productCategory:
+                                  _selectedCategory /*  ??
+                                ProductCategory(
+                                    cid: 0,
+                                    categoryName: 'Uncategorised',
+                                    categoryDescription:
+                                        'No Description') */
+                              ,
+                              isLowStock: isChecked,
+                              productQuantity:
+                                  int.tryParse(productQuantity.text) ?? 0,
+                              lowStockQuantity:
+                                  int.tryParse(lowStockQuantity.text) ?? 0,
+                              // sellingPrice:
+                              //     double.tryParse(productPrice.text) ?? 0,
+                              productImage: imageString);
+          
+                          Provider.of<GeneralProvider>(context, listen: false)
+                              .addProduct(product);
+                          Provider.of<GeneralProvider>(context, listen: false)
+                              .shop
+                              .products = Provider.of<GeneralProvider>(
+                                  context,
+                                  listen: false)
+                              .inventory;
+          
+                          await storage.setItem(
+                              shopName!,
+                              shopProductsToJson(Provider.of<GeneralProvider>(
+                                      context,
+                                      listen: false)
+                                  .shop));
+          
+                          addProducts(
+                              context
+                                      .read<GeneralProvider>()
+                                      .inventory
+                                      .isEmpty
+                                  ? 1
+                                  : context
+                                          .read<GeneralProvider>()
+                                          .inventory
+                                          .last
+                                          .pid +
+                                      1,
+                              productName.text,
+                              productDescription.text,
+                              imageString,
+                              double.tryParse(formatter
+                                      .getUnformattedValue()
+                                      .toString()) ??
+                                  0,
+                              double.tryParse(formatter2
+                                      .getUnformattedValue()
+                                      .toString()) ??
+                                  0,
+                              int.tryParse(productQuantity.text) ?? 0,
+                              int.tryParse(lowStockQuantity.text) ?? 0,
+                              isChecked);
+                        } else {
+                          Notifier().toast(
+                              context: context,
+                              message: "ERROR PRODUCT ALREADY EXIST!",
+                              color: Colors.red);
+                          return;
+                        }
                       }
-                    }
-                    successDialog();
-                    productCostPrice.clear();
-                    productName.clear();
-                    productPrice.clear();
-                    productDescription.clear();
-                    productQuantity.clear();
-                    lowStockQuantity.clear();
-                    imageFile = Uint8List(0);
-                    startTime();
-                    // Navigator.pushReplacement(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             const AddProductSuccess()));
-
-                    //Navigator.pop(context);
-                  },
+                      successDialog();
+                      productCostPrice.clear();
+                      productName.clear();
+                      productPrice.clear();
+                      productDescription.clear();
+                      productQuantity.clear();
+                      lowStockQuantity.clear();
+                      imageFile = Uint8List(0);
+                      startTime();
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) =>
+                      //             const AddProductSuccess()));
+          
+                      //Navigator.pop(context);
+                    },
+                  ),
                 ),
-              ),
-            ],
-              ),
+              ],
             ),
-            // Positioned(
-            //   bottom: 0,
-            //   right: 0,
-            //   left: 0,
-            //   child: Container(
-            //     color: primaryColorLight,
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(20),
-            //       child: _submitButton(),
-            //     ),
-            //   ),
-            // )
-          ],
+          ),
         ),
       ),
     );
