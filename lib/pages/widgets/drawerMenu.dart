@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -89,7 +90,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           "$dir/SHOPMATE_${context.read<GeneralProvider>().shop.shopname ?? 'demo'}_${DateTime.now().millisecondsSinceEpoch}.json");
       // log(file.path);
       file.writeAsString(
-          context.read<GeneralProvider>().shop.toJson().toString());
+          shopProductsToJson(context.read<GeneralProvider>().shop));
       return file;
     } on Exception catch (e) {
       return File('');
