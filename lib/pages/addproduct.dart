@@ -793,7 +793,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 color: primaryColorLight),
                           ),
                           SizedBox(height: height * 0.01),
-                          Text('Take Photo', style: bodyText2)
+                          Text('Take Photo', style: bodyText1)
                         ],
                       ),
                     ),
