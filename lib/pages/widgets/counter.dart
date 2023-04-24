@@ -23,9 +23,9 @@ class _CounterWidgetState extends State<CounterWidget> {
   int counter = 1;
   @override
   void initState() {
-    widget.counterController.text = widget.counterController.text.isEmpty
-        ? '0'
-        : widget.counterController.text;
+    // widget.counterController.text = widget.counterController.text.isEmpty
+    //     ? '0'
+    //     : widget.counterController.text;
     super.initState();
   }
 

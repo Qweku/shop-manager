@@ -322,7 +322,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ],
                   ),
                 ),
-          
+
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(vertical: 10),
                 //   child: Container(
@@ -364,7 +364,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 //     ),
                 //   ),
                 // ),
-          
+
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: CustomTextField(
@@ -416,8 +416,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             width: width * 0.4,
                                             decoration: BoxDecoration(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.0),
+                                                    BorderRadius.circular(20.0),
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   const BoxShadow(
@@ -474,8 +473,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           child: Column(
                             children: [
                               Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -492,8 +491,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Checkbox(
                                           value: isChecked,
@@ -504,8 +502,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                             });
                                           }),
                                       //SizedBox(width:width*0.03),
-                                      Text('Low Stock Alert',
-                                          style: bodyText1),
+                                      Text('Low Stock Alert', style: bodyText1),
                                     ],
                                   ),
                                   Text(
@@ -548,9 +545,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         Product product = Product(
                           pid: widget.product!.pid,
                           productName: productName.text,
-                          sellingPrice: double.tryParse(formatter
-                                  .getUnformattedValue()
-                                  .toString()) ??
+                          sellingPrice: double.tryParse(
+                                  formatter.getUnformattedValue().toString()) ??
                               0,
                           productDescription: productDescription.text,
                           costPrice: double.tryParse(formatter2
@@ -565,24 +561,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           isLowStock: isChecked,
                           productCategory: ProductCategory(
                               cid: widget.product!.productCategory!.cid,
-                              categoryName: widget
-                                  .product!.productCategory!.categoryName,
+                              categoryName:
+                                  widget.product!.productCategory!.categoryName,
                               categoryDescription: widget.product!
                                   .productCategory!.categoryDescription),
                         );
-          
+
                         Provider.of<GeneralProvider>(context, listen: false)
                             .editProduct(product);
                         Provider.of<GeneralProvider>(context, listen: false)
                             .lowStocks
                             .forEach((element) {
                           if (element.productName == productName.text) {
-                            Provider.of<GeneralProvider>(context,
-                                    listen: false)
+                            Provider.of<GeneralProvider>(context, listen: false)
                                 .removeLowStock(product);
                           }
                         });
-          
+
                         // .inventory
                         //   .singleWhere(
                         //       (element) => element == widget.product)
@@ -591,17 +586,22 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         // ..itemcategory = product.itemcategory
                         // ..costPrice = product.costPrice
                         // ..imageb64 = product.imageb64;
-                      } else {
-                        if (productName.text.isEmpty &&
+                      } else 
+                        if (productName.text.isEmpty
+                         &&
                             double.tryParse(formatter
                                     .getUnformattedValue()
                                     .toString()) ==
-                                0 &&
+                                0
+                                &&
                             double.tryParse(formatter2
                                     .getUnformattedValue()
                                     .toString()) ==
-                                0 &&
-                            productQuantity.text.isEmpty) {
+                                0 
+                                &&
+                           ( productQuantity.text == 0.toString() || productQuantity.text.isEmpty)
+                            
+                            ) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 backgroundColor:
@@ -613,118 +613,121 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 behavior: SnackBarBehavior.floating,
                                 shape: const StadiumBorder()),
                           );
-          
+
                           return;
-                        }
-                        if (!(Provider.of<GeneralProvider>(context,
-                                listen: false)
-                            .inventory
-                            .any((element) =>
-                                element.productName == productName.text))) {
-                          Product product = Product(
-                              pid: context
-                                      .read<GeneralProvider>()
-                                      .inventory
-                                      .isEmpty
-                                  ? 1
-                                  : context
-                                          .read<GeneralProvider>()
-                                          .inventory
-                                          .last
-                                          .pid +
-                                      1,
-                              productName: productName.text,
-                              productDescription: productDescription.text,
-                              sellingPrice: double.tryParse(formatter
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              costPrice: double.tryParse(formatter2
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              productCategory:
-                                  _selectedCategory /*  ??
-                                ProductCategory(
-                                    cid: 0,
-                                    categoryName: 'Uncategorised',
-                                    categoryDescription:
-                                        'No Description') */
-                              ,
-                              isLowStock: isChecked,
-                              productQuantity:
-                                  int.tryParse(productQuantity.text) ?? 0,
-                              lowStockQuantity:
-                                  int.tryParse(lowStockQuantity.text) ?? 0,
-                              // sellingPrice:
-                              //     double.tryParse(productPrice.text) ?? 0,
-                              productImage: imageString);
-          
-                          Provider.of<GeneralProvider>(context, listen: false)
-                              .addProduct(product);
-                          Provider.of<GeneralProvider>(context, listen: false)
-                              .shop
-                              .products = Provider.of<GeneralProvider>(
-                                  context,
-                                  listen: false)
-                              .inventory;
-          
-                          await storage.setItem(
-                              shopName!,
-                              shopProductsToJson(Provider.of<GeneralProvider>(
-                                      context,
-                                      listen: false)
-                                  .shop));
-          
-                          addProducts(
-                              context
-                                      .read<GeneralProvider>()
-                                      .inventory
-                                      .isEmpty
-                                  ? 1
-                                  : context
-                                          .read<GeneralProvider>()
-                                          .inventory
-                                          .last
-                                          .pid +
-                                      1,
-                              productName.text,
-                              productDescription.text,
-                              imageString,
-                              double.tryParse(formatter
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              double.tryParse(formatter2
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              int.tryParse(productQuantity.text) ?? 0,
-                              int.tryParse(lowStockQuantity.text) ?? 0,
-                              isChecked);
-                        } else {
-                          Notifier().toast(
-                              context: context,
-                              message: "ERROR PRODUCT ALREADY EXIST!",
-                              color: Colors.red);
-                          return;
-                        }
-                      }
-                      successDialog();
-                      productCostPrice.clear();
-                      productName.clear();
-                      productPrice.clear();
-                      productDescription.clear();
-                      productQuantity.clear();
-                      lowStockQuantity.clear();
-                      imageFile = Uint8List(0);
-                      startTime();
+                        } 
+                        
+                        
+                        
+                        
+                        
+                      //   else if (!(Provider.of<GeneralProvider>(context,
+                      //           listen: false)
+                      //       .inventory
+                      //       .any((element) =>
+                      //           element.productName == productName.text))) {
+                      //     Product product = Product(
+                      //         pid: context
+                      //                 .read<GeneralProvider>()
+                      //                 .inventory
+                      //                 .isEmpty
+                      //             ? 1
+                      //             : context
+                      //                     .read<GeneralProvider>()
+                      //                     .inventory
+                      //                     .last
+                      //                     .pid +
+                      //                 1,
+                      //         productName: productName.text,
+                      //         productDescription: productDescription.text,
+                      //         sellingPrice: double.tryParse(formatter
+                      //                 .getUnformattedValue()
+                      //                 .toString()) ??
+                      //             0,
+                      //         costPrice: double.tryParse(formatter2
+                      //                 .getUnformattedValue()
+                      //                 .toString()) ??
+                      //             0,
+                      //         productCategory:
+                      //             _selectedCategory /*  ??
+                      //           ProductCategory(
+                      //               cid: 0,
+                      //               categoryName: 'Uncategorised',
+                      //               categoryDescription:
+                      //                   'No Description') */
+                      //         ,
+                      //         isLowStock: isChecked,
+                      //         productQuantity:
+                      //             int.tryParse(productQuantity.text) ?? 0,
+                      //         lowStockQuantity:
+                      //             int.tryParse(lowStockQuantity.text) ?? 0,
+                      //         // sellingPrice:
+                      //         //     double.tryParse(productPrice.text) ?? 0,
+                      //         productImage: imageString);
+
+                      //     Provider.of<GeneralProvider>(context, listen: false)
+                      //         .addProduct(product);
+                      //     Provider.of<GeneralProvider>(context, listen: false)
+                      //         .shop
+                      //         .products = Provider.of<GeneralProvider>(context,
+                      //             listen: false)
+                      //         .inventory;
+
+                      //     await storage.setItem(
+                      //         shopName!,
+                      //         shopProductsToJson(Provider.of<GeneralProvider>(
+                      //                 context,
+                      //                 listen: false)
+                      //             .shop));
+
+                      //     addProducts(
+                      //         context.read<GeneralProvider>().inventory.isEmpty
+                      //             ? 1
+                      //             : context
+                      //                     .read<GeneralProvider>()
+                      //                     .inventory
+                      //                     .last
+                      //                     .pid +
+                      //                 1,
+                      //         productName.text,
+                      //         productDescription.text,
+                      //         imageString,
+                      //         double.tryParse(formatter
+                      //                 .getUnformattedValue()
+                      //                 .toString()) ??
+                      //             0,
+                      //         double.tryParse(formatter2
+                      //                 .getUnformattedValue()
+                      //                 .toString()) ??
+                      //             0,
+                      //         int.tryParse(productQuantity.text) ?? 0,
+                      //         int.tryParse(lowStockQuantity.text) ?? 0,
+                      //         isChecked);
+
+                      //     successDialog();
+                      //     productCostPrice.clear();
+                      //     productName.clear();
+                      //     productPrice.clear();
+                      //     productDescription.clear();
+                      //     productQuantity.clear();
+                      //     lowStockQuantity.clear();
+                      //     imageFile = Uint8List(0);
+                      //     startTime();
+                      //   } else {
+                      //     Notifier().toast(
+                      //         context: context,
+                      //         message: "ERROR PRODUCT ALREADY EXIST!",
+                      //         color: Colors.red);
+                      //     return;
+                      //   }
+                      
+
                       // Navigator.pushReplacement(
                       //     context,
                       //     MaterialPageRoute(
                       //         builder: (context) =>
                       //             const AddProductSuccess()));
-          
+
                       //Navigator.pop(context);
                     },
                   ),
