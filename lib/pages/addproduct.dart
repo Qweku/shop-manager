@@ -695,7 +695,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               int.tryParse(lowStockQuantity.text) ?? 0,
                               isChecked);
 
-                          successDialog();
+                          
+                        } else {
+                          Notifier().toast(
+                              context: context,
+                              message: "ERROR PRODUCT ALREADY EXIST!",
+                              color: Colors.red);
+                          return;
+                        }
+                            successDialog();
                           productCostPrice.clear();
                           productName.clear();
                           productPrice.clear();
@@ -704,19 +712,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           lowStockQuantity.clear();
                           imageFile = Uint8List(0);
                           startTime();
-                        } else {
-                          Notifier().toast(
-                              context: context,
-                              message: "ERROR PRODUCT ALREADY EXIST!",
-                              color: Colors.red);
-                          return;
-                        }
-
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const AddProductSuccess()));
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) =>
+                      //             const AddProductSuccess()));
 
                       //Navigator.pop(context);
                     },

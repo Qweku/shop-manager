@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:shop_manager/components/responsive.dart';
 
@@ -11,7 +10,7 @@ final double height =
 
 
 DateFormat dateformat = DateFormat.yMMMd();
-DateFormat salesDateFormat = DateFormat.yMd();
+DateFormat salesDateFormat = DateFormat('y-MM-dd');
 DateFormat timeformat = DateFormat.Hm();
 
 Color primaryColor = const Color(0xFF0D47A1);

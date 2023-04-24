@@ -255,8 +255,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
   }
 
   void notify(Product productModel) async {
-    await notificationPlugin.showNotification(
-        "Low Stock", "Some products are running low on stock");
+    //await notificationPlugin.showNotification(
+        // "Low Stock", "Some products are running low on stock");
     await storage.setItem(
         'notification',
         notificationModelToJson(

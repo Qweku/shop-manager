@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:shop_manager/components/button.dart';
-import 'package:shop_manager/components/custom_indicator.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
-import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/sales_report.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
@@ -25,6 +25,26 @@ class _SalesScreenState extends State<SalesScreen> {
   final toDate = TextEditingController();
   double totalSales = 0.0;
   double totalProfit = 0.0;
+  var output = <SalesModel>[];
+  bool isError = false;
+
+//Filter sales date range
+  List<SalesModel> itemsBetweenDates({
+    required DateTime start,
+    required DateTime end,
+  }) {
+    Provider.of<SalesProvider>(context, listen: false)
+        .salesList
+        .forEach((element) {
+      DateFormat newDateFormat = DateFormat('y-MM-dd');
+      var date = newDateFormat.parse(element.date ?? "", true);
+      if (date.compareTo(start) >= 0 && date.compareTo(end) <= 0) {
+        output.add(element);
+      }
+    });
+    return output;
+  }
+
   @override
   void initState() {
     log("Total Sales Items: " +
@@ -32,8 +52,11 @@ class _SalesScreenState extends State<SalesScreen> {
             .salesList
             .length
             .toString());
-    // Provider.of<SalesProvider>(context, listen: false).salesList =
-    //     Provider.of<GeneralProvider>(context, listen: false).shop.sales;
+    output = <SalesModel>[];
+    fromDate.text =
+        Provider.of<SalesProvider>(context, listen: false).salesList[0].date!;
+    log("First sales date: " +
+        Provider.of<SalesProvider>(context, listen: false).salesList[0].date!);
     super.initState();
   }
 
@@ -73,7 +96,10 @@ class _SalesScreenState extends State<SalesScreen> {
                         icon: const Icon(Icons.filter_list,
                             size: 30, color: Colors.white),
                         onPressed: () {
-                          _searchAccount(context);
+                          output.clear();
+                          fromDate.clear();
+                          toDate.clear();
+                          _searchAccount();
                         },
                       ),
                     ),
@@ -193,6 +219,16 @@ class _SalesScreenState extends State<SalesScreen> {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) =>
                           SalesListSection(
+                        onTap: () {
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => SalesReport(
+                          //                 salesList: itemsBetweenDates(
+                          //               start: DateTime.parse(fromDate.text),
+                          //               end: DateTime.parse(toDate.text),
+                          //             ))));
+                        },
                         width: width,
                         sales: context.watch<SalesProvider>().salesList[index],
                       ),
@@ -209,69 +245,286 @@ class _SalesScreenState extends State<SalesScreen> {
     );
   }
 
-  void _searchAccount(context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        backgroundColor: primaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
-        ),
+  // void _searchAccount(context) {
+  //   showModalBottomSheet(
+  //       isScrollControlled: true,
+  //       shape: const RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.only(
+  //             topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+  //       ),
+  //       context: context,
+  //       builder: (BuildContext bc) {
+  //         return Container(
+  //           height: height * 0.55,
+  //           padding: EdgeInsets.all(height * 0.02),
+  //           child: Column(
+  //             // spacing: 20,
+  //             children: <Widget>[
+  //               SizedBox(height: height * 0.02),
+  //               Padding(
+  //                 padding: EdgeInsets.only(
+  //                     bottom: height * 0.02, top: height * 0.04),
+  //                 child: Text("Generate Sales Report",
+  //                     textAlign: TextAlign.center, style: headline1),
+  //               ),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   SizedBox(
+  //                     width: width * 0.2,
+  //                     child: Divider(color: primaryColor),
+  //                   ),
+  //                   Padding(
+  //                     padding: EdgeInsets.symmetric(horizontal: height * 0.01),
+  //                     child: Icon(Icons.receipt_long,
+  //                         color: actionColor, size: 20),
+  //                   ),
+  //                   SizedBox(
+  //                     width: width * 0.2,
+  //                     child: Divider(color: primaryColor),
+  //                   )
+  //                 ],
+  //               ),
+  //               SizedBox(
+  //                 height: 20,
+  //               ),
+  //               Padding(
+  //                 padding: EdgeInsets.only(
+  //                   bottom: height * 0.04,
+  //                 ),
+  //                 child: DateTextField(
+  //                     controller: fromDate,
+  //                     hintText: 'From',
+  //                     borderColor: Color.fromARGB(255, 206, 206, 206),
+  //                     prefixIcon: const Icon(Icons.calendar_today,
+  //                         color: Colors.grey, size: 20),
+  //                     style: bodyText1),
+  //               ),
+  //               Padding(
+  //                 padding: EdgeInsets.only(
+  //                   bottom: height * 0.04,
+  //                 ),
+  //                 child: DateTextField(
+  //                     controller: toDate,
+  //                     hintText: 'To',
+  //                     borderColor: Color.fromARGB(255, 206, 206, 206),
+  //                     prefixIcon: const Icon(Icons.calendar_today,
+  //                         color: Colors.grey, size: 20),
+  //                     style: bodyText1),
+  //               ),
+  //               isError
+  //                   ? Padding(
+  //                       padding: EdgeInsets.symmetric(vertical: 20),
+  //                       child: Text(
+  //                         "*Date range invalid",
+  //                         style: headline1.copyWith(
+  //                             color: Color.fromARGB(255, 201, 26, 14)),
+  //                       ))
+  //                   : Container(),
+  //               SizedBox(height: height * 0.05),
+  //               Button(
+  //                 color: primaryColor,
+  //                 width: width,
+  //                 buttonText: "Done",
+  //                 onTap: () {
+  //                   if (DateTime.parse(fromDate.text)
+  //                       .isBefore(DateTime.parse(toDate.text))) {
+  //                     Navigator.pushReplacement(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                             builder: (context) => SalesReport(
+  //                                 fromDate: fromDate.text,
+  //                                 toDate: toDate.text,
+  //                                 salesList: itemsBetweenDates(
+  //                                   start: DateTime.parse(fromDate.text),
+  //                                   end: DateTime.parse(toDate.text),
+  //                                 ))));
+  //                   } else {
+  //                     isError = true;
+  //                     // ScaffoldMessenger.of(context).showSnackBar(
+  //                     //   SnackBar(
+  //                     //       backgroundColor:
+  //                     //           const Color.fromARGB(255, 255, 17, 1),
+  //                     //       content: Text('Date range invalid',
+  //                     //           textAlign: TextAlign.center, style: bodyText2),
+  //                     //       duration: const Duration(milliseconds: 1500),
+  //                     //       behavior: SnackBarBehavior.floating,
+  //                     //       shape: const StadiumBorder()),
+  //                     // );
+  //                   }
+
+  //                   //Navigator.pop(context);
+  //                 },
+  //               ),
+  //               SizedBox(height: height * 0.03),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
+
+  _searchAccount() {
+    return showDialog<bool>(
+        barrierDismissible: false,
         context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            height: height * 0.7,
-            padding: EdgeInsets.all(height * 0.02),
-            child: Wrap(
-              spacing: 20,
-              children: <Widget>[
-                SizedBox(height: height * 0.02),
-                Padding(
-                  padding: EdgeInsets.only(
-                      bottom: height * 0.02, top: height * 0.04),
-                  child: Text("Search Account History", style: headline2),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height * 0.04,
+        builder: (c) => StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                contentPadding: EdgeInsets.all(20),
+                insetPadding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                content: SizedBox(
+                  height: height * 0.4,
+                  width: width * 0.7,
+                  child: Column(
+                    // spacing: 20,
+                    children: <Widget>[
+                      SizedBox(height: height * 0.02),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: height * 0.02, top: height * 0.04),
+                        child: Text("Generate Sales Report",
+                            textAlign: TextAlign.center, style: headline1),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: width * 0.2,
+                            child: Divider(color: primaryColor),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: height * 0.01),
+                            child: Icon(Icons.receipt_long,
+                                color: actionColor, size: 20),
+                          ),
+                          SizedBox(
+                            width: width * 0.2,
+                            child: Divider(color: primaryColor),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: height * 0.04,
+                        ),
+                        child: DateTextField(
+                            controller: fromDate,
+                            hintText: 'From',
+                            borderColor: Color.fromARGB(255, 206, 206, 206),
+                            prefixIcon: const Icon(Icons.calendar_today,
+                                color: Colors.grey, size: 20),
+                            style: bodyText1),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: height * 0.04,
+                        ),
+                        child: DateTextField(
+                            controller: toDate,
+                            hintText: 'To',
+                            borderColor: Color.fromARGB(255, 206, 206, 206),
+                            prefixIcon: const Icon(Icons.calendar_today,
+                                color: Colors.grey, size: 20),
+                            style: bodyText1),
+                      ),
+                      isError
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                "*Date range invalid",
+                                style: bodyText1.copyWith(
+                                    color: Color.fromARGB(255, 201, 26, 14)),
+                              ))
+                          : Container(),
+                      // SizedBox(height: height * 0.05),
+                      // Button(
+                      //   color: primaryColor,
+                      //   width: width,
+                      //   buttonText: "Done",
+                      //   onTap: () {
+                      //     if (DateTime.parse(fromDate.text)
+                      //         .isBefore(DateTime.parse(toDate.text))) {
+                      //       Navigator.pushReplacement(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => SalesReport(
+                      //                   fromDate: fromDate.text,
+                      //                   toDate: toDate.text,
+                      //                   salesList: itemsBetweenDates(
+                      //                     start: DateTime.parse(fromDate.text),
+                      //                     end: DateTime.parse(toDate.text),
+                      //                   ))));
+                      //     } else {
+                      //       isError = true;
+                      //       // ScaffoldMessenger.of(context).showSnackBar(
+                      //       //   SnackBar(
+                      //       //       backgroundColor:
+                      //       //           const Color.fromARGB(255, 255, 17, 1),
+                      //       //       content: Text('Date range invalid',
+                      //       //           textAlign: TextAlign.center, style: bodyText2),
+                      //       //       duration: const Duration(milliseconds: 1500),
+                      //       //       behavior: SnackBarBehavior.floating,
+                      //       //       shape: const StadiumBorder()),
+                      //       // );
+                      //     }
+
+                      //     //Navigator.pop(context);
+                      //   },
+                      // ),
+                      // SizedBox(height: height * 0.03),
+                    ],
                   ),
-                  child: DateTextField(
-                      controller: fromDate,
-                      hintText: 'From',
-                      hintColor: Colors.white,
-                      borderColor: Colors.white,
-                      prefixIcon: const Icon(Icons.calendar_today,
-                          color: Colors.white, size: 20),
-                      style: bodyText2),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    bottom: height * 0.04,
-                  ),
-                  child: DateTextField(
-                      controller: toDate,
-                      hintText: 'To',
-                      hintColor: Colors.white,
-                      borderColor: Colors.white,
-                      prefixIcon: const Icon(Icons.calendar_today,
-                          color: Colors.white, size: 20),
-                      style: bodyText2),
-                ),
-                SizedBox(height: height * 0.1),
-                Button(
-                  color: primaryColorLight,
-                  textColor: primaryColor,
-                  width: width,
-                  buttonText: "Done",
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                SizedBox(height: height * 0.4),
-              ],
-            ),
-          );
-        });
+                actions: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Button(
+                      onTap: () async {
+                        if (DateTime.parse(fromDate.text)
+                                .isBefore(DateTime.parse(toDate.text)) ||
+                            DateTime.parse(fromDate.text).isAtSameMomentAs(
+                                DateTime.parse(fromDate.text))) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SalesReport(
+                                      fromDate: fromDate.text,
+                                      toDate: toDate.text,
+                                      salesList: itemsBetweenDates(
+                                        start: DateTime.parse(fromDate.text),
+                                        end: DateTime.parse(toDate.text),
+                                      ))));
+                        } else {
+                          setState(() {
+                            isError = true;
+                          });
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 255, 17, 1),
+                                content: Text('Date range invalid',
+                                    textAlign: TextAlign.center,
+                                    style: bodyText2),
+                                duration: const Duration(milliseconds: 1500),
+                                behavior: SnackBarBehavior.floating,
+                                shape: const StadiumBorder()),
+                          );
+                        }
+                      },
+                      width: width * 0.4,
+                      buttonText: 'Done',
+                      color: primaryColor,
+                    ),
+                  )
+                ],
+              );
+            }));
   }
 }
 
@@ -280,53 +533,58 @@ class SalesListSection extends StatelessWidget {
     Key? key,
     required this.width,
     required this.sales,
+    this.onTap,
   }) : super(key: key);
 
   final double width;
   final SalesModel sales;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Color.fromARGB(255, 247, 247, 247),
-            borderRadius: BorderRadius.circular(15)),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Order Number: #${sales.accId}",
-                      style: bodyText1.copyWith(color: primaryColorDark)),
-                  Text("Date: ${sales.date}",
-                      style: bodyText1.copyWith(color: primaryColorDark))
-                ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Color.fromARGB(255, 247, 247, 247),
+              borderRadius: BorderRadius.circular(15)),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Order Number: #${sales.accId}",
+                        style: bodyText1.copyWith(color: primaryColorDark)),
+                    Text("Date: ${sales.date}",
+                        style: bodyText1.copyWith(color: primaryColorDark))
+                  ],
+                ),
               ),
-            ),
-            ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: sales.products.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.05,
-                    ),
-                    child: SummaryListItem(
-                      item: sales.products[index].productName!,
-                      amount:
-                          "GHS ${sales.products[index].sellingPrice.toStringAsFixed(2)}",
-                      quantity: sales.products[index].cartQuantity.toString(),
-                      date: sales.date!,
-                    ),
-                  );
-                }),
-          ],
+              ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: sales.products.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.05,
+                      ),
+                      child: SummaryListItem(
+                        item: sales.products[index].productName!,
+                        amount:
+                            "GHS ${sales.products[index].sellingPrice.toStringAsFixed(2)}",
+                        quantity: sales.products[index].cartQuantity.toString(),
+                        date: sales.date!,
+                      ),
+                    );
+                  }),
+            ],
+          ),
         ),
       ),
     );
