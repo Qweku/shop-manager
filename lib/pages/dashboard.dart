@@ -3,7 +3,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +18,7 @@ import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/expenses.dart';
+import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
 import 'package:shop_manager/pages/sales.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/low_stock_list.dart';
@@ -149,7 +149,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryName: "Uncategorised",
               categoryDescription: 'No Description'));
     }
-
+    notify();
     delayScreen();
     super.initState();
   }
@@ -161,10 +161,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     });
   }
 
-  // void notify() async {
-  //   await notificationPlugin.showNotification(
-  //       "Low Stock", "Some products are running low on stock");
-  // }
+  void notify() async {
+    await notificationPlugin.showNotification(
+        "Low Stock", "Some products are running low on stock");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +394,7 @@ class _DashboardState extends State<Dashboard> {
                   children: [
                     SizedBox(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Welcome,', style: headline2),
                         const SizedBox(
@@ -402,10 +402,10 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         Text(
                           'Admin',
-                          style: headline2.copyWith(fontSize:40,color:actionColor),
+                          style: headline2.copyWith(
+                              fontSize: 40, color: actionColor),
                         ),
-                        
-                          ],
+                      ],
                     )),
                     DashboardCard(totalProfit: totalProfit),
                     //const ShopBarChart(),
@@ -490,4 +490,3 @@ class ItemStatus extends StatelessWidget {
     );
   }
 }
-

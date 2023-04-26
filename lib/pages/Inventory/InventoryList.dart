@@ -83,6 +83,8 @@ class _InventoryListState extends State<InventoryList> {
                               top: 10,
                             ),
                             child: ProductCard(
+
+                              //edit and delete action
                               onLongPress: () {
                                 _bottomDrawSheet(
                                     context,
@@ -95,6 +97,7 @@ class _InventoryListState extends State<InventoryList> {
                                                     .categories[isSelected - 1])
                                             .toList()[index],);
                               },
+                              // add to cart button action
                               onPressed: () {
                                 if (!(context
                                     .read<GeneralProvider>()
@@ -115,6 +118,8 @@ class _InventoryListState extends State<InventoryList> {
                                   );
                                 }
                               },
+
+                              //view product details action
                               onTap: () {
                                 Navigator.push(
                                     context,

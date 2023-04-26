@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -60,11 +61,11 @@ class _SalesReportState extends State<SalesReport> {
         build: (context) {
           return pw.Expanded(
               child:
-                  pw.Image(pw.MemoryImage(screenShot), fit: pw.BoxFit.cover));
+                  pw.Image(pw.MemoryImage(screenShot), fit: pw.BoxFit.contain));
         },
       ),
     );
-    String tempPath = (await getExternalStorageDirectory())?.path ?? '';
+    String tempPath = (await DownloadsPathProvider.downloadsDirectory)?.path ?? '';
     String fileName = "my-sales-report" + "${DateTime.now().microsecond}";
     //if (await Permission.storage.request().isGranted) {
     File pdfFile = File('$tempPath/$fileName.pdf');
