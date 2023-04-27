@@ -76,7 +76,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             Text('Order #: ',
                                 style: bodyText1.copyWith(
                                     fontWeight: FontWeight.bold)),
-                            Text('0001', style: bodyText1),
+                            Text('000'+"${context.read<SalesProvider>().salesList.length + 1}", style: bodyText1),
                           ]),
                       Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,

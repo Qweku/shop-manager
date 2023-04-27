@@ -8,6 +8,7 @@ import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/sales_receipt.dart';
 import 'package:shop_manager/pages/sales_report.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
@@ -220,14 +221,11 @@ class _SalesScreenState extends State<SalesScreen> {
                       itemBuilder: (BuildContext context, int index) =>
                           SalesListSection(
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => SalesReport(
-                          //                 salesList: itemsBetweenDates(
-                          //               start: DateTime.parse(fromDate.text),
-                          //               end: DateTime.parse(toDate.text),
-                          //             ))));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SalesReceipt(
+                                          sales:context.watch<SalesProvider>().salesList[index])));
                         },
                         width: width,
                         sales: context.watch<SalesProvider>().salesList[index],
@@ -245,124 +243,7 @@ class _SalesScreenState extends State<SalesScreen> {
     );
   }
 
-  // void _searchAccount(context) {
-  //   showModalBottomSheet(
-  //       isScrollControlled: true,
-  //       shape: const RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.only(
-  //             topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
-  //       ),
-  //       context: context,
-  //       builder: (BuildContext bc) {
-  //         return Container(
-  //           height: height * 0.55,
-  //           padding: EdgeInsets.all(height * 0.02),
-  //           child: Column(
-  //             // spacing: 20,
-  //             children: <Widget>[
-  //               SizedBox(height: height * 0.02),
-  //               Padding(
-  //                 padding: EdgeInsets.only(
-  //                     bottom: height * 0.02, top: height * 0.04),
-  //                 child: Text("Generate Sales Report",
-  //                     textAlign: TextAlign.center, style: headline1),
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   SizedBox(
-  //                     width: width * 0.2,
-  //                     child: Divider(color: primaryColor),
-  //                   ),
-  //                   Padding(
-  //                     padding: EdgeInsets.symmetric(horizontal: height * 0.01),
-  //                     child: Icon(Icons.receipt_long,
-  //                         color: actionColor, size: 20),
-  //                   ),
-  //                   SizedBox(
-  //                     width: width * 0.2,
-  //                     child: Divider(color: primaryColor),
-  //                   )
-  //                 ],
-  //               ),
-  //               SizedBox(
-  //                 height: 20,
-  //               ),
-  //               Padding(
-  //                 padding: EdgeInsets.only(
-  //                   bottom: height * 0.04,
-  //                 ),
-  //                 child: DateTextField(
-  //                     controller: fromDate,
-  //                     hintText: 'From',
-  //                     borderColor: Color.fromARGB(255, 206, 206, 206),
-  //                     prefixIcon: const Icon(Icons.calendar_today,
-  //                         color: Colors.grey, size: 20),
-  //                     style: bodyText1),
-  //               ),
-  //               Padding(
-  //                 padding: EdgeInsets.only(
-  //                   bottom: height * 0.04,
-  //                 ),
-  //                 child: DateTextField(
-  //                     controller: toDate,
-  //                     hintText: 'To',
-  //                     borderColor: Color.fromARGB(255, 206, 206, 206),
-  //                     prefixIcon: const Icon(Icons.calendar_today,
-  //                         color: Colors.grey, size: 20),
-  //                     style: bodyText1),
-  //               ),
-  //               isError
-  //                   ? Padding(
-  //                       padding: EdgeInsets.symmetric(vertical: 20),
-  //                       child: Text(
-  //                         "*Date range invalid",
-  //                         style: headline1.copyWith(
-  //                             color: Color.fromARGB(255, 201, 26, 14)),
-  //                       ))
-  //                   : Container(),
-  //               SizedBox(height: height * 0.05),
-  //               Button(
-  //                 color: primaryColor,
-  //                 width: width,
-  //                 buttonText: "Done",
-  //                 onTap: () {
-  //                   if (DateTime.parse(fromDate.text)
-  //                       .isBefore(DateTime.parse(toDate.text))) {
-  //                     Navigator.pushReplacement(
-  //                         context,
-  //                         MaterialPageRoute(
-  //                             builder: (context) => SalesReport(
-  //                                 fromDate: fromDate.text,
-  //                                 toDate: toDate.text,
-  //                                 salesList: itemsBetweenDates(
-  //                                   start: DateTime.parse(fromDate.text),
-  //                                   end: DateTime.parse(toDate.text),
-  //                                 ))));
-  //                   } else {
-  //                     isError = true;
-  //                     // ScaffoldMessenger.of(context).showSnackBar(
-  //                     //   SnackBar(
-  //                     //       backgroundColor:
-  //                     //           const Color.fromARGB(255, 255, 17, 1),
-  //                     //       content: Text('Date range invalid',
-  //                     //           textAlign: TextAlign.center, style: bodyText2),
-  //                     //       duration: const Duration(milliseconds: 1500),
-  //                     //       behavior: SnackBarBehavior.floating,
-  //                     //       shape: const StadiumBorder()),
-  //                     // );
-  //                   }
-
-  //                   //Navigator.pop(context);
-  //                 },
-  //               ),
-  //               SizedBox(height: height * 0.03),
-  //             ],
-  //           ),
-  //         );
-  //       });
-  // }
-
+  
   _searchAccount() {
     return showDialog<bool>(
         barrierDismissible: false,
@@ -441,43 +322,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                     color: Color.fromARGB(255, 201, 26, 14)),
                               ))
                           : Container(),
-                      // SizedBox(height: height * 0.05),
-                      // Button(
-                      //   color: primaryColor,
-                      //   width: width,
-                      //   buttonText: "Done",
-                      //   onTap: () {
-                      //     if (DateTime.parse(fromDate.text)
-                      //         .isBefore(DateTime.parse(toDate.text))) {
-                      //       Navigator.pushReplacement(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (context) => SalesReport(
-                      //                   fromDate: fromDate.text,
-                      //                   toDate: toDate.text,
-                      //                   salesList: itemsBetweenDates(
-                      //                     start: DateTime.parse(fromDate.text),
-                      //                     end: DateTime.parse(toDate.text),
-                      //                   ))));
-                      //     } else {
-                      //       isError = true;
-                      //       // ScaffoldMessenger.of(context).showSnackBar(
-                      //       //   SnackBar(
-                      //       //       backgroundColor:
-                      //       //           const Color.fromARGB(255, 255, 17, 1),
-                      //       //       content: Text('Date range invalid',
-                      //       //           textAlign: TextAlign.center, style: bodyText2),
-                      //       //       duration: const Duration(milliseconds: 1500),
-                      //       //       behavior: SnackBarBehavior.floating,
-                      //       //       shape: const StadiumBorder()),
-                      //       // );
-                      //     }
-
-                      //     //Navigator.pop(context);
-                      //   },
-                      // ),
-                      // SizedBox(height: height * 0.03),
-                    ],
+                       ],
                   ),
                 ),
                 actions: [
@@ -577,7 +422,7 @@ class SalesListSection extends StatelessWidget {
                       child: SummaryListItem(
                         item: sales.products[index].productName!,
                         amount:
-                            "GHS ${sales.products[index].sellingPrice.toStringAsFixed(2)}",
+                            "${sales.products[index].sellingPrice.toStringAsFixed(2)}",
                         quantity: sales.products[index].cartQuantity.toString(),
                         date: sales.date!,
                       ),

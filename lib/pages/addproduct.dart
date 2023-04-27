@@ -131,6 +131,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void navigationDialog() {
     Navigator.pop(context);
+    setState(() {});
   }
 
   Future addProducts(
