@@ -19,17 +19,19 @@ class _AddProductSuccessState extends State<AddProductSuccess> {
   void initState() {
     super.initState();
     startTime();
-     context.read<GeneralProvider>().cart.clear();
+    context.read<GeneralProvider>().cart.clear();
   }
 
   startTime() async {
-    var _duration = const Duration(seconds: 3);
+    var _duration = const Duration(seconds: 2);
     return Timer(_duration, navigationPage);
   }
 
   void navigationPage() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const MyHomeScreen()));
+    if (mounted) {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const MyHomeScreen()));
+    }
   }
 
   @override
@@ -60,8 +62,7 @@ class _AddProductSuccessState extends State<AddProductSuccess> {
                         ? "Order processed successfully"
                         : 'Product added successfully',
                     textAlign: TextAlign.center,
-                    style:headline1
-                        .copyWith(color: primaryColor),
+                    style: headline1.copyWith(color: primaryColor),
                   ))
             ],
           ),

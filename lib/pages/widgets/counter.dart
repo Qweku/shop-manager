@@ -144,11 +144,11 @@ class _ItemCounterState extends State<ItemCounter> {
       children: [
         IconButton(
           icon: Icon(Icons.remove_circle_outline,
-              size: 30, color: counter < 1 ? Colors.grey : widget.color),
+              size: 30, color: counter <= 1 ? Colors.grey : widget.color),
           onPressed: () {
             FocusScope.of(context).unfocus();
 
-            if (counter > 0) {
+            if (counter > 1) {
               setState(() {
                 counter--;
               });
@@ -204,7 +204,7 @@ class _ItemCounterState extends State<ItemCounter> {
         IconButton(
           icon: Icon(Icons.add_circle_outline,
               size: 30,
-              color: counter >
+              color: counter >=
                       widget.product
                           .productQuantity //widget.product!.productQuantity!
                   ? Colors.grey
@@ -213,6 +213,8 @@ class _ItemCounterState extends State<ItemCounter> {
             // counter = int.parse(widget.counterController.text.isEmpty
             //     ? '0'
             //     : widget.counterController.text);
+
+              
             setState(() {
               if (counter < widget.product.productQuantity) {
                 counter++;

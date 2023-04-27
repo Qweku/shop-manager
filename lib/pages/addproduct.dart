@@ -134,25 +134,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Future addProducts(
-      int id,
-      String productName,
-      String productDescription,
-      String image,
-      double sellingPrice,
-      double costPrice,
-      int productQuantity,
-      int lowStockQuantity,
-      bool isLowStock) async {
+    Product product,
+  ) async {
     await fireStore.collection(shopName ?? "").add({
-      'product id': id,
-      'product name': productName,
-      'product description': productDescription,
-      'product image': image,
-      'selling price': sellingPrice,
-      'cost price': costPrice,
-      'product quantity': productQuantity,
-      'low stock quantity': lowStockQuantity,
-      'low stock': isLowStock,
+      'product id': product.pid,
+      'product name': product.productName,
+      'product description': product.productDescription,
+      'product image': product.productImage,
+      'selling price': product.sellingPrice,
+      'cost price': product.costPrice,
+      'product quantity': product.productQuantity,
+      'low stock quantity': product.lowStockQuantity,
+      'low stock': product.isLowStock,
     });
   }
 
@@ -162,8 +155,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     //     .collection(shopName ?? "").where(field)
   }
 
-  void successDialog() {
-    showDialog(
+  void successDialog() async {
+    return await showDialog(
         context: context,
         barrierDismissible: true,
         builder: (context) => AlertDialog(
@@ -204,22 +197,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
         Provider.of<GeneralProvider>(context, listen: false).categories);
     _selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
     if (widget.toEdit) {
-      productName.text = widget.product!.productName!;
-      productDescription.text = widget.product!.productDescription!;
-      lowStockQuantity.text = widget.product!.lowStockQuantity.toString();
-      productPrice.text =
-          formatter.format(widget.product!.sellingPrice.toStringAsFixed(2) );
-      productCostPrice.text =
-          formatter2.format(widget.product!.costPrice.toStringAsFixed(2)  );
-      productQuantity.text = widget.product!.productQuantity.toString();
-      imageString = (widget.product!.productImage ?? "").isEmpty
-          ? ""
-          : widget.product!.productImage!;
-      _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
-          .categories
-          .singleWhere(
-              (element) => element.cid == widget.product!.productCategory!.cid);
-      isChecked = widget.product!.isLowStock;
+      setState(() {
+        productName.text = widget.product!.productName!;
+        productDescription.text = widget.product!.productDescription!;
+        lowStockQuantity.text = widget.product!.lowStockQuantity.toString();
+        productPrice.text =
+            formatter.format(widget.product!.sellingPrice.toStringAsFixed(2));
+        productCostPrice.text =
+            formatter2.format(widget.product!.costPrice.toStringAsFixed(2));
+        productQuantity.text = widget.product!.productQuantity.toString();
+        imageString = (widget.product!.productImage ?? "").isEmpty
+            ? ""
+            : widget.product!.productImage!;
+        _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
+            .categories
+            .singleWhere((element) =>
+                element.cid == widget.product!.productCategory!.cid);
+        isChecked = widget.product!.isLowStock;
+        imageFile =
+            imageString.isNotEmpty ? base64Decode(imageString) : Uint8List(0);
+      });
+
+      log((widget.product!.productImage ?? "").isEmpty.toString());
     }
 
     super.initState();
@@ -409,64 +408,64 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       fit: BoxFit.cover,
                                     ),
                                   )
-                                : (widget.toEdit)
-                                    ? (widget.product!.productImage ?? "")
-                                            .isEmpty
-                                        ? Container(
-                                            height: height * 0.23,
-                                            width: width * 0.4,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  const BoxShadow(
-                                                      offset: Offset(2, 2),
-                                                      color: Color.fromARGB(
-                                                          31, 0, 0, 0),
-                                                      blurRadius: 2,
-                                                      spreadRadius: 1)
-                                                ]),
-                                            child: Center(
-                                              child: Text(
-                                                widget.product!.productName!
-                                                    .substring(0, 2)
-                                                    .toUpperCase(),
-                                                style: headline2.copyWith(
-                                                    fontSize: 70,
-                                                    color: primaryColorLight),
-                                              ),
-                                            ))
-                                        : ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: Image.memory(
-                                              base64Decode(widget
-                                                  .product!.productImage!),
-                                              width: width * 0.45,
-                                              height: height * 0.25,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          )
-                                    : isLoading
-                                        ? Center(
-                                            child: CircularProgressIndicator(
-                                            color: primaryColorLight,
-                                          ))
-                                        : Container(
-                                            decoration: BoxDecoration(
-                                              //color: Colors.grey[200],
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            width: width * 0.45,
-                                            height: height * 0.25,
-                                            child: Icon(
-                                              Icons.camera_alt,
-                                              color: primaryColorLight,
-                                              size: 30,
-                                            ),
-                                          ),
+                                // : (widget.toEdit)
+                                //     ? (widget.product!.productImage ?? "")
+                                //             .isEmpty
+                                //         ? Container(
+                                //             height: height * 0.23,
+                                //             width: width * 0.4,
+                                //             decoration: BoxDecoration(
+                                //                 borderRadius:
+                                //                     BorderRadius.circular(20.0),
+                                //                 color: Colors.white,
+                                //                 boxShadow: [
+                                //                   const BoxShadow(
+                                //                       offset: Offset(2, 2),
+                                //                       color: Color.fromARGB(
+                                //                           31, 0, 0, 0),
+                                //                       blurRadius: 2,
+                                //                       spreadRadius: 1)
+                                //                 ]),
+                                //             child: Center(
+                                //               child: Text(
+                                //                 widget.product!.productName!
+                                //                     .substring(0, 2)
+                                //                     .toUpperCase(),
+                                //                 style: headline2.copyWith(
+                                //                     fontSize: 70,
+                                //                     color: primaryColorLight),
+                                //               ),
+                                //             ))
+                                //         : ClipRRect(
+                                //             borderRadius:
+                                //                 BorderRadius.circular(20),
+                                //             child: Image.memory(
+                                //               base64Decode(widget
+                                //                   .product!.productImage!),
+                                //               width: width * 0.45,
+                                //               height: height * 0.25,
+                                //               fit: BoxFit.cover,
+                                //             ),
+                                //           )
+                                : isLoading
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                        color: primaryColorLight,
+                                      ))
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          //color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        width: width * 0.45,
+                                        height: height * 0.25,
+                                        child: Icon(
+                                          Icons.camera_alt,
+                                          color: primaryColorLight,
+                                          size: 30,
+                                        ),
+                                      ),
                           ),
                         ),
                         SizedBox(width: width * 0.05),
@@ -546,8 +545,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         Product product = Product(
                           pid: widget.product!.pid,
                           productName: productName.text,
-                          sellingPrice: double.tryParse(
-                                  formatter.getUnformattedValue().toStringAsFixed(2)) ??
+                          sellingPrice: double.tryParse(formatter
+                                  .getUnformattedValue()
+                                  .toStringAsFixed(2)) ??
                               0,
                           productDescription: productDescription.text,
                           costPrice: double.tryParse(formatter2
@@ -610,108 +610,83 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         );
 
                         return;
-                      }
-
-                        else if (!(Provider.of<GeneralProvider>(context,
-                                listen: false)
-                            .inventory
-                            .any((element) =>
-                                element.productName == productName.text))) {
-                          Product product = Product(
-                              pid: context
-                                      .read<GeneralProvider>()
-                                      .inventory
-                                      .isEmpty
-                                  ? 1
-                                  : context
-                                          .read<GeneralProvider>()
-                                          .inventory
-                                          .last
-                                          .pid +
-                                      1,
-                              productName: productName.text,
-                              productDescription: productDescription.text,
-                              sellingPrice: double.tryParse(formatter
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              costPrice: double.tryParse(formatter2
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              productCategory:
-                                  _selectedCategory /*  ??
+                      } else if (!(Provider.of<GeneralProvider>(context,
+                              listen: false)
+                          .inventory
+                          .any((element) =>
+                              element.productName == productName.text))) {
+                        Product product = Product(
+                            pid: context
+                                    .read<GeneralProvider>()
+                                    .inventory
+                                    .isEmpty
+                                ? 1
+                                : context
+                                        .read<GeneralProvider>()
+                                        .inventory
+                                        .last
+                                        .pid +
+                                    1,
+                            productName: productName.text,
+                            productDescription: productDescription.text,
+                            sellingPrice: double.tryParse(
+                                    formatter
+                                        .getUnformattedValue()
+                                        .toString()) ??
+                                0,
+                            costPrice: double.tryParse(formatter2
+                                    .getUnformattedValue()
+                                    .toString()) ??
+                                0,
+                            productCategory:
+                                _selectedCategory /*  ??
                                 ProductCategory(
                                     cid: 0,
                                     categoryName: 'Uncategorised',
                                     categoryDescription:
                                         'No Description') */
-                              ,
-                              isLowStock: isChecked,
-                              productQuantity:
-                                  int.tryParse(productQuantity.text) ?? 0,
-                              lowStockQuantity:
-                                  int.tryParse(lowStockQuantity.text) ?? 0,
-                              // sellingPrice:
-                              //     double.tryParse(productPrice.text) ?? 0,
-                              productImage: imageString);
+                            ,
+                            isLowStock: isChecked,
+                            productQuantity:
+                                int.tryParse(productQuantity.text) ?? 0,
+                            lowStockQuantity:
+                                int.tryParse(lowStockQuantity.text) ?? 0,
+                            // sellingPrice:
+                            //     double.tryParse(productPrice.text) ?? 0,
+                            productImage: imageString);
 
-                          Provider.of<GeneralProvider>(context, listen: false)
-                              .addProduct(product);
-                          Provider.of<GeneralProvider>(context, listen: false)
-                              .shop
-                              .products = Provider.of<GeneralProvider>(context,
-                                  listen: false)
-                              .inventory;
+                        Provider.of<GeneralProvider>(context, listen: false)
+                            .addProduct(product);
+                        Provider.of<GeneralProvider>(context, listen: false)
+                                .shop
+                                .products =
+                            Provider.of<GeneralProvider>(context, listen: false)
+                                .inventory;
 
-                          await storage.setItem(
-                              shopName!,
-                              shopProductsToJson(Provider.of<GeneralProvider>(
-                                      context,
-                                      listen: false)
-                                  .shop));
+                        await storage.setItem(
+                            shopName!,
+                            shopProductsToJson(Provider.of<GeneralProvider>(
+                                    context,
+                                    listen: false)
+                                .shop));
 
-                          addProducts(
-                              context.read<GeneralProvider>().inventory.isEmpty
-                                  ? 1
-                                  : context
-                                          .read<GeneralProvider>()
-                                          .inventory
-                                          .last
-                                          .pid +
-                                      1,
-                              productName.text,
-                              productDescription.text,
-                              imageString,
-                              double.tryParse(formatter
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              double.tryParse(formatter2
-                                      .getUnformattedValue()
-                                      .toString()) ??
-                                  0,
-                              int.tryParse(productQuantity.text) ?? 0,
-                              int.tryParse(lowStockQuantity.text) ?? 0,
-                              isChecked);
-
-                          
-                        } else {
-                          Notifier().toast(
-                              context: context,
-                              message: "ERROR PRODUCT ALREADY EXIST!",
-                              color: Colors.red);
-                          return;
-                        }
-                            successDialog();
-                          productCostPrice.clear();
-                          productName.clear();
-                          productPrice.clear();
-                          productDescription.clear();
-                          productQuantity.clear();
-                          lowStockQuantity.clear();
-                          imageFile = Uint8List(0);
-                          startTime();
+                        addProducts(product);
+                      } else {
+                        Notifier().toast(
+                            context: context,
+                            message: "ERROR PRODUCT ALREADY EXIST!",
+                            color: Colors.red);
+                        return;
+                      }
+                      successDialog();
+                      productCostPrice.clear();
+                      productName.clear();
+                      productPrice.clear();
+                      productDescription.clear();
+                      productQuantity.clear();
+                      lowStockQuantity.clear();
+                      imageFile = Uint8List(0);
+                      startTime();
                       // Navigator.pushReplacement(
                       //     context,
                       //     MaterialPageRoute(

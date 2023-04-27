@@ -7,8 +7,13 @@ import 'package:shop_manager/models/localStore.dart';
 LocalStore storage = LocalStore();
 
 class GeneralProvider extends ChangeNotifier {
-  ShopProducts _shop =
-      ShopProducts(id: 0, shopname: 'demo', products: [], sales: [], expenses: [], lowStocks: []);
+  ShopProducts _shop = ShopProducts(
+      id: 0,
+      shopname: 'demo',
+      products: [],
+      sales: [],
+      expenses: [],
+      lowStocks: []);
   ProductCategory _category = ProductCategory(cid: -1);
   Product _product = Product(pid: -1);
 
@@ -24,7 +29,11 @@ class GeneralProvider extends ChangeNotifier {
   Product get product => _product;
   ProductCategory get category => _category;
   List<Product> get inventory => _inventory;
-  List<Product> get lowStocks => _lowStocks;
+  List<Product> get lowStocks => _inventory
+      .where((element) =>
+          element.isLowStock &&
+          element.lowStockQuantity >= element.productQuantity)
+      .toList();
 
   List<Product> get cart => _cart;
   List<ProductCategory> get categories => _categories;
@@ -62,7 +71,8 @@ class GeneralProvider extends ChangeNotifier {
 
     // notifyListeners();
   }
-set lowStocks(List<Product> lowStocks) {
+
+  set lowStocks(List<Product> lowStocks) {
     _lowStocks = List.from(lowStocks);
 
     // notifyListeners();
@@ -89,12 +99,14 @@ set lowStocks(List<Product> lowStocks) {
   }
 
   void addToCart(Product product) {
-    if (product.productQuantity < 1) {
+    if (product.productQuantity < 1 ||
+        cart.any((element) => element.pid == product.pid)) {
       return;
     }
     if (product.cartQuantity < 1) {
       product.cartQuantity = 1;
     }
+
     Product cartProduct = product.copyWith();
     cart.add(cartProduct);
     notifyListeners();
@@ -196,7 +208,7 @@ set lowStocks(List<Product> lowStocks) {
   void addProduct(Product product) {
     _inventory.add(product);
     notifyListeners();
-   // saveToShop(_inventory);
+    // saveToShop(_inventory);
   }
 
   void editProduct(Product product) {

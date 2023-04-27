@@ -186,6 +186,11 @@ class _ProductViewState extends State<ProductView> {
                         children: [
                           IconButton(
                               onPressed: () {
+                                if ((context.watch<GeneralProvider>().cart.any(
+                                    (element) =>
+                                        element.pid == widget.product.pid))) {
+                                  return;
+                                }
                                 if (counter > 1) {
                                   setState(() {
                                     counter--;
@@ -195,7 +200,13 @@ class _ProductViewState extends State<ProductView> {
                               },
                               icon: Icon(Icons.remove_circle_outline,
                                   size: 30,
-                                  color: counter == 1
+                                  color: (counter == 1 ||
+                                          (context
+                                              .watch<GeneralProvider>()
+                                              .cart
+                                              .any((element) =>
+                                                  element.pid ==
+                                                  widget.product.pid)))
                                       ? Colors.grey
                                       : Colors.white)),
                           Padding(
@@ -208,6 +219,12 @@ class _ProductViewState extends State<ProductView> {
                           ),
                           IconButton(
                               onPressed: () {
+                                if ((context.watch<GeneralProvider>().cart.any(
+                                    (element) =>
+                                        element.pid == widget.product.pid))) {
+                                  return;
+                                }
+
                                 if (counter < widget.product.productQuantity) {
                                   setState(() {
                                     counter++;
@@ -217,10 +234,16 @@ class _ProductViewState extends State<ProductView> {
                               },
                               icon: Icon(Icons.add_circle_outline,
                                   size: 30,
-                                  color:
-                                      counter == widget.product.productQuantity
-                                          ? Colors.grey
-                                          : Colors.white))
+                                  color: (counter ==
+                                              widget.product.productQuantity ||
+                                          (context
+                                              .watch<GeneralProvider>()
+                                              .cart
+                                              .any((element) =>
+                                                  element.pid ==
+                                                  widget.product.pid)))
+                                      ? Colors.grey
+                                      : Colors.white))
                         ],
                       )),
                       const SizedBox(width: 20),
@@ -235,10 +258,8 @@ class _ProductViewState extends State<ProductView> {
                           }
                         }),
                         buttonText: 'Cart',
-                        color: (context
-                                .watch<GeneralProvider>()
-                                .cart.any((element) => element.pid == widget.product.pid)
-                                )
+                        color: (context.watch<GeneralProvider>().cart.any(
+                                (element) => element.pid == widget.product.pid))
                             ? Colors.grey
                             : actionColor,
                         width: width * 0.2,
