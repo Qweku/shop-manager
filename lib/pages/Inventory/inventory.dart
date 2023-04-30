@@ -1,11 +1,14 @@
 // ignore_for_file: unnecessary_cast, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/ShopModel.dart';
 
 import 'package:shop_manager/pages/Inventory/InventoryList.dart';
 import 'package:shop_manager/pages/Inventory/InventorySearchList.dart';
@@ -33,6 +36,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   final ScrollController _scrollController = ScrollController();
 
+ 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -40,7 +44,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-         floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (builder) => AddProductScreen()));
@@ -48,17 +52,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
           backgroundColor: primaryColor,
           child: Icon(Icons.add, color: Colors.white),
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   backgroundColor: primaryColor,
-        //   onPressed: () {
-        //     setState(() {
-        //       isList = !isList;
-        //     });
-        //   },
-        //   child: isList
-        //       ? Icon(Icons.dashboard_customize, color: primaryColorLight)
-        //       : Icon(Icons.list, color: primaryColorLight),
-        // ),
         body: SafeArea(
           top: false,
           child: Column(

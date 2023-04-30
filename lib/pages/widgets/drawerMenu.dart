@@ -3,6 +3,8 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,6 +22,110 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? shopName;
+
+  Future addProducts() async {
+    Provider.of<GeneralProvider>(context, listen: false)
+        .inventory
+        .forEach((element) async {
+      QuerySnapshot data = await fireStore.collection(shopName ?? "").get();
+
+      for (QueryDocumentSnapshot snapshot in data.docs) {
+        if (snapshot.exists) {
+          if (snapshot["product name"] != element.productName) {
+            await fireStore
+                .collection(shopName ?? "")
+                .doc(element.productName)
+                .set({
+              'product id': element.pid,
+              'product name': element.productName,
+              'product description': element.productDescription,
+              'product image': element.productImage,
+              'selling price': element.sellingPrice,
+              'cost price': element.costPrice,
+              'product quantity': element.productQuantity,
+              'low stock quantity': element.lowStockQuantity,
+              'low stock': element.isLowStock,
+            }).catchError((e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    backgroundColor: Color.fromARGB(255, 219, 16, 16),
+                    content: Text('An error occurred, please try again',
+                        textAlign: TextAlign.center, style: bodyText2),
+                    duration: const Duration(milliseconds: 1500),
+                    behavior: SnackBarBehavior.floating,
+                    shape: const StadiumBorder()),
+              );
+            });
+           
+          } else {
+            print("Something went wrong");
+          }
+           ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  backgroundColor: Color.fromARGB(255, 1, 156, 27),
+                  content: Text('Products Exported Successfully',
+                      textAlign: TextAlign.center, style: bodyText2),
+                  duration: const Duration(milliseconds: 1500),
+                  behavior: SnackBarBehavior.floating,
+                  shape: const StadiumBorder()),
+            );
+        }
+      }
+    });
+  }
+Future fetchProducts() async {
+   
+    QuerySnapshot data = await fireStore.collection(shopName ?? "").get().catchError((e){
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          backgroundColor: Color.fromARGB(255, 219, 16, 16),
+          content: Text('An error occurred, please try again',
+              textAlign: TextAlign.center, style: bodyText2),
+          duration: const Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+          shape: const StadiumBorder()),
+    );
+    });
+
+    for (QueryDocumentSnapshot snapshot in data.docs) {
+      Product products = Product(
+          pid: snapshot["product id"],
+          productName: snapshot["product name"],
+          productDescription: snapshot["product description"],
+          productImage: snapshot["product image"],
+          sellingPrice: snapshot["selling price"],
+          costPrice: snapshot["cost price"],
+          productQuantity: snapshot["product quantity"],
+          lowStockQuantity: snapshot["low stock quantity"],
+          isLowStock: snapshot["low stock"]);
+      Provider.of<GeneralProvider>(context, listen: false).addProduct(products);
+      
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  backgroundColor: Color.fromARGB(255, 1, 156, 27),
+                  content: Text('Products imported successfully',
+                      textAlign: TextAlign.center, style: bodyText2),
+                  duration: const Duration(milliseconds: 1500),
+                  behavior: SnackBarBehavior.floating,
+                  shape: const StadiumBorder()),
+            );
+  }
+
+
+  Future getShopName() async {
+    shopName = auth.currentUser!.displayName;
+  }
+
+  @override
+  void initState() {
+    getShopName();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -57,12 +163,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           ),
           DrawerItem(
             onTap: () async {
-              await downloadAttachment(context).then((value) {
-                log((value as File).path);
-              });
+              addProducts();
+              //Navigator.pop(context);
+              // await downloadAttachment(context).then((value) {
+              //   log((value as File).path);
+              //});
             },
             text: 'Export Data',
-            icon: Icons.download,
+            icon: Icons.cloud_upload,
+          ), 
+          DrawerItem(
+            onTap: () async {
+              fetchProducts();
+              //Navigator.pop(context);
+              // await downloadAttachment(context).then((value) {
+              //   log((value as File).path);
+              //});
+            },
+            text: 'Import Data',
+            icon: Icons.save_alt,
           ),
           DrawerItem(
             onTap: () => _backButton(context),

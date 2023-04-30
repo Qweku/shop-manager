@@ -48,6 +48,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   int count = 0;
   String? shopName;
+  
   Future getShopProducts() async {
     shopName = auth.currentUser!.displayName;
     var data = await storage.getItem(shopName!.isEmpty ? 'demo' : shopName!);

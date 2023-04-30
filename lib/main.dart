@@ -42,11 +42,7 @@ main() async {
     initialRoute = NotificationScreen.routeName;
   }
 
-  // await Hive.initFlutter();
-  // Hive.registerAdapter(ProductAdapter());
-  // Hive.registerAdapter(ProductCategoryAdapter());
-  // await Hive.openBox<Product>('Product');
-  // await Hive.openBox<ProductCategory>('Category');
+ 
   Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     Provider<AuthService>(create: (_)=>AuthService(),),

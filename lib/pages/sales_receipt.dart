@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -31,20 +29,24 @@ class SalesReceipt extends StatefulWidget {
 class _SalesReceiptState extends State<SalesReceipt> {
   ScreenshotController screenshotController = ScreenshotController();
   late Uint8List _imageFile;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? shopEmail;
+  Future getShopEmail() async {
+    shopEmail = auth.currentUser!.email;
+  }
 
   shareImage() async {
-    String tempPath = (await DownloadsPathProvider.downloadsDirectory)?.path ??
-        ''; //(await getExternalStorageDirectory())?.path ?? '';
+    String tempPath = ( Directory('/storage/emulated/0/Download')).path; //(await getExternalStorageDirectory())?.path ?? '';
     String fileName = "sales-report";
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     _imageFile = (await screenshotController.capture())!;
 
     //if (await Permission.storage.request().isGranted) {
-    File file = await File('$tempPath/$fileName.png');
+    File file =  File('$tempPath/$fileName.png');
     file.writeAsBytesSync(_imageFile);
-    await Share.shareFiles([file.path]);
+   await Share.shareFiles([file.path]);
     scaffoldMessenger.showSnackBar(SnackBar(
-      content: Text("Share result: ${file}"),
+      content: Text("Share result: $file"),
     ));
     //}
   }
@@ -64,7 +66,7 @@ class _SalesReceiptState extends State<SalesReceipt> {
       ),
     );
     String tempPath =
-        (await DownloadsPathProvider.downloadsDirectory)?.path ?? '';
+        (await Directory('/storage/emulated/0/Download')).path;
     String fileName = "my-sales-report" + "${DateTime.now().microsecond}";
     //if (await Permission.storage.request().isGranted) {
     File pdfFile = File('$tempPath/$fileName.pdf');
@@ -77,6 +79,12 @@ class _SalesReceiptState extends State<SalesReceipt> {
 
   double totalSales = 0.0;
   double totalProfit = 0.0;
+
+  @override
+  void initState() {
+    getShopEmail();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +138,7 @@ class _SalesReceiptState extends State<SalesReceipt> {
                                     children: [
                                       Text('contact: +233246013840',
                                           style: bodyText1),
-                                      Text('email: collins.brobbey@gmail.com',
+                                      Text('email: $shopEmail',
                                           style: bodyText1),
                                     ],
                                   )),
@@ -164,7 +172,7 @@ class _SalesReceiptState extends State<SalesReceipt> {
                                                       fontWeight:
                                                           FontWeight.bold)),
                                               Text(
-                                               widget.sales.date!,
+                                                widget.sales.date!,
                                                 style: bodyText1,
                                               )
                                             ],
@@ -298,31 +306,6 @@ class _SalesReceiptState extends State<SalesReceipt> {
                   )
                 ],
               ),
-              Positioned(
-                bottom: height * 0.05,
-                left: width * 0.05,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () => shareImage(),
-                      child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: primaryColorLight,
-                          child: const Icon(Icons.share, color: Colors.white)),
-                    ),
-                    SizedBox(height: height * 0.02),
-                    GestureDetector(
-                      onTap: getPdf,
-                      child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: primaryColorLight,
-                          child:
-                              const Icon(Icons.save_alt, color: Colors.white)),
-                    ),
-                  ],
-                ),
-              )
             ],
           )),
         ));

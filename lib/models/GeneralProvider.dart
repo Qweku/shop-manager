@@ -140,7 +140,7 @@ class GeneralProvider extends ChangeNotifier {
       return true;
     });
     notifyListeners();
-    //saveToShop(_inventory);
+    saveToShop(_inventory);
     return true;
   }
 
@@ -156,14 +156,14 @@ class GeneralProvider extends ChangeNotifier {
         ..productQuantity -= cartItem.cartQuantity
         ..cartQuantity = 0;
     }
-    //saveToShop(_inventory);
+    saveToShop(_inventory);
     notifyListeners();
   }
 
   void removeFromCategory(Product product) {
     _inventory.singleWhere((element) => element == product).productCategory =
         ProductCategory(cid: 0);
-    //saveToShop(_inventory);
+    saveToShop(_inventory);
     notifyListeners();
   }
 
@@ -202,13 +202,13 @@ class GeneralProvider extends ChangeNotifier {
   void deleteProduct(Product product) {
     _inventory.remove(product);
     notifyListeners();
-    //saveToShop(_inventory);
+    saveToShop(_inventory);
   }
 
   void addProduct(Product product) {
     _inventory.add(product);
     notifyListeners();
-    // saveToShop(_inventory);
+    saveToShop(_inventory);
   }
 
   void editProduct(Product product) {
@@ -220,58 +220,7 @@ class GeneralProvider extends ChangeNotifier {
       ..sellingPrice = product.sellingPrice
       ..costPrice = product.costPrice;
     notifyListeners();
-    //saveToShop(_inventory);
+    saveToShop(_inventory);
   }
 
-//   var productBox = Hive.box<Product>('Product');
-//   var categoryBox = Hive.box<ProductCategory>('Category');
-
-//   void saveToCategory(ProductCategory selectedCategory) {
-//     categories.singleWhere(
-//         (element) => element.categoryName == selectedCategory.categoryName)
-//       ..products = HiveList(productBox)
-//       //     ;
-//       // categories
-//       //     .singleWhere((element) => element == selectedCategory)
-//       ..products!.addAll(productBox.values.where((value) =>
-//           value.itemcategory!.toLowerCase() ==
-//           selectedCategory.categoryName.toLowerCase()));
-//   }
-
-//   void reArrangeCategory() {
-//     for (var category in categories) {
-//       saveToCategory(category);
-//     }
-//     return;
-//   }
-// }
-
-// class HiveFunctions {
-//   var productBox = Hive.box<Product>('Product');
-//   var categoryBox = Hive.box<ProductCategory>('Category');
-
-//   void saveToCategory(ProductCategory _selectedCategory) {
-//     categoryBox.values.firstWhere(
-//         (element) => element.categoryName == _selectedCategory.categoryName)
-//       ..products = HiveList(productBox)
-//       //     ;
-//       // categoryBox.values
-//       //     .firstWhere((element) => element.categoryName == _selectedCategory.categoryName)
-//       ..products!.addAll(productBox.values.where((value) =>
-//           value.itemcategory!.toLowerCase() ==
-//           _selectedCategory.categoryName.toLowerCase()))
-//       // ;
-//       // categoryBox.values
-//       //     .firstWhere((element) => element == _selectedCategory)
-//       ..save();
-//     return;
-//   }
-
-//   void reArrangeCategory() {
-//     for (var category in categoryBox.values) {
-//       saveToCategory(category);
-//     }
-//     return;
-//   }
-// }
 }

@@ -1,9 +1,13 @@
 // ignore_for_file: file_names
 
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
@@ -12,6 +16,7 @@ import 'package:shop_manager/pages/productView.dart';
 import 'package:shop_manager/pages/widgets/categoryCard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCard.dart';
+import 'package:shop_manager/utils/firebase_functions.dart';
 
 class InventoryList extends StatefulWidget {
   final bool isList;
@@ -31,6 +36,32 @@ class _InventoryListState extends State<InventoryList> {
   bool isScrolled = false;
   int isSelected = 0;
   List<Product> productItems = [];
+
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String? shopName;
+  bool isLoading = true;
+  refresh() async {
+    var _duration = const Duration(seconds: 5);
+    return Timer(_duration, cancelRefresh);
+  }
+
+  bool cancelRefresh() {
+    setState(() {});
+    return isLoading = true;
+  }
+
+  Future getShopName() async {
+    shopName = auth.currentUser!.displayName;
+  }
+
+  
+  @override
+  void initState() {
+    getShopName();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var categories = context.watch<GeneralProvider>();
@@ -49,12 +80,43 @@ class _InventoryListState extends State<InventoryList> {
                     .toSet()
                     .toList()
                     .isEmpty)
-            ? Center(
-                child: Text(
-                  'No Products',
-                  style:
-                      headline1.copyWith(fontSize: 25, color: Colors.blueGrey),
-                ),
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'No Products',
+                    style: headline1.copyWith(
+                        fontSize: 25, color: Colors.blueGrey),
+                  ),
+                  const SizedBox(height: 7),
+                  SizedBox(
+                    width: width * 0.4,
+                    child: Text(
+                      'Import data that was lost from your local storage',
+                      textAlign: TextAlign.center,
+                      style: bodyText1.copyWith(color: Colors.blueGrey),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  isLoading
+                      ? Button(
+                          onTap: () {
+                            FirebaseFunction().fetchProducts(context, shopName);
+
+                            refresh();
+                            setState(() {
+                              isLoading = false;
+                            });
+                          },
+                          color: actionColor,
+                          buttonText: "Import Data",
+                          width: width * 0.3,
+                        )
+                      : CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                ],
               )
             : Expanded(
                 child: Padding(
@@ -83,19 +145,19 @@ class _InventoryListState extends State<InventoryList> {
                               top: 10,
                             ),
                             child: ProductCard(
-
                               //edit and delete action
                               onLongPress: () {
                                 _bottomDrawSheet(
-                                    context,
-                                     isSelected == 0
-                                        ? categories.inventory[index]
-                                        : categories.inventory
-                                            .where((element) =>
-                                                element.productCategory ==
-                                                categories
-                                                    .categories[isSelected - 1])
-                                            .toList()[index],);
+                                  context,
+                                  isSelected == 0
+                                      ? categories.inventory[index]
+                                      : categories.inventory
+                                          .where((element) =>
+                                              element.productCategory ==
+                                              categories
+                                                  .categories[isSelected - 1])
+                                          .toList()[index],
+                                );
                               },
                               // add to cart button action
                               onPressed: () {
@@ -103,7 +165,6 @@ class _InventoryListState extends State<InventoryList> {
                                     .read<GeneralProvider>()
                                     .cart
                                     .contains(categories.inventory[index]))) {
-                                      
                                   Provider.of<GeneralProvider>(context,
                                           listen: false)
                                       .addToCart(

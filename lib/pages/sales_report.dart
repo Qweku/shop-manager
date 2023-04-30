@@ -1,14 +1,10 @@
 import 'dart:io';
 
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
+
 import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -34,23 +30,6 @@ class _SalesReportState extends State<SalesReport> {
   ScreenshotController screenshotController = ScreenshotController();
   late Uint8List _imageFile;
 
-  shareImage() async {
-    String tempPath = (await getDownloadsDirectory())?.path ??
-        ''; //(await getExternalStorageDirectory())?.path ?? '';
-    String fileName = "sales-report";
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    _imageFile = (await screenshotController.capture())!;
-
-    if (await Permission.storage.request().isGranted) {
-      File file = await File('$tempPath/$fileName.png');
-      file.writeAsBytesSync(_imageFile);
-      await Share.shareFiles([file.path]);
-      scaffoldMessenger.showSnackBar(SnackBar(
-        content: Text("Share result: ${file}"),
-      ));
-    }
-  }
-
   Future getPdf() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final screenShot = (await screenshotController.capture())!;
@@ -65,7 +44,7 @@ class _SalesReportState extends State<SalesReport> {
         },
       ),
     );
-    String tempPath = (await DownloadsPathProvider.downloadsDirectory)?.path ?? '';
+    String tempPath = (Directory('/storage/emulated/0/Download')).path;
     String fileName = "my-sales-report" + "${DateTime.now().microsecond}";
     //if (await Permission.storage.request().isGranted) {
     File pdfFile = File('$tempPath/$fileName.pdf');
@@ -140,8 +119,8 @@ class _SalesReportState extends State<SalesReport> {
                                                 .shop
                                                 .shopname
                                                 .toString(),
-                                            style:
-                                                headline1.copyWith(fontSize: 20)),
+                                            style: headline1.copyWith(
+                                                fontSize: 20)),
                                         Image.asset(
                                           'assets/app_icon.png',
                                           width: width * 0.15,
@@ -164,7 +143,8 @@ class _SalesReportState extends State<SalesReport> {
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text('From:',
                                                     style: bodyText1.copyWith(
@@ -181,7 +161,8 @@ class _SalesReportState extends State<SalesReport> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text('To:',
                                                     style: bodyText1.copyWith(
@@ -202,7 +183,8 @@ class _SalesReportState extends State<SalesReport> {
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text('Total Profit:',
                                                     style: bodyText1.copyWith(
@@ -219,7 +201,8 @@ class _SalesReportState extends State<SalesReport> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text('Total Sales:',
                                                     style: bodyText1.copyWith(
@@ -249,29 +232,29 @@ class _SalesReportState extends State<SalesReport> {
                                       //         style: bodyText1.copyWith(
                                       //             fontWeight: FontWeight.bold))),
                                       Expanded(
-                                         
                                           child: Text('Items',
                                               //textAlign: TextAlign.center,
                                               style: bodyText1.copyWith(
-                                                  fontWeight: FontWeight.bold))),
+                                                  fontWeight:
+                                                      FontWeight.bold))),
                                       Expanded(
-                                         
                                           child: Text('Date',
                                               textAlign: TextAlign.center,
                                               style: bodyText1.copyWith(
-                                                  fontWeight: FontWeight.bold))),
+                                                  fontWeight:
+                                                      FontWeight.bold))),
                                       Expanded(
-                                          
                                           child: Text('Quantity',
                                               textAlign: TextAlign.center,
                                               style: bodyText1.copyWith(
-                                                  fontWeight: FontWeight.bold))),
+                                                  fontWeight:
+                                                      FontWeight.bold))),
                                       Expanded(
-                                         
                                           child: Text('Amount',
                                               textAlign: TextAlign.right,
                                               style: bodyText1.copyWith(
-                                                  fontWeight: FontWeight.bold))),
+                                                  fontWeight:
+                                                      FontWeight.bold))),
                                     ],
                                   ),
                                 ),
@@ -318,7 +301,7 @@ class _SalesReportState extends State<SalesReport> {
                   ],
                 ),
               ),
-             ],
+            ],
           )),
         ));
   }
@@ -343,10 +326,10 @@ class SummaryListItem extends StatelessWidget {
           children: [
             // Expanded(child: Text("${index + 1}", style: bodyText1)),
             Expanded(
-                child: Text(
-                    salesModel.products[index].productName!.toTitleCase(),
-                   // textAlign: TextAlign.center,
-                    style: bodyText1)),
+                child:
+                    Text(salesModel.products[index].productName!.toTitleCase(),
+                        // textAlign: TextAlign.center,
+                        style: bodyText1)),
             Expanded(
                 child: Text(salesModel.date!,
                     textAlign: TextAlign.center, style: bodyText1)),
@@ -354,7 +337,6 @@ class SummaryListItem extends StatelessWidget {
                 child: Text(salesModel.products[index].cartQuantity.toString(),
                     textAlign: TextAlign.center, style: bodyText1)),
             Expanded(
-               
                 child: Text(
                     salesModel.products[index].sellingPrice.toStringAsFixed(2),
                     textAlign: TextAlign.right,

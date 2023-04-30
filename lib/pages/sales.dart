@@ -54,10 +54,15 @@ class _SalesScreenState extends State<SalesScreen> {
             .length
             .toString());
     output = <SalesModel>[];
-    fromDate.text =
-        Provider.of<SalesProvider>(context, listen: false).salesList[0].date!;
-    log("First sales date: " +
-        Provider.of<SalesProvider>(context, listen: false).salesList[0].date!);
+    if (Provider.of<SalesProvider>(context, listen: false)
+        .salesList
+        .isNotEmpty) {
+      fromDate.text = Provider.of<SalesProvider>(context, listen: false).salesList.first.date!;
+    }
+    // fromDate.text =
+    //     Provider.of<SalesProvider>(context, listen: false).salesList[0].date!;
+    // log("First sales date: " +
+    //     Provider.of<SalesProvider>(context, listen: false).salesList[0].date!);
     super.initState();
   }
 
@@ -225,7 +230,9 @@ class _SalesScreenState extends State<SalesScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SalesReceipt(
-                                          sales:context.watch<SalesProvider>().salesList[index])));
+                                      sales: context
+                                          .watch<SalesProvider>()
+                                          .salesList[index])));
                         },
                         width: width,
                         sales: context.watch<SalesProvider>().salesList[index],
@@ -243,7 +250,6 @@ class _SalesScreenState extends State<SalesScreen> {
     );
   }
 
-  
   _searchAccount() {
     return showDialog<bool>(
         barrierDismissible: false,
@@ -322,7 +328,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                     color: Color.fromARGB(255, 201, 26, 14)),
                               ))
                           : Container(),
-                       ],
+                    ],
                   ),
                 ),
                 actions: [

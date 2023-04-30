@@ -23,6 +23,7 @@ import 'package:shop_manager/models/api_client.dart';
 import 'package:shop_manager/pages/addProductSuccess.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/counter.dart';
+import 'package:shop_manager/utils/firebase_functions.dart';
 
 class AddProductScreen extends StatefulWidget {
   final bool toEdit;
@@ -134,29 +135,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
     setState(() {});
   }
 
-  Future addProducts(
-    Product product,
-  ) async {
-    await fireStore.collection(shopName ?? "").add({
-      'product id': product.pid,
-      'product name': product.productName,
-      'product description': product.productDescription,
-      'product image': product.productImage,
-      'selling price': product.sellingPrice,
-      'cost price': product.costPrice,
-      'product quantity': product.productQuantity,
-      'low stock quantity': product.lowStockQuantity,
-      'low stock': product.isLowStock,
-    });
-  }
-
-  Future updateProducts() async {
-    // DocumentReference docRef = fireStore.collection(shopName).id;
-    // await fireStore
-    //     .collection(shopName ?? "").where(field)
-  }
-
+  
   void successDialog() async {
+
     return await showDialog(
         context: context,
         barrierDismissible: true,
@@ -323,49 +304,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ],
                   ),
                 ),
-
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 10),
-                //   child: Container(
-                //     width: MediaQuery.of(context).size.width,
-                //     height: 50,
-                //     decoration: BoxDecoration(
-                //         border: Border.all(color: Colors.grey, width: 1),
-                //         borderRadius: BorderRadius.circular(20)),
-                //     child: DropdownButtonFormField(
-                //       //dropdownColor: Colors.black,
-                //       style: bodyText1,
-                //       decoration: InputDecoration(
-                //           hintStyle: TextStyle(color: Colors.grey),
-                //           border: InputBorder.none,
-                //           enabled: false,
-                //           fillColor: Colors.transparent,
-                //           filled: true),
-                //       hint: Text(
-                //         'Select Category',
-                //         style: TextStyle(color: Colors.grey),
-                //       ),
-                //       value: _selectedCategory,
-                //       onChanged: (newValue) {
-                //         setState(() {
-                //           _selectedCategory = newValue as ProductCategory;
-                //           categoryIndex = categoryList.indexOf(newValue);
-                //         });
-                //       },
-                //       items: categoryList.map((location) {
-                //         return DropdownMenuItem(
-                //           child: Text(
-                //             location.categoryName!,
-                //             style:
-                //                 bodyText1, /* ,style: TextStyle(color: Colors.white), */
-                //           ),
-                //           value: location,
-                //         );
-                //       }).toList(),
-                //     ),
-                //   ),
-                // ),
-
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: CustomTextField(
@@ -580,6 +518,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           }
                         });
 
+                        FirebaseFunction().updateProduct(context,product,productName.text,shopName);
+
                         // .inventory
                         //   .singleWhere(
                         //       (element) => element == widget.product)
@@ -664,14 +604,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             Provider.of<GeneralProvider>(context, listen: false)
                                 .inventory;
 
-                        await storage.setItem(
-                            shopName!,
-                            shopProductsToJson(Provider.of<GeneralProvider>(
-                                    context,
-                                    listen: false)
-                                .shop));
+                        // await storage.setItem(
+                        //     shopName!,
+                        //     shopProductsToJson(Provider.of<GeneralProvider>(
+                        //             context,
+                        //             listen: false)
+                        //         .shop));
 
-                        addProducts(product);
+                        FirebaseFunction().addProducts(product,productName.text,shopName);
                       } else {
                         Notifier().toast(
                             context: context,
@@ -688,13 +628,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       lowStockQuantity.clear();
                       imageFile = Uint8List(0);
                       startTime();
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) =>
-                      //             const AddProductSuccess()));
-
-                      //Navigator.pop(context);
                     },
                   ),
                 ),

@@ -137,9 +137,9 @@ class _LowStockGridListState extends State<LowStockGridList> {
                 (index) => ProductCard(
                   onTap: ()=>_editProduct(context, index),
                       index: index,
-                      image64: "",
+                      image64: context.read<GeneralProvider>().lowStocks[index].productImage ?? "",
                       price:
-                          "${context.read<GeneralProvider>().lowStocks[index].sellingPrice}",
+                          "${context.read<GeneralProvider>().lowStocks[index].sellingPrice.toStringAsFixed(2)}",
                       productName: context
                               .read<GeneralProvider>()
                               .lowStocks[index]
