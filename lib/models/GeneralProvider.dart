@@ -156,7 +156,7 @@ class GeneralProvider extends ChangeNotifier {
         ..productQuantity -= cartItem.cartQuantity
         ..cartQuantity = 0;
     }
-    saveToShop(_inventory);
+    //saveToShop(_inventory);
     notifyListeners();
   }
 

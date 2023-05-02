@@ -150,7 +150,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryName: "Uncategorised",
               categoryDescription: 'No Description'));
     }
-    notify();
+  
     delayScreen();
     super.initState();
   }
@@ -162,10 +162,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     });
   }
 
-  void notify() async {
-    await notificationPlugin.showNotification(
-        "Low Stock", "Some products are running low on stock");
-  }
+  // void notify() async {
+  //   await notificationPlugin.showNotification(
+  //       "Low Stock", "Some products are running low on stock");
+  // }
 
   @override
   Widget build(BuildContext context) {

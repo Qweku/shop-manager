@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +19,20 @@ import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
 
 import '../models/NotificationModel.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+     Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('A Background message just showed up :  ${message.messageId}');
+}
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    //'This channel is used for important notifications.', // description
+    importance: Importance.high,
+    playSound: true);
 
 class SummaryScreen extends StatefulWidget {
   final double amountReceived, change, totalCost;
@@ -269,7 +286,18 @@ class _SummaryScreenState extends State<SummaryScreen> {
         'lowStocks',
         shopProductsToJson(
             Provider.of<GeneralProvider>(context, listen: false).shop)); 
-      await notificationPlugin.showNotification(
-        "Low Stock", "Some products are running low on stock");
+      // await notificationPlugin.showNotification(
+      //   "Low Stock", "Some products are running low on stock");
+       flutterLocalNotificationsPlugin.show(
+        0,
+        "Low Stock",
+        "Some products are running low on stock",
+        NotificationDetails(
+            android: AndroidNotificationDetails(
+                channel.id, channel.name,
+                importance: Importance.high,
+                color: primaryColor,
+                playSound: true,
+                icon: '@mipmap/ic_launcher')));
   }
 }
