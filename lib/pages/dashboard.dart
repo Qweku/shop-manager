@@ -170,7 +170,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _backButton(context),
+      onWillPop: () async => await false,
       child: Scaffold(
           backgroundColor: primaryColorLight,
           // appBar: AppBar(
