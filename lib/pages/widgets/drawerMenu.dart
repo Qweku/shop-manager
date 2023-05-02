@@ -26,7 +26,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   FirebaseAuth auth = FirebaseAuth.instance;
   String? shopName;
 
-  Future addProducts() async {
+  Future addProducts(BuildContext context) async {
     Provider.of<GeneralProvider>(context, listen: false)
         .inventory
         .forEach((element) async {
@@ -76,7 +76,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       }
     });
   }
-Future fetchProducts() async {
+Future fetchProducts(BuildContext context) async {
    
     QuerySnapshot data = await fireStore.collection(shopName ?? "").get().catchError((e){
       ScaffoldMessenger.of(context).showSnackBar(
@@ -163,7 +163,7 @@ Future fetchProducts() async {
           ),
           DrawerItem(
             onTap: () async {
-              addProducts();
+              addProducts(context);
               //Navigator.pop(context);
               // await downloadAttachment(context).then((value) {
               //   log((value as File).path);
@@ -174,7 +174,7 @@ Future fetchProducts() async {
           ), 
           DrawerItem(
             onTap: () async {
-              fetchProducts();
+              fetchProducts(context);
               //Navigator.pop(context);
               // await downloadAttachment(context).then((value) {
               //   log((value as File).path);

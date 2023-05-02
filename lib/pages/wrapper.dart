@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/responsive.dart';
@@ -8,7 +6,6 @@ import 'package:shop_manager/models/UserModel.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
 import 'package:shop_manager/pages/Auth/verify_email.dart';
 import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
-import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class Wrapper extends StatefulWidget {
@@ -42,9 +39,7 @@ class _WrapperState extends State<Wrapper> {
             //     .doc(user.uid)
             //     .set({"lastLoggedIn": currentTime}, SetOptions(merge: true));
             return Responsive.isMobile()
-                ? VerifyEmailScreen(
-                    
-                  )
+                ? VerifyEmailScreen()
                 : TabletDashboard();
           } else {
             return Scaffold(
