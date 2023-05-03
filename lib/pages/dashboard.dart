@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 // import 'package:hive_flutter/adapters.dart';
@@ -33,6 +34,9 @@ import '../models/NotificationModel.dart';
 import 'addproduct.dart';
 import 'Categories/category.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
 
@@ -48,7 +52,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   int count = 0;
   String? shopName;
-  
+
   Future getShopProducts() async {
     shopName = auth.currentUser!.displayName;
     var data = await storage.getItem(shopName!.isEmpty ? 'demo' : shopName!);
@@ -69,57 +73,23 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     }
   }
 
-  // void bootUp() async {
-  //   shopName = auth.currentUser!.displayName;
-  //   if (await storage.ready) {
-  //     Provider.of<NotificationProvider>(context, listen: false).notiList =
-  //         notificationModelFromJson(storage.getItem('notification') ?? '[]');
-  //     Provider.of<GeneralProvider>(context, listen: false).shop =
-  //         shopProductsFromJson(storage.getItem(shopName!) ?? '[]');
-  //   }
-  // }
+  void bootUp() async {
+    shopName = auth.currentUser!.displayName;
+    if (await storage.ready) {
+      Provider.of<NotificationProvider>(context, listen: false).notiList =
+          notificationModelFromJson(storage.getItem('notification') ?? '[]');
+      Provider.of<GeneralProvider>(context, listen: false).shop =
+          shopProductsFromJson(storage.getItem(shopName!) ?? '[]');
+    }
+  }
 
   @override
   void initState() {
-    // bootUp();
-    // getShopProducts();
-    // Provider.of<GeneralProvider>(context, listen: false).inventory =
-    //     Provider.of<GeneralProvider>(context, listen: false).shop.products;
+    bootUp();
+    NotiPlugin.initialize(flutterLocalNotificationsPlugin);
 
-    log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
-    log("${Provider.of<GeneralProvider>(context, listen: false).shop.shopname}");
-    // log(shopName!);
-    // var productBox = Hive.box<Product>('Product');
-    // var categoryBox = Hive.box<ProductCategory>('Category');
-    // HiveFunctions().reArrangeCategory();
-    // log('5');
-    // context.read<GeneralProvider>().inventory.forEach(
-    //   (element) {
-    //     Product productModel = Product(
-    //         pid: pid,
-    //         productCategory: element.productCategory,
-    //         productDescription: element.productDescription,
-    //         productName: element.productName,
-    //         productImage: element.productName,
-    //         productQuantity: element.productQuantity);
-    //     NotificationModel notiModel = NotificationModel(
-    //         date: dateformat.format(DateTime.now()),
-    //         time: timeformat.format(DateTime.now()),
-    //         title: "Low Stock",
-    //         body:
-    //             ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
-    //     if (element.productQuantity <= element.lowStockQuantity) {
-    //       Provider.of<NotificationProvider>(context, listen: false)
-    //           .addNotification(notiModel);
-    //       notify();
-    //       count = 1;
-    //       Provider.of<GeneralProvider>(context, listen: false)
-    //           .addLowStock(productModel);
-    //     } else {
-    //       return null;
-    //     }
-    //   },
-    // );
+    // log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
+    // log("${Provider.of<GeneralProvider>(context, listen: false).shop.shopname}");
 
     Set<String> name = {};
 
@@ -135,12 +105,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     }).toList()
           ..removeWhere((element) => element.cid == -1);
 
-    log('CATEGORIES: ');
-    log(Provider.of<GeneralProvider>(context, listen: false)
-        .categories
-        .length
-        .toString());
-
     if (Provider.of<GeneralProvider>(context, listen: false)
         .categories
         .isEmpty) {
@@ -150,7 +114,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               categoryName: "Uncategorised",
               categoryDescription: 'No Description'));
     }
-  
+
     delayScreen();
     super.initState();
   }
@@ -170,7 +134,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => await false,
+      onWillPop: () async => _backButton(context),
       child: Scaffold(
           backgroundColor: primaryColorLight,
           // appBar: AppBar(

@@ -40,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               'product image': element.productImage,
               'selling price': element.sellingPrice,
               'cost price': element.costPrice,
-              'product category': element.productCategory,
+              //'product category': element.productCategory,
               'product quantity': element.productQuantity,
               'low stock quantity': element.lowStockQuantity,
               'low stock': element.isLowStock,

@@ -135,9 +135,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
     setState(() {});
   }
 
-  
-  void successDialog() async {
+  Future exportProduct(Product product) async {
+    String customId = productName.text;
+    await fireStore.collection(shopName ?? "").doc(customId).set({
+      'product id': product.pid,
+      'product name': product.productName,
+      'product description': product.productDescription,
+      'product image': product.productImage,
+      'selling price': product.sellingPrice,
+      'cost price': product.costPrice,
+      //'product category': product.productCategory,
+      'product quantity': product.productQuantity,
+      'low stock quantity': product.lowStockQuantity,
+      'low stock': product.isLowStock,
+    });
+  }
 
+  void successDialog() async {
     return await showDialog(
         context: context,
         barrierDismissible: true,
@@ -518,7 +532,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           }
                         });
 
-                        FirebaseFunction().updateProduct(context,product,productName.text,shopName);
+                        FirebaseFunction().updateProduct(
+                            context, product, productName.text, shopName);
 
                         // .inventory
                         //   .singleWhere(
@@ -610,8 +625,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     context,
                                     listen: false)
                                 .shop));
-
-                        FirebaseFunction().addProducts(product,productName.text,shopName);
+                        exportProduct(product);
+                        // FirebaseFunction()
+                        //     .addProducts(product, productName.text, shopName);
                       } else {
                         Notifier().toast(
                             context: context,
