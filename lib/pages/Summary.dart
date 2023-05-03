@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,11 +25,12 @@ import '../models/NotificationModel.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-     Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('A Background message just showed up :  ${message.messageId}');
+  log('A Background message just showed up :  ${message.messageId}');
 }
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
     //'This channel is used for important notifications.', // description
@@ -93,7 +96,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             Text('Order #: ',
                                 style: bodyText1.copyWith(
                                     fontWeight: FontWeight.bold)),
-                            Text('000'+"${context.read<SalesProvider>().salesList.length + 1}", style: bodyText1),
+                            Text(
+                                '000' +
+                                    "${context.read<SalesProvider>().salesList.length + 1}",
+                                style: bodyText1),
                           ]),
                       Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,7 +278,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
   }
 
   void notify(Product productModel) async {
-   
     await storage.setItem(
         'notification',
         notificationModelToJson(
@@ -285,16 +290,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
     await storage.setItem(
         'lowStocks',
         shopProductsToJson(
-            Provider.of<GeneralProvider>(context, listen: false).shop)); 
-      // await notificationPlugin.showNotification(
-      //   "Low Stock", "Some products are running low on stock");
-       flutterLocalNotificationsPlugin.show(
+            Provider.of<GeneralProvider>(context, listen: false).shop));
+    // await notificationPlugin.showNotification(
+    //   "Low Stock", "Some products are running low on stock");
+    flutterLocalNotificationsPlugin.show(
         0,
         "Low Stock",
         "Some products are running low on stock",
         NotificationDetails(
-            android: AndroidNotificationDetails(
-                channel.id, channel.name,
+            android: AndroidNotificationDetails(channel.id, channel.name,
                 importance: Importance.high,
                 color: primaryColor,
                 playSound: true,

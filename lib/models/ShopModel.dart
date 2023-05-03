@@ -192,9 +192,8 @@ class ShopProducts {
             (json["sales"] ?? []).map((x) => SalesModel.fromJson(x))),
         expenses: List<ExpenseModel>.from(
             (json["expenses"] ?? []).map((x) => ExpenseModel.fromJson(x))),
-           lowStocks: List<Product>.from(
+        lowStocks: List<Product>.from(
             (json["lowStocks"] ?? []).map((x) => Product.fromJson(x))),
-            
       );
 
   Map<String, dynamic> toJson() => {
@@ -204,7 +203,6 @@ class ShopProducts {
         "sales": List<dynamic>.from(sales.map((x) => x.toJson())),
         "expenses": List<dynamic>.from(expenses.map((x) => x.toJson())),
         "lowStocks": List<dynamic>.from(lowStocks.map((x) => x.toJson())),
-        
       };
 }
 
@@ -273,7 +271,9 @@ class Product {
         lowStockQuantity: json["lowStockQuantity"] ?? 0,
         cartQuantity: json["cartQuantity"] ?? 0,
         isLowStock: json["isLowStock"] ?? false,
-        productCategory: ProductCategory.fromJson(json["productCategory"]),
+        productCategory: json["productCategory"] == null
+            ? ProductCategory()
+            : ProductCategory.fromJson(json["productCategory"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -287,7 +287,7 @@ class Product {
         "lowStockQuantity": lowStockQuantity,
         "cartQuantity": cartQuantity,
         "isLowStock": isLowStock,
-        "productCategory": productCategory?.toJson(),
+        "productCategory": productCategory?.toJson() ?? ProductCategory().toJson(),
       };
 }
 

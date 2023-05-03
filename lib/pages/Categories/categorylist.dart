@@ -38,7 +38,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     // Provider.of<GeneralProvider>(context, listen: false)
     //     .categories
     //     .forEach((element) {
-    //   print(element.products!.first.productName);
+    //   log(element.products!.first.productName);
     // });
     return Scaffold(
       // floatingActionButton: FloatingActionButton(
@@ -71,7 +71,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       child: HeaderSection(
                         height: height,
                         widget: widget,
-                       
                         width: width,
                         onPressed: () {
                           Navigator.push(
@@ -313,14 +312,13 @@ class HeaderSection extends StatelessWidget {
     Key? key,
     required this.height,
     required this.widget,
-    
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
   final ProductListScreen widget;
-  
+
   final double width;
   final Function()? onPressed;
 

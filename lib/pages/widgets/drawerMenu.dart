@@ -63,7 +63,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               );
             });
           } else {
-            print("Something went wrong");
+            log("Something went wrong");
           }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

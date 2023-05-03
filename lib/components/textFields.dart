@@ -247,7 +247,7 @@ class CustomPhoneTextField extends StatefulWidget {
       this.textStyle,
       this.controller,
       this.hint,
-   required   this.getValidation})
+      required this.getValidation})
       : super(key: key);
 
   @override
@@ -277,10 +277,10 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
           textStyle: widget.textStyle,
           // inputDecoration: InputDecoration(contentPadding: EdgeInsets.all(5)),
           onInputChanged: (PhoneNumber number) {
-            // print(number.phoneNumber);
+            // log(number.phoneNumber);
           },
           onInputValidated: (bool value) {
-            // print(value);
+            // log(value);
             setState(() {
               widget.getValidation!(value);
             });
@@ -295,7 +295,8 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
           textFieldController: widget.controller,
           formatInput: true,
           inputDecoration: InputDecoration(
-              border: InputBorder.none, contentPadding: EdgeInsets.symmetric(vertical:20)),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(vertical: 20)),
           isEnabled: true,
           hintText: widget.hint,
           // keyboardType:
@@ -306,7 +307,7 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
           //  borderSide: BorderSide(color: Colors.grey[800],
           // width: 1) ),
           onSaved: (PhoneNumber number) {
-            // print('On Saved: $number');
+            // log('On Saved: $number');
             setState(() {
               val = number.toString();
             });
