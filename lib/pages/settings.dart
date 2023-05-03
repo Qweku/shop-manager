@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,8 +28,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       QuerySnapshot data = await fireStore.collection(shopName ?? "").get();
 
       for (QueryDocumentSnapshot snapshot in data.docs) {
+                  log(snapshot.exists.toString());
+
         if (snapshot.exists) {
-          print(snapshot.exists);
+          log(snapshot.exists.toString());
           if (snapshot["product name"] != element.productName) {
             await fireStore
                 .collection(shopName ?? "")
@@ -56,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
             });
           } else {
-            print("Something went wrong");
+            log("Something went wrong");
           }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -87,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
 
     for (QueryDocumentSnapshot snapshot in data.docs) {
-      print(snapshot.exists);
+      log(snapshot.exists.toString());
       Product products = Product(
           pid: snapshot["product id"],
           productName: snapshot["product name"],

@@ -97,14 +97,13 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                   color: primaryColor,
                                   child: HeaderSection(
                                     height: height,
-                                   
                                     width: width,
                                     onPressed: () {
                                       // showSearch(
                                       //     //useRootNavigator: true,
                                       //     context: context,
                                       //     delegate: Search());
-                                      // print('SEARCH');
+                                      // log('SEARCH');
                                     },
                                   ),
                                 ),
@@ -303,13 +302,12 @@ class HeaderSection extends StatelessWidget {
   const HeaderSection({
     Key? key,
     required this.height,
-    
     required this.width,
     this.onPressed,
   }) : super(key: key);
 
   final double height;
-  
+
   final double width;
   final Function()? onPressed;
 

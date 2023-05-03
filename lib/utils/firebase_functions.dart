@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
@@ -6,22 +8,22 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
-class FirebaseFunction{
-   LocalStorage storage = LocalStorage('shop_mate');
+class FirebaseFunction {
+  LocalStorage storage = LocalStorage('shop_mate');
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   Future fetchProducts(BuildContext context, String? shopName) async {
-   
-    QuerySnapshot data = await fireStore.collection(shopName ?? "").get().catchError((e){
+    QuerySnapshot data =
+        await fireStore.collection(shopName ?? "").get().catchError((e) {
       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          backgroundColor: Color.fromARGB(255, 219, 16, 16),
-          content: Text('An error occurred, please try again',
-              textAlign: TextAlign.center, style: bodyText2),
-          duration: const Duration(milliseconds: 1500),
-          behavior: SnackBarBehavior.floating,
-          shape: const StadiumBorder()),
-    );
+        SnackBar(
+            backgroundColor: Color.fromARGB(255, 219, 16, 16),
+            content: Text('An error occurred, please try again',
+                textAlign: TextAlign.center, style: bodyText2),
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            shape: const StadiumBorder()),
+      );
     });
 
     for (QueryDocumentSnapshot snapshot in data.docs) {
@@ -38,19 +40,14 @@ class FirebaseFunction{
           isLowStock: snapshot["low stock"]);
       Provider.of<GeneralProvider>(context, listen: false).addProduct(products);
       await storage.setItem(
-                            shopName!,
-                            shopProductsToJson(Provider.of<GeneralProvider>(
-                                    context,
-                                    listen: false)
-                                .shop));
-
+          shopName!,
+          shopProductsToJson(
+              Provider.of<GeneralProvider>(context, listen: false).shop));
     }
-   
   }
 
-
-  Future updateProduct(BuildContext context,Product product,String productName,
-    String? shopName) async {
+  Future updateProduct(BuildContext context, Product product,
+      String productName, String? shopName) async {
     DocumentReference data =
         fireStore.collection(shopName ?? "").doc(productName);
     data.update({
@@ -60,7 +57,7 @@ class FirebaseFunction{
       'product image': product.productImage,
       'selling price': product.sellingPrice,
       'cost price': product.costPrice,
-       //'product category':product.productCategory,
+      //'product category':product.productCategory,
       'product quantity': product.productQuantity,
       'low stock quantity': product.lowStockQuantity,
       'low stock': product.isLowStock,
@@ -78,10 +75,7 @@ class FirebaseFunction{
   }
 
   Future addProducts(
-    Product product,
-    String productName,
-    String? shopName
-  ) async {
+      Product product, String productName, String? shopName) async {
     String customId = productName;
 
     QuerySnapshot data = await fireStore.collection(shopName ?? "").get();
@@ -96,17 +90,15 @@ class FirebaseFunction{
             'product image': product.productImage,
             'selling price': product.sellingPrice,
             'cost price': product.costPrice,
-            'product category':product.productCategory,
+            'product category': product.productCategory,
             'product quantity': product.productQuantity,
             'low stock quantity': product.lowStockQuantity,
             'low stock': product.isLowStock,
           });
         } else {
-          print("Document already exist.");
+          log("Document already exist.");
         }
       }
     }
   }
- 
-
 }

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -21,11 +22,11 @@ import 'models/GeneralProvider.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-     Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  
-  print('A Background message just showed up :  ${message.messageId}');
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  log('A Background message just showed up :  ${message.messageId}');
 }
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
     //'This channel is used for important notifications.', // description
@@ -43,14 +44,14 @@ main() async {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   }
- await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 // Firebase local notification plugin
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
 //Firebase messaging
@@ -60,7 +61,7 @@ main() async {
     sound: true,
   );
 
-   NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
+  NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
           Platform.isLinux
       ? null
       : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -69,15 +70,20 @@ main() async {
     initialRoute = NotificationScreen.routeName;
   }
 
- 
   Firebase.initializeApp();
-  runApp(MultiProvider(providers: [
-    Provider<AuthService>(create: (_)=>AuthService(),),
-    ChangeNotifierProvider(create: (_) => GeneralProvider()),
-    ChangeNotifierProvider(create: (_) => NotificationProvider()),
-    ChangeNotifierProvider(create: (_) => SalesProvider()),
-    ChangeNotifierProvider(create: (_) => ApplicationState()),
-  ], child:  MyApp(initialRoute: initialRoute,)));
+  runApp(MultiProvider(
+      providers: [
+        Provider<AuthService>(
+          create: (_) => AuthService(),
+        ),
+        ChangeNotifierProvider(create: (_) => GeneralProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => SalesProvider()),
+        ChangeNotifierProvider(create: (_) => ApplicationState()),
+      ],
+      child: MyApp(
+        initialRoute: initialRoute,
+      )));
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -91,7 +97,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-   int _counter = 0;
+  int _counter = 0;
   @override
   void initState() {
     super.initState();
@@ -118,7 +124,7 @@ class _MyAppState extends State<MyApp> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new messageopen app event was published');
+      log('A new message open app event was published');
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
@@ -139,7 +145,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -151,14 +156,12 @@ class _MyAppState extends State<MyApp> {
         primaryColorLight: Colors.white,
         primaryColorDark: const Color.fromARGB(255, 22, 22, 22),
         fontFamily: "Montserrat",
-        
         primarySwatch: Colors.blue,
       ),
       initialRoute: widget.initialRoute,
       routes: <String, WidgetBuilder>{
         Launcher.routeName: (_) => Launcher(),
-        NotificationScreen.routeName: (_) =>
-            NotificationScreen()
+        NotificationScreen.routeName: (_) => NotificationScreen()
       },
       //LoginScreen(),
     );
