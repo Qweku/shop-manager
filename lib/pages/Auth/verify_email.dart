@@ -31,13 +31,13 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   bool canResendEmail = false;
   Timer? timer;
   LocalStorage storage = LocalStorage('shop_mate');
-  String  shopName ='';
+  String?  shopName;
   bool initialized = false;
 
   void bootUp() async {
     shopName = auth.currentUser?.displayName ?? '';
     //if (await storage.ready) {
-      var data = await storage.getItem(shopName.isEmpty ? 'demo' : shopName);
+      var data = await storage.getItem(shopName!.isEmpty ? 'demo' : shopName!);
       if (data == null) {
         log('empty');
         Provider.of<GeneralProvider>(context, listen: false).shop =
@@ -59,7 +59,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
   @override
   void initState() {
-    //bootUp();
+    bootUp();
     super.initState();
     //user needs to be created before!
     isEmailVerified = auth.currentUser!.emailVerified;

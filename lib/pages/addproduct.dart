@@ -604,12 +604,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             Provider.of<GeneralProvider>(context, listen: false)
                                 .inventory;
 
-                        // await storage.setItem(
-                        //     shopName!,
-                        //     shopProductsToJson(Provider.of<GeneralProvider>(
-                        //             context,
-                        //             listen: false)
-                        //         .shop));
+                        await storage.setItem(
+                            shopName!,
+                            shopProductsToJson(Provider.of<GeneralProvider>(
+                                    context,
+                                    listen: false)
+                                .shop));
 
                         FirebaseFunction().addProducts(product,productName.text,shopName);
                       } else {

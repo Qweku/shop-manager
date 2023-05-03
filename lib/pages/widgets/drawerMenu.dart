@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
+import 'package:shop_manager/pages/settings.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -45,6 +47,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               'product image': element.productImage,
               'selling price': element.sellingPrice,
               'cost price': element.costPrice,
+              //'product category': element.productCategory,
               'product quantity': element.productQuantity,
               'low stock quantity': element.lowStockQuantity,
               'low stock': element.isLowStock,
@@ -59,62 +62,22 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     shape: const StadiumBorder()),
               );
             });
-           
           } else {
             print("Something went wrong");
           }
-           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  backgroundColor: Color.fromARGB(255, 1, 156, 27),
-                  content: Text('Products Exported Successfully',
-                      textAlign: TextAlign.center, style: bodyText2),
-                  duration: const Duration(milliseconds: 1500),
-                  behavior: SnackBarBehavior.floating,
-                  shape: const StadiumBorder()),
-            );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                backgroundColor: Color.fromARGB(255, 1, 156, 27),
+                content: Text('Products Exported Successfully',
+                    textAlign: TextAlign.center, style: bodyText2),
+                duration: const Duration(milliseconds: 1500),
+                behavior: SnackBarBehavior.floating,
+                shape: const StadiumBorder()),
+          );
         }
       }
     });
   }
-Future fetchProducts(BuildContext context) async {
-   
-    QuerySnapshot data = await fireStore.collection(shopName ?? "").get().catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          backgroundColor: Color.fromARGB(255, 219, 16, 16),
-          content: Text('An error occurred, please try again',
-              textAlign: TextAlign.center, style: bodyText2),
-          duration: const Duration(milliseconds: 1500),
-          behavior: SnackBarBehavior.floating,
-          shape: const StadiumBorder()),
-    );
-    });
-
-    for (QueryDocumentSnapshot snapshot in data.docs) {
-      Product products = Product(
-          pid: snapshot["product id"],
-          productName: snapshot["product name"],
-          productDescription: snapshot["product description"],
-          productImage: snapshot["product image"],
-          sellingPrice: snapshot["selling price"],
-          costPrice: snapshot["cost price"],
-          productQuantity: snapshot["product quantity"],
-          lowStockQuantity: snapshot["low stock quantity"],
-          isLowStock: snapshot["low stock"]);
-      Provider.of<GeneralProvider>(context, listen: false).addProduct(products);
-      
-    }
-    ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  backgroundColor: Color.fromARGB(255, 1, 156, 27),
-                  content: Text('Products imported successfully',
-                      textAlign: TextAlign.center, style: bodyText2),
-                  duration: const Duration(milliseconds: 1500),
-                  behavior: SnackBarBehavior.floating,
-                  shape: const StadiumBorder()),
-            );
-  }
-
 
   Future getShopName() async {
     shopName = auth.currentUser!.displayName;
@@ -152,36 +115,19 @@ Future fetchProducts(BuildContext context) async {
             ),
           ),
           DrawerItem(
-            onTap: () {},
+            onTap: () {
+              addProducts(context);
+            },
             text: 'Profile',
             icon: Icons.person,
           ),
           DrawerItem(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsScreen()));
+            },
             text: 'Settings',
             icon: Icons.settings,
-          ),
-          DrawerItem(
-            onTap: () async {
-              addProducts(context);
-              //Navigator.pop(context);
-              // await downloadAttachment(context).then((value) {
-              //   log((value as File).path);
-              //});
-            },
-            text: 'Export Data',
-            icon: Icons.cloud_upload,
-          ), 
-          DrawerItem(
-            onTap: () async {
-              fetchProducts(context);
-              //Navigator.pop(context);
-              // await downloadAttachment(context).then((value) {
-              //   log((value as File).path);
-              //});
-            },
-            text: 'Import Data',
-            icon: Icons.save_alt,
           ),
           DrawerItem(
             onTap: () => _backButton(context),

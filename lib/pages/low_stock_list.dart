@@ -129,6 +129,7 @@ class _LowStockGridListState extends State<LowStockGridList> {
             ),
           )
         : GridView.count(
+          padding: EdgeInsets.symmetric(horizontal: 15),
             physics: const BouncingScrollPhysics(),
             crossAxisCount: Responsive.isMobile() ? 3 : 6,
             childAspectRatio: 2 / 3.5,
@@ -139,7 +140,7 @@ class _LowStockGridListState extends State<LowStockGridList> {
                       index: index,
                       image64: context.read<GeneralProvider>().lowStocks[index].productImage ?? "",
                       price:
-                          "${context.read<GeneralProvider>().lowStocks[index].sellingPrice.toStringAsFixed(2)}",
+                          "GHS ${context.read<GeneralProvider>().lowStocks[index].sellingPrice.toStringAsFixed(2)}",
                       productName: context
                               .read<GeneralProvider>()
                               .lowStocks[index]

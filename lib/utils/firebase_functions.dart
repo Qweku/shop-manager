@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class FirebaseFunction{
+   LocalStorage storage = LocalStorage('shop_mate');
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   Future fetchProducts(BuildContext context, String? shopName) async {
@@ -30,11 +32,18 @@ class FirebaseFunction{
           productImage: snapshot["product image"],
           sellingPrice: snapshot["selling price"],
           costPrice: snapshot["cost price"],
+          //productCategory: snapshot["product category"],
           productQuantity: snapshot["product quantity"],
           lowStockQuantity: snapshot["low stock quantity"],
           isLowStock: snapshot["low stock"]);
       Provider.of<GeneralProvider>(context, listen: false).addProduct(products);
-      
+      await storage.setItem(
+                            shopName!,
+                            shopProductsToJson(Provider.of<GeneralProvider>(
+                                    context,
+                                    listen: false)
+                                .shop));
+
     }
    
   }
@@ -51,6 +60,7 @@ class FirebaseFunction{
       'product image': product.productImage,
       'selling price': product.sellingPrice,
       'cost price': product.costPrice,
+       //'product category':product.productCategory,
       'product quantity': product.productQuantity,
       'low stock quantity': product.lowStockQuantity,
       'low stock': product.isLowStock,
@@ -86,6 +96,7 @@ class FirebaseFunction{
             'product image': product.productImage,
             'selling price': product.sellingPrice,
             'cost price': product.costPrice,
+            'product category':product.productCategory,
             'product quantity': product.productQuantity,
             'low stock quantity': product.lowStockQuantity,
             'low stock': product.isLowStock,
