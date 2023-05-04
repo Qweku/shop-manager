@@ -500,17 +500,7 @@ class _TabletDashboardState extends State<TabletDashboard> {
                                 .any((element) =>
                                     element.productName == productName.text))) {
                               Product product = Product(
-                                  pid: context
-                                          .read<GeneralProvider>()
-                                          .inventory
-                                          .isEmpty
-                                      ? 1
-                                      : context
-                                              .read<GeneralProvider>()
-                                              .inventory
-                                              .last
-                                              .pid +
-                                          1,
+                                  pid:context.read<GeneralProvider>().generateUID(),
                                   productName: productName.text,
                                   productDescription: productDescription.text,
                                   sellingPrice: double.tryParse(formatter

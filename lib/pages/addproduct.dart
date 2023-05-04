@@ -17,6 +17,7 @@ import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:shop_manager/config/size.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/api_client.dart';
@@ -521,16 +522,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           //         .productCategory!.categoryDescription),
                         );
 
+                         
                         Provider.of<GeneralProvider>(context, listen: false)
                             .editProduct(product);
-                        Provider.of<GeneralProvider>(context, listen: false)
-                            .lowStocks
-                            .forEach((element) {
-                          if (element.productName == productName.text) {
-                            Provider.of<GeneralProvider>(context, listen: false)
-                                .removeLowStock(product);
-                          }
-                        });
 
                         FirebaseFunction().updateProduct(
                             context, product, productName.text, shopName);
@@ -572,17 +566,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           .any((element) =>
                               element.productName == productName.text))) {
                         Product product = Product(
-                            pid: context
-                                    .read<GeneralProvider>()
-                                    .inventory
-                                    .isEmpty
-                                ? 1
-                                : context
-                                        .read<GeneralProvider>()
-                                        .inventory
-                                        .last
-                                        .pid +
-                                    1,
+                            pid: context.read<GeneralProvider>().generateUID(),
                             productName: productName.text,
                             productDescription: productDescription.text,
                             sellingPrice: double.tryParse(

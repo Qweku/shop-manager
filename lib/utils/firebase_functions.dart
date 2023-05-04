@@ -82,6 +82,7 @@ class FirebaseFunction {
 
     for (QueryDocumentSnapshot snapshot in data.docs) {
       if (snapshot.exists) {
+        //! Unhandled Exception: Bad state: field does not exist within the DocumentSnapshotPlatform
         if (snapshot["product name"] != productName) {
           await fireStore.collection(shopName ?? "").doc(customId).set({
             'product id': product.pid,

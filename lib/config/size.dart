@@ -1,6 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 
-class SizeConfig{
+class SizeConfig {
   static height(context) {
     return MediaQuery.of(context).size.height;
   }
@@ -9,4 +11,5 @@ class SizeConfig{
     return MediaQuery.of(context).size.width;
   }
 }
+
 

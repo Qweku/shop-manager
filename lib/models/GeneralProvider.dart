@@ -1,5 +1,8 @@
 // ignore_for_file: file_names, prefer_final_fields
 
+import 'dart:developer';
+import 'dart:math' as Math;
+
 import 'package:flutter/material.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
@@ -152,7 +155,8 @@ class GeneralProvider extends ChangeNotifier {
 
   void processCart() {
     for (var cartItem in cart) {
-      _inventory.singleWhere((element) => element.productName == cartItem.productName)
+      _inventory
+          .singleWhere((element) => element.productName == cartItem.productName)
         ..productQuantity -= cartItem.cartQuantity
         ..cartQuantity = 0;
     }
@@ -199,6 +203,14 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  generateUID() {
+   
+    var firstPart = (Math.Random().nextInt(2 ^ 32) * 46656) | 0;
+    var secondPart = (Math.Random().nextInt(2 ^ 32) * 46656) | 0;
+    return ((shop.shopname ?? 'demo') + firstPart.toRadixString(36)) +
+        (secondPart.toRadixString(36));
+  }
+
   void deleteProduct(Product product) {
     _inventory.remove(product);
     notifyListeners();
@@ -212,6 +224,13 @@ class GeneralProvider extends ChangeNotifier {
   }
 
   void editProduct(Product product) {
+    int num = 0;
+    _inventory.forEach((element) {
+      if (element.pid == product.pid) {
+        num++;
+        log("$num WITH SAME PID");
+      }
+    });
     _inventory.singleWhere((element) => element.pid == product.pid)
       //..productCategory = product.productCategory
       ..productImage = product.productImage
@@ -222,5 +241,4 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
     saveToShop(_inventory);
   }
-
 }

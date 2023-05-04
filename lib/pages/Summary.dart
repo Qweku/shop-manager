@@ -25,7 +25,6 @@ import '../models/NotificationModel.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-
 class SummaryScreen extends StatefulWidget {
   final double amountReceived, change, totalCost;
   const SummaryScreen(
