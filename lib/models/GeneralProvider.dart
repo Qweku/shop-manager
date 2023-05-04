@@ -14,10 +14,10 @@ class GeneralProvider extends ChangeNotifier {
       sales: [],
       expenses: [],
       lowStocks: []);
-  ProductCategory _category = ProductCategory(cid: -1);
+ // ProductCategory _category = ProductCategory(cid: -1);
   Product _product = Product(pid: -1);
 
-  List<ProductCategory> _categories = [];
+  //List<ProductCategory> _categories = [];
   List<Product> _inventory = [];
   List<Product> _lowStocks = [];
   List<Product> _cart = [];
@@ -27,7 +27,7 @@ class GeneralProvider extends ChangeNotifier {
   ShopProducts get shop => _shop;
 
   Product get product => _product;
-  ProductCategory get category => _category;
+ // ProductCategory get category => _category;
   List<Product> get inventory => _inventory;
   List<Product> get lowStocks => _inventory
       .where((element) =>
@@ -36,7 +36,7 @@ class GeneralProvider extends ChangeNotifier {
       .toList();
 
   List<Product> get cart => _cart;
-  List<ProductCategory> get categories => _categories;
+ // List<ProductCategory> get categories => _categories;
   String _query = "";
   String get query => _query;
 
@@ -50,13 +50,13 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set category(ProductCategory category) {
-    _category = category;
-    // Notify listeners, in case the new catalog provides information
-    // different from the previous one. For example, availability of an item
-    // might have changed.
-    notifyListeners();
-  }
+  // set category(ProductCategory category) {
+  //   _category = category;
+  //   // Notify listeners, in case the new catalog provides information
+  //   // different from the previous one. For example, availability of an item
+  //   // might have changed.
+  //   notifyListeners();
+  // }
 
   set cart(List<Product> cart) {
     _cart = cart;
@@ -78,11 +78,11 @@ class GeneralProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  set categories(List<ProductCategory> categories) {
-    _categories = List.from(categories);
+  // set categories(List<ProductCategory> categories) {
+  //   _categories = List.from(categories);
 
     // notifyListeners();
-  }
+  // }
 
   set product(Product product) {
     _product = product;
@@ -112,37 +112,37 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool addCategory(ProductCategory newCategory) {
-    if (_categories.any((element) =>
-        element.categoryName!.toLowerCase() ==
-        newCategory.categoryName!.toLowerCase())) {
-      return false;
-    }
-    _categories.add(newCategory);
-    notifyListeners();
-    return true;
-  }
+  // bool addCategory(ProductCategory newCategory) {
+  //   if (_categories.any((element) =>
+  //       element.categoryName!.toLowerCase() ==
+  //       newCategory.categoryName!.toLowerCase())) {
+  //     return false;
+  //   }
+  //   _categories.add(newCategory);
+  //   notifyListeners();
+  //   return true;
+  // }
 
-  bool editCategory(ProductCategory newCategory) {
-    if (!_categories.any((element) => element.cid == newCategory.cid)) {
-      return false;
-    }
-    _categories.any((element) {
-      if (element.cid == newCategory.cid) {
-        element.categoryName = newCategory.categoryName;
-        element.categoryDescription = newCategory.categoryDescription;
-        for (var elements in _inventory) {
-          if (elements.productCategory!.cid == newCategory.cid) {
-            elements.productCategory = newCategory;
-          }
-        }
-      }
-      return true;
-    });
-    notifyListeners();
-    //saveToShop(_inventory);
-    return true;
-  }
+  // bool editCategory(ProductCategory newCategory) {
+  //   if (!_categories.any((element) => element.cid == newCategory.cid)) {
+  //     return false;
+  //   }
+  //   _categories.any((element) {
+  //     if (element.cid == newCategory.cid) {
+  //       element.categoryName = newCategory.categoryName;
+  //       element.categoryDescription = newCategory.categoryDescription;
+  //       for (var elements in _inventory) {
+  //         if (elements.productCategory!.cid == newCategory.cid) {
+  //           elements.productCategory = newCategory;
+  //         }
+  //       }
+  //     }
+  //     return true;
+  //   });
+  //   notifyListeners();
+  //   //saveToShop(_inventory);
+  //   return true;
+  // }
 
   void removeFromCart(int index) {
     cart[index].cartQuantity = 0;
@@ -160,12 +160,12 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFromCategory(Product product) {
-    _inventory.singleWhere((element) => element == product).productCategory =
-        ProductCategory(cid: 0);
-   // saveToShop(_inventory);
-    notifyListeners();
-  }
+  // void removeFromCategory(Product product) {
+  //   _inventory.singleWhere((element) => element == product).productCategory =
+  //       ProductCategory(cid: 0);
+  //  // saveToShop(_inventory);
+  //   notifyListeners();
+  // }
 
   void updateCart(Product product) {
     for (Product element in _cart) {
@@ -213,7 +213,7 @@ class GeneralProvider extends ChangeNotifier {
 
   void editProduct(Product product) {
     _inventory.singleWhere((element) => element.pid == product.pid)
-      ..productCategory = product.productCategory
+      //..productCategory = product.productCategory
       ..productImage = product.productImage
       ..productName = product.productName
       ..productQuantity = product.productQuantity

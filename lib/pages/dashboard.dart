@@ -32,7 +32,7 @@ import 'package:intl/intl.dart';
 
 import '../models/NotificationModel.dart';
 import 'addproduct.dart';
-import 'Categories/category.dart';
+// import 'Categories/category.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -93,27 +93,27 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
     Set<String> name = {};
 
-    Provider.of<GeneralProvider>(context, listen: false).categories =
-        Provider.of<GeneralProvider>(context, listen: false).inventory.map((e) {
-      if (name.add(e.productCategory!.categoryName!)) {
-        return e.productCategory!;
-      } else {
-        return ProductCategory(
-          cid: -1,
-        );
-      }
-    }).toList()
-          ..removeWhere((element) => element.cid == -1);
+    // Provider.of<GeneralProvider>(context, listen: false).categories =
+    //     Provider.of<GeneralProvider>(context, listen: false).inventory.map((e) {
+    //   if (name.add(e.productCategory!.categoryName!)) {
+    //     return e.productCategory!;
+    //   } else {
+    //     return ProductCategory(
+    //       cid: -1,
+    //     );
+    //   }
+    // }).toList()
+    //       ..removeWhere((element) => element.cid == -1);
 
-    if (Provider.of<GeneralProvider>(context, listen: false)
-        .categories
-        .isEmpty) {
-      Provider.of<GeneralProvider>(context, listen: false).categories.add(
-          ProductCategory(
-              cid: 0,
-              categoryName: "Uncategorised",
-              categoryDescription: 'No Description'));
-    }
+    // if (Provider.of<GeneralProvider>(context, listen: false)
+    //     .categories
+    //     .isEmpty) {
+    //   Provider.of<GeneralProvider>(context, listen: false).categories.add(
+    //       ProductCategory(
+    //           cid: 0,
+    //           categoryName: "Uncategorised",
+    //           categoryDescription: 'No Description'));
+    // }
 
     delayScreen();
     super.initState();

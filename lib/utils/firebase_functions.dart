@@ -90,7 +90,7 @@ class FirebaseFunction {
             'product image': product.productImage,
             'selling price': product.sellingPrice,
             'cost price': product.costPrice,
-            'product category': product.productCategory,
+           // 'product category': product.productCategory,
             'product quantity': product.productQuantity,
             'low stock quantity': product.lowStockQuantity,
             'low stock': product.isLowStock,

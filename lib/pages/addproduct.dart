@@ -73,9 +73,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   // late Box shopBox;
-  ProductCategory? _selectedCategory;
+  //ProductCategory? _selectedCategory;
   String imageString = '';
-  List<ProductCategory> categoryList = [];
+ // List<ProductCategory> categoryList = [];
   Uint8List imageFile = Uint8List(0);
   //String imagePath;
   bool isLoading = false;
@@ -189,9 +189,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void initState() {
     getShopName();
-    categoryList = List.from(
-        Provider.of<GeneralProvider>(context, listen: false).categories);
-    _selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
+    // categoryList = List.from(
+    //     Provider.of<GeneralProvider>(context, listen: false).categories);
+    //_selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
     if (widget.toEdit) {
       setState(() {
         productName.text = widget.product!.productName!;
@@ -205,10 +205,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
         imageString = (widget.product!.productImage ?? "").isEmpty
             ? ""
             : widget.product!.productImage!;
-        _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
-            .categories
-            .singleWhere((element) =>
-                element.cid == widget.product!.productCategory!.cid);
+        // _selectedCategory = Provider.of<GeneralProvider>(context, listen: false)
+        //     .categories
+        //     .singleWhere((element) =>
+        //         element.cid == widget.product!.productCategory!.cid);
         isChecked = widget.product!.isLowStock;
         imageFile =
             imageString.isNotEmpty ? base64Decode(imageString) : Uint8List(0);
@@ -513,12 +513,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               int.tryParse(lowStockQuantity.text) ?? 0,
                           productImage: imageString,
                           isLowStock: isChecked,
-                          productCategory: ProductCategory(
-                              cid: widget.product!.productCategory!.cid,
-                              categoryName:
-                                  widget.product!.productCategory!.categoryName,
-                              categoryDescription: widget.product!
-                                  .productCategory!.categoryDescription),
+                          // productCategory: ProductCategory(
+                          //     cid: widget.product!.productCategory!.cid,
+                          //     categoryName:
+                          //         widget.product!.productCategory!.categoryName,
+                          //     categoryDescription: widget.product!
+                          //         .productCategory!.categoryDescription),
                         );
 
                         Provider.of<GeneralProvider>(context, listen: false)
@@ -594,14 +594,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     .getUnformattedValue()
                                     .toString()) ??
                                 0,
-                            productCategory:
-                                _selectedCategory /*  ??
-                                ProductCategory(
-                                    cid: 0,
-                                    categoryName: 'Uncategorised',
-                                    categoryDescription:
-                                        'No Description') */
-                            ,
+                            // productCategory:
+                            //     _selectedCategory /*  ??
+                            //     ProductCategory(
+                            //         cid: 0,
+                            //         categoryName: 'Uncategorised',
+                            //         categoryDescription:
+                            //             'No Description') */
+                            // ,
                             isLowStock: isChecked,
                             productQuantity:
                                 int.tryParse(productQuantity.text) ?? 0,
@@ -625,9 +625,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     context,
                                     listen: false)
                                 .shop));
-                        exportProduct(product);
-                        // FirebaseFunction()
-                        //     .addProducts(product, productName.text, shopName);
+                        //exportProduct(product);
+                        FirebaseFunction()
+                            .addProducts(product, productName.text, shopName);
                       } else {
                         Notifier().toast(
                             context: context,

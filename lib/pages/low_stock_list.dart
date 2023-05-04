@@ -286,10 +286,10 @@ class _LowStockGridListState extends State<LowStockGridList> {
                                 int.tryParse(lowStockQuantity.text) ?? 0,
                             productImage: context.read<GeneralProvider>().lowStocks[index].productImage,
                             isLowStock: isChecked,
-                            productCategory: ProductCategory(
-                                cid: context.read<GeneralProvider>().lowStocks[index].productCategory!.cid,
-                                categoryName: context.read<GeneralProvider>().lowStocks[index].productCategory!.categoryName,
-                                categoryDescription: context.read<GeneralProvider>().lowStocks[index].productCategory!.categoryDescription),
+                            // productCategory: ProductCategory(
+                            //     cid: context.read<GeneralProvider>().lowStocks[index].productCategory!.cid,
+                            //     categoryName: context.read<GeneralProvider>().lowStocks[index].productCategory!.categoryName,
+                            //     categoryDescription: context.read<GeneralProvider>().lowStocks[index].productCategory!.categoryDescription),
                           );
 
                           Provider.of<GeneralProvider>(context, listen: false)

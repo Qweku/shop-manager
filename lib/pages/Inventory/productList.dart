@@ -149,9 +149,9 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                     //     .singleWhere(
                                     //         (elements) => elements == element)
                                     //     .save();
-                                    element.productCategory = context
-                                        .read<GeneralProvider>()
-                                        .category;
+                                    // element.productCategory = context
+                                    //     .read<GeneralProvider>()
+                                    //     .category;
                                     // Provider.of<GeneralProvider>(context,
                                     //         listen: false)
                                     //     .categories
@@ -196,8 +196,8 @@ class _InventoryProductListState extends State<InventoryProductList> {
                   children: [
                     SizedBox(height: height * 0.03),
                     categories.inventory
-                            .where((value) => value.productCategory!.cid == 0)
-                            .toList()
+                            // .where((value) => value.productCategory!.cid == 0)
+                            // .toList()
                             .isEmpty
                         ? Center(
                             child: Text(
@@ -216,8 +216,8 @@ class _InventoryProductListState extends State<InventoryProductList> {
                                       physics: const BouncingScrollPhysics(),
                                       padding: EdgeInsets.zero,
                                       itemCount: categories.inventory
-                                          .where((value) =>
-                                              value.productCategory!.cid == 0)
+                                          // .where((value) =>
+                                          //     value.productCategory!.cid == 0)
                                           .length,
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
@@ -228,64 +228,73 @@ class _InventoryProductListState extends State<InventoryProductList> {
 
                                             if (isSelected.contains(categories
                                                 .inventory
-                                                .where((value) =>
-                                                    value
-                                                        .productCategory!.cid ==
-                                                    0)
-                                                .toList()[index])) {
+                                                // .where((value) =>
+                                                //     value
+                                                //         .productCategory!.cid ==
+                                                //     0)
+                                                // .toList()
+                                                [index])) {
                                               isSelected.removeWhere((element) =>
                                                   element ==
                                                   categories.inventory
-                                                      .where((value) =>
-                                                          value.productCategory!
-                                                              .cid ==
-                                                          0)
-                                                      .toList()[index]);
+                                                      // .where((value) =>
+                                                      //     value.productCategory!
+                                                      //         .cid ==
+                                                      //     0)
+                                                      // .toList()
+                                                      [index]);
                                             } else {
                                               isSelected.add(categories
                                                   .inventory
-                                                  .where((value) =>
-                                                      value.productCategory!
-                                                          .cid ==
-                                                      0)
-                                                  .toList()[index]);
+                                                  // .where((value) =>
+                                                  //     value.productCategory!
+                                                  //         .cid ==
+                                                  //     0)
+                                                  // .toList()
+                                                  [index]);
                                             }
                                           },
                                           child: ProductListTile(
                                             isSelected: isSelected.contains(
                                                 categories.inventory
-                                                    .where((value) =>
-                                                        value.productCategory!
-                                                            .cid ==
-                                                        0)
-                                                    .toList()[index]),
+                                                    // .where((value) =>
+                                                    //     value.productCategory!
+                                                    //         .cid ==
+                                                    //     0)
+                                                    // .toList()
+                                                    [index]),
                                             onTap: () {},
                                             index: index,
                                             image64: categories.inventory
-                                                    .where((value) =>
-                                                        value.productCategory!
-                                                            .cid ==
-                                                        0)
-                                                    .toList()[index]
+                                                    // .where((value) =>
+                                                    //     value.productCategory!
+                                                    //         .cid ==
+                                                    //     0)
+                                                    // .toList()
+                                                    [index]
                                                     .productImage ??
                                                 "",
                                             productName: categories.inventory
-                                                .where((value) =>
-                                                    value
-                                                        .productCategory!.cid ==
-                                                    0)
-                                                .toList()[index]
+                                                // .where((value) =>
+                                                //     value
+                                                //         .productCategory!.cid ==
+                                                //     0)
+                                                // .toList()
+                                                [index]
                                                 .productName,
                                             quantity: categories.inventory
-                                                .where((value) =>
-                                                    value
-                                                        .productCategory!.cid ==
-                                                    0)
-                                                .toList()[index]
+                                                // .where((value) =>
+                                                //     value
+                                                //         .productCategory!.cid ==
+                                                //     0)
+                                                // .toList()
+                                                [index]
                                                 .productQuantity
                                                 .toString(),
                                             price:
-                                                "GHS ${categories.inventory.where((value) => value.productCategory!.cid == 0).toList()[index].sellingPrice.toString()}",
+                                                "GHS ${categories.inventory
+                                                //.where((value) => value.productCategory!.cid == 0).toList()
+                                                [index].sellingPrice.toString()}",
                                           ),
                                         );
                                       })),

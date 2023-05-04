@@ -59,9 +59,9 @@ class _TabletDashboardState extends State<TabletDashboard> {
   File? _image;
 
   // late Box shopBox;
-  ProductCategory? _selectedCategory;
+  // ProductCategory? _selectedCategory;
   String imageString = '';
-  List<ProductCategory> categoryList = [];
+  // List<ProductCategory> categoryList = [];
   Uint8List imageFile = Uint8List(0);
   //String imagePath;
   bool isLoading = false;
@@ -152,9 +152,9 @@ class _TabletDashboardState extends State<TabletDashboard> {
 
   @override
   void initState() {
-    categoryList = List.from(
-        Provider.of<GeneralProvider>(context, listen: false).categories);
-    _selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
+    // categoryList = List.from(
+    //     Provider.of<GeneralProvider>(context, listen: false).categories);
+    //_selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
      Provider.of<GeneralProvider>(context, listen: false).inventory =
         Provider.of<GeneralProvider>(context, listen: false).shop.products;
     Provider.of<SalesProvider>(context, listen: false).expenseList =
@@ -277,50 +277,6 @@ class _TabletDashboardState extends State<TabletDashboard> {
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.grey, width: 1),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: DropdownButtonFormField(
-                              //dropdownColor: Colors.black,
-                              style: bodyText1,
-                              decoration: InputDecoration(
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                  border: InputBorder.none,
-                                  enabled: false,
-                                  fillColor: Colors.transparent,
-                                  filled: true),
-                              hint: Text(
-                                'Select Category',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              value: _selectedCategory,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedCategory =
-                                      newValue as ProductCategory;
-                                  categoryIndex =
-                                      categoryList.indexOf(newValue);
-                                });
-                              },
-                              items: categoryList.map((location) {
-                                return DropdownMenuItem(
-                                  child: Text(
-                                    location.categoryName!,
-                                    style:
-                                        bodyText1, /* ,style: TextStyle(color: Colors.white), */
-                                  ),
-                                  value: location,
-                                );
-                              }).toList(),
-                            ),
                           ),
                         ),
                         Padding(
@@ -565,14 +521,13 @@ class _TabletDashboardState extends State<TabletDashboard> {
                                           .getUnformattedValue()
                                           .toString()) ??
                                       0,
-                                  productCategory:
-                                      _selectedCategory /*  ??
+                               /*  ??
                                       ProductCategory(
                                           cid: 0,
                                           categoryName: 'Uncategorised',
                                           categoryDescription:
                                               'No Description') */
-                                  ,
+                                  
                                   isLowStock: isChecked,
                                   productQuantity:
                                       int.tryParse(productQuantity.text) ?? 0,

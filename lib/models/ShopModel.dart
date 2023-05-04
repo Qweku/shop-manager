@@ -217,10 +217,10 @@ class Product {
   String? productDescription;
   int cartQuantity;
   bool isLowStock;
-  ProductCategory? productCategory = ProductCategory(
-      cid: 0,
-      categoryName: 'Uncategorised',
-      categoryDescription: 'No Description');
+  // ProductCategory? productCategory = ProductCategory(
+  //     cid: 0,
+  //     categoryName: 'Uncategorised',
+  //     categoryDescription: 'No Description');
 
   Product({
     required this.pid,
@@ -232,7 +232,7 @@ class Product {
     this.productQuantity = 0,
     this.lowStockQuantity = 0,
     this.cartQuantity = 0,
-    this.productCategory,
+    //this.productCategory,
     this.isLowStock = false,
   });
 
@@ -257,7 +257,7 @@ class Product {
           productQuantity: productQuantity ?? this.productQuantity,
           lowStockQuantity: lowStockQuantity ?? this.lowStockQuantity,
           cartQuantity: cartQuantity ?? this.cartQuantity,
-          productCategory: productCategory ?? this.productCategory,
+         // productCategory: productCategory ?? this.productCategory,
           isLowStock: isLowStock ?? this.isLowStock);
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -271,9 +271,9 @@ class Product {
         lowStockQuantity: json["lowStockQuantity"] ?? 0,
         cartQuantity: json["cartQuantity"] ?? 0,
         isLowStock: json["isLowStock"] ?? false,
-        productCategory: json["productCategory"] == null
-            ? ProductCategory()
-            : ProductCategory.fromJson(json["productCategory"]),
+        // productCategory: json["productCategory"] == null
+        //     ? ProductCategory()
+        //     : ProductCategory.fromJson(json["productCategory"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -287,34 +287,34 @@ class Product {
         "lowStockQuantity": lowStockQuantity,
         "cartQuantity": cartQuantity,
         "isLowStock": isLowStock,
-        "productCategory": productCategory?.toJson() ?? ProductCategory().toJson(),
+       // "productCategory": productCategory?.toJson() ?? ProductCategory().toJson(),
       };
 }
 
-class ProductCategory {
-  int? cid;
-  String? categoryName;
-  String? categoryDescription;
+// class ProductCategory {
+//   int? cid;
+//   String? categoryName;
+//   String? categoryDescription;
 
-  ProductCategory({
-    this.cid = 0,
-    /* required */ this.categoryName = 'Uncategorised',
-    this.categoryDescription = 'No Description',
-  });
+//   ProductCategory({
+//     this.cid = 0,
+//     /* required */ this.categoryName = 'Uncategorised',
+//     this.categoryDescription = 'No Description',
+//   });
 
-  factory ProductCategory.fromJson(Map<String, dynamic> json) =>
-      ProductCategory(
-        cid: json["cid"],
-        categoryName: json["category_name"],
-        categoryDescription: json["category_description"],
-      );
+//   factory ProductCategory.fromJson(Map<String, dynamic> json) =>
+//       ProductCategory(
+//         cid: json["cid"],
+//         categoryName: json["category_name"],
+//         categoryDescription: json["category_description"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "cid": cid,
-        "category_name": categoryName,
-        "category_description": categoryDescription,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "cid": cid,
+//         "category_name": categoryName,
+//         "category_description": categoryDescription,
+//       };
+// }
 
 class SalesModel {
   SalesModel({

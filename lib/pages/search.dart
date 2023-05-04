@@ -10,7 +10,7 @@ import 'package:shop_manager/pages/widgets/constants.dart';
 import '../models/ShopModel.dart';
 
 class Search extends SearchDelegate {
-  final List<ProductCategory> productList;
+  final List<Product> productList;
   Search({required this.productList});
 
   @override
@@ -77,7 +77,7 @@ class ItemSearchBar extends StatefulWidget {
 
 class _ItemSearchBarState extends State<ItemSearchBar> {
   late GeneralProvider shop;
-  late List<ProductCategory> productList;
+  late List<Product> productList;
 
   @override
   void initState() {
@@ -85,7 +85,7 @@ class _ItemSearchBarState extends State<ItemSearchBar> {
     super.initState();
 
     shop = context.read<GeneralProvider>();
-    productList = shop.categories;
+    // productList = shop.categories;
   }
 
   @override

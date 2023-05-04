@@ -77,14 +77,15 @@ class _InventorySearchListState extends State<InventorySearchList> {
                                 onLongPress: () {
                                   _bottomDrawSheet(
                                       context,
-                                      productItems
-                                          .where((element) =>
-                                              element.productCategory!.cid ==
-                                              context
-                                                  .read<GeneralProvider>()
-                                                  .category
-                                                  .cid)
-                                          .toList()[index]);
+                                      productItems[index]
+                                          // .where((element) =>
+                                          //     element.productCategory!.cid ==
+                                          //     context
+                                          //         .read<GeneralProvider>()
+                                          //         .category
+                                          //         .cid)
+                                          // .toList()[index]
+                                          );
                                 },
                                 onTap: () {
                                   Navigator.push(

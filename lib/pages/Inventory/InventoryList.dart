@@ -55,7 +55,6 @@ class _InventoryListState extends State<InventoryList> {
     shopName = auth.currentUser!.displayName;
   }
 
-  
   @override
   void initState() {
     getShopName();
@@ -71,15 +70,17 @@ class _InventoryListState extends State<InventoryList> {
       children: [
         // SizedBox(height: height * 0.03),
 
-        ((isSelected == 0)
-                ? categories.inventory.isEmpty
-                : categories.inventory
-                    .where((element) =>
-                        element.productCategory!.cid ==
-                        categories.categories[isSelected - 1].cid)
-                    .toSet()
-                    .toList()
-                    .isEmpty)
+        // ((isSelected == 0)
+        //         ?
+        //         :
+        //         categories.inventory
+        //             .where((element) =>
+        //                 element.productCategory!.cid ==
+        //                 categories.categories[isSelected - 1].cid)
+        //             .toSet()
+        //             .toList()
+        //             .isEmpty)
+        categories.inventory.isEmpty
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -130,15 +131,17 @@ class _InventoryListState extends State<InventoryList> {
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: Responsive.isMobile() ? 3 : 4,
                             childAspectRatio: 2 / 3.5),
-                        itemCount: isSelected == 0
-                            ? categories.inventory.length
-                            : categories.inventory
-                                .where((element) =>
-                                    element.productCategory!.cid ==
-                                    categories.categories[isSelected - 1].cid)
-                                .toSet()
-                                .toList()
-                                .length,
+                        itemCount:
+                            // isSelected == 0
+                            //     ?
+                            categories.inventory.length,
+                        // : categories.inventory
+                        //     .where((element) =>
+                        //         element.productCategory!.cid ==
+                        //         categories.categories[isSelected - 1].cid)
+                        //     .toSet()
+                        //     .toList()
+                        //     .length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(
@@ -148,16 +151,17 @@ class _InventoryListState extends State<InventoryList> {
                               //edit and delete action
                               onLongPress: () {
                                 _bottomDrawSheet(
-                                  context,
-                                  isSelected == 0
-                                      ? categories.inventory[index]
-                                      : categories.inventory
-                                          .where((element) =>
-                                              element.productCategory ==
-                                              categories
-                                                  .categories[isSelected - 1])
-                                          .toList()[index],
-                                );
+                                    context,
+                                    // isSelected == 0
+                                    //     ?
+                                    categories.inventory[index]
+                                    // : categories.inventory
+                                    //     .where((element) =>
+                                    //         element.productCategory ==
+                                    //         categories
+                                    //             .categories[isSelected - 1])
+                                    //     .toList()[index],
+                                    );
                               },
                               // add to cart button action
                               onPressed: () {
@@ -168,15 +172,16 @@ class _InventoryListState extends State<InventoryList> {
                                   Provider.of<GeneralProvider>(context,
                                           listen: false)
                                       .addToCart(
-                                    isSelected == 0
-                                        ? categories.inventory[index]
-                                        : categories.inventory
-                                            .where((element) =>
-                                                element.productCategory ==
-                                                categories
-                                                    .categories[isSelected - 1])
-                                            .toList()[index],
-                                  );
+                                          // isSelected == 0
+                                          //     ?
+                                          categories.inventory[index]
+                                          // : categories.inventory
+                                          //     .where((element) =>
+                                          //         element.productCategory ==
+                                          //         categories
+                                          //             .categories[isSelected - 1])
+                                          //     .toList()[index],
+                                          );
                                 }
                               },
 
@@ -186,52 +191,64 @@ class _InventoryListState extends State<InventoryList> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ProductView(
-                                              product: isSelected == 0
-                                                  ? categories.inventory[index]
-                                                  : categories.inventory
-                                                      .where((element) =>
-                                                          element
-                                                              .productCategory ==
-                                                          categories.categories[
-                                                              isSelected - 1])
-                                                      .toList()[index],
+                                            product:
+                                                // isSelected == 0
+                                                //     ?
+                                                categories.inventory[index]
+                                            // : categories.inventory
+                                            //     .where((element) =>
+                                            //         element
+                                            //             .productCategory ==
+                                            //         categories.categories[
+                                            //             isSelected - 1])
+                                            //     .toList()[index],
                                             )));
                               },
                               index: index,
-                              image64: isSelected == 0
-                                  ? categories.inventory[index].productImage ??
-                                      ""
-                                  : categories.inventory
-                                          .where((element) =>
-                                              element.productCategory!.cid ==
-                                              categories
-                                                  .categories[isSelected - 1]
-                                                  .cid)
-                                          .toList()[index]
-                                          .productImage ??
+                              image64:
+                                  // isSelected == 0
+                                  //     ?
+                                  categories.inventory[index].productImage ??
                                       "",
-                              productName: isSelected == 0
-                                  ? categories.inventory[index].productName
-                                  : categories.inventory
-                                      .where((element) =>
-                                          element.productCategory!.cid ==
-                                          categories
-                                              .categories[isSelected - 1].cid)
-                                      .toList()[index]
-                                      .productName,
-                              quantity: isSelected == 0
-                                  ? categories.inventory[index].productQuantity
-                                      .toString()
-                                  : categories.inventory
-                                      .where((element) =>
-                                          element.productCategory!.cid ==
-                                          categories
-                                              .categories[isSelected - 1].cid)
-                                      .toList()[index]
-                                      .productQuantity
+                              // : categories.inventory
+                              //         .where((element) =>
+                              //             element.productCategory!.cid ==
+                              //             categories
+                              //                 .categories[isSelected - 1]
+                              //                 .cid)
+                              //         .toList()[index]
+                              //         .productImage ??
+                              //     "",
+                              productName:
+                                  // isSelected == 0
+                                  //     ?
+                                  categories.inventory[index].productName,
+                              // : categories.inventory
+                              //      .where((element) =>
+                              //        element.productCategory!.cid ==
+                              //         categories
+                              //             .categories[isSelected - 1].cid)
+                              //     .toList()[index]
+                              //     .productName,
+                              quantity:
+                                  // isSelected == 0
+                                  //     ?
+                                  categories.inventory[index].productQuantity
                                       .toString(),
+                              // : categories.inventory
+                              //     .where((element) =>
+                              //         element.productCategory!.cid ==
+                              //         categories
+                              //             .categories[isSelected - 1].cid)
+                              //     .toList()[index]
+                              //     .productQuantity
+                              //     .toString(),
                               price:
-                                  "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toStringAsFixed(2) : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toStringAsFixed(2)}",
+                                  "GHS ${
+                                    // isSelected == 0 ? 
+                                  categories.inventory[index].sellingPrice.toStringAsFixed(2)
+                                  //  : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toStringAsFixed(2)
+                                   }",
                             ),
                           );
                         })),
@@ -314,72 +331,69 @@ class _InventoryListState extends State<InventoryList> {
   }
 }
 
-
-
-  // : ListView.builder(
-  //                             physics: const BouncingScrollPhysics(),
-  //                             padding: EdgeInsets.zero,
-  //                             itemCount: isSelected == 0
-  //                                 ? categories.inventory.length
-  //                                 : categories.inventory
-  //                                     .where((element) =>
-  //                                         element.productCategory!.cid ==
-  //                                         categories
-  //                                             .categories[isSelected - 1].cid)
-  //                                     .toList()
-  //                                     .length,
-  //                             itemBuilder: (context, index) {
-  //                               return ProductListTile(
-  //                                 onTap: () {
-  //                                   Navigator.push(
-  //                                       context,
-  //                                       MaterialPageRoute(
-  //                                           builder: (context) => ProductView(
-  //                                                 product: categories
-  //                                                     .inventory[index],
-  //                                               )));
-  //                                 },
-  //                                 index: index,
-  //                                 image64: isSelected == 0
-  //                                     ? categories
-  //                                             .inventory[index].productImage ??
-  //                                         ""
-  //                                     : categories.inventory
-  //                                             .where((element) =>
-  //                                                 element
-  //                                                     .productCategory!.cid ==
-  //                                                 categories
-  //                                                     .categories[
-  //                                                         isSelected - 1]
-  //                                                     .cid)
-  //                                             .toList()[index]
-  //                                             .productImage ??
-  //                                         "",
-  //                                 productName: isSelected == 0
-  //                                     ? categories.inventory[index].productName
-  //                                     : categories.inventory
-  //                                         .where((element) =>
-  //                                             element.productCategory!.cid ==
-  //                                             categories
-  //                                                 .categories[isSelected - 1]
-  //                                                 .cid)
-  //                                         .toList()[index]
-  //                                         .productName,
-  //                                 quantity: isSelected == 0
-  //                                     ? categories
-  //                                         .inventory[index].productQuantity
-  //                                         .toString()
-  //                                     : categories.inventory
-  //                                         .where((element) =>
-  //                                             element.productCategory!.cid ==
-  //                                             categories
-  //                                                 .categories[isSelected - 1]
-  //                                                 .cid)
-  //                                         .toList()[index]
-  //                                         .productQuantity
-  //                                         .toString(),
-  //                                 price:
-  //                                     "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toString()}",
-  //                               );
-  //                             })),
-           
+// : ListView.builder(
+//                             physics: const BouncingScrollPhysics(),
+//                             padding: EdgeInsets.zero,
+//                             itemCount: isSelected == 0
+//                                 ? categories.inventory.length
+//                                 : categories.inventory
+//                                     .where((element) =>
+//                                         element.productCategory!.cid ==
+//                                         categories
+//                                             .categories[isSelected - 1].cid)
+//                                     .toList()
+//                                     .length,
+//                             itemBuilder: (context, index) {
+//                               return ProductListTile(
+//                                 onTap: () {
+//                                   Navigator.push(
+//                                       context,
+//                                       MaterialPageRoute(
+//                                           builder: (context) => ProductView(
+//                                                 product: categories
+//                                                     .inventory[index],
+//                                               )));
+//                                 },
+//                                 index: index,
+//                                 image64: isSelected == 0
+//                                     ? categories
+//                                             .inventory[index].productImage ??
+//                                         ""
+//                                     : categories.inventory
+//                                             .where((element) =>
+//                                                 element
+//                                                     .productCategory!.cid ==
+//                                                 categories
+//                                                     .categories[
+//                                                         isSelected - 1]
+//                                                     .cid)
+//                                             .toList()[index]
+//                                             .productImage ??
+//                                         "",
+//                                 productName: isSelected == 0
+//                                     ? categories.inventory[index].productName
+//                                     : categories.inventory
+//                                         .where((element) =>
+//                                             element.productCategory!.cid ==
+//                                             categories
+//                                                 .categories[isSelected - 1]
+//                                                 .cid)
+//                                         .toList()[index]
+//                                         .productName,
+//                                 quantity: isSelected == 0
+//                                     ? categories
+//                                         .inventory[index].productQuantity
+//                                         .toString()
+//                                     : categories.inventory
+//                                         .where((element) =>
+//                                             element.productCategory!.cid ==
+//                                             categories
+//                                                 .categories[isSelected - 1]
+//                                                 .cid)
+//                                         .toList()[index]
+//                                         .productQuantity
+//                                         .toString(),
+//                                 price:
+//                                     "GHS ${isSelected == 0 ? categories.inventory[index].sellingPrice.toString() : categories.inventory.where((element) => element.productCategory!.cid == categories.categories[isSelected - 1].cid).toList()[index].sellingPrice.toString()}",
+//                               );
+//                             })),

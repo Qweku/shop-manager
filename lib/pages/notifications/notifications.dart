@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +17,13 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
- // ScrollController controller = ScrollController();
+  // ScrollController controller = ScrollController();
   @override
   void initState() {
     super.initState();
+    log("${Provider.of<NotificationProvider>(context, listen: false)
+        .notiList
+        .length}");
     // if (context.watch<NotificationProvider>().notiList.isNotEmpty) {
     //   SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
     //     controller.animateTo(controller.position.maxScrollExtent,
@@ -76,7 +81,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(color: Colors.white),
-                                        color: primaryColorLight.withOpacity(0.3),
+                                        color:
+                                            primaryColorLight.withOpacity(0.3),
                                       ),
                                       child: ListTile(
                                         leading: CircleAvatar(
@@ -92,7 +98,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                               .notiList[index]
                                               .title!,
                                           style: bodyText1.copyWith(
-                                              color: primaryColor, fontSize: 17),
+                                              color: primaryColor,
+                                              fontSize: 17),
                                         ),
                                         subtitle: Text(
                                             context
@@ -100,35 +107,39 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                 .notiList[index]
                                                 .body!,
                                             style: bodyText1),
-                                   ) ),
-                                   const SizedBox(height:10),
-                                   Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              context
-                                                  .watch<NotificationProvider>()
-                                                  .notiList[index]
-                                                  .date!,
-                                              style: bodyText1.copyWith(
-                                                  color: Color.fromARGB(255, 56, 56, 56)),
-                                            ),
-                                           Padding(
-                                             padding: const EdgeInsets.symmetric(horizontal: 5),
-                                             child: Icon(Icons.circle,color:Color.fromARGB(255, 56, 56, 56),size:10),
-                                           ),
-                                            Text(
-                                              context
-                                                  .watch<NotificationProvider>()
-                                                  .notiList[index]
-                                                  .time!,
-                                              style: bodyText1.copyWith(
-                                                  color: Color.fromARGB(255, 56, 56, 56)),
-                                            ),
-                                          ],
-                                        ),
-                                      
+                                      )),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        context
+                                            .watch<NotificationProvider>()
+                                            .notiList[index]
+                                            .date!,
+                                        style: bodyText1.copyWith(
+                                            color: Color.fromARGB(
+                                                255, 56, 56, 56)),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Icon(Icons.circle,
+                                            color:
+                                                Color.fromARGB(255, 56, 56, 56),
+                                            size: 10),
+                                      ),
+                                      Text(
+                                        context
+                                            .watch<NotificationProvider>()
+                                            .notiList[index]
+                                            .time!,
+                                        style: bodyText1.copyWith(
+                                            color: Color.fromARGB(
+                                                255, 56, 56, 56)),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),

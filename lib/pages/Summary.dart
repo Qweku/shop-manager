@@ -208,7 +208,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             (element) {
                               Product productModel = Product(
                                   pid: element.pid,
-                                  productCategory: element.productCategory,
+                                  //productCategory: element.productCategory,
                                   productDescription:
                                       element.productDescription,
                                   productName: element.productName,
@@ -218,18 +218,22 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   isLowStock: element.isLowStock,
                                   lowStockQuantity: element.lowStockQuantity,
                                   productQuantity: element.productQuantity);
-                              NotificationModel notiModel = NotificationModel(
-                                  date: dateformat.format(DateTime.now()),
-                                  time: timeformat.format(DateTime.now()),
-                                  title: "Low Stock",
-                                  body:
-                                      ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
+
+                             
                               if (element.productQuantity <=
                                       element.lowStockQuantity &&
                                   !(Provider.of<GeneralProvider>(context,
                                           listen: false)
                                       .lowStocks
-                                      .contains(element))) {
+                                      .contains(element))) { 
+                                        
+                                        
+                                        NotificationModel notiModel = NotificationModel(
+                                  date: dateformat.format(DateTime.now()),
+                                  time: timeformat.format(DateTime.now()),
+                                  title: "Low Stock",
+                                  body:
+                                      ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
                                 Provider.of<NotificationProvider>(context,
                                         listen: false)
                                     .addNotification(notiModel);
