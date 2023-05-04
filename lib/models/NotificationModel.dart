@@ -28,7 +28,7 @@ class NotificationModel {
         body: json["body"],
         date: json["date"],
         time: json["time"],
-        isRead: json["isRead"],
+        isRead: json["isRead"]  ,
     );
 
     Map<String, dynamic> toJson() => {

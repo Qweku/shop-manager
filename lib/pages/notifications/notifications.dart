@@ -8,8 +8,6 @@ import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/pages/addproduct.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
-import 'notificationPlugin.dart';
-
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
   static const String routeName = '/notificationScreen';
@@ -71,34 +69,42 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       onTap: () {
                                         context
                                             .read<NotificationProvider>()
-                                            .notiList[index]
-                                            .isRead = true;
+                                            .updateNotification(context
+                                                .read<NotificationProvider>()
+                                                .notiList[index]);
 
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (builder) =>
-                                                        AddProductScreen(
-                                                          toEdit: true,
-                                                          product: context
-                                                              .read<
-                                                                  GeneralProvider>()
-                                                              .inventory
-                                                              .singleWhere((element) =>
-                                                                  (element.productName ??
-                                                                          '')
-                                                                      .toUpperCase() ==
-                                                                  (context.read<NotificationProvider>().notiList[index].body ??
-                                                                          '')
-                                                                      .split(
-                                                                          'is')
-                                                                      .first
-                                                                      .trim()),
-                                                        ))).then((value) {
-                                          setState(() {});
-                                          Navigator.pop(context);
-                                        });
+                                        if (context
+                                            .read<NotificationProvider>()
+                                            .notiList[index]
+                                            .title!
+                                            .contains('Low')) {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      AddProductScreen(
+                                                        toEdit: true,
+                                                        product: context
+                                                            .read<
+                                                                GeneralProvider>()
+                                                            .inventory
+                                                            .singleWhere((element) =>
+                                                                (element.productName ??
+                                                                        '')
+                                                                    .toUpperCase() ==
+                                                                (context
+                                                                            .read<NotificationProvider>()
+                                                                            .notiList[index]
+                                                                            .body ??
+                                                                        '')
+                                                                    .split('is')
+                                                                    .first
+                                                                    .trim()),
+                                                      ))).then((value) {
+                                            setState(() {});
+                                            Navigator.pop(context);
+                                          });
+                                        }
 
                                         return;
                                       },

@@ -17,7 +17,6 @@ import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/expenses.dart';
 import 'package:shop_manager/pages/low_stock_list.dart';
-import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
 import 'package:shop_manager/pages/sales.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
@@ -33,74 +32,46 @@ class MyHomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget? _content;
-  LocalStore localStore = LocalStore();
-  LocalStorage storage = LocalStorage('shop_mate');
+  // LocalStore localStore = LocalStore();
+  // LocalStorage storage = LocalStorage('shop_mate');
 
-  FirebaseAuth auth = FirebaseAuth.instance;
-  int count = 0;
-  String? shopName;
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // int count = 0;
+  // String? shopName;
 
-  Future getShopProducts() async {
-    shopName = auth.currentUser!.displayName;
-    var data = await storage.getItem(shopName!.isEmpty ? 'demo' : shopName!);
+  // Future getShopProducts() async {
+  //   shopName = auth.currentUser!.displayName;
+  //   var data = await storage.getItem(shopName!.isEmpty ? 'demo' : shopName!);
 
-    if (data == null) {
-      log('empty');
-      Provider.of<GeneralProvider>(context, listen: false).shop = ShopProducts(
-          id: 0,
-          shopname: 'demo',
-          products: [],
-          sales: [],
-          expenses: [],
-          lowStocks: []);
-    } else {
-      log('not empty');
-      Provider.of<GeneralProvider>(context, listen: false).shop =
-          shopProductsFromJson(data);
-    }
-  }
+  //   if (data == null) {
+  //     log('empty');
+  //     Provider.of<GeneralProvider>(context, listen: false).shop = ShopProducts(
+  //         id: 0,
+  //         shopname: 'demo',
+  //         products: [],
+  //         sales: [],
+  //         expenses: [],
+  //         lowStocks: []);
+  //   } else {
+  //     log('not empty');
+  //     Provider.of<GeneralProvider>(context, listen: false).shop =
+  //         shopProductsFromJson(data);
+  //   }
+  // }
 
-  void bootUp() async {
-    shopName = auth.currentUser!.displayName;
-    if (await storage.ready) {
-      Provider.of<NotificationProvider>(context, listen: false).notiList =
-          notificationModelFromJson(storage.getItem('notification') ?? '[]');
-      Provider.of<GeneralProvider>(context, listen: false).shop =
-          shopProductsFromJson(storage.getItem(shopName!) ?? '[]');
-    }
-  }
+  // void bootUp() async {
+  //   shopName = auth.currentUser!.displayName;
+  //   // if (await storage.ready) {
+  //   //   // Provider.of<NotificationProvider>(context, listen: false).notiList =
+  //   //   //     notificationModelFromJson(storage.getItem('notification') ?? '[]');
+  //   //   // Provider.of<GeneralProvider>(context, listen: false).shop =
+  //   //   //     shopProductsFromJson(storage.getItem(shopName!) ?? '[]');
+  //   // }
+  // }
 
   @override
   void initState() {
-    bootUp();
-    NotiPlugin.initialize(flutterLocalNotificationsPlugin);
-
-    // log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
-    // log("${Provider.of<GeneralProvider>(context, listen: false).shop.shopname}");
-
-    Set<String> name = {};
-
-    // Provider.of<GeneralProvider>(context, listen: false).categories =
-    //     Provider.of<GeneralProvider>(context, listen: false).inventory.map((e) {
-    //   if (name.add(e.productCategory!.categoryName!)) {
-    //     return e.productCategory!;
-    //   } else {
-    //     return ProductCategory(
-    //       cid: -1,
-    //     );
-    //   }
-    // }).toList()
-    //       ..removeWhere((element) => element.cid == -1);
-
-    // if (Provider.of<GeneralProvider>(context, listen: false)
-    //     .categories
-    //     .isEmpty) {
-    //   Provider.of<GeneralProvider>(context, listen: false).categories.add(
-    //       ProductCategory(
-    //           cid: 0,
-    //           categoryName: "Uncategorised",
-    //           categoryDescription: 'No Description'));
-    // }
+    // bootUp();
 
     delayScreen();
     super.initState();
@@ -113,28 +84,13 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     });
   }
 
-  // void notify() async {
-  //   await notificationPlugin.showNotification(
-  //       "Low Stock", "Some products are running low on stock");
-  // }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => _backButton(context),
       child: Scaffold(
           backgroundColor: primaryColorLight,
-          // appBar: AppBar(
-          //   elevation: 0,
-          //   backgroundColor: primaryColor,
-          //   actions: [
-          //     IconButton(
-          //         onPressed: () {},
-          //         icon: Icon(Icons.notifications_active,
-          //             color: primaryColorLight))
-          //   ],
-          // ),
-          // drawer: const DrawerWidget(),
+           
           bottomNavigationBar: Container(
               decoration: BoxDecoration(
                   border: Border(
