@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-// import 'package:hive_flutter/adapters.dart';
 import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
@@ -19,16 +18,13 @@ import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/expenses.dart';
-import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
 import 'package:shop_manager/pages/sales.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/low_stock_list.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
-import 'package:shop_manager/pages/widgets/barChart.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/dashboard_card.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
-import 'package:intl/intl.dart';
 
 import '../models/NotificationModel.dart';
 import 'addproduct.dart';
@@ -117,20 +113,12 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: primaryColor,
           actions: [
             NotificationIconButton(
-              quantity: context.watch<NotificationProvider>().notiCount,
+              quantity: context.watch<NotificationProvider>().notiList.where((element) => element.isRead == false).length,
               onTap: () {
-                if (context.read<NotificationProvider>().notiCount > 0) {
-                  context.read<NotificationProvider>().notiCount = 0;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NotificationScreen()));
-                } else {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NotificationScreen()));
-                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NotificationScreen()));
               },
             )
           ],

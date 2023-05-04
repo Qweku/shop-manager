@@ -9,6 +9,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:shop_manager/components/button.dart';
+import 'package:shop_manager/config/notificationService.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
 
 import 'package:shop_manager/models/GeneralProvider.dart';
@@ -22,8 +23,9 @@ import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
 
 import '../models/NotificationModel.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+NotificationService _notificationService = NotificationService();
 
 class SummaryScreen extends StatefulWidget {
   final double amountReceived, change, totalCost;
@@ -177,6 +179,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       SizedBox(height: height * 0.05),
                       Button(
                         onTap: () async {
+                          //!
                           context.read<GeneralProvider>().processCart();
                           SalesModel salesModel = SalesModel(
                             products:
@@ -203,49 +206,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       listen: false)
                                   .shop));
 
-                          context.read<GeneralProvider>().inventory.forEach(
-                            (element) {
-                              Product productModel = Product(
-                                  pid: element.pid,
-                                  //productCategory: element.productCategory,
-                                  productDescription:
-                                      element.productDescription,
-                                  productName: element.productName,
-                                  productImage: element.productName,
-                                  sellingPrice: element.sellingPrice,
-                                  costPrice: element.costPrice,
-                                  isLowStock: element.isLowStock,
-                                  lowStockQuantity: element.lowStockQuantity,
-                                  productQuantity: element.productQuantity);
+                          
 
-                             
-                              if (element.productQuantity <=
-                                      element.lowStockQuantity &&
-                                  !(Provider.of<GeneralProvider>(context,
-                                          listen: false)
-                                      .lowStocks
-                                      .contains(element))) { 
-                                        
-                                        
-                                        NotificationModel notiModel = NotificationModel(
-                                  date: dateformat.format(DateTime.now()),
-                                  time: timeformat.format(DateTime.now()),
-                                  title: "Low Stock",
-                                  body:
-                                      ("${(element.productName)?.toCapitalized()} is running low. Prepare to re-stock"));
-                                Provider.of<NotificationProvider>(context,
-                                        listen: false)
-                                    .addNotification(notiModel);
+                          // _notificationService.showNotifications();
 
-                                context.read<NotificationProvider>().notiCount =
-                                    1;
-
-                                notify(productModel);
-                              } else {
-                                return null;
-                              }
-                            },
-                          );
                           //context.read<GeneralProvider>().cart.clear();
                           Navigator.pushReplacement(
                               context,
@@ -285,10 +249,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
             Provider.of<GeneralProvider>(context, listen: false).shop));
     // await notificationPlugin.showNotification(
     //   "Low Stock", "Some products are running low on stock");
-    NotiPlugin.showNotification(
-        title: "Low Stock",
-        body: "Some products are running low on stock",
-        fln: flutterLocalNotificationsPlugin);
+    // _notificationService.showNotifications();
+    // NotiPlugin.showNotification(
+    //     title: "Low Stock",
+    //     body: "Some products are running low on stock",
+    //     fln: flutterLocalNotificationsPlugin);
     //  flutterLocalNotificationsPlugin.show(
     //   0,
     //   "Low Stock",

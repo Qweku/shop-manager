@@ -4,8 +4,12 @@ import 'dart:developer';
 import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
+import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
+import 'package:shop_manager/pages/widgets/constants.dart';
+
+import 'NotificationModel.dart';
 
 LocalStore storage = LocalStore();
 
@@ -155,10 +159,23 @@ class GeneralProvider extends ChangeNotifier {
 
   void processCart() {
     for (var cartItem in cart) {
-      _inventory
-          .singleWhere((element) => element.productName == cartItem.productName)
+      Product product = _inventory.singleWhere((element) {
+        return element.productName == cartItem.productName;
+      })
         ..productQuantity -= cartItem.cartQuantity
         ..cartQuantity = 0;
+
+      if (product.isLowStock &&
+          (product.productQuantity <= product.lowStockQuantity)) {
+        NotificationProvider().notiList.add(NotificationModel(
+            date: dateformat.format(DateTime.now()),
+            time: timeformat.format(DateTime.now()),
+            title: "Low Stock",
+            body:
+                ("${((product.productName) ?? 'n/a').toUpperCase()} is running low. Prepare to re-stock")));
+
+
+      }
     }
     //saveToShop(_inventory);
     notifyListeners();
@@ -203,11 +220,10 @@ class GeneralProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  generateUID() {
-   
+  String generateUID() {
     var firstPart = (Math.Random().nextInt(2 ^ 32) * 46656) | 0;
     var secondPart = (Math.Random().nextInt(2 ^ 32) * 46656) | 0;
-    return ((shop.shopname ?? 'demo') + firstPart.toRadixString(36)) +
+    return (  firstPart.toRadixString(36)) +
         (secondPart.toRadixString(36));
   }
 

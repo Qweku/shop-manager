@@ -77,7 +77,7 @@ class _ProductViewState extends State<ProductView> {
                 Container(
                   width: width,
                   //color:Color.fromARGB(255, 221, 221, 221),
-                  height: height * 0.5,
+                  height: height * 0.45,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
