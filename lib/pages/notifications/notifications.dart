@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
+import 'package:shop_manager/pages/addproduct.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 import 'notificationPlugin.dart';
@@ -17,22 +19,9 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  // ScrollController controller = ScrollController();
   @override
   void initState() {
     super.initState();
-    log("${Provider.of<NotificationProvider>(context, listen: false)
-        .notiList
-        .length}");
-    // if (context.watch<NotificationProvider>().notiList.isNotEmpty) {
-    //   SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-    //     controller.animateTo(controller.position.maxScrollExtent,
-    //         duration: const Duration(milliseconds: 10),
-    //         curve: Curves.easeInOut);
-    //   });
-    // }
-    // notificationPlugin.setListenerForLowerVersions(onNotificationLower);
-    // notificationPlugin.setOnNotificationClick(onNotificationClick);
   }
 
   @override
@@ -69,79 +58,105 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 .length, (index) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 10),
-                            child: GestureDetector(
-                              onTap: () async {
-                                // await notificationPlugin.showNotification('Bandwidth Warning',
-                                //     "Your bandwidth has reached it's max point. Please reduce usage.");
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                      padding: const EdgeInsets.all(15),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(color: Colors.white),
-                                        color:
-                                            primaryColorLight.withOpacity(0.3),
-                                      ),
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Icon(
-                                            Icons.notifications,
-                                            color: primaryColor,
-                                          ),
+                            child: Column(
+                              children: [
+                                Container(
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(color: Colors.white),
+                                      color: primaryColorLight.withOpacity(0.3),
+                                    ),
+                                    child: ListTile(
+                                      onTap: () {
+                                        context
+                                            .read<NotificationProvider>()
+                                            .notiList[index]
+                                            .isRead = true;
+
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (builder) =>
+                                                        AddProductScreen(
+                                                          toEdit: true,
+                                                          product: context
+                                                              .read<
+                                                                  GeneralProvider>()
+                                                              .inventory
+                                                              .singleWhere((element) =>
+                                                                  (element.productName ??
+                                                                          '')
+                                                                      .toUpperCase() ==
+                                                                  (context.read<NotificationProvider>().notiList[index].body ??
+                                                                          '')
+                                                                      .split(
+                                                                          'is')
+                                                                      .first
+                                                                      .trim()),
+                                                        ))).then((value) {
+                                          setState(() {});
+                                          Navigator.pop(context);
+                                        });
+
+                                        return;
+                                      },
+                                      leading: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: Icon(
+                                          Icons.notifications,
+                                          color: primaryColor,
                                         ),
-                                        title: Text(
+                                      ),
+                                      title: Text(
+                                        context
+                                            .read<NotificationProvider>()
+                                            .notiList[index]
+                                            .title!,
+                                        style: bodyText1.copyWith(
+                                            color: primaryColor, fontSize: 17),
+                                      ),
+                                      subtitle: Text(
                                           context
                                               .read<NotificationProvider>()
                                               .notiList[index]
-                                              .title!,
-                                          style: bodyText1.copyWith(
-                                              color: primaryColor,
-                                              fontSize: 17),
-                                        ),
-                                        subtitle: Text(
-                                            context
-                                                .read<NotificationProvider>()
-                                                .notiList[index]
-                                                .body!,
-                                            style: bodyText1),
-                                      )),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        context
-                                            .watch<NotificationProvider>()
-                                            .notiList[index]
-                                            .date!,
-                                        style: bodyText1.copyWith(
-                                            color: Color.fromARGB(
-                                                255, 56, 56, 56)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Icon(Icons.circle,
-                                            color:
-                                                Color.fromARGB(255, 56, 56, 56),
-                                            size: 10),
-                                      ),
-                                      Text(
-                                        context
-                                            .watch<NotificationProvider>()
-                                            .notiList[index]
-                                            .time!,
-                                        style: bodyText1.copyWith(
-                                            color: Color.fromARGB(
-                                                255, 56, 56, 56)),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                              .body!,
+                                          style: bodyText1),
+                                    )),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      context
+                                          .watch<NotificationProvider>()
+                                          .notiList[index]
+                                          .date!,
+                                      style: bodyText1.copyWith(
+                                          color:
+                                              Color.fromARGB(255, 56, 56, 56)),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Icon(Icons.circle,
+                                          color:
+                                              Color.fromARGB(255, 56, 56, 56),
+                                          size: 10),
+                                    ),
+                                    Text(
+                                      context
+                                          .watch<NotificationProvider>()
+                                          .notiList[index]
+                                          .time!,
+                                      style: bodyText1.copyWith(
+                                          color:
+                                              Color.fromARGB(255, 56, 56, 56)),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           );
                         }

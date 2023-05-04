@@ -1,32 +1,19 @@
 // ignore_for_file: prefer_is_not_empty
 
-import 'dart:developer';
-import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_manager/components/bottomnav.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
-import 'package:shop_manager/models/ShopModel.dart';
-import 'package:shop_manager/models/localStore.dart';
-import 'package:shop_manager/pages/expenses.dart';
-import 'package:shop_manager/pages/sales.dart';
-import 'package:shop_manager/pages/Inventory/inventory.dart';
-import 'package:shop_manager/pages/low_stock_list.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/dashboard_card.dart';
 import 'package:shop_manager/pages/widgets/drawerMenu.dart';
 
-import '../models/NotificationModel.dart';
 import 'addproduct.dart';
 // import 'Categories/category.dart';
 
@@ -57,8 +44,8 @@ class _DashboardState extends State<Dashboard> {
         Provider.of<GeneralProvider>(context, listen: false).shop.lowStocks;
     Provider.of<SalesProvider>(context, listen: false).salesList =
         Provider.of<GeneralProvider>(context, listen: false).shop.sales;
-    Provider.of<NotificationProvider>(context, listen: false).notiList =
-        notificationModelFromJson(storage.getItem('notification') ?? '[]');
+    // Provider.of<NotificationProvider>(context, listen: false).notiList =
+    //     notificationModelFromJson(storage.getItem('notification') ?? '[]');
     super.initState();
   }
 
@@ -113,7 +100,11 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: primaryColor,
           actions: [
             NotificationIconButton(
-              quantity: context.watch<NotificationProvider>().notiList.where((element) => element.isRead == false).length,
+              quantity: context
+                  .watch<NotificationProvider>()
+                  .notiList
+                  .where((element) => element.isRead == false)
+                  .length,
               onTap: () {
                 Navigator.push(
                     context,

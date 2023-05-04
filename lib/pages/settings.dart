@@ -28,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       QuerySnapshot data = await fireStore.collection(shopName ?? "").get();
 
       for (QueryDocumentSnapshot snapshot in data.docs) {
-                  log(snapshot.exists.toString());
+        log(snapshot.exists.toString());
 
         if (snapshot.exists) {
           log(snapshot.exists.toString());
@@ -88,10 +88,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             shape: const StadiumBorder()),
       );
     });
-
+ 
     for (QueryDocumentSnapshot snapshot in data.docs) {
-      log(snapshot.exists.toString());
-      Product products = Product(
+       Product products = Product(
           pid: snapshot["product id"],
           productName: snapshot["product name"],
           productDescription: snapshot["product description"],
@@ -104,6 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           isLowStock: snapshot["low stock"]);
       Provider.of<GeneralProvider>(context, listen: false).addProduct(products);
     }
+ 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           backgroundColor: Color.fromARGB(255, 1, 156, 27),

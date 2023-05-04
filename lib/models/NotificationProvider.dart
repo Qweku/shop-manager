@@ -3,19 +3,19 @@ import 'package:shop_manager/models/NotificationModel.dart';
 
 class NotificationProvider extends ChangeNotifier {
   List<NotificationModel> _notiList = [];
-   int _notiCount = 0;
+  int _notiCount = 0;
 
-   int get notiCount => _notiCount;
+  int get notiCount => _notiCount;
   List<NotificationModel> get notiList => _notiList;
 
   set notiList(List<NotificationModel> notiList) {
     _notiList = notiList;
-    // notifyListeners();
+    notifyListeners();
   }
 
    set notiCount(int notiCount) {
     _notiCount = notiCount;
-    // notifyListeners();
+    notifyListeners();
   }
 
 
