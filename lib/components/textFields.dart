@@ -163,6 +163,7 @@ class CustomTextField extends StatelessWidget {
   final Color hintColor;
   final bool? readOnly;
   final bool? autoFocus;
+  final FocusNode? focusNode;
 
   const CustomTextField(
       {Key? key,
@@ -183,7 +184,7 @@ class CustomTextField extends StatelessWidget {
       this.onChanged,
       this.autoFocus = false,
       this.onEditingComplete,
-      this.inputFormatters})
+      this.inputFormatters, this.focusNode})
       : super(key: key);
 
   @override
@@ -197,6 +198,7 @@ class CustomTextField extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(20)),
       child: TextField(
+        focusNode: focusNode ?? FocusNode(),
         autofocus: autoFocus!,
         obscureText: obscure,
         readOnly: readOnly!,

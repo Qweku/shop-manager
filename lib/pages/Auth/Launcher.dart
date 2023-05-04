@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 // import 'package:hive/hive.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
@@ -12,7 +13,7 @@ import 'package:shop_manager/pages/wrapper.dart';
 
 class Launcher extends StatefulWidget {
   const Launcher({Key? key}) : super(key: key);
-  static const String routeName = '/';
+  // static const String routeName = '/';
 
   @override
   _LauncherState createState() => _LauncherState();
@@ -33,7 +34,7 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
     _animation = CurvedAnimation(parent: _controller, curve: Curves.bounceOut);
     _animation2 = Tween<double>(begin: 0.0, end: 1.2).animate(_controller);
     _controller.forward();
-    startTime();
+   // startTime();
   }
 
   @override
@@ -77,15 +78,22 @@ class _LauncherState extends State<Launcher> with TickerProviderStateMixin {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ScaleTransition(
-                    scale: _animation,
-                    child: CircleAvatar(
-                      backgroundColor: primaryColorLight,
-                      radius:
-                          Responsive.isMobile() ? width * 0.12 : width * 0.05,
-                      backgroundImage: AssetImage("assets/app_icon.png"),
-                    ),
+                  CircularPercentIndicator(
+                    backgroundColor: Colors.transparent,
+                    animationDuration: 5000,
+                    animation: true,
+                  radius:width * 0.15,
+                  lineWidth: 5.0,
+                  percent: 1.0,
+                  center:  
+                  CircleAvatar(
+                    backgroundColor: primaryColorLight,
+                    radius:
+                        Responsive.isMobile() ? width * 0.12 : width * 0.05,
+                    backgroundImage: AssetImage("assets/app_icon.png"),
                   ),
+                  progressColor: Colors.white,
+                ),
                   SizedBox(height: height * 0.01),
                   FadeTransition(
                       opacity: _animation2,

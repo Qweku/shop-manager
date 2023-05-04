@@ -54,11 +54,12 @@ class _SalesScreenState extends State<SalesScreen> {
             .length
             .toString());
     output = <SalesModel>[];
-    if (Provider.of<SalesProvider>(context, listen: false)
-        .salesList
-        .isNotEmpty) {
-      fromDate.text = Provider.of<SalesProvider>(context, listen: false).salesList.first.date!;
-    }
+    // if (
+    //   Provider.of<SalesProvider>(context, listen: false)
+    //     .salesList
+    //     .isNotEmpty) {
+    //   fromDate.text = Provider.of<SalesProvider>(context, listen: false).salesList.first.date!;
+    // }
     // fromDate.text =
     //     Provider.of<SalesProvider>(context, listen: false).salesList[0].date!;
     // log("First sales date: " +

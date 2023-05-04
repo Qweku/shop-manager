@@ -71,7 +71,7 @@ class _SalesReportState extends State<SalesReport> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: primaryColor,
+        backgroundColor: primaryColorLight,
         floatingActionButton: FloatingActionButton(
           onPressed: getPdf,
           backgroundColor: primaryColor,
@@ -80,229 +80,222 @@ class _SalesReportState extends State<SalesReport> {
         body: SizedBox(
           height: height,
           width: width,
-          child: SafeArea(
-              child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Screenshot(
-                        controller: screenshotController,
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.white),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Screenshot(
+                  controller: screenshotController,
+                  child: Container(
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.all(width * 0.05),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Sales Report', style: headline1),
+                                  Text(
+                                      "${dateformat.format(DateTime.now())},  ${timeformat.format(DateTime.now())}"),
+                                ],
+                              )),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.05),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      context
+                                          .read<GeneralProvider>()
+                                          .shop
+                                          .shopname
+                                          .toString(),
+                                      style: headline1.copyWith(
+                                          fontSize: 20)),
+                                  Image.asset(
+                                    'assets/app_icon.png',
+                                    width: width * 0.15,
+                                  ),
+                                ]),
+                          ),
+                          SizedBox(height: height * 0.03),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.05),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                    padding: EdgeInsets.all(width * 0.05),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Sales Report', style: headline1),
-                                        Text(
-                                            "${dateformat.format(DateTime.now())},  ${timeformat.format(DateTime.now())}"),
-                                      ],
-                                    )),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.05),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            context
-                                                .read<GeneralProvider>()
-                                                .shop
-                                                .shopname
-                                                .toString(),
-                                            style: headline1.copyWith(
-                                                fontSize: 20)),
-                                        Image.asset(
-                                          'assets/app_icon.png',
-                                          width: width * 0.15,
-                                        ),
-                                      ]),
-                                ),
-                                SizedBox(height: height * 0.03),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.05),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text('From:',
-                                                    style: bodyText1.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(
-                                                  widget.fromDate,
-                                                  style: bodyText1,
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: height * 0.01,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text('To:',
-                                                    style: bodyText1.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(widget.toDate,
-                                                    style: bodyText1),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                        children: [
+                                          Text('From:',
+                                              style: bodyText1.copyWith(
+                                                  fontWeight:
+                                                      FontWeight.bold)),
+                                          Text(
+                                            widget.fromDate,
+                                            style: bodyText1,
+                                          )
+                                        ],
                                       ),
-                                      const SizedBox(width: 30),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text('Total Profit:',
-                                                    style: bodyText1.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(
-                                                  "GHS ${totalProfit.toStringAsFixed(2)}",
-                                                  style: bodyText1,
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: height * 0.01,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text('Total Sales:',
-                                                    style: bodyText1.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(
-                                                    "GHS ${totalSales.toStringAsFixed(2)}",
-                                                    style: bodyText1),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                      SizedBox(
+                                        height: height * 0.01,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                        children: [
+                                          Text('To:',
+                                              style: bodyText1.copyWith(
+                                                  fontWeight:
+                                                      FontWeight.bold)),
+                                          Text(widget.toDate,
+                                              style: bodyText1),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: height * 0.05),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: height * 0.01,
-                                      horizontal: width * 0.05),
-                                  color: Color.fromARGB(255, 197, 196, 196),
-                                  child: Row(
+                                const SizedBox(width: 30),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      // Expanded(
-                                      //     child: Text('No.',
-                                      //         style: bodyText1.copyWith(
-                                      //             fontWeight: FontWeight.bold))),
-                                      Expanded(
-                                          child: Text('Items',
-                                              //textAlign: TextAlign.center,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                        children: [
+                                          Text('Total Profit:',
                                               style: bodyText1.copyWith(
                                                   fontWeight:
-                                                      FontWeight.bold))),
-                                      Expanded(
-                                          child: Text('Date',
-                                              textAlign: TextAlign.center,
+                                                      FontWeight.bold)),
+                                          Text(
+                                            "GHS ${totalProfit.toStringAsFixed(2)}",
+                                            style: bodyText1,
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.01,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                        children: [
+                                          Text('Total Sales:',
                                               style: bodyText1.copyWith(
                                                   fontWeight:
-                                                      FontWeight.bold))),
-                                      Expanded(
-                                          child: Text('Quantity',
-                                              textAlign: TextAlign.center,
-                                              style: bodyText1.copyWith(
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                      Expanded(
-                                          child: Text('Amount',
-                                              textAlign: TextAlign.right,
-                                              style: bodyText1.copyWith(
-                                                  fontWeight:
-                                                      FontWeight.bold))),
+                                                      FontWeight.bold)),
+                                          Text(
+                                              "GHS ${totalSales.toStringAsFixed(2)}",
+                                              style: bodyText1),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.all(width * 0.05),
-                                  child: SizedBox(
-                                      // height: height * 0.7,
-                                      child: widget.salesList.isEmpty
-                                          ? Center(
-                                              child: Text("No Records",
-                                                  style: headline1.copyWith(
-                                                      color: Colors.grey)))
-                                          : ListView(
-                                              reverse: true,
-                                              shrinkWrap: true,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              children: List.generate(
-                                                  widget.salesList.length,
-                                                  (index) => SummaryListItem(
-                                                      salesModel: widget
-                                                          .salesList[index])))),
-                                ),
-                                Divider(
-                                  color: Colors.grey,
-                                  height: height * 0.05,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: width * 0.05),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                        'Net Total:   GHS ${totalSales.toStringAsFixed(2)}',
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: height * 0.05),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: height * 0.01,
+                                horizontal: width * 0.05),
+                            color: Color.fromARGB(255, 197, 196, 196),
+                            child: Row(
+                              children: [
+                                // Expanded(
+                                //     child: Text('No.',
+                                //         style: bodyText1.copyWith(
+                                //             fontWeight: FontWeight.bold))),
+                                Expanded(
+                                    child: Text('Items',
+                                        //textAlign: TextAlign.center,
                                         style: bodyText1.copyWith(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                )
-                              ]),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          )),
+                                            fontWeight:
+                                                FontWeight.bold))),
+                                Expanded(
+                                    child: Text('Date',
+                                        textAlign: TextAlign.center,
+                                        style: bodyText1.copyWith(
+                                            fontWeight:
+                                                FontWeight.bold))),
+                                Expanded(
+                                    child: Text('Quantity',
+                                        textAlign: TextAlign.center,
+                                        style: bodyText1.copyWith(
+                                            fontWeight:
+                                                FontWeight.bold))),
+                                Expanded(
+                                    child: Text('Amount',
+                                        textAlign: TextAlign.right,
+                                        style: bodyText1.copyWith(
+                                            fontWeight:
+                                                FontWeight.bold))),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(width * 0.05),
+                            child: SizedBox(
+                                // height: height * 0.7,
+                                child: widget.salesList.isEmpty
+                                    ? Center(
+                                        child: Text("No Records",
+                                            style: headline1.copyWith(
+                                                color: Colors.grey)))
+                                    : ListView(
+                                        reverse: true,
+                                        shrinkWrap: true,
+                                        physics:
+                                            NeverScrollableScrollPhysics(),
+                                        children: List.generate(
+                                            widget.salesList.length,
+                                            (index) => SummaryListItem(
+                                                salesModel: widget
+                                                    .salesList[index])))),
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                            height: height * 0.05,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.05),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                  'Net Total:   GHS ${totalSales.toStringAsFixed(2)}',
+                                  style: bodyText1.copyWith(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          )
+                        ]),
+                  ),
+                )
+              ],
+            ),
+          ),
         ));
   }
 }

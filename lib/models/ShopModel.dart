@@ -207,7 +207,7 @@ class ShopProducts {
 }
 
 class Product {
-  int pid;
+  String pid;
   String? productName;
   double sellingPrice;
   double costPrice;
@@ -237,7 +237,7 @@ class Product {
   });
 
   Product copyWith(
-          {int? pid,
+          {String? pid,
           String? productName,
           double? sellingPrice,
           double? costPrice,

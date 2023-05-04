@@ -15,6 +15,7 @@ import 'package:shop_manager/pages/Auth/Launcher.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
 
 import 'package:provider/provider.dart';
+import 'package:shop_manager/pages/wrapper.dart';
 
 import 'models/AuthService.dart';
 import 'models/GeneralProvider.dart';
@@ -22,16 +23,7 @@ import 'models/GeneralProvider.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  log('A Background message just showed up :  ${message.messageId}');
-}
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    //'This channel is used for important notifications.', // description
-    importance: Importance.high,
-    playSound: true);
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,26 +38,13 @@ main() async {
   }
   await Firebase.initializeApp();
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-// Firebase local notification plugin
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-//Firebase messaging
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
+  
 
   NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
           Platform.isLinux
       ? null
       : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  String initialRoute = Launcher.routeName;
+  String initialRoute = Wrapper.routeName;
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     initialRoute = NotificationScreen.routeName;
   }
@@ -97,53 +76,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _counter = 0;
-  @override
-  void initState() {
-    super.initState();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                //channel.description,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_lancher',
-              ),
-            ));
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      log('A new message open app event was published');
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text(notification.title!),
-                content: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(notification.body!)],
-                  ),
-                ),
-              );
-            });
-      }
-    });
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +93,7 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: widget.initialRoute,
       routes: <String, WidgetBuilder>{
-        Launcher.routeName: (_) => Launcher(),
+        Wrapper.routeName: (_) => Wrapper(),
         NotificationScreen.routeName: (_) => NotificationScreen()
       },
       //LoginScreen(),

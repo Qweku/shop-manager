@@ -14,6 +14,7 @@ import 'package:shop_manager/models/NotificationModel.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/dashboard.dart';
+import 'package:shop_manager/pages/my_home_screen.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class VerifyEmailScreen extends StatefulWidget {

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+// import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -76,7 +77,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   // late Box shopBox;
   //ProductCategory? _selectedCategory;
   String imageString = '';
- // List<ProductCategory> categoryList = [];
+  // List<ProductCategory> categoryList = [];
   Uint8List imageFile = Uint8List(0);
   //String imagePath;
   bool isLoading = false;
@@ -136,6 +137,41 @@ class _AddProductScreenState extends State<AddProductScreen> {
     setState(() {});
   }
 
+  List<Product> suggestions = [];
+
+  Future getProducts() async {
+    QuerySnapshot data =
+        await fireStore.collection("shopNow").get().catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Color.fromARGB(255, 219, 16, 16),
+            content: Text('An error occurred, please try again',
+                textAlign: TextAlign.center, style: bodyText2),
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            shape: const StadiumBorder()),
+      );
+    });
+
+    for (QueryDocumentSnapshot snapshot in data.docs) {
+      log("${snapshot["product id"]}:${snapshot["product name"]}");
+      Product products = Product(
+          pid: snapshot["product id"],
+          productName: snapshot["product name"],
+          productDescription: snapshot["product description"],
+          productImage: snapshot["product image"],
+          sellingPrice: snapshot["selling price"],
+          costPrice: snapshot["cost price"],
+          //productCategory: snapshot["product category"],
+          productQuantity: snapshot["product quantity"],
+          lowStockQuantity: snapshot["low stock quantity"],
+          isLowStock: snapshot["low stock"]);
+
+      suggestions.add(products);
+      // Provider.of<GeneralProvider>(context, listen: false).addProduct(products);
+    }
+  }
+
   Future exportProduct(Product product) async {
     String customId = productName.text;
     await fireStore.collection(shopName ?? "").doc(customId).set({
@@ -190,6 +226,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void initState() {
     getShopName();
+    getProducts();
+    log("${suggestions.length}");
     // categoryList = List.from(
     //     Provider.of<GeneralProvider>(context, listen: false).categories);
     //_selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
@@ -220,6 +258,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     super.initState();
   }
+//  GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -281,13 +320,42 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CustomTextField(
-                      prefixIcon: Icon(Icons.add_box, color: Colors.grey),
-                      hintText: "Product name",
-                      borderColor: Colors.grey,
-                      controller: productName,
-                      style: bodyText1,
-                      hintColor: Colors.grey,
+                    child: Autocomplete<Product>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        return suggestions
+                            .where((element) => element.productName!
+                                .toLowerCase()
+                                .startsWith(
+                                    textEditingValue.text.toLowerCase()))
+                            .toList();
+                      },
+                      displayStringForOption: (Product option) =>
+                          option.productName!,
+                      fieldViewBuilder: (BuildContext context,
+                          TextEditingController fieldTextEditingController,
+                          FocusNode fieldFocusNode,
+                          VoidCallback onFieldSubmitted) {
+                        return CustomTextField(
+                          prefixIcon: Icon(Icons.add_box, color: Colors.grey),
+                          hintText: "Product name",
+                          borderColor: Colors.grey,
+                          controller: fieldTextEditingController,
+                          focusNode: fieldFocusNode,
+                          style: bodyText1,
+                          hintColor: Colors.grey,
+                        );
+                      },
+                      onSelected: (Product suggestion) {
+                        productName.text = suggestion.productName!;
+                        productPrice.text =
+                            "${suggestion.sellingPrice.toStringAsFixed(2)}";
+                        productCostPrice.text =
+                            "${suggestion.costPrice.toStringAsFixed(2)}";
+                        productDescription.text =
+                            suggestion.productDescription!;
+                        imageFile = base64Decode(suggestion.productImage!);
+                        setState(() {});
+                      },
                     )),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -522,12 +590,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           //         .productCategory!.categoryDescription),
                         );
 
-                         
                         Provider.of<GeneralProvider>(context, listen: false)
                             .editProduct(product);
 
-                        FirebaseFunction().updateProduct(
-                            context, product, productName.text, shopName);
+                        // FirebaseFunction().updateProduct(
+                        //     context, product, productName.text, shopName);
+                        exportProduct(product);
 
                         // .inventory
                         //   .singleWhere(
@@ -569,10 +637,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             pid: context.read<GeneralProvider>().generateUID(),
                             productName: productName.text,
                             productDescription: productDescription.text,
-                            sellingPrice: double.tryParse(
-                                    formatter
-                                        .getUnformattedValue()
-                                        .toString()) ??
+                            sellingPrice: double.tryParse(formatter
+                                    .getUnformattedValue()
+                                    .toString()) ??
                                 0,
                             costPrice: double.tryParse(formatter2
                                     .getUnformattedValue()

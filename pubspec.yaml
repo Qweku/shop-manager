@@ -59,6 +59,8 @@ dependencies:
   pdf: ^3.10.1
   firebase_messaging:
   permission_handler: ^10.2.0
+  autocomplete_textfield: ^2.0.1
+  percent_indicator: ^4.2.3
   # downloads_path_provider_28: ^0.1.2
 
 dev_dependencies:

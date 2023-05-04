@@ -186,7 +186,7 @@ class _ProductViewState extends State<ProductView> {
                         children: [
                           IconButton(
                               onPressed: () {
-                                if ((context.watch<GeneralProvider>().cart.any(
+                                if ((Provider.of<GeneralProvider>(context, listen: false).cart.any(
                                     (element) =>
                                         element.pid == widget.product.pid))) {
                                   return;
@@ -201,9 +201,7 @@ class _ProductViewState extends State<ProductView> {
                               icon: Icon(Icons.remove_circle_outline,
                                   size: 30,
                                   color: (counter == 1 ||
-                                          (context
-                                              .watch<GeneralProvider>()
-                                              .cart
+                                          (Provider.of<GeneralProvider>(context, listen: false).cart
                                               .any((element) =>
                                                   element.pid ==
                                                   widget.product.pid)))
@@ -219,7 +217,7 @@ class _ProductViewState extends State<ProductView> {
                           ),
                           IconButton(
                               onPressed: () {
-                                if ((context.watch<GeneralProvider>().cart.any(
+                                if ((Provider.of<GeneralProvider>(context, listen: false).cart.any(
                                     (element) =>
                                         element.pid == widget.product.pid))) {
                                   return;
@@ -236,9 +234,7 @@ class _ProductViewState extends State<ProductView> {
                                   size: 30,
                                   color: (counter ==
                                               widget.product.productQuantity ||
-                                          (context
-                                              .watch<GeneralProvider>()
-                                              .cart
+                                          (Provider.of<GeneralProvider>(context, listen: false).cart
                                               .any((element) =>
                                                   element.pid ==
                                                   widget.product.pid)))

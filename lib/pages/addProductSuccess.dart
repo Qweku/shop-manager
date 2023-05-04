@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/dashboard.dart';
+import 'package:shop_manager/pages/my_home_screen.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class AddProductSuccess extends StatefulWidget {
