@@ -92,8 +92,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   void initState() {
     getShopName();
-     NotiPlugin.initialize(flutterLocalNotificationsPlugin);
-    super.initState();
+     super.initState();
   }
 
   @override
@@ -123,10 +122,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           ),
           DrawerItem(
             onTap: () {
-              NotiPlugin.showNotification(
-        title: "Low Stock",
-        body: "Some products are running low on stock",
-        fln: flutterLocalNotificationsPlugin);
+             
             },
             text: 'Profile',
             icon: Icons.person,

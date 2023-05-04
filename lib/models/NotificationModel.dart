@@ -14,18 +14,21 @@ class NotificationModel {
         this.body,
         this.date,
         this.time,
+        this.isRead = false,
     });
 
     String? title;
     String? body;
     String? date;
     String? time;
+    bool isRead;
 
     factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
         title: json["title"],
         body: json["body"],
         date: json["date"],
         time: json["time"],
+        isRead: json["isRead"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -33,5 +36,6 @@ class NotificationModel {
         "body": body,
         "date": date,
         "time": time,
+        "isRead": isRead,
     };
 }

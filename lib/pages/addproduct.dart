@@ -522,7 +522,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           //         .productCategory!.categoryDescription),
                         );
 
-                         
                         Provider.of<GeneralProvider>(context, listen: false)
                             .editProduct(product);
 
@@ -565,14 +564,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           .inventory
                           .any((element) =>
                               element.productName == productName.text))) {
+                        String uid = (Provider.of<GeneralProvider>(context,
+                                        listen: false)
+                                    .shop
+                                    .shopname ??
+                                'demo') +
+                            context.read<GeneralProvider>().generateUID();
                         Product product = Product(
-                            pid: context.read<GeneralProvider>().generateUID(),
+                            pid: uid,
                             productName: productName.text,
                             productDescription: productDescription.text,
-                            sellingPrice: double.tryParse(
-                                    formatter
-                                        .getUnformattedValue()
-                                        .toString()) ??
+                            sellingPrice: double.tryParse(formatter
+                                    .getUnformattedValue()
+                                    .toString()) ??
                                 0,
                             costPrice: double.tryParse(formatter2
                                     .getUnformattedValue()
