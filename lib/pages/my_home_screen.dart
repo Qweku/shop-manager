@@ -1,18 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:localstorage/localstorage.dart';
-import 'package:provider/provider.dart';
 import 'package:shop_manager/components/bottomnav.dart';
-import 'package:shop_manager/models/GeneralProvider.dart';
-import 'package:shop_manager/models/NotificationModel.dart';
-import 'package:shop_manager/models/NotificationProvider.dart';
-import 'package:shop_manager/models/ShopModel.dart';
-import 'package:shop_manager/models/localStore.dart';
 import 'package:shop_manager/pages/Inventory/inventory.dart';
 import 'package:shop_manager/pages/dashboard.dart';
 import 'package:shop_manager/pages/expenses.dart';
@@ -71,7 +62,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   @override
   void initState() {
-    // bootUp();
+    // bootUp();style: headline1.copyWith(fontSize: 25, color: Colors.blueGrey),
 
     delayScreen();
     super.initState();

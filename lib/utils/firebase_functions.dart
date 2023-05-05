@@ -99,6 +99,47 @@ class FirebaseFunction {
         } else {
           log("Document already exist.");
         }
+      }else{
+         await fireStore.collection(shopName ?? "").doc(customId).set({
+            'product id': product.pid,
+            'product name': product.productName,
+            'product description': product.productDescription,
+            'product image': product.productImage,
+            'selling price': product.sellingPrice,
+            'cost price': product.costPrice,
+           // 'product category': product.productCategory,
+            'product quantity': product.productQuantity,
+            'low stock quantity': product.lowStockQuantity,
+            'low stock': product.isLowStock,
+          });
+      }
+    }
+  }
+
+ Future exportToSuggestions(
+      Product product, String productName) async {
+    String customId = productName;
+
+    QuerySnapshot data = await fireStore.collection("shopNow").get();
+
+    for (QueryDocumentSnapshot snapshot in data.docs) {
+      if (snapshot.exists) {
+        //! Unhandled Exception: Bad state: field does not exist within the DocumentSnapshotPlatform
+        if (snapshot["product name"] != productName) {
+          await fireStore.collection("shopNow").doc(customId).set({
+            'product id': product.pid,
+            'product name': product.productName,
+            'product description': product.productDescription,
+            'product image': product.productImage,
+            'selling price': product.sellingPrice,
+            'cost price': product.costPrice,
+             'product quantity': product.productQuantity,
+            'low stock quantity': product.lowStockQuantity,
+            'low stock': product.isLowStock,
+          });
+        } else {
+          log("Document already exist.");
+        }
       }
     }
   }

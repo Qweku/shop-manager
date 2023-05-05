@@ -421,45 +421,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       fit: BoxFit.cover,
                                     ),
                                   )
-                                // : (widget.toEdit)
-                                //     ? (widget.product!.productImage ?? "")
-                                //             .isEmpty
-                                //         ? Container(
-                                //             height: height * 0.23,
-                                //             width: width * 0.4,
-                                //             decoration: BoxDecoration(
-                                //                 borderRadius:
-                                //                     BorderRadius.circular(20.0),
-                                //                 color: Colors.white,
-                                //                 boxShadow: [
-                                //                   const BoxShadow(
-                                //                       offset: Offset(2, 2),
-                                //                       color: Color.fromARGB(
-                                //                           31, 0, 0, 0),
-                                //                       blurRadius: 2,
-                                //                       spreadRadius: 1)
-                                //                 ]),
-                                //             child: Center(
-                                //               child: Text(
-                                //                 widget.product!.productName!
-                                //                     .substring(0, 2)
-                                //                     .toUpperCase(),
-                                //                 style: headline2.copyWith(
-                                //                     fontSize: 70,
-                                //                     color: primaryColorLight),
-                                //               ),
-                                //             ))
-                                //         : ClipRRect(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(20),
-                                //             child: Image.memory(
-                                //               base64Decode(widget
-                                //                   .product!.productImage!),
-                                //               width: width * 0.45,
-                                //               height: height * 0.25,
-                                //               fit: BoxFit.cover,
-                                //             ),
-                                //           )
+                             
                                 : isLoading
                                     ? Center(
                                         child: CircularProgressIndicator(
@@ -677,7 +639,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     context,
                                     listen: false)
                                 .shop));
-                        //exportProduct(product);
+                        FirebaseFunction().exportToSuggestions(product,productName.text);
                         FirebaseFunction()
                             .addProducts(product, productName.text, shopName);
                       } else {
