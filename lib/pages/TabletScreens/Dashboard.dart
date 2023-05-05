@@ -163,8 +163,8 @@ class _TabletDashboardState extends State<TabletDashboard> {
         Provider.of<GeneralProvider>(context, listen: false).shop.lowStocks;
     Provider.of<SalesProvider>(context, listen: false).salesList =
         Provider.of<GeneralProvider>(context, listen: false).shop.sales;
-    Provider.of<NotificationProvider>(context, listen: false).notiList =
-        notificationModelFromJson(storage.getItem('notification') ?? '[]');
+    // Provider.of<NotificationProvider>(context, listen: false).notiList =
+    //     notificationModelFromJson(storage.getItem('notification') ?? '[]');
 
     super.initState();
   }

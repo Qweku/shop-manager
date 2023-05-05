@@ -18,8 +18,11 @@ import 'package:shop_manager/components/notifiers.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:shop_manager/config/notificationService.dart';
 import 'package:shop_manager/config/size.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
+import 'package:shop_manager/models/NotificationModel.dart';
+import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/api_client.dart';
 import 'package:shop_manager/pages/addProductSuccess.dart';
@@ -570,29 +573,33 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               int.tryParse(lowStockQuantity.text) ?? 0,
                           productImage: imageString,
                           isLowStock: isChecked,
-                          // productCategory: ProductCategory(
-                          //     cid: widget.product!.productCategory!.cid,
-                          //     categoryName:
-                          //         widget.product!.productCategory!.categoryName,
-                          //     categoryDescription: widget.product!
-                          //         .productCategory!.categoryDescription),
                         );
+
+                        //? Check and send Notification for Restock
+
+                        if (product.productQuantity !=
+                            (widget.product?.productQuantity ?? 0)) {
+                          context.read<NotificationProvider>().addNotification(
+                              NotificationModel(
+                                  date: dateformat.format(DateTime.now()),
+                                  time: timeformat.format(DateTime.now()),
+                                  title:
+                                      "${((product.productName) ?? 'n/a').toUpperCase()} Re-Stocked",
+                                  body:
+                                      ("${((product.productName) ?? 'n/a').toUpperCase()} has been re-stocked")));
+
+                          NotificationService().showNotifications(NotificationModel(
+                              date: dateformat.format(DateTime.now()),
+                              time: timeformat.format(DateTime.now()),
+                              title: "Re-Stock Alert",
+                              body:
+                                  ("${((product.productName) ?? 'n/a').toUpperCase()} has been re-stocked")));
+                        }
 
                         Provider.of<GeneralProvider>(context, listen: false)
                             .editProduct(product);
 
-                        // FirebaseFunction().updateProduct(
-                        //     context, product, productName.text, shopName);
                         exportProduct(product);
-
-                        // .inventory
-                        //   .singleWhere(
-                        //       (element) => element == widget.product)
-                        // ..quantity = product.quantity
-                        // ..sellingPrice = product.sellingPrice
-                        // ..itemcategory = product.itemcategory
-                        // ..costPrice = product.costPrice
-                        // ..imageb64 = product.imageb64;
                       } else if (productName.text.isEmpty ||
                           double.tryParse(
                                   formatter.getUnformattedValue().toString()) ==

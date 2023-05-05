@@ -34,7 +34,7 @@ class GeneralProvider extends ChangeNotifier {
   ShopProducts get shop => _shop;
 
   Product get product => _product;
- // ProductCategory get category => _category;
+  // ProductCategory get category => _category;
   List<Product> get inventory => _inventory;
   List<Product> get lowStocks => _inventory
       .where((element) =>
@@ -43,7 +43,7 @@ class GeneralProvider extends ChangeNotifier {
       .toList();
 
   List<Product> get cart => _cart;
- // List<ProductCategory> get categories => _categories;
+  // List<ProductCategory> get categories => _categories;
   String _query = "";
   String get query => _query;
 
@@ -88,7 +88,7 @@ class GeneralProvider extends ChangeNotifier {
   // set categories(List<ProductCategory> categories) {
   //   _categories = List.from(categories);
 
-    // notifyListeners();
+  // notifyListeners();
   // }
 
   set product(Product product) {
@@ -159,23 +159,11 @@ class GeneralProvider extends ChangeNotifier {
 
   void processCart() {
     for (var cartItem in cart) {
-      Product product = _inventory.singleWhere((element) {
+      _inventory.singleWhere((element) {
         return element.productName == cartItem.productName;
       })
         ..productQuantity -= cartItem.cartQuantity
         ..cartQuantity = 0;
-
-      if (product.isLowStock &&
-          (product.productQuantity <= product.lowStockQuantity)) {
-        NotificationProvider().notiList.add(NotificationModel(
-            date: dateformat.format(DateTime.now()),
-            time: timeformat.format(DateTime.now()),
-            title: "Low Stock",
-            body:
-                ("${((product.productName) ?? 'n/a').toUpperCase()} is running low. Prepare to re-stock")));
-
-
-      }
     }
     //saveToShop(_inventory);
     notifyListeners();
@@ -223,8 +211,7 @@ class GeneralProvider extends ChangeNotifier {
   String generateUID() {
     var firstPart = (Math.Random().nextInt(2 ^ 32) * 46656) | 0;
     var secondPart = (Math.Random().nextInt(2 ^ 32) * 46656) | 0;
-    return (  firstPart.toRadixString(36)) +
-        (secondPart.toRadixString(36));
+    return (firstPart.toRadixString(36)) + (secondPart.toRadixString(36));
   }
 
   void deleteProduct(Product product) {
@@ -240,13 +227,6 @@ class GeneralProvider extends ChangeNotifier {
   }
 
   void editProduct(Product product) {
-    int num = 0;
-    _inventory.forEach((element) {
-      if (element.pid == product.pid) {
-        num++;
-        log("$num WITH SAME PID");
-      }
-    });
     _inventory.singleWhere((element) => element.pid == product.pid)
       //..productCategory = product.productCategory
       ..productImage = product.productImage

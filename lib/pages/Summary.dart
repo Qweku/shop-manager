@@ -1,13 +1,7 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:shop_manager/components/button.dart';
 import 'package:shop_manager/config/notificationService.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
@@ -16,7 +10,6 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/addProductSuccess.dart';
-import 'package:shop_manager/pages/notifications/notificationPlugin.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
@@ -179,8 +172,36 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       SizedBox(height: height * 0.05),
                       Button(
                         onTap: () async {
-                          //!
                           context.read<GeneralProvider>().processCart();
+                          for (var cartItem
+                              in context.read<GeneralProvider>().cart) {
+                            Product product = context
+                                .read<GeneralProvider>()
+                                .inventory
+                                .singleWhere((element) {
+                              return element.pid == cartItem.pid;
+                            });
+                            if (product.isLowStock &&
+                                (product.lowStockQuantity >=
+                                    product.productQuantity)) {
+                              context.read<NotificationProvider>().addNotification(
+                                  NotificationModel(
+                                      date: dateformat.format(DateTime.now()),
+                                      time: timeformat.format(DateTime.now()),
+                                      title:
+                                          "${((product.productName) ?? 'n/a').toUpperCase()} Low on Stock",
+                                      body:
+                                          ("${((product.productName) ?? 'n/a').toUpperCase()} is running low. Prepare to re-stock")));
+
+                              _notificationService.showNotifications(
+                                  NotificationModel(
+                                      date: dateformat.format(DateTime.now()),
+                                      time: timeformat.format(DateTime.now()),
+                                      title: "Low Stock",
+                                      body:
+                                          ("${((product.productName) ?? 'n/a').toUpperCase()} is running low. Prepare to re-stock")));
+                            }
+                          }
                           SalesModel salesModel = SalesModel(
                             products:
                                 List.from(context.read<GeneralProvider>().cart),
@@ -205,8 +226,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       context,
                                       listen: false)
                                   .shop));
-
-                          
 
                           // _notificationService.showNotifications();
 
