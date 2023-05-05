@@ -33,10 +33,10 @@ class _ProductCalculatorState extends State<ProductCalculator> {
   @override
   void initState() {
     if (Responsive.isMobile()) {
-  context.read<GeneralProvider>().cart.forEach((element) {
-    counterController.add(TextEditingController());
-  });
-}
+      context.read<GeneralProvider>().cart.forEach((element) {
+        counterController.add(TextEditingController());
+      });
+    }
     //  context.read<GeneralProvider>().cartList.forEach((element) {
     //    counter.add(element.cartQuantity!);
     //   });
@@ -93,22 +93,31 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                           ),
                         ),
                   Expanded(
-                    child: ListView.builder(
-                      // shrinkWrap: true,
-                      padding: EdgeInsets.only(top: height * 0.03),
-                      itemCount: context.watch<GeneralProvider>().cart.length,
-                      itemBuilder: (context, index) => GestureDetector(
-                          onTap: () {},
-                          child: CartItemWidget(
-                            index: index,
-                            product: Provider.of<GeneralProvider>(context,
-                                    listen: false)
-                                .cart[index],
-                            counterController: counterController[index],
-                            height: height,
-                            width: width,
-                          )),
-                    ),
+                    child: context.watch<GeneralProvider>().cart.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No Orders",
+                              style: headline1.copyWith(
+                                  fontSize: 25, color: Colors.blueGrey),
+                            ),
+                          )
+                        : ListView.builder(
+                            // shrinkWrap: true,
+                            padding: EdgeInsets.only(top: height * 0.03),
+                            itemCount:
+                                context.watch<GeneralProvider>().cart.length,
+                            itemBuilder: (context, index) => GestureDetector(
+                                onTap: () {},
+                                child: CartItemWidget(
+                                  index: index,
+                                  product: Provider.of<GeneralProvider>(context,
+                                          listen: false)
+                                      .cart[index],
+                                  counterController: counterController[index],
+                                  height: height,
+                                  width: width,
+                                )),
+                          ),
                   ),
                   SizedBox(
                     height: height * 0.12,
@@ -190,7 +199,7 @@ class _ProductCalculatorState extends State<ProductCalculator> {
                   style: headline1,
                 ),
                 content: SizedBox(
-                  width: Responsive.isTablet()? width * 0.4:width*0.8,
+                  width: Responsive.isTablet() ? width * 0.4 : width * 0.8,
                   height: height * 0.4,
                   child: Column(
                     // spacing: 20,

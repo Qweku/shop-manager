@@ -125,8 +125,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   bool isChecked = false;
 
-  // var productBox = Hive.box<Product>('Product');
-  // var categoryBox = Hive.box<ProductCategory>('Category');
+ 
   startTime() async {
     var _duration = const Duration(seconds: 2);
     return Timer(_duration, navigationDialog);
@@ -140,18 +139,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   List<Product> suggestions = [];
 
   Future getProducts() async {
-    QuerySnapshot data =
-        await fireStore.collection("shopNow").get().catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            backgroundColor: Color.fromARGB(255, 219, 16, 16),
-            content: Text('An error occurred, please try again',
-                textAlign: TextAlign.center, style: bodyText2),
-            duration: const Duration(milliseconds: 1500),
-            behavior: SnackBarBehavior.floating,
-            shape: const StadiumBorder()),
-      );
-    });
+    QuerySnapshot data = await fireStore.collection("shopNow").get();
 
     for (QueryDocumentSnapshot snapshot in data.docs) {
       log("${snapshot["product id"]}:${snapshot["product name"]}");
@@ -162,13 +150,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
           productImage: snapshot["product image"],
           sellingPrice: snapshot["selling price"],
           costPrice: snapshot["cost price"],
-          //productCategory: snapshot["product category"],
+         
           productQuantity: snapshot["product quantity"],
           lowStockQuantity: snapshot["low stock quantity"],
           isLowStock: snapshot["low stock"]);
 
       suggestions.add(products);
-      // Provider.of<GeneralProvider>(context, listen: false).addProduct(products);
+      
     }
   }
 
@@ -348,9 +336,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       onSelected: (Product suggestion) {
                         productName.text = suggestion.productName!;
                         productPrice.text =
-                            "${suggestion.sellingPrice.toStringAsFixed(2)}";
+                           formatter.format(suggestion.sellingPrice.toStringAsFixed(2));
                         productCostPrice.text =
-                            "${suggestion.costPrice.toStringAsFixed(2)}";
+                            formatter2.format(suggestion.costPrice.toStringAsFixed(2));
                         productDescription.text =
                             suggestion.productDescription!;
                         imageFile = base64Decode(suggestion.productImage!);

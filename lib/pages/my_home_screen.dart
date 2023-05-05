@@ -73,7 +73,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   @override
   void initState() {
     bootUp();
-    NotiPlugin.initialize(flutterLocalNotificationsPlugin);
+    // NotiPlugin.initialize(flutterLocalNotificationsPlugin);
 
     // log("${Provider.of<SalesProvider>(context, listen: false).salesList.length}");
     // log("${Provider.of<GeneralProvider>(context, listen: false).shop.shopname}");
