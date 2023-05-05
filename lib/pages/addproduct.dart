@@ -326,6 +326,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           TextEditingController fieldTextEditingController,
                           FocusNode fieldFocusNode,
                           VoidCallback onFieldSubmitted) {
+                            productName.text = fieldTextEditingController.text;
                         return CustomTextField(
                           prefixIcon: Icon(Icons.add_box, color: Colors.grey),
                           hintText: "Product name",
@@ -337,6 +338,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         );
                       },
                       onSelected: (Product suggestion) {
+                       
                         productName.text = suggestion.productName!;
                         productPrice.text =
                            formatter.format(suggestion.sellingPrice.toStringAsFixed(2));
