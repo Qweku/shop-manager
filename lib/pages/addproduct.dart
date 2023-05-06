@@ -641,9 +641,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     context,
                                     listen: false)
                                 .shop));
-                        FirebaseFunction().exportToSuggestions(product,productName.text);
+                        FirebaseFunction().exportToSuggestions(context,product,productName.text);
                         FirebaseFunction()
-                            .addProducts(product, productName.text, shopName);
+                            .addProducts(context,product, productName.text, shopName);
                       } else {
                         Notifier().toast(
                             context: context,

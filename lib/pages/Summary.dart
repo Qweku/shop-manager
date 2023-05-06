@@ -189,9 +189,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       date: dateformat.format(DateTime.now()),
                                       time: timeformat.format(DateTime.now()),
                                       title:
-                                          "${((product.productName) ?? 'n/a').toUpperCase()} Low on Stock",
+                                          "${((product.productName) ?? 'n/a').toCapitalized()} Low on Stock",
                                       body:
-                                          ("${((product.productName) ?? 'n/a').toUpperCase()} is running low. Prepare to re-stock")));
+                                          ("${((product.productName) ?? 'n/a').toCapitalized()} is running low. Prepare to re-stock")));
 
                               _notificationService.showNotifications(
                                   NotificationModel(
@@ -199,7 +199,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       time: timeformat.format(DateTime.now()),
                                       title: "Low Stock",
                                       body:
-                                          ("${((product.productName) ?? 'n/a').toUpperCase()} is running low. Prepare to re-stock")));
+                                          ("${((product.productName) ?? 'n/a').toCapitalized()} is running low. Prepare to re-stock")));
                             }
                           }
                           SalesModel salesModel = SalesModel(
