@@ -108,7 +108,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         ],
                       ),
                     ),
-              SizedBox(height: height * 0.03),
+              // SizedBox(height: height * 0.03),
               Expanded(
                 child: AnimatedSwitcher(
                     duration: Duration(microseconds: 100),

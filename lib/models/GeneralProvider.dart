@@ -18,7 +18,7 @@ class GeneralProvider extends ChangeNotifier {
       expenses: [],
       lowStocks: []);
  // ProductCategory _category = ProductCategory(cid: -1);
-  Product _product = Product(pid: "${-1}");
+  Product _product = Product(productName: "", pid: "${-1}");
 
   //List<ProductCategory> _categories = [];
   List<Product> _inventory = [];

@@ -206,7 +206,7 @@ class ShopProducts {
 
 class Product {
   String pid;
-  String? productName;
+  String productName;
   double sellingPrice;
   double costPrice;
   String? productImage;
@@ -222,7 +222,7 @@ class Product {
 
   Product({
     required this.pid,
-    this.productName,
+    required this.productName,
     this.sellingPrice = 0.0,
     this.costPrice = 0.0,
     this.productImage,

@@ -222,7 +222,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     //_selectedCategory = (categoryList.isEmpty) ? null : categoryList.first;
     if (widget.toEdit) {
       setState(() {
-        productName.text = widget.product!.productName!;
+        productName.text = widget.product!.productName;
         productDescription.text = widget.product!.productDescription!;
         lowStockQuantity.text = widget.product!.lowStockQuantity.toString();
         productPrice.text =
@@ -312,14 +312,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     child: Autocomplete<Product>(
                       optionsBuilder: (TextEditingValue textEditingValue) {
                         return suggestions
-                            .where((element) => element.productName!
+                            .where((element) => element.productName
                                 .toLowerCase()
                                 .startsWith(
                                     textEditingValue.text.toLowerCase()))
                             .toList();
                       },
                       displayStringForOption: (Product option) =>
-                          option.productName!,
+                          option.productName,
                       fieldViewBuilder: (BuildContext context,
                           TextEditingController fieldTextEditingController,
                           FocusNode fieldFocusNode,
@@ -337,7 +337,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       },
                       onSelected: (Product suggestion) {
                        
-                        productName.text = suggestion.productName!;
+                        productName.text = suggestion.productName;
                         productPrice.text =
                            formatter.format(suggestion.sellingPrice.toStringAsFixed(2));
                         productCostPrice.text =
@@ -546,16 +546,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                   date: dateformat.format(DateTime.now()),
                                   time: timeformat.format(DateTime.now()),
                                   title:
-                                      "${((product.productName) ?? 'n/a').toUpperCase()} Re-Stocked",
+                                      "${((product.productName) ).toUpperCase()} Re-Stocked",
                                   body:
-                                      ("${((product.productName) ?? 'n/a').toUpperCase()} has been re-stocked")));
+                                      ("${((product.productName) ).toUpperCase()} has been re-stocked")));
 
                           NotificationService().showNotifications(NotificationModel(
                               date: dateformat.format(DateTime.now()),
                               time: timeformat.format(DateTime.now()),
                               title: "Re-Stock Alert",
                               body:
-                                  ("${((product.productName) ?? 'n/a').toUpperCase()} has been re-stocked")));
+                                  ("${((product.productName)).toUpperCase()} has been re-stocked")));
                         }
 
                         Provider.of<GeneralProvider>(context, listen: false)
@@ -641,7 +641,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                 .shop));
                         FirebaseFunction().exportToSuggestions(context,product,productName.text);
                         FirebaseFunction()
-                            .addProducts(context,product, productName.text, shopName);
+                            .updateProduct(context,product, productName.text, shopName!);
                       } else {
                         Notifier().toast(
                             context: context,

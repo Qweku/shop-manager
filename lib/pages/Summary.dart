@@ -13,6 +13,7 @@ import 'package:shop_manager/pages/addProductSuccess.dart';
 import 'package:shop_manager/pages/widgets/clipPath.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/widgets/productCalculatorWidget.dart';
+import 'package:shop_manager/utils/firebase_functions.dart';
 
 import '../models/NotificationModel.dart';
 
@@ -172,7 +173,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       SizedBox(height: height * 0.05),
                       Button(
                         onTap: () async {
-                          context.read<GeneralProvider>().processCart();
+                          FirebaseFunction()
+                              .updateCart(context, shopName, productName);
+                          //context.read<GeneralProvider>().processCart();
                           for (var cartItem
                               in context.read<GeneralProvider>().cart) {
                             Product product = context
@@ -181,17 +184,19 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                 .singleWhere((element) {
                               return element.pid == cartItem.pid;
                             });
+
                             if (product.isLowStock &&
                                 (product.lowStockQuantity >=
                                     product.productQuantity)) {
-                              context.read<NotificationProvider>().addNotification(
-                                  NotificationModel(
+                              context
+                                  .read<NotificationProvider>()
+                                  .addNotification(NotificationModel(
                                       date: dateformat.format(DateTime.now()),
                                       time: timeformat.format(DateTime.now()),
                                       title:
-                                          "${((product.productName) ?? 'n/a').toCapitalized()} Low on Stock",
+                                          "${((product.productName)).toCapitalized()} Low on Stock",
                                       body:
-                                          ("${((product.productName) ?? 'n/a').toCapitalized()} is running low. Prepare to re-stock")));
+                                          ("${((product.productName)).toCapitalized()} is running low. Prepare to re-stock")));
 
                               _notificationService.showNotifications(
                                   NotificationModel(
@@ -199,7 +204,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       time: timeformat.format(DateTime.now()),
                                       title: "Low Stock",
                                       body:
-                                          ("${((product.productName) ?? 'n/a').toCapitalized()} is running low. Prepare to re-stock")));
+                                          ("${((product.productName)).toCapitalized()} is running low. Prepare to re-stock")));
                             }
                           }
                           SalesModel salesModel = SalesModel(

@@ -104,45 +104,25 @@ class FirebaseFunction {
     // }
   }
 
-  Future addProducts(BuildContext context, Product product, String productName,
-      String? shopName) async {
-    String customId = productName;
-
+  Future updateCart(BuildContext context, String shopName, String productName) async {
     try {
-      QuerySnapshot data = await fireStore.collection(shopName ?? "").get();
+      QuerySnapshot data = await fireStore.collection(shopName).get();
 
       for (QueryDocumentSnapshot snapshot in data.docs) {
-        if (snapshot.exists) {
-          //! Unhandled Exception: Bad state: field does not exist within the DocumentSnapshotPlatform
-          if (snapshot["product name"] != productName) {
-            await fireStore.collection(shopName ?? "").doc(customId).set({
-              'product id': product.pid,
-              'product name': product.productName,
-              'product description': product.productDescription,
-              'product image': product.productImage,
-              'selling price': product.sellingPrice,
-              'cost price': product.costPrice,
-              // 'product category': product.productCategory,
-              'product quantity': product.productQuantity,
-              'low stock quantity': product.lowStockQuantity,
-              'low stock': product.isLowStock,
-            });
-          } else {
-            log("Document already exist.");
+        // Check if incoming data does not exist
+        int pQ = snapshot['product quantity'];
+        Provider.of<GeneralProvider>(context, listen: false)
+            .cart
+            .forEach((element) {
+          if (element.productName == snapshot['product name']) {
+            pQ -= element.cartQuantity;
+            element.cartQuantity = 0;
           }
-        } else {
-          await fireStore.collection(shopName ?? "").doc(customId).set({
-            'product id': product.pid,
-            'product name': product.productName,
-            'product description': product.productDescription,
-            'product image': product.productImage,
-            'selling price': product.sellingPrice,
-            'cost price': product.costPrice,
-            'product quantity': product.productQuantity,
-            'low stock quantity': product.lowStockQuantity,
-            'low stock': product.isLowStock,
-          });
-        }
+        });
+        await fireStore
+            .collection(shopName)
+            .doc(productName)
+            .update({'product quanttity': pQ});
       }
     } on FirebaseException catch (e) {
       firebaseError(context, e);
@@ -182,5 +162,9 @@ class FirebaseFunction {
 
   Stream<QuerySnapshot> getProducts(String shopName) {
     return fireStore.collection(shopName).snapshots();
+  }
+
+  Future deleteProduct(String shopName, String productName) async {
+    fireStore.collection(shopName).doc(productName).delete();
   }
 }

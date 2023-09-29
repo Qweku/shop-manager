@@ -62,12 +62,12 @@ class _InventoryListState extends State<InventoryList> {
 
   @override
   Widget build(BuildContext context) {
-    var categories = context.watch<GeneralProvider>();
+    // var categories = context.watch<GeneralProvider>();
 
     return StreamBuilder<QuerySnapshot>(
         stream: firebaseFunction.getProducts(shopName!),
         builder: (context, snapshot) {
-           if (snapshot.hasError) {
+          if (snapshot.hasError) {
             return Center(
               child: Text(
                 "An Error Occured while fetching data",
@@ -82,58 +82,84 @@ class _InventoryListState extends State<InventoryList> {
           }
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: height * 0.01),
-            child: GridView.builder(
-                // shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                padding: EdgeInsets.only(top: height * 0.01),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: Responsive.isMobile() ? 3 : 4,
-                    childAspectRatio: 2 / 3.5),
-                itemCount: categories.inventory.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                    ),
-                    child: ProductCard(
-                      //edit and delete action
-                      onLongPress: () {
-                        _bottomDrawSheet(context, categories.inventory[index]);
-                      },
-                      // add to cart button action
-                      onPressed: () {
-                        if (!(context
-                            .read<GeneralProvider>()
-                            .cart
-                            .contains(categories.inventory[index]))) {
-                          Provider.of<GeneralProvider>(context, listen: false)
-                              .addToCart(categories.inventory[index]);
-                        }
-                      },
-
-                      //view product details action
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductView(
-                                    product: categories.inventory[index])));
-                      },
-                      index: index,
-                      image64: categories.inventory[index].productImage ?? "",
-
-                      productName: categories.inventory[index].productName,
-
-                      quantity: categories.inventory[index].productQuantity
-                          .toString(),
-
-                      price:
-                          "GHS ${categories.inventory[index].sellingPrice.toStringAsFixed(2)}",
-                    ),
-                  );
-                }),
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: Responsive.isMobile() ? 3 : 4,
+              childAspectRatio: 2 / 3.5,
+              physics: const BouncingScrollPhysics(),
+              // padding: EdgeInsets.only(top: height * 0.01),
+              children: snapshot.data!.docs
+                  .map<Widget>((doc) => _buildUserListItem(doc))
+                  .toList(),
+            ),
           );
         });
+  }
+
+  Widget _buildUserListItem(DocumentSnapshot document) {
+    var categories = context.watch<GeneralProvider>();
+    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 10,
+      ),
+      child: ProductCard(
+        //edit and delete action
+        onLongPress: () {
+          Product product = Product(
+              pid: data['product id'] ?? "",
+              productName: data['product name'],
+              productImage: data['product image'],
+              productDescription: data['product description'],
+              sellingPrice: data['selling price'],
+              costPrice: data['cost price'],
+              productQuantity: data['product quantity']);
+          _bottomDrawSheet(context, product);
+        },
+        // add to cart button action
+        onPressed: () {
+          Product product = Product(
+              pid: data['product id'] ?? "",
+              productName: data['product name'],
+              productImage: data['product image'],
+              productDescription: data['product description'],
+              sellingPrice: data['selling price'],
+              costPrice: data['cost price'],
+              productQuantity: data['product quantity']);
+          if (!(context.read<GeneralProvider>().cart.contains(
+              categories.inventory.where(
+                  (element) => element.productName == data['product id'])))) {
+            Provider.of<GeneralProvider>(context, listen: false)
+                .addToCart(product);
+          }
+        },
+
+        //view product details action
+        onTap: () {
+          Product product = Product(
+              pid: data['product id'] ?? "",
+              productName: data['product name'],
+              productImage: data['product image'],
+              productDescription: data['product description'],
+              sellingPrice: data['selling price'],
+              costPrice: data['cost price'],
+              productQuantity: data['product quantity']);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductView(product: product)));
+        },
+        index: 0,
+        image64: data['product image'] ?? "",
+
+        productName: data['product name'] ?? "Name",
+
+        quantity: data['product quantity'].toString(),
+
+        price: "GHS ${data['selling price']}0",
+      ),
+    );
   }
 
   void _bottomDrawSheet(BuildContext context, Product product) {
@@ -183,8 +209,10 @@ class _InventoryListState extends State<InventoryList> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Provider.of<GeneralProvider>(context, listen: false)
-                            .deleteProduct(product);
+                        // Provider.of<GeneralProvider>(context, listen: false)
+                        //     .deleteProduct(product);
+                        firebaseFunction.deleteProduct(
+                            shopName!, product.productName);
 
                         Navigator.pop(context);
                       },

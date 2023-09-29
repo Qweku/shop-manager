@@ -9,18 +9,18 @@ import 'package:shop_manager/models/GeneralProvider.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 
 class ProductCard extends StatelessWidget {
-  final String? productName, price;
-  String? quantity;
+  final String productName, price;
+  final String quantity;
   final String image64;
   final int? index;
   final Function()? onTap, onLongPress, onPressed;
   ProductCard(
       {Key? key,
-      this.productName,
+      required this.productName,
       this.onTap,
       this.index,
-      this.quantity,
-      this.price,
+      required this.quantity,
+      required this.price,
       required this.image64,
       this.onLongPress,
       this.onPressed})
@@ -34,7 +34,7 @@ class ProductCard extends StatelessWidget {
     // File img = File(base64Decode(image64));
     context.read<GeneralProvider>().inventory.forEach(
       (element) {
-        if (int.tryParse(quantity!)! <= element.lowStockQuantity) {
+        if (int.tryParse(quantity)! <= element.lowStockQuantity) {
           isLow = true;
         } else {
           isLow = false;
@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget {
                       child: image64.isEmpty
                           ? Center(
                               child: Text(
-                                productName!.substring(0, 2).toUpperCase(),
+                                productName.substring(0, 2).toUpperCase(),
                                 style: headline1.copyWith(
                                     fontSize: 30, color: primaryColor),
                               ),
@@ -85,7 +85,7 @@ class ProductCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        productName!,
+                        productName,
                         overflow: TextOverflow.ellipsis,
                         style: bodyText1.copyWith(
                           fontSize: 14,
@@ -159,7 +159,7 @@ class ProductListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    // double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return ListTile(
       tileColor: isSelected ? primaryColor : Colors.transparent,

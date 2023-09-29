@@ -32,7 +32,7 @@ class _ProductViewState extends State<ProductView> {
             .cart
             .firstWhere(
               (element) => element == widget.product,
-              orElse: () => Product(cartQuantity: 1, pid: widget.product.pid),
+              orElse: () => Product(productName: widget.product.productName, cartQuantity: 1, pid: widget.product.pid),
             )
             .cartQuantity
             .toString();
@@ -106,7 +106,7 @@ class _ProductViewState extends State<ProductView> {
                           children: [
                             Expanded(
                               flex: 2,
-                              child: Text(widget.product.productName!,
+                              child: Text(widget.product.productName,
                                   style: headline1.copyWith(
                                       fontSize: 25,
                                       color: const Color.fromARGB(
