@@ -2,7 +2,6 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 

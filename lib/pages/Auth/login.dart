@@ -12,7 +12,6 @@ import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/main.dart';
 import 'package:shop_manager/models/AuthService.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
-import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/pages/Auth/forgotten_password.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
@@ -79,7 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    bool checkName = false;
 
     return AnimatedContainer(
         padding: EdgeInsets.only(bottom: height * 0.03),

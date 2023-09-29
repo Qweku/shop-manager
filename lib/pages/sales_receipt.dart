@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -66,7 +65,7 @@ class _SalesReceiptState extends State<SalesReceipt> {
       ),
     );
     String tempPath =
-        (await Directory('/storage/emulated/0/Download')).path;
+        (Directory('/storage/emulated/0/Download')).path;
     String fileName = "my-sales-report" + "${DateTime.now().microsecond}";
     //if (await Permission.storage.request().isGranted) {
     File pdfFile = File('$tempPath/$fileName.pdf');

@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/textFields.dart';
@@ -68,7 +67,7 @@ class Search extends SearchDelegate {
 }
 
 class ItemSearchBar extends StatefulWidget {
-  Function(String) valueCallback;
+ final  Function(String) valueCallback;
   ItemSearchBar({Key? key, required this.valueCallback}) : super(key: key);
 
   @override
@@ -81,7 +80,7 @@ class _ItemSearchBarState extends State<ItemSearchBar> {
 
   @override
   void initState() {
-    // TODO: implement initState
+   
     super.initState();
 
     shop = context.read<GeneralProvider>();

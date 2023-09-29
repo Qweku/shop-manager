@@ -30,13 +30,13 @@ class CustomTheme with ChangeNotifier {
         primaryColor: const Color(0xFF0D47A1),
         primaryColorLight: Colors.white,
         textTheme: const TextTheme(          
-          headline1: TextStyle(color: Colors.black, fontSize: 42,fontFamily: "Louis_George_Cafe",),
-          headline2: TextStyle(color: Colors.white, fontSize: 42,fontFamily: "Louis_George_Cafe",),
-          headline3: TextStyle(color: Colors.black, fontSize: 20,fontFamily: "Louis_George_Cafe",),
-          headline4: TextStyle(color: Colors.white, fontSize: 20,fontFamily: "Louis_George_Cafe",),
-          bodyText1: TextStyle(color: Colors.black, fontSize: 17,fontFamily: "Louis_George_Cafe",),
-          bodyText2: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Louis_George_Cafe",),
-          button: TextStyle(color:Colors.white,fontSize:15)
+          displayLarge: TextStyle(color: Colors.black, fontSize: 42,fontFamily: "Louis_George_Cafe",),
+          displayMedium: TextStyle(color: Colors.white, fontSize: 42,fontFamily: "Louis_George_Cafe",),
+          displaySmall: TextStyle(color: Colors.black, fontSize: 20,fontFamily: "Louis_George_Cafe",),
+          headlineMedium: TextStyle(color: Colors.white, fontSize: 20,fontFamily: "Louis_George_Cafe",),
+          bodyLarge: TextStyle(color: Colors.black, fontSize: 17,fontFamily: "Louis_George_Cafe",),
+          bodyMedium: TextStyle(color: Colors.white, fontSize: 17,fontFamily: "Louis_George_Cafe",),
+          labelLarge: TextStyle(color:Colors.white,fontSize:15)
         ),
         iconTheme: const IconThemeData(color: Color(0xFF0D47A1)));
   }

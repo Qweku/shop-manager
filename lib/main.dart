@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +9,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shop_manager/models/AccountProvider.dart';
 import 'package:shop_manager/models/FirebaseApplicationState.dart';
 import 'package:shop_manager/models/NotificationProvider.dart';
-import 'package:shop_manager/pages/Auth/Launcher.dart';
 import 'package:shop_manager/pages/notifications/notifications.dart';
 
 import 'package:provider/provider.dart';
@@ -28,7 +25,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final double screenWidth =
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
+      MediaQueryData.fromView(WidgetsBinding.instance.window).size.width;
   if (screenWidth >= 800) {
     await SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);

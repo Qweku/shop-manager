@@ -13,7 +13,7 @@ import 'package:shop_manager/pages/widgets/constants.dart';
 import '../components/button.dart';
 
 class ProductView extends StatefulWidget {
-  Product product;
+  final Product product;
   ProductView({Key? key, required this.product}) : super(key: key);
 
   @override

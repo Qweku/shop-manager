@@ -1,14 +1,11 @@
 // ignore_for_file: unnecessary_cast, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_manager/components/notificationButton.dart';
 import 'package:shop_manager/components/responsive.dart';
 import 'package:shop_manager/components/textFields.dart';
 import 'package:shop_manager/models/GeneralProvider.dart';
-import 'package:shop_manager/models/ShopModel.dart';
 
 import 'package:shop_manager/pages/Inventory/InventoryList.dart';
 import 'package:shop_manager/pages/Inventory/InventorySearchList.dart';

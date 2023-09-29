@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shop_manager/models/NotificationModel.dart';

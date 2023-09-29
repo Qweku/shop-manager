@@ -1,13 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 // import 'package:hive/hive.dart';
 import 'package:shop_manager/components/responsive.dart';
-import 'package:shop_manager/pages/Auth/authentication.dart';
 import 'package:shop_manager/pages/widgets/constants.dart';
 import 'package:shop_manager/pages/wrapper.dart';
 

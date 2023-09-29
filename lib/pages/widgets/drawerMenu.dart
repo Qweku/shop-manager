@@ -156,7 +156,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       file.writeAsString(
           shopProductsToJson(context.read<GeneralProvider>().shop));
       return file;
-    } on Exception catch (e) {
+    } on Exception {
       return File('');
       // log(e.toString());
     }

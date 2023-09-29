@@ -152,19 +152,17 @@ class _ItemCounterState extends State<ItemCounter> {
               setState(() {
                 counter--;
               });
-              if (widget.product != null) {
-                Product product = Product(
-                  pid: widget.product.pid,
-                  productName: widget.product.productName,
-                  sellingPrice: widget.product.sellingPrice,
-                  productDescription: widget.product.productDescription,
-                  cartQuantity: counter,
-                  productImage: widget.product.productImage,
-                );
-                context.read<GeneralProvider>().updateCart(product);
-                context.read<GeneralProvider>().total(product);
-              }
-
+              Product product = Product(
+                pid: widget.product.pid,
+                productName: widget.product.productName,
+                sellingPrice: widget.product.sellingPrice,
+                productDescription: widget.product.productDescription,
+                cartQuantity: counter,
+                productImage: widget.product.productImage,
+              );
+              context.read<GeneralProvider>().updateCart(product);
+              context.read<GeneralProvider>().total(product);
+            
               // widget.counterController.text = counter.toString();
             }
           },
@@ -220,19 +218,17 @@ class _ItemCounterState extends State<ItemCounter> {
                 counter++;
               }
             });
-            if (widget.product != null) {
-              Product product = Product(
-                pid: widget.product.pid,
-                productName: widget.product.productName,
-                sellingPrice: widget.product.sellingPrice,
-                productDescription: widget.product.productDescription,
-                cartQuantity: counter,
-                productImage: widget.product.productImage,
-              );
-              context.read<GeneralProvider>().updateCart(product);
-              context.read<GeneralProvider>().total(product);
-            }
-            // widget.counterController.text = counter.toString();
+            Product product = Product(
+              pid: widget.product.pid,
+              productName: widget.product.productName,
+              sellingPrice: widget.product.sellingPrice,
+              productDescription: widget.product.productDescription,
+              cartQuantity: counter,
+              productImage: widget.product.productImage,
+            );
+            context.read<GeneralProvider>().updateCart(product);
+            context.read<GeneralProvider>().total(product);
+                      // widget.counterController.text = counter.toString();
           },
         ),
       ],

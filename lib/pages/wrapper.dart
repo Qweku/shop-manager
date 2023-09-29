@@ -7,7 +7,6 @@ import 'package:shop_manager/pages/Auth/Launcher.dart';
 import 'package:shop_manager/pages/Auth/authentication.dart';
 import 'package:shop_manager/pages/Auth/verify_email.dart';
 import 'package:shop_manager/pages/TabletScreens/Dashboard.dart';
-import 'package:shop_manager/pages/widgets/constants.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);

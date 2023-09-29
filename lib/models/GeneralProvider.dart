@@ -1,15 +1,11 @@
 // ignore_for_file: file_names, prefer_final_fields
 
-import 'dart:developer';
 import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
-import 'package:shop_manager/models/NotificationProvider.dart';
 import 'package:shop_manager/models/ShopModel.dart';
 import 'package:shop_manager/models/localStore.dart';
-import 'package:shop_manager/pages/widgets/constants.dart';
 
-import 'NotificationModel.dart';
 
 LocalStore storage = LocalStore();
 

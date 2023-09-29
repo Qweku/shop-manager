@@ -8,10 +8,10 @@ class Responsive extends StatelessWidget {
       : super(key: key);
 
   static bool isMobile() =>
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width < 800;
+      MediaQueryData.fromView(WidgetsBinding.instance.window).size.width < 800;
   
   static bool isTablet() =>
-     MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width >= 800;
+     MediaQueryData.fromView(WidgetsBinding.instance.window).size.width >= 800;
 
   
 

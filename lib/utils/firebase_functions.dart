@@ -41,7 +41,7 @@ class FirebaseFunction {
       QuerySnapshot data = await fireStore.collection(shopName ?? "").get();
 
       for (QueryDocumentSnapshot snapshot in data.docs) {
-        // Check if incoming data does not exist 
+        // Check if incoming data does not exist
         if (!(Provider.of<GeneralProvider>(context, listen: false)
             .inventory
             .any((element) =>
@@ -57,7 +57,6 @@ class FirebaseFunction {
               productQuantity: snapshot["product quantity"],
               lowStockQuantity: snapshot["low stock quantity"],
               isLowStock: snapshot["low stock"]);
-         
 
           Provider.of<GeneralProvider>(context, listen: false)
               .addProduct(products);
@@ -65,19 +64,16 @@ class FirebaseFunction {
               shopName!,
               shopProductsToJson(
                   Provider.of<GeneralProvider>(context, listen: false).shop));
-        }else{
-           ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 255, 17, 1),
-                              content: Text('Some of the products already exist',
-                                  textAlign: TextAlign.center,
-                                  style: bodyText2),
-                              duration: const Duration(milliseconds: 1500),
-                              behavior: SnackBarBehavior.floating,
-                              shape: const StadiumBorder()),
-                        );
-
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                backgroundColor: const Color.fromARGB(255, 255, 17, 1),
+                content: Text('Some of the products already exist',
+                    textAlign: TextAlign.center, style: bodyText2),
+                duration: const Duration(milliseconds: 1500),
+                behavior: SnackBarBehavior.floating,
+                shape: const StadiumBorder()),
+          );
         }
       }
     } on FirebaseException catch (e) {
@@ -86,25 +82,26 @@ class FirebaseFunction {
   }
 
   Future updateProduct(BuildContext context, Product product,
-      String productName, String? shopName) async {
-    try {
-      DocumentReference data =
-          fireStore.collection(shopName ?? "").doc(productName);
-      data.update({
-        'product id': product.pid,
-        'product name': product.productName,
-        'product description': product.productDescription,
-        'product image': product.productImage,
-        'selling price': product.sellingPrice,
-        'cost price': product.costPrice,
-        //'product category':product.productCategory,
-        'product quantity': product.productQuantity,
-        'low stock quantity': product.lowStockQuantity,
-        'low stock': product.isLowStock,
-      });
-    } on FirebaseException catch (e) {
-      firebaseError(context, e);
-    }
+      String productName, String shopName) async {
+    await fireStore.collection(shopName).doc(productName).set(product.toJson());
+    // try {
+    //   DocumentReference data =
+    //       fireStore.collection(shopName ?? "").doc(productName);
+    //   data.update({
+    //     'product id': product.pid,
+    //     'product name': product.productName,
+    //     'product description': product.productDescription,
+    //     'product image': product.productImage,
+    //     'selling price': product.sellingPrice,
+    //     'cost price': product.costPrice,
+    //     //'product category':product.productCategory,
+    //     'product quantity': product.productQuantity,
+    //     'low stock quantity': product.lowStockQuantity,
+    //     'low stock': product.isLowStock,
+    //   });
+    // } on FirebaseException catch (e) {
+    //   firebaseError(context, e);
+    // }
   }
 
   Future addProducts(BuildContext context, Product product, String productName,
@@ -181,5 +178,9 @@ class FirebaseFunction {
     } on FirebaseException catch (e) {
       firebaseError(context, e);
     }
+  }
+
+  Stream<QuerySnapshot> getProducts(String shopName) {
+    return fireStore.collection(shopName).snapshots();
   }
 }
