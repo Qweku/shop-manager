@@ -120,12 +120,13 @@ class _TabletAuthState extends State<TabletAuth> {
       isToggle = !isToggle;
     });
   }
+    DateTime? currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
    
     return WillPopScope(
-      onWillPop: () => _backButton(),
+      onWillPop: () => doubleTapToExit(),
       child: Scaffold(
         //resizeToAvoidBottomInset: false,
         backgroundColor: primaryColor,
@@ -190,28 +191,23 @@ class _TabletAuthState extends State<TabletAuth> {
     );
   }
 
-  _backButton() {
-    return showDialog<bool>(
-        context: context,
-        builder: (c) => AlertDialog(
-              title: const Text("Warning"),
-              content: const Text("Do you really want to exit?"),
-              actions: [
-                TextButton(
-                    onPressed: () async {
-                      if (Platform.isIOS) {
-                        exit(0);
-                      }
-                      if (Platform.isAndroid) {
-                        return await SystemChannels.platform
-                            .invokeMethod<void>('SystemNavigator.pop');
-                      }
-                    },
-                    child: const Text("Yes")),
-                TextButton(
-                    onPressed: () => Navigator.pop(c, false),
-                    child: const Text("No"))
-              ],
-            ));
+  Future<bool> doubleTapToExit() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          width: width*0.42,
+            backgroundColor: Color.fromARGB(255, 8, 8, 8),
+            content: Text('Repeat action to exit',
+                textAlign: TextAlign.center, style: bodyText2),
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+            shape: const StadiumBorder()),
+      );
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 }

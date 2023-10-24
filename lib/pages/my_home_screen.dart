@@ -88,7 +88,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                   border: Border(
                       top: BorderSide(
                           color: Color.fromARGB(255, 247, 247, 247)))),
-              child: BottomNav(onChange: _handleNavigationChange)),
+              child: GBottomNav(onChange: _handleNavigationChange)),
           body: _content),
     );
   }
@@ -121,48 +121,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     });
   }
 
-  _backButton(context) {
-    return showDialog<bool>(
-        context: context,
-        builder: (c) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              content: SizedBox(
-                height: height * 0.1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.warning_amber_outlined,
-                        size: 40, color: Color.fromARGB(255, 255, 38, 23)),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      "Do you really want to exit?",
-                      style: bodyText1,
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () async {
-                      if (Platform.isIOS) {
-                        exit(0);
-                      }
-                      if (Platform.isAndroid) {
-                        return await SystemChannels.platform
-                            .invokeMethod<void>('SystemNavigator.pop');
-                      }
-                    },
-                    child: const Text("Yes")),
-                TextButton(
-                    onPressed: () => Navigator.pop(c, false),
-                    child: const Text("No"))
-              ],
-            ));
-  }
-
+  
   Future<bool> doubleTapToExit() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
